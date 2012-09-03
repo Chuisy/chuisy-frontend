@@ -3,7 +3,7 @@ enyo.kind({
 	fit: true,
 	kind: "FittableRows",
 	classes: "app",
-	narrowWidth: 600,
+	narrowWidth: 800,
 	published: {
 		menuShowing: true,
 		infoSliderShowing: true
@@ -62,7 +62,7 @@ enyo.kind({
 				{classes: "fading-separator"},
 				{kind: "FittableColumns", fit: true, components: [
 					{fit: false, style: "width: 100%; text-align: center; padding: 200px 0; font-size: 20pt;", name: "contentPanel", content: "content"},
-					{kind: "Slideable", classes: "bg-light", min: -200, max: 10, value: 10, unit: "px", overMoving: false, preventDragPropagation: true, style: "width: 200px;",
+					{kind: "Slideable", classes: "bg-light", unit: "px", overMoving: false, preventDragPropagation: true, style: "width: 200px;",
 						name: "infoSlider", components: [
 						{classes: "fading-separator"},
 						{style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "info slider"}
