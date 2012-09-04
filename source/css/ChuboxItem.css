@@ -1,0 +1,29 @@
+.chuboxitem {
+	padding: 20px;
+	width: 300px;
+	height: 340px;
+	margin: 10px;
+	box-sizing: border-box;
+	border: #ccc solid 1px;
+	box-shadow: 2px 2px 5px #333;
+	background-image: url(../../assets/images/lightpaperfibers.png);
+	display: inline-block;
+}
+
+.chuboxitem-image {
+	width: 260px;
+	height: 260px;
+	background: url() no-repeat center center;
+	background-size: 100%;
+	border: solid 1px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: White;
+}
+
+.chuboxitem-caption {
+	font-family: 'Annie Use Your Telescope';
+	padding: 10px;
+	font-size: 18pt;
+}
