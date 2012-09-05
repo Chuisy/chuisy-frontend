@@ -34,7 +34,7 @@ body {
 	height: 100%;
 	position: absolute;
 	left: -5px;
-	background: url(../../assets/images/menu-separator.png) no-repeat top center;
+	background: url(../../assets/images/menu-separator.png) no-repeat center center;
 }
 
 .main-header {
@@ -66,4 +66,19 @@ body {
 	font-size: 20pt;
 	font-family: PTSansCaptionBold;
 	text-align: center;
+}
+
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.page-header {
+	padding: 20px;
+	font-size: 23pt;
+}
+
+.page-header > .back-button {
+	margin-right: 10px;
 }
