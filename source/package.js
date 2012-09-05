@@ -5,5 +5,7 @@ enyo.depends(
 	"css/",
 	"App.js",
 	"ChuboxItem.js",
-	"Chubox.js"
+	"ChuboxListItem.js",
+	"Chubox.js",
+	"ProductView.js"
 );

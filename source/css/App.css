@@ -5,6 +5,20 @@ body {
 	font-family: PTSansRegular;
 }
 
+/*::-webkit-scrollbar {
+	display: none;
+}
+*/
+/*::-webkit-scrollbar {
+	background-color: transparent;
+	width: 10px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+	background-color: #bbb;
+	border-radius: 5px;
+}*/
+
 .bg-light {
 	background-image: url(../../assets/images/light_noise_diagonal.png);
 }

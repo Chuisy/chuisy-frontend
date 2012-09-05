@@ -38,12 +38,22 @@ enyo.kind({
 		this.inherited(arguments);
 		var narrow = this.isNarrow();
 		this.addRemoveClass("narrow", narrow);
-		this.$.contentPanel.setFit(!narrow);
+		this.$.contentPanels.setFit(!narrow);
 		this.$.infoSlider.setMin(narrow ? -200 : 0);
 		this.$.infoSlider.setMax(narrow ? 10 : 0);
 		this.$.infoSliderButton.setShowing(narrow);
 		this.$.mainPanel.render();
 		this.setInfoSliderShowing(!narrow);
+	},
+	chuboxItemSelected: function(sender, event) {
+		this.$.productView.setProduct(event.item.product);
+		this.$.contentPanels.setIndex(1);
+		setTimeout(enyo.bind(this, function() {
+			this.$.productView.resized();
+		}), 20);
+	},
+	contentPanelsBack: function() {
+		this.$.contentPanels.setIndex(0);
 	},
 	components: [
 		{classes: "main-header", kind: "FittableColumns", components: [
@@ -61,7 +71,12 @@ enyo.kind({
 			{classes: "main-panel bg-light", name: "mainPanel", kind: "FittableRows", components: [
 				{classes: "fading-separator"},
 				{kind: "FittableColumns", fit: true, components: [
-					{fit: false, style: "width: 100%; text-align: center; padding: 200px 0; font-size: 20pt;", name: "contentPanel", content: "content"},
+					{kind: "Panels", arrangerKind: "CardArranger", fit: false, draggable: false, style: "width: 100%", classes: "contentpanel", name: "contentPanels", components: [
+						{kind: "Chubox", onItemSelected: "chuboxItemSelected", user: {profile: {id: 2}}},
+						{kind: "Scroller", components: [
+							{kind: "ProductView", onBack: "contentPanelsBack"}
+						]}
+					]},
 					{kind: "Slideable", classes: "bg-light", unit: "px", overMoving: false, preventDragPropagation: true, style: "width: 200px;",
 						name: "infoSlider", components: [
 						{classes: "fading-separator"},

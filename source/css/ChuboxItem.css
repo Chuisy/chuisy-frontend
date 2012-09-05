@@ -8,18 +8,24 @@
 	box-shadow: 2px 2px 5px #333;
 	background-image: url(../../assets/images/lightpaperfibers.png);
 	display: inline-block;
+	border-radius: 5px;
+}
+
+.chuboxitem.highlight {
+	background-color: Orange;
+	background-image: none;
 }
 
 .chuboxitem-image {
 	width: 260px;
 	height: 260px;
 	background: url() no-repeat center center;
-	background-size: 100%;
+	background-size: cover;
 	border: solid 1px;
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	background-color: White;
+	background-color: Gray;
 }
 
 .chuboxitem-caption {

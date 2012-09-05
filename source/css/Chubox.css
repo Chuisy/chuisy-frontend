@@ -1,5 +1,6 @@
 .chubox {
 	text-align: center;
+	padding: 20px;
 }
 
 .chubox-newitem {
@@ -9,5 +10,5 @@
 	margin: 10px;
 	display: inline-block;
 	box-sizing: border-box;
-	padding: 20px;
+	padding: 10px;
 }
