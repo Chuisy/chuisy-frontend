@@ -11,10 +11,32 @@
 		<script src="enyo/enyo.js"></script>
 		<!-- application (debug) -->
 		<script src="source/package.js" type="text/javascript"></script>
-	</head>
-	<body class="enyo-unselectable">
-		<script>
-			new App().renderInto(document.body);
+		<link href='http://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope' rel='stylesheet' type='text/css'>
+		<script type="text/javascript">
+			touchMove = function(event) {
+				// Prevent scrolling on this element
+				event.preventDefault();
+			}
 		</script>
+	</head>
+	<body class="enyo-unselectable" ontouchmove="touchMove(event);">
+		<script>
+			// new App().renderInto(document.body);
+			// new Chubox({user: {profile: {id: 2}}}).renderInto(document.body);
+			// enyo.kind({
+			// 	name: "SignUpTest",
+			// 	submit: function(sender, event) {
+			// 		this.log("submitting", event.data);
+			// 		chuisy.signUp(event.data, enyo.bind(this, function(sender, response) {
+			// 			this.log(response);
+			// 		}));
+			// 	},
+			// 	components: [
+			// 		{kind: "SignUpForm", onSubmit: "submit"}
+			// 	]
+			// });
+			// new SignUpTest().renderInto(document.body);
+		</script>
+		<a href="https://www.facebook.com/dialog/oauth?client_id=180626725291316&response_type=token">Login with facebook!</a>
 	</body>
 </html>
