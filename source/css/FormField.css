@@ -1,0 +1,38 @@
+.formfield {
+	position: relative;
+}
+
+.formfield > .onyx-input {
+	width: 100%;
+}
+
+/*.formfield.valid {
+	background-color: #91BA07;
+}*/
+
+.formfield.invalid {
+	background-color: #C51616;
+}
+
+/*.formfield.valid > input,*/
+.formfield.invalid > input {
+	color: #F1F1F1;
+}
+
+/*.formfield-valid .formfield-checkmark {
+	display: inline;
+}
+
+.formfield-invalid .onyx-input-decorator {
+	background-color: Red;
+}*/
+
+.formfield-required .label {
+	font-weight: bold;
+}
+
+.formfield-errormessage {
+	display: block;
+	width: 100%;
+	color: #F1F1F1;
+}
