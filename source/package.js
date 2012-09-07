@@ -2,6 +2,7 @@ enyo.depends(
 	"$lib/layout",
 	"$lib/onyx",
 	"$lib/sdk",
+	"$lib/Base64.js",
 	"css/",
 	"App.js",
 	"ChuboxItem.js",

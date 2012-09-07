@@ -21,7 +21,7 @@
 	</head>
 	<body class="enyo-unselectable" ontouchmove="touchMove(event);">
 		<script>
-			// new App().renderInto(document.body);
+			new App().renderInto(document.body);
 			// new Chubox({user: {profile: {id: 2}}}).renderInto(document.body);
 			// enyo.kind({
 			// 	name: "SignUpTest",
@@ -36,7 +36,11 @@
 			// 	]
 			// });
 			// new SignUpTest().renderInto(document.body);
+			// console.log(window.location.hash);
+			// chuisy.login({fb_id: "100000906524196", fb_access_token: "AAACkR2ZCMRTQBACCuhAGF54Wnj8Lh1E0CrgtT1HFTe5RldIVrAvpj3ZBQgRT842CBo4TIVH8DTdZCDu3fus5llNHNcgwn5njtkLHikmKIkJ2U9gTblH"}, function(sender, response) {
+			// 	console.log(sender, response);
+			// });
 		</script>
-		<a href="https://www.facebook.com/dialog/oauth?client_id=180626725291316&response_type=token">Login with facebook!</a>
+		<!-- <a href="https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://chuisy.com:8000/v1/fb_auth/&scope=user_birthday,user_location,user_about_me">Login with facebook!</a> -->
 	</body>
 </html>
