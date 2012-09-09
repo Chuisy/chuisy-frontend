@@ -6,5 +6,6 @@ enyo.depends(
 	"Chubox.css",
 	"ProductView.css",
 	"FormField.css",
-	"SignUpForm.css"
+	"SignUpForm.css",
+	"StartPage.css"
 );

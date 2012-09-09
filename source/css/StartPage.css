@@ -1,0 +1,29 @@
+.startpage-signin-panels {
+	width: 300px;
+	height: 100%;
+}
+
+.startpage-signin-panels > * {
+	width: 100%;
+	padding: 10px;
+}
+
+.startpage-signin > * {
+	display: block;
+	width: 100%;
+	margin: 10px 0;
+}
+
+.startpage-signup-link {
+	text-align: right;
+}
+
+.startpage-signin-link {
+	text-align: left;
+}
+
+.startpage-signin-error {
+	color: red;
+	text-align: left;
+	padding-left: 10px;
+}

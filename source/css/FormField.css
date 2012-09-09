@@ -1,5 +1,6 @@
 .formfield {
 	position: relative;
+	box-sizing: border-box;
 }
 
 .formfield > .onyx-input {
