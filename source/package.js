@@ -5,6 +5,7 @@ enyo.depends(
 	"$lib/Base64.js",
 	"css/",
 	"App.js",
+	"MainView.js",
 	"ChuboxItem.js",
 	"ChuboxListItem.js",
 	"Chubox.js",
