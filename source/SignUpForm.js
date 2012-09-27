@@ -96,7 +96,6 @@ enyo.kind({
 		this.checkUsername();
 		this.checkEmail();
 		this.checkPassword();
-		this.log(this.$.firstName.getValid(), this.$.lastName.getValid(), this.$.email.getValid(), this.$.username.getValid(), this.$.password.getValid());
 		return this.$.firstName.getValid() && this.$.lastName.getValid() && this.$.email.getValid() && this.$.username.getValid() && this.$.password.getValid();
 	},
 	submit: function() {
@@ -113,12 +112,13 @@ enyo.kind({
 		}
 	},
 	components: [
-		{kind: "FormField", name: "firstName", placeholder: "Vorname", required: true, onchange: "checkFirstName", errorMessage: "Please enter your first name!"},
-		{kind: "FormField", name: "lastName", placeholder: "Nachname", required: true, onchange: "checkLastName", errorMessage: "Please enter your last name!"},
-		{kind: "FormField", name: "email", placeholder: "Email", required: true, onchange: "checkEmail"},
-		{kind: "FormField", name: "username", placeholder: "Benutzername", required: true, onchange: "checkUsername"},
-		{kind: "FormField", name: "password", type: "password", placeholder: "Passwort", required: true, onchange: "checkPassword"},
-		// {kind: "FormField", name: "password2", type: "password", placeholder: "Passwort wiederholen", required: true, onchange: "checkPassword"},
+		{kind: "onyx.Groupbox", components: [
+			{kind: "FormField", name: "firstName", placeholder: "Vorname", required: true, onchange: "checkFirstName", errorMessage: "Please enter your first name!"},
+			{kind: "FormField", name: "lastName", placeholder: "Nachname", required: true, onchange: "checkLastName", errorMessage: "Please enter your last name!"},
+			{kind: "FormField", name: "email", placeholder: "Email", required: true, onchange: "checkEmail"},
+			{kind: "FormField", name: "username", placeholder: "Benutzername", required: true, onchange: "checkUsername"},
+			{kind: "FormField", name: "password", type: "password", placeholder: "Passwort", required: true, onchange: "checkPassword"}
+		]},
 		{kind: "onyx.Button", content: "Submit", ontap: "submit", classes: "onyx-affirmative", style: "width: 100%;"}
 	]
 });

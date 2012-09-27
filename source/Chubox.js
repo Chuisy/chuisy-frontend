@@ -16,7 +16,12 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        this.loadItems();
+        this.userChanged();
+    },
+    userChanged: function() {
+        if (this.user) {
+            this.loadItems();
+        }
     },
     loadItems: function() {
         chuisy.chuboxitem.list([["user", this.user.profile.id]], enyo.bind(this, function(sender, response) {

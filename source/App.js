@@ -1,77 +1,74 @@
 enyo.kind({
-	name: "App",
-	fit: true,
-	kind: "FittableRows",
-	classes: "app",
-	narrowWidth: 800,
-	published: {
-		menuShowing: true,
-		infoSliderShowing: true
-	},
-	isNarrow: function() {
-		return this.getBounds().width < this.narrowWidth;
-	},
-	menuShowingChanged: function() {
-		this.$.menuButton.addRemoveClass("active", this.menuShowing);
-		this.$.appPanels.setIndex(this.menuShowing ? 0 : 1);
-	},
-	infoSliderShowingChanged: function() {
-		this.$.infoSliderButton.addRemoveClass("active", this.infoSliderShowing);
-		if (this.infoSliderShowing) {
-			this.$.infoSlider.animateToMin();
-		} else {
-			this.$.infoSlider.animateToMax();
-		}
-	},
-	rendered: function() {
-		this.inherited(arguments);
-		this.setMenuShowing(!this.isNarrow());
-		this.resizeHandler();
-	},
-	toggleMenu: function() {
-		this.setMenuShowing(!this.menuShowing);
-	},
-	toggleInfoSlider: function() {
-		this.setInfoSliderShowing(!this.infoSliderShowing);
-	},
-	// resizeHandler: function() {
-	// 	this.inherited(arguments);
-	// 	var narrow = this.isNarrow();
-	// 	this.addRemoveClass("narrow", narrow);
-	// 	this.$.contentPanels.setFit(!narrow);
-	// 	this.$.infoSlider.setMin(narrow ? -200 : 0);
-	// 	this.$.infoSlider.setMax(narrow ? 10 : 0);
-	// 	this.$.infoSliderButton.setShowing(narrow);
-	// 	this.$.mainPanel.render();
-	// 	this.setInfoSliderShowing(!narrow);
-	// },
-	chuboxItemSelected: function(sender, event) {
-		this.$.productView.setProduct(event.item.product);
-		this.$.contentPanels.setIndex(1);
-		setTimeout(enyo.bind(this, function() {
-			this.$.productView.resized();
-		}), 20);
-	},
-	contentPanelsBack: function() {
-		this.$.contentPanels.setIndex(0);
-	},
-	components: [
-		{classes: "mainheader", kind: "FittableColumns", components: [
-			{classes: "mainheader-text", fit: true, content: "chuisy"}
-			// {kind: "onyx.Button", name: "infoSliderButton", ontap: "toggleInfoSlider", components: [
-			// 	{kind: "Image", src: "assets/images/menu-icon.png"}
-			// ]}
-		]},
-		{kind: "FittableColumns", fit: true, components: [
-			{classes: "mainmenu", style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "menu"},
-			{kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
-				// {kind: "ChuFeed"},
-				{kind: "Chubox", onItemSelected: "chuboxItemSelected", user: {profile: {id: 2}}},
-				// {kind: "ChuView"},
-				{kind: "Scroller", components: [
-					{kind: "ProductView", onBack: "contentPanelsBack"}
-				]}
-			]}
-		]}
-	]
+    name: "App",
+    fit: true,
+    kind: "FittableRows",
+    classes: "app",
+    narrowWidth: 800,
+    published: {
+        user: null
+    },
+    create: function() {
+        this.inherited(arguments);
+
+        chuisy.authCredentials = this.fetchAuthCredentials();
+        if (chuisy.authCredentials) {
+            this.signedIn();
+        }
+
+        this.decodeHash();
+    },
+    decodeHash: function() {
+        var match, hash = window.location.hash;
+
+        if ((match = hash.match(/^#!\/(.+)/))) {
+            if ((match = match[1].match(/^auth\/(.+)/))) {
+                chuisy.authCredentials = JSON.parse(Base64.decode(match[1]));
+                this.signedIn();
+                window.location.hash = "";
+            } else if ((match = match[1].match(/^chubox\/$/))) {
+                this.$.mainView.showChuBox();
+            }
+        }
+    },
+    loadUserData: function() {
+        var credentials = this.fetchAuthCredentials();
+        if (credentials) {
+                chuisy.user.detail(credentials.id, enyo.bind(this, function(sender, response) {
+                this.setUser(response);
+            }));
+        } else {
+            this.setUser(null);
+        }
+    },
+    fetchAuthCredentials: function() {
+        var credentials = null;
+        try {
+            credentials = JSON.parse(localStorage.getItem("authCredentials"));
+        } catch(e) {
+        }
+        return credentials;
+    },
+    saveAuthCredentials: function() {
+        localStorage.setItem("authCredentials", JSON.stringify(chuisy.authCredentials));
+    },
+    deleteAuthCredentials: function() {
+        localStorage.removeItem("authCredentials");
+    },
+    signedIn: function() {
+        this.saveAuthCredentials();
+        this.loadUserData();
+        this.$.panels.setIndex(1);
+    },
+    userChanged: function() {
+        this.$.mainView.setUser(this.user);
+    },
+    isNarrow: function() {
+        return this.getBounds().width < this.narrowWidth;
+    },
+    components: [
+        {kind: "Panels", classes: "enyo-fill", components: [
+            {kind: "StartPage", onSignIn: "signedIn"},
+            {kind: "MainView"}
+        ]}
+    ]
 });

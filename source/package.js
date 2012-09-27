@@ -2,12 +2,15 @@ enyo.depends(
 	"$lib/layout",
 	"$lib/onyx",
 	"$lib/sdk",
+	"$lib/Base64.js",
 	"css/",
 	"App.js",
+	"MainView.js",
 	"ChuboxItem.js",
 	"ChuboxListItem.js",
 	"Chubox.js",
 	"ProductView.js",
 	"FormField.js",
-	"SignUpForm.js"
+	"SignUpForm.js",
+	"StartPage.js"
 );
