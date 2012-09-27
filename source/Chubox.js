@@ -35,11 +35,11 @@ enyo.kind({
         var item = this.items[event.index];
         c.setItem(item);
         var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
-        c.applyStyle("transform", "rotate(" + rot + "deg)");
-        c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
-        c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
-        c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
-        c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
+        // c.applyStyle("transform", "rotate(" + rot + "deg)");
+        // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
+        // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
+        // c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
+        // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
     },
     setupListItem: function(sender, event) {
         var item = this.items[event.index];
