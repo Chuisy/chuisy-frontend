@@ -34,17 +34,17 @@ enyo.kind({
 	toggleInfoSlider: function() {
 		this.setInfoSliderShowing(!this.infoSliderShowing);
 	},
-	resizeHandler: function() {
-		this.inherited(arguments);
-		var narrow = this.isNarrow();
-		this.addRemoveClass("narrow", narrow);
-		this.$.contentPanels.setFit(!narrow);
-		this.$.infoSlider.setMin(narrow ? -200 : 0);
-		this.$.infoSlider.setMax(narrow ? 10 : 0);
-		this.$.infoSliderButton.setShowing(narrow);
-		this.$.mainPanel.render();
-		this.setInfoSliderShowing(!narrow);
-	},
+	// resizeHandler: function() {
+	// 	this.inherited(arguments);
+	// 	var narrow = this.isNarrow();
+	// 	this.addRemoveClass("narrow", narrow);
+	// 	this.$.contentPanels.setFit(!narrow);
+	// 	this.$.infoSlider.setMin(narrow ? -200 : 0);
+	// 	this.$.infoSlider.setMax(narrow ? 10 : 0);
+	// 	this.$.infoSliderButton.setShowing(narrow);
+	// 	this.$.mainPanel.render();
+	// 	this.setInfoSliderShowing(!narrow);
+	// },
 	chuboxItemSelected: function(sender, event) {
 		this.$.productView.setProduct(event.item.product);
 		this.$.contentPanels.setIndex(1);
@@ -56,32 +56,20 @@ enyo.kind({
 		this.$.contentPanels.setIndex(0);
 	},
 	components: [
-		{classes: "main-header", kind: "FittableColumns", components: [
-			{kind: "onyx.Button", classes: "active", name: "menuButton", ontap: "toggleMenu", components: [
-				{kind: "Image", src: "assets/images/menu-icon.png"}
-			]},
-			{classes: "main-header-text", fit: true, content: "chuisy"},
-			{kind: "onyx.Button", name: "infoSliderButton", ontap: "toggleInfoSlider", components: [
-				{kind: "Image", src: "assets/images/menu-icon.png"}
-			]}
+		{classes: "mainheader", kind: "FittableColumns", components: [
+			{classes: "mainheader-text", fit: true, content: "chuisy"}
+			// {kind: "onyx.Button", name: "infoSliderButton", ontap: "toggleInfoSlider", components: [
+			// 	{kind: "Image", src: "assets/images/menu-icon.png"}
+			// ]}
 		]},
-		{kind: "Panels", name: "appPanels", fit: true, classes: "app-panels", narrowFit: false, realtimeFit: true,
-			arrangerKind: "CollapsingArranger", components: [
-			{classes: "main-menu bg-light", style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "menu"},
-			{classes: "main-panel bg-light", name: "mainPanel", kind: "FittableRows", components: [
-				{classes: "fading-separator"},
-				{kind: "FittableColumns", fit: true, components: [
-					{kind: "Panels", arrangerKind: "CardArranger", fit: false, draggable: false, style: "width: 100%", classes: "contentpanel", name: "contentPanels", components: [
-						{kind: "Chubox", onItemSelected: "chuboxItemSelected", user: {profile: {id: 2}}},
-						{kind: "Scroller", components: [
-							{kind: "ProductView", onBack: "contentPanelsBack"}
-						]}
-					]},
-					{kind: "Slideable", classes: "bg-light", unit: "px", overMoving: false, preventDragPropagation: true, style: "width: 200px;",
-						name: "infoSlider", components: [
-						{classes: "fading-separator"},
-						{style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "info slider"}
-					]}
+		{kind: "FittableColumns", fit: true, components: [
+			{classes: "mainmenu", style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "menu"},
+			{kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
+				// {kind: "ChuFeed"},
+				{kind: "Chubox", onItemSelected: "chuboxItemSelected", user: {profile: {id: 2}}},
+				// {kind: "ChuView"},
+				{kind: "Scroller", components: [
+					{kind: "ProductView", onBack: "contentPanelsBack"}
 				]}
 			]}
 		]}

@@ -1,5 +1,5 @@
 body {
-	background-image: url(../../assets/images/light_noise_diagonal.png);
+	/*background-image: url(../../assets/images/light_noise_diagonal.png);*/
 	padding: 0;
 	margin: 0;
 	font-family: PTSansRegular;
@@ -27,7 +27,7 @@ body {
 	text-align: center;
 }
 
-.app-panels {
+.apppanels {
 	height: 100%;
 	width: 100%;
 	max-width: 1024px;
@@ -36,11 +36,13 @@ body {
 	/*border: solid 1px;*/
 }
 
-.main-menu {
+.mainmenu {
 	width: 100px;
+	background-color: #888;
 }
 
-.main-panel {
+.secondarypanels {
+	width: 300px;
 }
 
 .fading-separator {
@@ -51,7 +53,7 @@ body {
 	background: url(../../assets/images/menu-separator.png) no-repeat center center;
 }
 
-.main-header {
+.mainheader {
 	height: 50px;
 	padding: 8px;
 	box-sizing: border-box;
@@ -70,12 +72,12 @@ body {
 	z-index: 99;
 }
 
-.main-header .onyx-button {
+.mainheader .onyx-button {
 	background-color: transparent;
 	padding: 2px;
 }
 
-.main-header-text {
+.mainheader-text {
 	color: White;
 	font-size: 20pt;
 	font-family: PTSansCaptionBold;
@@ -88,11 +90,42 @@ body {
 	text-overflow: ellipsis;
 }
 
-.page-header {
+.pageheader {
 	padding: 20px;
 	font-size: 23pt;
 }
 
-.page-header > .back-button {
+.pageheader > .back-button {
 	margin-right: 10px;
+}
+
+.label {
+	padding: 10px;
+	font-size: 13pt;
+}
+
+.shadow-left {
+	box-shadow: -5px 0px 10px #555;
+}
+
+.pageheader {
+	padding: 10px;
+	border-bottom: solid 1px #888;
+	font-size: 12pt;
+}
+
+.pageheader-radiobuttongroup {
+	float: right;
+}
+
+button.pageheader-radiobutton {
+	color: inherit;
+	background: none;
+	border: none;
+	padding: 0 5px;
+}
+
+button.pageheader-radiobutton.active {
+	border: solid 1px;
+	border-radius: 5px;
 }
