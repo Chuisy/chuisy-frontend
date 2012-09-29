@@ -1,7 +1,7 @@
 enyo.kind({
     name: "Chubox",
     classes: "chubox",
-    kind: "FittableRows",
+    kind: "FittableColumns",
     published: {
         user: null
     },
@@ -78,13 +78,40 @@ enyo.kind({
     itemMouseUp: function(sender, event) {
         sender.removeClass("highlight");
     },
-    itemTap: function() {
+    itemTap: function(sender, event) {
+        this.log(event);
         this.doItemSelected({item: this.items[event.index]});
     },
+    newItemClicked: function() {
+        this.$.productForm.clear();
+        this.$.secondaryPanels.setIndex(1);
+    },
+    newItemSave: function() {
+        var data = {
+            user: this.user.profile.resource_uri,
+            // product: this.$.productForm.getData()
+            product: "/v1/product/1/"
+        };
+        this.log(data);
+        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+    },
+    itemRemove: function(sender, event) {
+        var item = this.items[event.index];
+        chuisy.chuboxitem.remove(item.id, enyo.bind(this, function(sender, response) {
+            this.log(response);
+            this.loadItems();
+        }));
+    },
     components: [
-        {kind: "Scroller", style: "padding: 20px", classes: "enyo-fill", showing: true, components: [
+        {kind: "Scroller", fit: true, components: [
             {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                {kind: "ChuboxItem", onclick: "itemTap", onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
+                {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
+                //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
+            ]}
+        ]},
+        {kind: "Panels", name: "secondaryPanels", arrangerKind: "CarouselArranger", classes: "secondarypanels shadow-left", components: [
             ]}
         ]}
     ]

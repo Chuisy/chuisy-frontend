@@ -2,13 +2,14 @@
 	padding: 20px;
 	width: 300px;
 	height: 340px;
-	margin: 10px;
+	margin: 20px;
 	box-sizing: border-box;
 	border: #ccc solid 1px;
 	box-shadow: 2px 2px 5px #333;
 	background-image: url(../../assets/images/lightpaperfibers.png);
 	display: inline-block;
 	border-radius: 5px;
+	position: relative;
 }
 
 .chuboxitem.highlight {
@@ -32,6 +33,25 @@
 	font-family: 'Annie Use Your Telescope';
 	padding: 10px;
 	font-size: 18pt;
+}
+
+.chuboxitem-delete-button {
+	display: none;
+	background-color: White;
+	border: solid 1px;
+	border-radius: 20px;
+	position: absolute;
+	background-position: center center;
+	top: -15px;
+	left: -15px;
+}
+
+.chuboxitem:hover .chuboxitem-delete-button {
+	display: block;
+}
+
+.chuboxitem-delete-button:hover {
+	background-color: Gray;
 }
 
 .listchuboxitem {
