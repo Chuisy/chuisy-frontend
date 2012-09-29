@@ -8,10 +8,10 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        this.chuChanged();
     },
     userChanged: function() {
         this.loadChuboxItems();
+        this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
     },
     chuChanged: function() {
         if (this.chu) {
@@ -25,6 +25,8 @@ enyo.kind({
             this.refreshTaggedPersons();
             this.refreshChuItems();
         }
+        this.$.postButton.setShowing(!this.chu);
+        this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
     },
     clear: function() {
         this.chu = null;
@@ -33,11 +35,27 @@ enyo.kind({
     visibiltySelected: function(sender, event) {
         if (event.originator.getActive()) {
             var value = event.originator.value;
-            if (value == 'custom') {
-            } else {
+            if (this.chu) {
                 this.chu.visibility = value;
             }
+
+            if (value == "custom") {
+                this.$.secondaryPanels.setIndex(1);
+            }
         }
+    },
+    confirmVisibilityPeople: function() {
+        var people = this.$.visibilityPeopleSelector.getSelectedItems();
+        var peopleUris = [];
+        for (var i=0; i<people.length; i++) {
+            peopleUris.push(people[i].resource_uri);
+        }
+
+        if (this.chu) {
+            this.chu.visible_to =  peopleUris;
+        }
+
+        this.$.secondaryPanels.setIndex(0);
     },
     refreshTaggedPersons: function() {
         this.$.taggedRepeater.setCount(this.chu ? this.chu.tagged.length : 0);
@@ -77,7 +95,7 @@ enyo.kind({
         this.$.chuboxListItem.setItem(item);
     },
     components: [
-        {kind: "FittableRows", fit: true, components: [
+        {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
                 {kind: "onyx.InputDecorator", components: [
                     {kind: "onyx.Input", name: "title", placeholder: "Type title here..."}
@@ -98,18 +116,26 @@ enyo.kind({
                 {classes: "chuview-location", components: [
                     {classes: "chuview-location-text", name: "locationText", content: "Tap to enter location..."},
                     {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
-                ]}  
+                ]}
             ]},
-            {kind: "Scroller", style: "text-align: center;", fit: true, components: [
+            {style: "text-align: center;", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "ChuboxItem", onclick: "itemTap"}
                 ]}
-            ]}
+            ]},
+            {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu"}
         ]},
         {kind: "Panels", name: "secondaryPanels", draggable: false, classes: "secondarypanels shadow-left", components: [
-            {kind: "List", name: "chuboxList", classes: "enyo-fill", onSetupItem: "setupChuboxItem", components: [
-                {kind: "ChuboxListItem"}
+            {components: [
+                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu"}
+            ]},
+            {components: [
+                {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
+                {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
             ]}
+            // {kind: "List", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
+            //     {kind: "ListChuboxItem"}
+            // ]}
         ]}
     ]
 });

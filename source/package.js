@@ -11,5 +11,7 @@ enyo.depends(
 	"ProductView.js",
 	"FormField.js",
 	"SignUpForm.js",
-	"StartPage.js"
+	"StartPage.js",
+	"ChuView.js",
+	"PeopleSelector.js"
 );

@@ -8,5 +8,7 @@ enyo.depends(
 	"FormField.css",
 	"SignUpForm.css",
 	"StartPage.css",
-	"MainView.css"
+	"ChuView.css",
+	"MainView.css",
+	"PeopleSelector.css"
 );
