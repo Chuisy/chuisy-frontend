@@ -3,7 +3,8 @@ enyo.kind({
     classes: "chubox",
     kind: "FittableColumns",
     published: {
-        user: null
+        user: null, // The currently signed in user
+        boxOwner: null // The owner of this Chubox
     },
     events: {
         onItemSelected: ""
@@ -19,25 +20,29 @@ enyo.kind({
         this.userChanged();
     },
     userChanged: function() {
-        if (this.user) {
+        this.refreshItems();
+    },
+    boxOwnerChanged: function() {
+        if (this.boxOwner) {
             this.loadItems();
         }
     },
     loadItems: function() {
-        chuisy.chuboxitem.list([["user", this.user.profile.id]], enyo.bind(this, function(sender, response) {
+        chuisy.chuboxitem.list([["user", this.boxOwner.id]], enyo.bind(this, function(sender, response) {
             this.items = response.objects;
             this.refreshItems();
         }));
     },
     refreshItems: function() {
-        this.$.itemRepeater.setCount(this.items.length);
+        this.$.itemRepeater.setCount(this.items ? this.items.length : 0);
         this.$.itemRepeater.render();
     },
     setupRepeaterItem: function(sender, event) {
         var c = event.item.$.chuboxItem;
         var item = this.items[event.index];
         c.setItem(item);
-        var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
+        c.setOwned(this.user && this.user.profile.id == this.boxOwner.id);
+        // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
         // c.applyStyle("transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
@@ -79,7 +84,6 @@ enyo.kind({
         sender.removeClass("highlight");
     },
     itemTap: function(sender, event) {
-        this.log(event);
         this.doItemSelected({item: this.items[event.index]});
     },
     newItemClicked: function() {
@@ -104,14 +108,32 @@ enyo.kind({
             this.loadItems();
         }));
     },
+    itemCollect: function(sender, event) {
+        var item = this.items[event.index];
+        this.log(item);
+        var data = {
+            product: item.product.resource_uri,
+            user: this.user.profile.resource_uri
+        };
+        this.log(data);
+        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+    },
     components: [
-        {kind: "Scroller", fit: true, components: [
+        {kind: "Scroller", style: "text-align: center;", fit: true, components: [
             {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
+                {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove", onCollect: "itemCollect"}
                 //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
             ]}
         ]},
         {kind: "Panels", name: "secondaryPanels", arrangerKind: "CarouselArranger", classes: "secondarypanels shadow-left", components: [
+            {classes: "enyo-fill", components: [
+                {kind: "onyx.Button", content: "New Item", ontap: "newItemClicked"}
+            ]},
+            {classes: "enyo-fill", components: [
+                {kind: "ProductForm"},
+                {kind: "onyx.Button", content: "Save", ontap: "newItemSave"}
             ]}
         ]}
     ]

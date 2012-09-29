@@ -35,23 +35,39 @@
 	font-size: 18pt;
 }
 
-.chuboxitem-delete-button {
+.chuboxitem-toolbar {
 	display: none;
+	position: absolute;
+	top: -20px;
+	left: -20px;
+}
+
+.chuboxitem-toolbar-button {
 	background-color: White;
 	border: solid 1px;
 	border-radius: 20px;
-	position: absolute;
 	background-position: center center;
-	top: -15px;
-	left: -15px;
+	margin: 2px;
 }
 
-.chuboxitem:hover .chuboxitem-delete-button {
+.chuboxitem:hover .chuboxitem-toolbar {
 	display: block;
 }
 
-.chuboxitem-delete-button:hover {
+.chuboxitem-toolbar-button:hover {
 	background-color: Gray;
+}
+
+.chuboxitem-remove-button {
+	display: none;
+}
+
+.chuboxitem.owned .chuboxitem-remove-button {
+	display: block;
+}
+
+.chuboxitem.owned .chuboxitem-collect-button {
+	display: none;
 }
 
 .listchuboxitem {

@@ -1,5 +1,6 @@
 enyo.kind({
     name: "MainView",
+    kind: "FittableRows",
     narrowWidth: 800,
     published: {
         // menuShowing: true,
@@ -11,6 +12,8 @@ enyo.kind({
     },
     userChanged: function() {
         this.$.chubox.setUser(this.user);
+        this.$.chubox.setBoxOwner(this.user.profile);
+        this.$.chuFeed.setUser(this.user);
     },
     // menuShowingChanged: function() {
     //     this.$.menuButton.addRemoveClass("active", this.menuShowing);
@@ -24,11 +27,11 @@ enyo.kind({
     //         this.$.infoSlider.animateToMax();
     //     }
     // },
-    rendered: function() {
-        this.inherited(arguments);
-        // this.setMenuShowing(!this.isNarrow());
-        this.resizeHandler();
-    },
+    // rendered: function() {
+    //     this.inherited(arguments);
+    //     // this.setMenuShowing(!this.isNarrow());
+    //     this.resizeHandler();
+    // },
     // toggleMenu: function() {
     //     this.setMenuShowing(!this.menuShowing);
     // },
@@ -47,18 +50,18 @@ enyo.kind({
     //     this.setInfoSliderShowing(!narrow);
     // },
     chuboxItemSelected: function(sender, event) {
-        this.$.productView.setProduct(event.item.product);
-        this.$.contentPanels.setIndex(1);
-        setTimeout(enyo.bind(this, function() {
-            this.$.productView.resized();
-        }), 20);
+        // this.$.productView.setProduct(event.item.product);
+        // this.$.primaryPanels.setIndex(3);
+        // setTimeout(enyo.bind(this, function() {
+        //     this.$.productView.resized();
+        // }), 20);
     },
     contentPanelsBack: function() {
         this.$.contentPanels.setIndex(0);
     },
     components: [
-        {classes: "mainheader", kind: "FittableColumns", components: [
-            {classes: "mainheader-text", fit: true, content: "chuisy"}
+        {classes: "mainheader", components: [
+            {classes: "mainheader-text", content: "chuisy"}
             // {kind: "onyx.Button", name: "infoSliderButton", ontap: "toggleInfoSlider", components: [
             //  {kind: "Image", src: "assets/images/menu-icon.png"}
             // ]}
@@ -66,12 +69,7 @@ enyo.kind({
         {kind: "FittableColumns", fit: true, components: [
             {classes: "mainmenu", style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "menu"},
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
-                // {kind: "ChuFeed"},
-                {kind: "Chubox", onItemSelected: "chuboxItemSelected", user: {profile: {id: 2}}},
-                // {kind: "ChuView"},
-                {kind: "Scroller", components: [
-                    {kind: "ProductView", onBack: "contentPanelsBack"}
-                ]}
+                {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
             ]}
         ]}
     ]
