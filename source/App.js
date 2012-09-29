@@ -66,9 +66,9 @@ enyo.kind({
         return this.getBounds().width < this.narrowWidth;
     },
     components: [
-        {kind: "Panels", classes: "enyo-fill", components: [
+        {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
             {kind: "StartPage", onSignIn: "signedIn"},
-            {kind: "MainView"}
+            {kind: "MainView", classes: "enyo-fill"}
         ]}
     ]
 });
