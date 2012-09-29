@@ -17,16 +17,18 @@ enyo.kind({
         if (this.chu) {
             this.$.title.setValue(this.chu.title);
             this.$[this.chu.visibility + "Button"].setActive(true);
-            this.refreshTaggedPersons();
-            this.refreshChuItems();
+            this.items = this.chu.items;
+            this.taggedPersons = this.chu.tagged;
         } else {
             this.$.title.setValue("");
             this.$.publicButton.setActive(true);
-            this.refreshTaggedPersons();
-            this.refreshChuItems();
+            this.items = [];
+            this.taggedPersons = [];
         }
         this.$.postButton.setShowing(!this.chu);
         this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
+        this.refreshChuItems();
+        this.refreshTaggedPersons();
     },
     clear: function() {
         this.chu = null;
@@ -58,20 +60,20 @@ enyo.kind({
         this.$.secondaryPanels.setIndex(0);
     },
     refreshTaggedPersons: function() {
-        this.$.taggedRepeater.setCount(this.chu ? this.chu.tagged.length : 0);
+        this.$.taggedRepeater.setCount(this.taggedPersons.length);
         this.$.taggedRepeater.render();
     },
     refreshChuItems: function() {
-        this.$.itemRepeater.setCount(this.chu ? this.chu.items.length : 0);
+        this.$.itemRepeater.setCount(this.item.length);
         this.$.itemRepeater.render();
     },
     setupTaggedPerson: function(sender, event) {
-        var profile = this.chu.tagged[event.index];
-        event.item.$.thumbnail.setSrc(profile.avatar);
+        var user = this.taggedPersons[event.index];
+        event.item.$.thumbnail.setSrc(user.profile.avatar);
     },
     setupRepeaterItem: function(sender, event) {
         var c = event.item.$.chuboxItem;
-        var item = this.chu.items[event.index];
+        var item = this.items[event.index];
         c.setItem(item);
         var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
         // c.applyStyle("transform", "rotate(" + rot + "deg)");
@@ -94,6 +96,18 @@ enyo.kind({
         var item = this.chuboxItems[event.index];
         this.$.chuboxListItem.setItem(item);
     },
+    tagPerson: function() {
+        this.$.secondaryPanels.setIndex(2);
+    },
+    confirmTaggedPeople: function() {
+        this.taggedPersons = this.$.taggedPeopleSelector.getSelectedItems();
+        var peopleUris = [];
+        for (var i=0; i<this.taggedPersons.length; i++) {
+            peopleUris.push(this.taggedPersons[i].resource_uri);
+        }
+        this.refreshTaggedPersons();
+        this.$.secondaryPanels.setIndex(0);
+    },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
@@ -110,9 +124,9 @@ enyo.kind({
             ]},
             {components: [
                 {kind: "Repeater", name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                    {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail"}
+                    {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
                 ]},
-                {kind: "Button", ontap: "tagPerson", content: "+", classes: "chuview-tagbutton"},
+                {kind: "onyx.IconButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
                 {classes: "chuview-location", components: [
                     {classes: "chuview-location-text", name: "locationText", content: "Tap to enter location..."},
                     {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
@@ -130,8 +144,14 @@ enyo.kind({
                 {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu"}
             ]},
             {components: [
+                {content: "Visible To"},
                 {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
+            ]},
+            {components: [
+                {content: "Tagged People"},
+                {kind: "PeopleSelector", name: "taggedPeopleSelector"},
+                {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
             ]}
             // {kind: "List", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
             //     {kind: "ListChuboxItem"}
