@@ -1,11 +1,16 @@
 enyo.kind({
     name: "MainView",
+    classes: "mainview",
     kind: "FittableRows",
     narrowWidth: 800,
     published: {
         // menuShowing: true,
         // infoSliderShowing: true,
         user: null
+    },
+    views: {
+        chuFeed: 0,
+        chubox: 1
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -14,6 +19,19 @@ enyo.kind({
         this.$.chubox.setUser(this.user);
         this.$.chubox.setBoxOwner(this.user.profile);
         this.$.chuFeed.setUser(this.user);
+    },
+    showView: function(name) {
+        this.$.primaryPanels.setIndex(this.views[name]);
+    },
+    openChuFeed: function() {
+        this.showView("chuFeed");
+        this.$.chuFeedMenuItem.addClass("selected");
+        this.$.chuboxMenuItem.removeClass("selected");
+    },
+    openChubox: function() {
+        this.showView("chubox");
+        this.$.chuFeedMenuItem.removeClass("selected");
+        this.$.chuboxMenuItem.addClass("selected");
     },
     // menuShowingChanged: function() {
     //     this.$.menuButton.addRemoveClass("active", this.menuShowing);
@@ -67,8 +85,12 @@ enyo.kind({
             // ]}
         ]},
         {kind: "FittableColumns", fit: true, components: [
-            {classes: "mainmenu", style: "text-align: center; padding: 200px 0; font-size: 20pt;", content: "menu"},
+            {classes: "mainmenu", components: [
+                {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
+                {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"}
+            ]},
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
+                {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
             ]}
         ]}

@@ -1,0 +1,16 @@
+.mainview {}
+
+.mainmenu {
+}
+
+.mainmenu-item {
+	padding: 10px;
+}
+
+.mainmenu-item:hover {
+	background-color: White;
+}
+
+.mainmenu-item.selected {
+	background-color: White;
+}
