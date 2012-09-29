@@ -64,7 +64,7 @@ enyo.kind({
         this.$.taggedRepeater.render();
     },
     refreshChuItems: function() {
-        this.$.itemRepeater.setCount(this.item.length);
+        this.$.itemRepeater.setCount(this.items.length + 1);
         this.$.itemRepeater.render();
     },
     setupTaggedPerson: function(sender, event) {
@@ -72,10 +72,16 @@ enyo.kind({
         event.item.$.thumbnail.setSrc(user.profile.avatar);
     },
     setupRepeaterItem: function(sender, event) {
-        var c = event.item.$.chuboxItem;
-        var item = this.items[event.index];
-        c.setItem(item);
-        var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
+        if (event.index < this.items.length) {
+            var item = this.items[event.index];
+            event.item.$.chuboxItem.setItem(item);
+            event.item.$.chuboxItem.show();
+            event.item.$.newItemButton.hide();
+        } else {
+            event.item.$.chuboxItem.hide();
+            event.item.$.newItemButton.show();
+        }
+        // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
         // c.applyStyle("transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
@@ -83,18 +89,18 @@ enyo.kind({
         // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
     },
     loadChuboxItems: function() {
-        chuisy.chuboxitem.list([["user", this.user.profile.id]], enyo.bind(this, function(sender, response) {
+        chuisy.chuboxitem.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
             this.chuboxItems = response.objects;
             this.refreshChuboxItems();
         }));
     },
     refreshChuboxItems: function() {
         this.$.chuboxList.setCount(this.chuboxItems.length);
-        this.$.chuboxList.refresh();
+        this.$.chuboxList.render();
     },
     setupChuboxItem: function(sender, event) {
         var item = this.chuboxItems[event.index];
-        this.$.chuboxListItem.setItem(item);
+        this.$.listChuboxItem.setItem(item);
     },
     tagPerson: function() {
         this.$.secondaryPanels.setIndex(2);
@@ -106,6 +112,15 @@ enyo.kind({
             peopleUris.push(this.taggedPersons[i].resource_uri);
         }
         this.refreshTaggedPersons();
+        this.$.secondaryPanels.setIndex(0);
+    },
+    addItem: function() {
+        this.$.secondaryPanels.setIndex(3);
+    },
+    itemSelected: function(sender, event) {
+        var item = this.chuboxItems[event.index];
+        this.items.push(item);
+        this.refreshChuItems();
         this.$.secondaryPanels.setIndex(0);
     },
     components: [
@@ -134,7 +149,8 @@ enyo.kind({
             ]},
             {style: "text-align: center;", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", onclick: "itemTap"}
+                    {kind: "ChuboxItem", onclick: "itemTap"},
+                    {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
                 ]}
             ]},
             {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu"}
@@ -152,10 +168,13 @@ enyo.kind({
                 {content: "Tagged People"},
                 {kind: "PeopleSelector", name: "taggedPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
+            ]},
+            {components: [
+                {content: "Choose an Item!"},
+                {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
+                    {kind: "ListChuboxItem", ontap: "itemSelected"}
+                ]}
             ]}
-            // {kind: "List", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
-            //     {kind: "ListChuboxItem"}
-            // ]}
         ]}
     ]
 });

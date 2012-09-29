@@ -47,3 +47,20 @@
 .chuview-post-button {
 	float: right;
 }
+
+.chuview-new-item {
+	width: 300px;
+	height: 340px;
+	margin: 20px;
+	box-sizing: border-box;
+	border: #ccc dashed 1px;
+	background-color: transparent;
+	display: inline-block;
+	border-radius: 5px;
+	background-image: none;
+}
+
+.onyx-button.chuview-new-item:active {
+	background-color: Gray;
+	background-image: none;
+}
