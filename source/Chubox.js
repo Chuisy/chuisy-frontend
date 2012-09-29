@@ -32,8 +32,6 @@ enyo.kind({
     refreshItems: function() {
         this.$.itemRepeater.setCount(this.items.length);
         this.$.itemRepeater.render();
-        this.$.itemList.setCount(this.items.length);
-        this.$.itemList.refresh();
     },
     setupRepeaterItem: function(sender, event) {
         var c = event.item.$.chuboxItem;
@@ -45,10 +43,6 @@ enyo.kind({
         // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
-    },
-    setupListItem: function(sender, event) {
-        var item = this.items[event.index];
-        this.$.listItem.setItem(item);
     },
     itemHold: function(sender, event) {
         this.log(event);
@@ -87,28 +81,11 @@ enyo.kind({
     itemTap: function() {
         this.doItemSelected({item: this.items[event.index]});
     },
-    showGrid: function() {
-        this.$.panels.setIndex(0);
-    },
-    showList: function() {
-        this.$.panels.setIndex(1);
-    },
     components: [
-        {kind: "onyx.RadioGroup", components: [
-            {content: "grid", ontap: "showGrid"},
-            {content: "list", ontap: "showList"}
-        ]},
-        {kind: "Panels", fit: true, name: "panels", components: [
-            {kind: "Scroller", style: "padding: 20px", classes: "enyo-fill", showing: true, components: [
-                {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", onclick: "itemTap", onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
-                ]}
-            ]},
-            // {kind: "Scroller", classes: "enyo-fill", components: [
-                {kind: "List", style: "padding: 20px", classes: "enyo-fill", name: "itemList", onSetupItem: "setupListItem", components: [
-                    {kind: "ChuboxListItem", name: "listItem", ontap: "itemTap", tapHighlight: true}
-                ]}
-            // ]}
+        {kind: "Scroller", style: "padding: 20px", classes: "enyo-fill", showing: true, components: [
+            {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
+                {kind: "ChuboxItem", onclick: "itemTap", onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
+            ]}
         ]}
     ]
 });
