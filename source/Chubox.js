@@ -41,7 +41,7 @@ enyo.kind({
         var c = event.item.$.chuboxItem;
         var item = this.items[event.index];
         c.setItem(item);
-        c.setOwned(this.user && this.user.profile.id == this.boxOwner.id);
+        c.setOwned(this.user && this.user.id == this.boxOwner.id);
         // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
         // c.applyStyle("transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
@@ -92,7 +92,7 @@ enyo.kind({
     },
     newItemSave: function() {
         var data = {
-            user: this.user.profile.resource_uri,
+            user: this.user.resource_uri,
             // product: this.$.productForm.getData()
             product: "/v1/product/1/"
         };
@@ -113,9 +113,8 @@ enyo.kind({
         this.log(item);
         var data = {
             product: item.product.resource_uri,
-            user: this.user.profile.resource_uri
+            user: this.user.resource_uri
         };
-        this.log(data);
         chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));

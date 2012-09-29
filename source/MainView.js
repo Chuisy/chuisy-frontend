@@ -17,7 +17,7 @@ enyo.kind({
     },
     userChanged: function() {
         this.$.chubox.setUser(this.user);
-        this.$.chubox.setBoxOwner(this.user.profile);
+        this.$.chubox.setBoxOwner(this.user);
         this.$.chuFeed.setUser(this.user);
     },
     showView: function(name) {
