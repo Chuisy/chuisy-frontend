@@ -1,4 +1,5 @@
 enyo.depends(
+	"util.js",
 	"$lib/layout",
 	"$lib/onyx",
 	"$lib/sdk",
