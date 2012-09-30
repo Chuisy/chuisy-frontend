@@ -179,6 +179,16 @@ enyo.kind({
 
         this.refreshChuItems();
     },
+    itemCollect: function(sender, event) {
+        var item = this.items[event.index];
+        var data = {
+            product: item.product.resource_uri,
+            user: this.user.resource_uri
+        };
+        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+    },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
@@ -205,7 +215,7 @@ enyo.kind({
             ]},
             {style: "text-align: center;", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"},
+                    {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove", onCollect: "itemCollect"},
                     {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
                 ]}
             ]},
