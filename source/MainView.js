@@ -10,7 +10,8 @@ enyo.kind({
     },
     views: {
         chuFeed: 0,
-        chubox: 1
+        chubox: 1,
+        chuView: 2
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -19,6 +20,7 @@ enyo.kind({
         this.$.chubox.setUser(this.user);
         this.$.chubox.setBoxOwner(this.user);
         this.$.chuFeed.setUser(this.user);
+        this.$.chuView.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -92,6 +94,7 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
+                {kind: "ChuView"}
             ]}
         ]}
     ]

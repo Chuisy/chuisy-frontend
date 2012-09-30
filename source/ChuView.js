@@ -16,45 +16,65 @@ enyo.kind({
     chuChanged: function() {
         if (this.chu) {
             this.$.title.setValue(this.chu.title);
-            this.$[this.chu.visibility + "Button"].setActive(true);
+            this.visibility = this.chu.visibility;
             this.items = this.chu.items;
+            this.visibleTo = this.chu.visible_to;
             this.taggedPersons = this.chu.tagged;
         } else {
             this.$.title.setValue("");
-            this.$.publicButton.setActive(true);
+            this.visibility = "public";
             this.items = [];
+            this.visibleTo = [];
             this.taggedPersons = [];
         }
         this.$.postButton.setShowing(!this.chu);
+        this.$[this.visibility + "Button"].setActive(true);
         this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
         this.refreshChuItems();
         this.refreshTaggedPersons();
+        this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
+        this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
     },
     clear: function() {
         this.chu = null;
         this.chuChanged();
     },
+    updateChu: function() {
+        this.log(this.chu);
+        chuisy.chu.put(this.chu.id, this.chu, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+    },
+    titleChanged: function() {
+        if (this.chu) {
+            this.chu.title = this.$.title.getValue();
+            this.updateChu();
+        }
+    },
     visibiltySelected: function(sender, event) {
-        if (event.originator.getActive()) {
-            var value = event.originator.value;
-            if (this.chu) {
-                this.chu.visibility = value;
-            }
+        var value = sender.value;
 
-            if (value == "custom") {
-                this.$.secondaryPanels.setIndex(1);
-            }
+        this.visibility = value;
+
+        if (this.chu) {
+            this.chu.visibility = value;
+            this.updateChu();
+        }
+
+        if (value == "custom") {
+            this.$.secondaryPanels.setIndex(1);
+        } else {
+            this.$.secondaryPanels.setIndex(0);
         }
     },
     confirmVisibilityPeople: function() {
         var people = this.$.visibilityPeopleSelector.getSelectedItems();
-        var peopleUris = [];
-        for (var i=0; i<people.length; i++) {
-            peopleUris.push(people[i].resource_uri);
-        }
+
+        this.visibleTo = people;
 
         if (this.chu) {
-            this.chu.visible_to =  peopleUris;
+            this.chu.visible_to =  this.visibleTo;
+            this.updateChu();
         }
 
         this.$.secondaryPanels.setIndex(0);
@@ -76,6 +96,7 @@ enyo.kind({
             var item = this.items[event.index];
             event.item.$.chuboxItem.setItem(item);
             event.item.$.chuboxItem.show();
+            event.item.$.chuboxItem.setOwned(this.user.id == this.chu.user.id);
             event.item.$.newItemButton.hide();
         } else {
             event.item.$.chuboxItem.hide();
@@ -107,10 +128,12 @@ enyo.kind({
     },
     confirmTaggedPeople: function() {
         this.taggedPersons = this.$.taggedPeopleSelector.getSelectedItems();
-        var peopleUris = [];
-        for (var i=0; i<this.taggedPersons.length; i++) {
-            peopleUris.push(this.taggedPersons[i].resource_uri);
+
+        if (this.chu) {
+            this.chu.tagged = this.taggedPersons;
+            this.updateChu();
         }
+
         this.refreshTaggedPersons();
         this.$.secondaryPanels.setIndex(0);
     },
@@ -120,21 +143,29 @@ enyo.kind({
     itemSelected: function(sender, event) {
         var item = this.chuboxItems[event.index];
         this.items.push(item);
+
+        if (this.chu) {
+            this.chu.items = this.items;
+            this.updateChu();
+        }
+
         this.refreshChuItems();
         this.$.secondaryPanels.setIndex(0);
+    },
+    postChu: function() {
     },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
                 {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "title", placeholder: "Type title here..."}
+                    {kind: "onyx.Input", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
                 ]},
-                {kind: "Group", classes: "pageheader-radiobuttongroup", onActivate: "visibiltySelected", components: [
-                    {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "publicTapped"},
+                {kind: "Group", classes: "pageheader-radiobuttongroup", components: [
+                    {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
                     {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                    {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "showImpressum"},
+                    {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
                     {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                    {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "showContact"}
+                    {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
                 ]}
             ]},
             {components: [
