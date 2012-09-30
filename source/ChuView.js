@@ -96,7 +96,7 @@ enyo.kind({
             var item = this.items[event.index];
             event.item.$.chuboxItem.setItem(item);
             event.item.$.chuboxItem.show();
-            event.item.$.chuboxItem.setOwned(this.user.id == this.chu.user.id);
+            event.item.$.chuboxItem.setOwned(!this.chu || this.user.id == this.chu.user.id);
             event.item.$.newItemButton.hide();
         } else {
             event.item.$.chuboxItem.hide();
@@ -153,6 +153,21 @@ enyo.kind({
         this.$.secondaryPanels.setIndex(0);
     },
     postChu: function() {
+        var data = {
+            title: this.$.title.getValue(),
+            visibility: this.visibility,
+            expandability: "public", // TODO: Add option to change this
+            user: this.user,
+            items: this.items,
+            tagged: this.taggedPersons,
+            visible_to: this.visibleTo,
+            expandable_by: []
+        };
+
+        this.log(data);
+        chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
     },
     components: [
         {kind: "Scroller", fit: true, components: [
@@ -184,7 +199,7 @@ enyo.kind({
                     {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
                 ]}
             ]},
-            {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu"}
+            {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
         ]},
         {kind: "Panels", name: "secondaryPanels", draggable: false, classes: "secondarypanels shadow-left", components: [
             {components: [
