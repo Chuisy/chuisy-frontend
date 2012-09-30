@@ -6,6 +6,9 @@ enyo.kind({
         user: null,
         chu: null
     },
+    events: {
+        onBack: ""
+    },
     create: function() {
         this.inherited(arguments);
     },
@@ -39,10 +42,11 @@ enyo.kind({
         this.chu = null;
         this.chuChanged();
     },
-    updateChu: function() {
+    updateChu: function(callback) {
         this.log(this.chu);
         chuisy.chu.put(this.chu.id, this.chu, enyo.bind(this, function(sender, response) {
             this.log(response);
+            callback();
         }));
     },
     titleChanged: function() {
@@ -189,6 +193,12 @@ enyo.kind({
             this.log(response);
         }));
     },
+    closeChu: function() {
+        this.chu.closed = true;
+        this.updateChu(enyo.bind(this, function() {
+            this.doBack();
+        }));
+    },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
@@ -223,7 +233,7 @@ enyo.kind({
         ]},
         {kind: "Panels", name: "secondaryPanels", draggable: false, classes: "secondarypanels shadow-left", components: [
             {components: [
-                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu"}
+                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
             ]},
             {components: [
                 {content: "Visible To"},

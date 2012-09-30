@@ -93,8 +93,16 @@ enyo.kind({
         //     this.$.productView.resized();
         // }), 20);
     },
+    chuSelected: function(sender, event) {
+        this.$.chuView.setUser(this.user);
+        this.$.chuView.setChu(event.chu);
+        this.$.primaryPanels.setIndex(2);
+    },
     contentPanelsBack: function() {
         this.$.contentPanels.setIndex(0);
+    },
+    back: function() {
+        this.openChuFeed();
     },
     components: [
         {classes: "mainheader", components: [
@@ -112,7 +120,7 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuView"}
+                {kind: "ChuView", onBack: "back"}
             ]}
         ]}
     ]
