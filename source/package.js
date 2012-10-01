@@ -13,6 +13,8 @@ enyo.depends(
 	"FormField.js",
 	"SignUpForm.js",
 	"StartPage.js",
+	"ChuFeed.js",
 	"ChuView.js",
+	"ChuItem.js",
 	"PeopleSelector.js"
 );
