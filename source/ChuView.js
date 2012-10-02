@@ -45,7 +45,7 @@ enyo.kind({
     updateChu: function(callback) {
         this.log(this.chu);
         chuisy.chu.put(this.chu.id, this.chu, enyo.bind(this, function(sender, response) {
-            this.log(response);
+            // this.log(response);
             callback();
         }));
     },
@@ -100,7 +100,8 @@ enyo.kind({
             var item = this.items[event.index];
             event.item.$.chuboxItem.setItem(item);
             event.item.$.chuboxItem.show();
-            event.item.$.chuboxItem.setOwned(!this.chu || this.user.id == this.chu.user.id);
+            event.item.$.chuboxItem.setUser(this.user);
+            event.item.$.chuboxItem.setChu(this.chu);
             event.item.$.newItemButton.hide();
         } else {
             event.item.$.chuboxItem.hide();
@@ -183,16 +184,6 @@ enyo.kind({
 
         this.refreshChuItems();
     },
-    itemCollect: function(sender, event) {
-        var item = this.items[event.index];
-        var data = {
-            product: item.product.resource_uri,
-            user: this.user.resource_uri
-        };
-        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
-    },
     closeChu: function() {
         this.chu.closed = true;
         this.updateChu(enyo.bind(this, function() {
@@ -225,7 +216,7 @@ enyo.kind({
             ]},
             {style: "text-align: center;", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove", onCollect: "itemCollect"},
+                    {kind: "ChuboxItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"},
                     {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
                 ]}
             ]},

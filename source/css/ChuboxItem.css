@@ -70,6 +70,17 @@
 	display: none;
 }
 
+.chuboxitem .chuboxitem-like-button {
+	display: none;
+	position: absolute;
+	top: 150px;
+	left: 120px;
+}
+
+.chuboxitem.likeable:hover:not(.owned) .chuboxitem-like-button {
+	display: block;
+}
+
 .listchuboxitem {
 	background-color: White;
 	border-radius: 5px;
