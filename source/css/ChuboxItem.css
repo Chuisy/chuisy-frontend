@@ -115,3 +115,39 @@
 	background-color: Orange;
 	background-image: none;
 }
+
+.minichuboxitem {
+	padding: 10px;
+	width: 140px;
+	height: 160px;
+	margin: 5px;
+	box-sizing: border-box;
+	border: #ccc solid 1px;
+	box-shadow: 2px 2px 5px #333;
+	background-image: url(../../assets/images/lightpaperfibers.png);
+	display: inline-block;
+	border-radius: 4px;
+}
+
+.minichuboxitem.highlight {
+	background-color: Orange;
+	background-image: none;
+}
+
+.minichuboxitem-image {
+	width: 120px;
+	height: 120px;
+	background: url() no-repeat center center;
+	background-size: cover;
+	border: solid 1px #555;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: Gray;
+}
+
+.minichuboxitem-caption {
+	font-family: 'Annie Use Your Telescope';
+	padding: 5px;
+	font-size: 12pt;
+}

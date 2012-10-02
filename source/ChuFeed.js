@@ -46,7 +46,6 @@ enyo.kind({
     },
     chuChanged: function() {
         if (this.chu) {
-            this.log(this.chu);
             this.$.title.setContent(this.chu.title);
             this.$.avatar.setSrc(this.chu.user.profile.avatar);
             this.refreshChuItems();
@@ -58,7 +57,7 @@ enyo.kind({
     },
     setupRepeaterItem: function(sender, event) {
         if (this.chu) {
-            var c = event.item.$.miniChuItem;
+            var c = event.item.$.miniChuboxItem;
             var item = this.chu.items[event.index];
             c.setItem(item);
         }
@@ -77,7 +76,7 @@ enyo.kind({
             {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "listchu-toolbutton"},
             {kind: "Scroller", classes: "listchu-scroller", components: [
                 {kind: "Repeater", style: "white-space: nowrap;", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "MiniChuItem"}
+                    {kind: "MiniChuboxItem"}
                 ]}
             ]}
         ]}
