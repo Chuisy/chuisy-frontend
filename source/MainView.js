@@ -11,7 +11,8 @@ enyo.kind({
     views: {
         chuFeed: 0,
         chubox: 1,
-        chuView: 2
+        chuView: 2,
+        chuboxItemView: 3
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -21,6 +22,7 @@ enyo.kind({
         this.$.chubox.setBoxOwner(this.user);
         this.$.chuFeed.setUser(this.user);
         this.$.chuView.setUser(this.user);
+        this.$.chuboxItemView.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -48,6 +50,16 @@ enyo.kind({
         this.$.chuFeedMenuItem.removeClass("selected");
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.addClass("selected");
+    },
+    openChuboxItemView: function(item, chu) {
+        this.$.chuboxItemView.setItem(item);
+        this.$.chuboxItemView.setChu(chu);
+        if (chu) {
+            this.$.chuboxItemView.setLikeable(true);
+        } else {
+            this.$.chuboxItemView.setLikeable(false);
+        }
+        this.showView("chuboxItemView");
     },
     postChu: function() {
         this.openChuView(null);
@@ -87,11 +99,7 @@ enyo.kind({
     //     this.setInfoSliderShowing(!narrow);
     // },
     chuboxItemSelected: function(sender, event) {
-        // this.$.productView.setProduct(event.item.product);
-        // this.$.primaryPanels.setIndex(3);
-        // setTimeout(enyo.bind(this, function() {
-        //     this.$.productView.resized();
-        // }), 20);
+        this.openChuboxItemView(event.item, event.chu);
     },
     chuSelected: function(sender, event) {
         this.$.chuView.setUser(this.user);
@@ -120,7 +128,8 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuView", onBack: "back"}
+                {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
+                {kind: "ChuboxItemView"}
             ]}
         ]}
     ]

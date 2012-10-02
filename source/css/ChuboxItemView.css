@@ -1,0 +1,27 @@
+.chuboxitemview {
+}
+
+.chuboxitemview-price {
+	float: right;
+}
+
+.chuboxitemview-likes {
+	display: none;
+}
+
+.chuboxitemview.likeable .chuboxitemview-likes {
+	display: block;
+}
+
+.chuboxitemview-taggedrepeater {
+}
+
+.chuboxitemview-likerimage {
+	height: 32px;
+	width: 32px;
+	margin: 5px 2px;
+}
+
+.chuboxitemview.owned .chuboxitemview-collect-button {
+	display: none;
+}

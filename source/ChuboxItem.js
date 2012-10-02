@@ -27,6 +27,7 @@ enyo.kind({
             } else {
                 this.setLiked(false);
             }
+            this.addRemoveClass("owned", this.user && this.item && this.user.id == this.item.user.id);
         }
     },
     userChanged: function() {

@@ -7,7 +7,8 @@ enyo.kind({
         chu: null
     },
     events: {
-        onBack: ""
+        onBack: "",
+        onItemSelected: ""
     },
     create: function() {
         this.inherited(arguments);
@@ -173,6 +174,10 @@ enyo.kind({
         chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
+    },
+    itemTap: function(sender, event) {
+        var item = this.items[event.index];
+        this.doItemSelected({item: item, chu: this.chu});
     },
     itemRemove: function(sender, event) {
         this.items.remove(event.index);
