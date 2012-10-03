@@ -45,9 +45,27 @@ enyo.kind({
     },
     updateChu: function(callback) {
         this.log(this.chu);
-        chuisy.chu.put(this.chu.id, this.chu, enyo.bind(this, function(sender, response) {
+        var params = enyo.clone(this.chu);
+        function toUriList(list) {
+            var temp = [];
+            for (var i=0; i<list.length; i++) {
+                temp.push(list[i].resource_uri);
+            }
+            return temp;
+        }
+
+        // Have to do this because of bug in django-tastypie 0.9.11
+        params.items = toUriList(params.items);
+        params.tagged = toUriList(params.tagged);
+        params.visible_to = toUriList(params.visible_to);
+        params.expandable_by = toUriList(params.expandable_by);
+
+        this.log(params);
+        chuisy.chu.put(this.chu.id, params, enyo.bind(this, function(sender, response) {
             // this.log(response);
-            callback();
+            if (callback) {
+                callback();
+            }
         }));
     },
     titleChanged: function() {
