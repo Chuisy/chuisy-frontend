@@ -86,10 +86,6 @@ enyo.kind({
     itemTap: function(sender, event) {
         this.doItemSelected({item: this.items[event.index]});
     },
-    newItemClicked: function() {
-        this.$.productForm.clear();
-        this.$.secondaryPanels.setIndex(1);
-    },
     newItemSave: function() {
         var data = {
             user: this.user.resource_uri,
@@ -117,11 +113,6 @@ enyo.kind({
         ]},
         {kind: "Panels", name: "secondaryPanels", arrangerKind: "CarouselArranger", classes: "secondarypanels shadow-left", components: [
             {classes: "enyo-fill", components: [
-                {kind: "onyx.Button", content: "New Item", ontap: "newItemClicked"}
-            ]},
-            {classes: "enyo-fill", components: [
-                {kind: "ProductForm"},
-                {kind: "onyx.Button", content: "Save", ontap: "newItemSave"}
             ]}
         ]}
     ]
