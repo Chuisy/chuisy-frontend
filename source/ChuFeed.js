@@ -28,8 +28,10 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", classes: "enyo-fill", components: [
-            {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
+        {kind: "Scroller", classes: "enyo-fill", components: [
+            {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
+                {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
+            ]}
         ]}
     ]
 });
