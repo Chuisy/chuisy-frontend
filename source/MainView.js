@@ -12,7 +12,8 @@ enyo.kind({
         chuFeed: 0,
         chubox: 1,
         chuView: 2,
-        chuboxItemView: 3
+        chuboxItemView: 3,
+        profileView: 4
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -23,6 +24,7 @@ enyo.kind({
         this.$.chuFeed.setUser(this.user);
         this.$.chuView.setUser(this.user);
         this.$.chuboxItemView.setUser(this.user);
+        this.$.profileView.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -60,6 +62,13 @@ enyo.kind({
             this.$.chuboxItemView.setLikeable(false);
         }
         this.showView("chuboxItemView");
+    },
+    openProfileView: function(user) {
+        this.$.profileView.setShowedUser(user);
+        this.showView("profileView");
+    },
+    openProfile: function() {
+        this.openProfileView(this.user);
     },
     postChu: function() {
         this.openChuView(null);
@@ -123,13 +132,15 @@ enyo.kind({
             {classes: "mainmenu", components: [
                 {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
                 {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
-                {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"}
+                {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
+                {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"}
             ]},
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuboxItemView"}
+                {kind: "ChuboxItemView"},
+                {kind: "ProfileView"}
             ]}
         ]}
     ]
