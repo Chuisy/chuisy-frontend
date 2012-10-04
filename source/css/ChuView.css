@@ -58,6 +58,7 @@
 	display: inline-block;
 	border-radius: 5px;
 	background-image: none;
+	vertical-align: top;
 }
 
 .onyx-button.chuview-new-item:active {
