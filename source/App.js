@@ -7,6 +7,12 @@ enyo.kind({
     published: {
         user: null
     },
+    statics: {
+        updateHistory: function(uri) {
+            window.ignoreHashChange = true;
+            window.location.hash = "!/" + uri;
+        }
+    },
     create: function() {
         this.inherited(arguments);
 
@@ -15,20 +21,87 @@ enyo.kind({
             this.signedIn();
         }
 
-        this.decodeHash();
+        window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
+        this.recoverStateFromUri();
     },
-    decodeHash: function() {
-        var match, hash = window.location.hash;
+    /**
+        Scans uri for certain patterns and recovers the corresponding application state
+    */
+    recoverStateFromUri: function() {
+        if (!window.ignoreHashChange) {
+            var match, match2, match3, hash = window.location.hash;
+            if ((match = hash.match(/^#!\/(.+)/))) {
+                // #!/...
+                // Seems like there is an app state encoded in the uri. Let's see what we can find...
+                if ((match2 = match[1].match(/^auth\/(.+)/))) {
+                    // auth/{base64-encoded auth credentials}
+                    // The user has been redirected from the backend with authentication credentials. Let's sign him in.
+                    chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
+                    this.signedIn();
+                    App.updateHistory("");
+                } else if (match[1].match(/^chufeed\/$/)) {
+                    // chufeed/
+                    // The chu feed it is! Let't open it.
+                    this.$.mainView.openChuFeed();
+                } else if (match[1].match(/^chubox\/$/)) {
+                    // chubox/
+                    // User wants to see his Chu Box? Our pleasure!
+                    this.$.mainView.openChubox();
+                } else if ((match2 = match[1].match(/^chu\/(.+)$/))) {
+                    // chu/..
+                    if (match2[1].match(/new\/$/)) {
+                        // chu/new/
+                        // Always glad to see new Chus. Let's open an empty chu view.
+                        this.$.mainView.openChuView(null);
+                    } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
+                        // chu/{chu id}
+                        // We have a URI pointing to a specific Chu. Let's open it.
+                        chuisy.chu.detail(match2[1], enyo.bind(this, function(sender, response) {
+                            this.$.mainView.openChuView(response);
+                        }));
+                    } else if ((match3 = match2[1].match(/^(\d+)\/item\/(\d+)\/$/))) {
+                        // chu/{chu id}/item/{item id}/
+                        // This is a Chubox Item within a certain Chu. Let's open the ChuboxItemView with a Chu specified
+                        chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
+                            var item;
+                            // Find the right item inside the chu's item array
+                            for (var i=0; i<response.items.length; i++) {
+                                if (response.items[i].id == match3[2]) {
+                                    item = response.items[i];
+                                    break;
+                                }
+                            }
+                            this.$.mainView.openChuboxItemView(item, response);
+                        }));
+                    }
+                } else if ((match2 = match[1].match(/^item\/(\d+)\/$/))) {
+                    // item/{item id}
+                    // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
+                    chuisy.chuboxitem.detail(match2[1], enyo.bind(this, function(sender, response) {
+                        this.$.mainView.openChuboxItemView(response);
+                    }));
+                } else if ((match2 = match[1].match(/^user\/(\d+)\/$/))) {
+                    // {user id}/
+                    // This is the URI to a users profile
+                    chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+                        this.$.mainView.openProfileView(response);
+                    }));
+                } else if ((match2 = match[1].match(/^([^\/]+)\/$/))) {
+                    // {username}/
+                    // Might be a username. Lets try finding a user that matches.
 
-        if ((match = hash.match(/^#!\/(.+)/))) {
-            if ((match = match[1].match(/^auth\/(.+)/))) {
-                chuisy.authCredentials = JSON.parse(Base64.decode(match[1]));
-                this.signedIn();
-                window.location.hash = "";
-            } else if ((match = match[1].match(/^chubox\/$/))) {
-                this.$.mainView.showChuBox();
+                    // This doesn't work presently as the 'username' get parameter is being used for authentication
+                    // chuisy.user.list(["username", match2[1]], enyo.bind(this, function(sender, response) {
+                    //     this.log(response);
+                    // }));
+                } else {
+                    this.log("Uri hash provided but no known pattern found!");
+                    // TODO: Show 404 Page
+                }
             }
         }
+
+        window.ignoreHashChange = false;
     },
     loadUserData: function() {
         var credentials = this.fetchAuthCredentials();

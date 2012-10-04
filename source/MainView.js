@@ -15,6 +15,9 @@ enyo.kind({
         chuboxItemView: 3,
         profileView: 4
     },
+    events: {
+        onLogout: ""
+    },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
@@ -35,6 +38,8 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+
+        App.updateHistory("chufeed/");
     },
     openChubox: function() {
         this.showView("chubox");
@@ -42,6 +47,8 @@ enyo.kind({
         this.$.chuboxMenuItem.addClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+
+        App.updateHistory("chubox/");
     },
     openChuView: function(chu) {
         if (chu) {
@@ -55,14 +62,18 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.addClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+
+        App.updateHistory("chu/" + (chu ? chu.id : "new") + "/");
     },
     openChuboxItemView: function(item, chu) {
         this.$.chuboxItemView.setItem(item);
         this.$.chuboxItemView.setChu(chu);
         if (chu) {
             this.$.chuboxItemView.setLikeable(true);
+            App.updateHistory("chu/" + chu.id + "/item/" + item.id + "/");
         } else {
             this.$.chuboxItemView.setLikeable(false);
+            App.updateHistory("item/" + item.id + "/");
         }
         this.showView("chuboxItemView");
     },
@@ -74,54 +85,22 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.addClass("selected");
+
+        App.updateHistory("user/" + user.id + "/");
     },
     openProfile: function() {
         this.openProfileView(this.user);
     },
     postChu: function() {
         this.openChuView(null);
+
+        App.updateHistory("chu/new/");
     },
-    // menuShowingChanged: function() {
-    //     this.$.menuButton.addRemoveClass("active", this.menuShowing);
-    //     this.$.appPanels.setIndex(this.menuShowing ? 0 : 1);
-    // },
-    // infoSliderShowingChanged: function() {
-    //     this.$.infoSliderButton.addRemoveClass("active", this.infoSliderShowing);
-    //     if (this.infoSliderShowing) {
-    //         this.$.infoSlider.animateToMin();
-    //     } else {
-    //         this.$.infoSlider.animateToMax();
-    //     }
-    // },
-    // rendered: function() {
-    //     this.inherited(arguments);
-    //     // this.setMenuShowing(!this.isNarrow());
-    //     this.resizeHandler();
-    // },
-    // toggleMenu: function() {
-    //     this.setMenuShowing(!this.menuShowing);
-    // },
-    // toggleInfoSlider: function() {
-    //     this.setInfoSliderShowing(!this.infoSliderShowing);
-    // },
-    // resizeHandler: function() {
-    //     this.inherited(arguments);
-    //     var narrow = this.isNarrow();
-    //     this.addRemoveClass("narrow", narrow);
-    //     this.$.contentPanels.setFit(!narrow);
-    //     this.$.infoSlider.setMin(narrow ? -200 : 0);
-    //     this.$.infoSlider.setMax(narrow ? 10 : 0);
-    //     this.$.infoSliderButton.setShowing(narrow);
-    //     this.$.mainPanel.render();
-    //     this.setInfoSliderShowing(!narrow);
-    // },
     chuboxItemSelected: function(sender, event) {
         this.openChuboxItemView(event.item, event.chu);
     },
     chuSelected: function(sender, event) {
-        this.$.chuView.setUser(this.user);
-        this.$.chuView.setChu(event.chu);
-        this.$.primaryPanels.setIndex(2);
+        this.openChuView(event.chu);
     },
     contentPanelsBack: function() {
         this.$.contentPanels.setIndex(0);
