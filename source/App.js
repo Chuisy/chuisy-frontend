@@ -65,10 +65,15 @@ enyo.kind({
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
+    logout: function() {
+        this.deleteAuthCredentials();
+        this.setUser(null);
+        this.$.panels.setIndex(0);
+    },
     components: [
         {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
             {kind: "StartPage", onSignIn: "signedIn"},
-            {kind: "MainView", classes: "enyo-fill"}
+            {kind: "MainView", classes: "enyo-fill", onLogout: "logout"}
         ]}
     ]
 });

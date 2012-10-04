@@ -129,6 +129,9 @@ enyo.kind({
     back: function() {
         this.openChuFeed();
     },
+    logout: function() {
+        this.doLogout();
+    },
     components: [
         {classes: "mainheader", components: [
             {classes: "mainheader-text", content: "chuisy"}
@@ -140,8 +143,9 @@ enyo.kind({
             {classes: "mainmenu", components: [
                 {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
                 {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
+                {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"},
                 {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
-                {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"}
+                {classes: "mainmenu-item", content: "Logout", ontap: "logout", name: "logoutMenuItem"}
             ]},
             {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
