@@ -10,9 +10,6 @@ enyo.kind({
         onBack: "",
         onItemSelected: ""
     },
-    create: function() {
-        this.inherited(arguments);
-    },
     userChanged: function() {
         this.loadChuboxItems();
         this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
@@ -134,10 +131,12 @@ enyo.kind({
         // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
     },
     loadChuboxItems: function() {
-        chuisy.chuboxitem.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
-            this.chuboxItems = response.objects;
-            this.refreshChuboxItems();
-        }));
+        if (this.user) {
+            chuisy.chuboxitem.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
+                this.chuboxItems = response.objects;
+                this.refreshChuboxItems();
+            }));
+        }
     },
     refreshChuboxItems: function() {
         this.$.chuboxList.setCount(this.chuboxItems.length);
