@@ -34,12 +34,14 @@ enyo.kind({
         this.$.chuFeedMenuItem.addClass("selected");
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
+        this.$.profileMenuItem.removeClass("selected");
     },
     openChubox: function() {
         this.showView("chubox");
         this.$.chuFeedMenuItem.removeClass("selected");
         this.$.chuboxMenuItem.addClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
+        this.$.profileMenuItem.removeClass("selected");
     },
     openChuView: function(chu) {
         if (chu) {
@@ -52,6 +54,7 @@ enyo.kind({
         this.$.chuFeedMenuItem.removeClass("selected");
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.addClass("selected");
+        this.$.profileMenuItem.removeClass("selected");
     },
     openChuboxItemView: function(item, chu) {
         this.$.chuboxItemView.setItem(item);
@@ -66,6 +69,11 @@ enyo.kind({
     openProfileView: function(user) {
         this.$.profileView.setShowedUser(user);
         this.showView("profileView");
+
+        this.$.chuFeedMenuItem.removeClass("selected");
+        this.$.chuboxMenuItem.removeClass("selected");
+        this.$.postChuMenuItem.removeClass("selected");
+        this.$.profileMenuItem.addClass("selected");
     },
     openProfile: function() {
         this.openProfileView(this.user);
