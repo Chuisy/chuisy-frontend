@@ -37,7 +37,7 @@ enyo.kind({
         {kind: "Image", name: "avatar", classes: "listchu-avatar"},
         {fit: true, components: [
             {name: "title", classes: "listchu-title"},
-            {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "listchu-toolbutton"},
+            // {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "listchu-toolbutton"},
             {kind: "Scroller", classes: "listchu-scroller", components: [
                 {kind: "Repeater", style: "white-space: nowrap;", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "MiniChuboxItem"}
