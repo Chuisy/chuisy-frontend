@@ -16,5 +16,6 @@ enyo.depends(
 	"ChuFeed.js",
 	"ChuView.js",
 	"PeopleSelector.js",
-	"ProfileView.js"
+	"ProfileView.js",
+	"ListChu.js"
 );
