@@ -1,1 +1,29 @@
-.profileview {}
+.profileview .pageheader > * {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.profileview-mainpanel {
+	padding: 20px;
+}
+
+.profileview-avatar {
+	width: 150px;
+	margin: 0 10px;
+}
+
+.profileview-fullname {
+	padding: 10px;
+	font-size: 25pt;
+}
+
+.profileview-username {
+	padding: 5px;
+	font-size: 20pt;
+	font-weight: bold;
+}
+
+.profileview-bio {
+	padding: 10px;
+	font-size: 12pt;
+}
