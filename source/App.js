@@ -106,7 +106,7 @@ enyo.kind({
     loadUserData: function() {
         var credentials = this.fetchAuthCredentials();
         if (credentials) {
-                chuisy.user.detail(credentials.id, enyo.bind(this, function(sender, response) {
+            chuisy.user.detail(credentials.id, enyo.bind(this, function(sender, response) {
                 this.setUser(response);
             }));
         } else {
@@ -142,6 +142,7 @@ enyo.kind({
         this.deleteAuthCredentials();
         this.setUser(null);
         this.$.panels.setIndex(0);
+        App.updateHistory("");
     },
     components: [
         {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
