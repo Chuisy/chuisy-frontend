@@ -7,7 +7,7 @@ enyo.kind({
         onSignup: ""
     },
     facebookSignIn: function() {
-        window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://chuisy.com:8000/v1/fb_auth/&scope=user_birthday,user_location,user_about_me";
+        window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://api.chuisy.com/v1/fb_auth/&scope=user_birthday,user_location,user_about_me";
     },
     showSignUp: function() {
         this.$.signInPanels.setIndex(1);
@@ -27,7 +27,7 @@ enyo.kind({
             }
             this.$.signInError.setShowing(!success);
         }));
-    }, 
+    },
     components: [
         {classes: "mainheader", components: [
             {classes: "mainheader-text", fit: true, content: "chuisy", style: "width: 100%"}
