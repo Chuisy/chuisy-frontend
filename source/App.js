@@ -56,7 +56,7 @@ enyo.kind({
                     } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                         // chu/{chu id}
                         // We have a URI pointing to a specific Chu. Let's open it.
-                        chuisy.chu.detail(match2[1], enyo.bind(this, function(sender, response) {
+                        chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
                             this.$.mainView.openChuView(response);
                         }));
                     } else if ((match3 = match2[1].match(/^(\d+)\/item\/(\d+)\/$/))) {
