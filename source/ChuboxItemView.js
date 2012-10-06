@@ -42,11 +42,18 @@ enyo.kind({
             this.$.likeCount.setContent(this.item.likes.length + " likes");
             this.refreshLikerRepeater();
             
-            this.addRemoveClass("owned", this.user && this.item && this.user.id == this.item.user.id);
+            this.addRemoveClass("owned", this.isOwned());
         }
     },
     userChanged: function() {
-        this.addRemoveClass("owned", this.user && this.item && this.user.id == this.item.user.id);
+        this.addRemoveClass("owned", this.isOwned());
+    },
+    chuChanged: function() {
+        this.addRemoveClass("owned", this.isOwned());
+        this.log(this.isOwned());
+    },
+    isOwned: function() {
+        return this.user && this.item && this.user.id == this.item.user.id;
     },
     likeableChanged: function() {
         this.addRemoveClass("likeable", this.likeable);

@@ -27,11 +27,21 @@ enyo.kind({
             } else {
                 this.setLiked(false);
             }
-            this.addRemoveClass("owned", this.user && this.item && this.user.id == this.item.user.id);
+            this.addRemoveClass("owned", this.isOwned());
         }
     },
     userChanged: function() {
-        this.addRemoveClass("owned", this.user && this.item && this.user.id == this.item.user.id);
+        this.addRemoveClass("owned", this.isOwned());
+    },
+    chuChanged: function() {
+        this.addRemoveClass("owned", this.isOwned());
+    },
+    isOwned: function() {
+        // if (this.chu) {
+        //     return this.user && this.item && this.user.id == this.chu.user.id;
+        // } else {
+            return this.user && this.item && this.user.id == this.item.user.id;
+        // }
     },
     likeableChanged: function() {
         this.addRemoveClass("likeable", this.likeable);
