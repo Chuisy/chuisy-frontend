@@ -21,12 +21,14 @@ enyo.kind({
             this.items = this.chu.items;
             this.visibleTo = this.chu.visible_to;
             this.taggedPersons = this.chu.tagged;
+            this.location = this.chu.location;
         } else {
             this.$.title.setValue("");
             this.visibility = "public";
             this.items = [];
             this.visibleTo = [];
             this.taggedPersons = [];
+            this.location = null;
         }
         this.$.postButton.setShowing(!this.chu);
         this.$[this.visibility + "Button"].setActive(true);
@@ -35,13 +37,14 @@ enyo.kind({
         this.refreshTaggedPersons();
         this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
         this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
+        this.$.locationPicker.setLocation(this.location);
+        this.updateLocationText();
     },
     clear: function() {
         this.chu = null;
         this.chuChanged();
     },
     updateChu: function(callback) {
-        this.log(this.chu);
         var params = enyo.clone(this.chu);
         function toUriList(list) {
             var temp = [];
@@ -57,9 +60,7 @@ enyo.kind({
         params.visible_to = toUriList(params.visible_to);
         params.expandable_by = toUriList(params.expandable_by);
 
-        this.log(params);
         chuisy.chu.put(this.chu.id, params, enyo.bind(this, function(sender, response) {
-            // this.log(response);
             if (callback) {
                 callback();
             }
@@ -184,10 +185,10 @@ enyo.kind({
             items: this.items,
             tagged: this.taggedPersons,
             visible_to: this.visibleTo,
-            expandable_by: []
+            expandable_by: [],
+            location: this.location
         };
 
-        this.log(data);
         chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
@@ -212,6 +213,27 @@ enyo.kind({
             this.doBack();
         }));
     },
+    changeLocation: function() {
+        this.$.secondaryPanels.setIndex(4);
+        this.$.locationPicker.initialize();
+    },
+    locationChanged: function(sender, event) {
+        this.log(event.location);
+    },
+    locationPickerBack: function() {
+        this.$.secondaryPanels.setIndex(0);
+    },
+    locationPickerChanged: function() {
+        this.location = this.$.locationPicker.getLocation();
+        this.updateLocationText();
+        if (this.chu) {
+            this.chu.location = this.location;
+            this.updateChu();
+        }
+    },
+    updateLocationText: function() {
+        this.$.locationText.setContent(this.location ? this.location.address : "Tap to enter location...");
+    },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
@@ -231,8 +253,8 @@ enyo.kind({
                     {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
                 ]},
                 {kind: "onyx.IconButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
-                {classes: "chuview-location", components: [
-                    {classes: "chuview-location-text", name: "locationText", content: "Tap to enter location..."},
+                {classes: "chuview-location", ontap: "changeLocation", components: [
+                    {classes: "chuview-location-text", name: "locationText"},
                     {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
                 ]}
             ]},
@@ -244,25 +266,29 @@ enyo.kind({
             ]},
             {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
         ]},
-        {kind: "Panels", name: "secondaryPanels", draggable: false, classes: "secondarypanels shadow-left", components: [
-            {components: [
+        {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "secondarypanels shadow-left", components: [
+            {classes: "enyo-fill", components: [
                 {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
             ]},
-            {components: [
+            {classes: "enyo-fill", components: [
                 {content: "Visible To"},
                 {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
             ]},
-            {components: [
+            {classes: "enyo-fill", components: [
                 {content: "Tagged People"},
                 {kind: "PeopleSelector", name: "taggedPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
             ]},
-            {components: [
+            {classes: "enyo-fill", components: [
                 {content: "Choose an Item!"},
                 {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
                     {kind: "ListChuboxItem", ontap: "itemSelected"}
                 ]}
+            ]},
+            {classes: "enyo-fill", components: [
+                {kind: "LocationPicker", classes: "enyo-fill", onLocationChanged: "locationPickerChanged"},
+                {kind: "onyx.Button", classes: "chuview-map-back-button", content: "Back", ontap: "locationPickerBack"}
             ]}
         ]}
     ]

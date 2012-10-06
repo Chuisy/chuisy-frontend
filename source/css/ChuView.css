@@ -65,3 +65,9 @@
 	background-color: Gray;
 	background-image: none;
 }
+
+.chuview-map-back-button {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+}
