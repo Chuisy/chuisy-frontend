@@ -131,7 +131,7 @@ enyo.kind({
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
-                {kind: "ProfileView"}
+                {kind: "ProfileView", onChuSelected: "chuSelected"}
             ]}
         ]}
     ]

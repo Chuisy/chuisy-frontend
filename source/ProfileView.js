@@ -6,6 +6,9 @@ enyo.kind({
 		user: null, // Currently signed in user
 		showedUser: null // User who's profile to show
 	},
+	events: {
+		onChuSelected: ""
+	},
 	showedUserChanged: function() {
 		if (this.showedUser) {
 			this.$.avatar.setSrc(this.showedUser.profile.avatar);
