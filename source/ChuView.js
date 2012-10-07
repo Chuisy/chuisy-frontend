@@ -252,9 +252,11 @@ enyo.kind({
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
+                // TITLE
                 {kind: "onyx.InputDecorator", components: [
                     {kind: "onyx.Input", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
                 ]},
+                // VISIBILITY
                 {kind: "Group", classes: "pageheader-radiobuttongroup", components: [
                     {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
                     {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
@@ -264,43 +266,52 @@ enyo.kind({
                 ]}
             ]},
             {components: [
+                // TAGGED
                 {kind: "Repeater", name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
                     {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
                 ]},
                 {kind: "onyx.IconButton", name: "tagButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
+                // LOCATION
                 {kind: "onyx.Button", classes: "chuview-location", name: "locationButton", ontap: "changeLocation", components: [
                     {classes: "chuview-location-text", name: "locationText"},
                     {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
                 ]}
             ]},
+            // ITEMS
             {style: "text-align: center;", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "ChuboxItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"},
                     {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
                 ]}
             ]},
+            // POST
             {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
         ]},
         {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "secondarypanels shadow-left", components: [
             {classes: "enyo-fill", components: [
+                // CLOSE
                 {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
             ]},
+            // SELECT VISIBLE TO
             {classes: "enyo-fill", components: [
                 {content: "Visible To"},
                 {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
             ]},
+            // SELECT TAGGED
             {classes: "enyo-fill", components: [
                 {content: "Tagged People"},
                 {kind: "PeopleSelector", name: "taggedPeopleSelector"},
                 {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
             ]},
+            // SELECT ITEM
             {classes: "enyo-fill", components: [
                 {content: "Choose an Item!"},
                 {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
                     {kind: "ListChuboxItem", ontap: "itemSelected"}
                 ]}
             ]},
+            // PICK LOCATION
             {classes: "enyo-fill", components: [
                 {kind: "LocationPicker", classes: "enyo-fill", onLocationChanged: "locationPickerChanged"},
                 {kind: "onyx.Button", classes: "chuview-map-back-button", content: "Back", ontap: "locationPickerBack"}
