@@ -12,7 +12,7 @@ enyo.kind({
     },
     userChanged: function() {
         this.loadChuboxItems();
-        this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
+        this.applyPermissions();
     },
     chuChanged: function() {
         if (this.chu) {
@@ -32,13 +32,26 @@ enyo.kind({
         }
         this.$.postButton.setShowing(!this.chu);
         this.$[this.visibility + "Button"].setActive(true);
-        this.addRemoveClass("owned", this.user && this.chu && this.chu.user.id == this.user.profile.id);
+        this.applyPermissions();
         this.refreshChuItems();
         this.refreshTaggedPersons();
         this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
         this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
         this.$.locationPicker.setLocation(this.location);
         this.updateLocationText();
+    },
+    isOwned: function() {
+        return !this.chu || this.user && this.chu.user.id == this.user.profile.id;
+    },
+    applyPermissions: function() {
+        var owned = this.isOwned();
+        this.addRemoveClass("owned", owned);
+        this.$.title.setDisabled(!owned);
+        this.$.publicButton.setDisabled(!owned);
+        this.$.privateButton.setDisabled(!owned);
+        this.$.customButton.setDisabled(!owned);
+        this.$.locationButton.setDisabled(!owned);
+        this.$.tagButton.setDisabled(!owned);
     },
     clear: function() {
         this.chu = null;
@@ -148,7 +161,9 @@ enyo.kind({
         this.$.listChuboxItem.setItem(item);
     },
     tagPerson: function() {
-        this.$.secondaryPanels.setIndex(2);
+        if (this.isOwned()) {
+            this.$.secondaryPanels.setIndex(2);
+        }
     },
     confirmTaggedPeople: function() {
         this.taggedPersons = this.$.taggedPeopleSelector.getSelectedItems();
@@ -252,8 +267,8 @@ enyo.kind({
                 {kind: "Repeater", name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
                     {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
                 ]},
-                {kind: "onyx.IconButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
-                {classes: "chuview-location", ontap: "changeLocation", components: [
+                {kind: "onyx.IconButton", name: "tagButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
+                {kind: "onyx.Button", classes: "chuview-location", name: "locationButton", ontap: "changeLocation", components: [
                     {classes: "chuview-location-text", name: "locationText"},
                     {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
                 ]}

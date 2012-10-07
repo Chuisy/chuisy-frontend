@@ -55,10 +55,14 @@
 	box-sizing: border-box;
 	border: #ccc dashed 1px;
 	background-color: transparent;
-	display: inline-block;
+	display: none;
 	border-radius: 5px;
 	background-image: none;
 	vertical-align: top;
+}
+
+.chuview.owned .chuview-new-item {
+	display: inline-block;
 }
 
 .onyx-button.chuview-new-item:active {
