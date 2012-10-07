@@ -75,3 +75,26 @@
 	top: 5px;
 	left: 5px;
 }
+
+.chuview-comments-scroller {
+	max-height: 200px;
+}
+
+.chuview-comment-avatar {
+	width: 30px;
+}
+
+.chuview-comment-text {
+	display: inline-block;
+	padding: 10px;
+	vertical-align: top;
+}
+
+.chuview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.chuview-commentinput-decorator > .enyo-input {
+	width: 100%;
+}

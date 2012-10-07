@@ -39,6 +39,7 @@ enyo.kind({
         this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
         this.$.locationPicker.setLocation(this.location);
         this.updateLocationText();
+        this.refreshComments();
     },
     isOwned: function() {
         return !this.chu || this.user && this.chu.user.id == this.user.profile.id;
@@ -249,6 +250,31 @@ enyo.kind({
     updateLocationText: function() {
         this.$.locationText.setContent(this.location ? this.location.address : "Tap to enter location...");
     },
+    refreshComments: function() {
+        this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
+        this.$.commentsRepeater.render();
+    },
+    setupComment: function(sender, event) {
+        var comment = this.chu.comments[event.index];
+        this.$.commentText.setContent(comment.text);
+        this.$.commentAvatar.setSrc(comment.user.profile.avatar);
+    },
+    commentInputKeydown: function(sender, event) {
+        if (event.keyCode == 13) {
+            this.commentEnter();
+        }
+    },
+    commentEnter: function() {
+        var comment = {
+            text: this.$.commentInput.getValue(),
+            chu: this.chu.resource_uri,
+            user: this.user
+        };
+        this.chu.comments.push(comment);
+        this.updateChu();
+        this.refreshComments();
+        this.$.commentInput.setValue("");
+    },
     components: [
         {kind: "Scroller", fit: true, components: [
             {classes: "pageheader", components: [
@@ -290,7 +316,20 @@ enyo.kind({
         {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "secondarypanels shadow-left", components: [
             {classes: "enyo-fill", components: [
                 // CLOSE
-                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
+                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"},
+                // COMMENTS
+                {kind: "Scroller", classes: "chuview-comments-scroller", components: [
+                    {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                        {kind: "onyx.Item", classes: "chuview-comment", components: [
+                            {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar"},
+                            {name: "commentText", classes: "chuview-comment-text"}
+                        ]}
+                    ]}
+                ]},
+                // POST COMMENT
+                {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
+                    {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
+                ]}
             ]},
             // SELECT VISIBLE TO
             {classes: "enyo-fill", components: [
