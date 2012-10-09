@@ -301,7 +301,6 @@ enyo.kind({
     components: [
         {kind: "Scroller", classes: "enyo-fill", components: [
             {classes: "main-content", components: [
-                {classes: "notification-button", content: "3"},
                 {classes: "pageheader", components: [
                     // TITLE
                     {kind: "onyx.InputDecorator", components: [

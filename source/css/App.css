@@ -94,7 +94,7 @@ body {
 	background-image: -o-linear-gradient(#E61E4B,#A00000);
 	background-image: -ms-linear-gradient(#E61E4B,#A00000);
 	background-image: linear-gradient(#E61E4B,#A00000);
-	/*border-radius: 10px 10px 0 0;*/
+	/*border-radius: 5px 5px 0 0;*/
 	box-shadow: 0 2px 5px #555;
 	position: relative;
 	z-index: 99;

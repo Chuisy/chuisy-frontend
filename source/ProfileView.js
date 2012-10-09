@@ -37,7 +37,6 @@ enyo.kind({
     },
     components: [
         {kind: "Scroller", classes: "profileview-mainpanel enyo-fill", components: [
-            {classes: "notification-button", content: 3},
             {classes: "main-content", components: [
                 {classes: "pageheader", components: [
                     {kind: "Image", classes: "profileview-avatar", name: "avatar"},

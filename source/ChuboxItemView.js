@@ -117,17 +117,12 @@ enyo.kind({
     },
     components: [
         {kind: "Scroller", fit: true, components: [
-            {classes: "pageheader", components: [
-                {classes: "pageheader-title", name: "name"},
-                {classes: "chuboxitemview-price", name: "price"}
-            ]},
-            {classes: "chuboxitemview-description", name: "description"},
-            {kind: "Image", name: "image1", classes: "chuboxitemview-productimage"},
-            {kind: "Image", name: "image2", classes: "chuboxitemview-productimage"},
-            {kind: "Image", name: "image3", classes: "chuboxitemview-productimage"}
-        ]},
-        {kind: "Panels", name: "secondaryPanels", arrangerKind: "CarouselArranger", classes: "secondarypanels shadow-left", components: [
-            {components: [
+            {classes: "main-content", components: [
+                {classes: "pageheader", components: [
+                    {classes: "pageheader-title", name: "name"},
+                    {classes: "chuboxitemview-price", name: "price"}
+                ]},
+                {classes: "chuboxitemview-description", name: "description"},
                 {classes: "chuboxitemview-likes", components: [
                     {name: "likeCount"},
                     {kind: "Repeater", name: "likerRepeater", classes: "chuboxitemview-likerrepeater", onSetupItem: "setupLiker", components: [
@@ -135,7 +130,10 @@ enyo.kind({
                     ]},
                     {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike"}
                 ]},
-                {kind: "onyx.Button", content: "Put in Chubox!", ontap: "collect", classes: "chuboxitemview-collect-button"}
+                {kind: "onyx.Button", content: "Put in Chubox!", ontap: "collect", classes: "chuboxitemview-collect-button"},
+                {kind: "Image", name: "image1", classes: "chuboxitemview-productimage"},
+                {kind: "Image", name: "image2", classes: "chuboxitemview-productimage"},
+                {kind: "Image", name: "image3", classes: "chuboxitemview-productimage"}
             ]}
         ]}
     ]

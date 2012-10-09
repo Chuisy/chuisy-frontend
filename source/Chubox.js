@@ -105,7 +105,6 @@ enyo.kind({
     },
     components: [
         {kind: "Scroller", classes: "enyo-fill", style: "text-align: center;", components: [
-            {classes: "notification-button", content: 3},
             {classes: "main-content", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}

@@ -28,8 +28,7 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "Scroller", classes: "enyo-fill", components: [
-            {classes: "notification-button", content: "3"},
+        {kind: "Scroller", classes: "enyo-fill main-scroller", components: [
             {classes: "main-content", components: [
                 {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
                     {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
