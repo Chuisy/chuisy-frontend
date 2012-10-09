@@ -1,7 +1,6 @@
 enyo.kind({
     name: "App",
     fit: true,
-    kind: "FittableRows",
     classes: "app",
     narrowWidth: 800,
     published: {

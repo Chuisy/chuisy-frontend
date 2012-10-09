@@ -1,7 +1,6 @@
 enyo.kind({
     name: "MainView",
     classes: "mainview",
-    kind: "FittableRows",
     narrowWidth: 800,
     published: {
         // menuShowing: true,
@@ -39,6 +38,8 @@ enyo.kind({
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
 
+        this.$.mainSlider.animateToMin();
+
         App.updateHistory("chufeed/");
     },
     openChubox: function() {
@@ -47,6 +48,8 @@ enyo.kind({
         this.$.chuboxMenuItem.addClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+
+        this.$.mainSlider.animateToMin();
 
         App.updateHistory("chubox/");
     },
@@ -63,6 +66,8 @@ enyo.kind({
         this.$.postChuMenuItem.addClass("selected");
         this.$.profileMenuItem.removeClass("selected");
 
+        this.$.mainSlider.animateToMin();
+
         App.updateHistory("chu/" + (chu ? chu.id : "new") + "/");
     },
     openChuboxItemView: function(item, chu) {
@@ -76,6 +81,8 @@ enyo.kind({
             App.updateHistory("item/" + item.id + "/");
         }
         this.showView("chuboxItemView");
+
+        this.$.mainSlider.animateToMin();
     },
     openProfileView: function(user) {
         this.$.profileView.setShowedUser(user);
@@ -85,6 +92,8 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.addClass("selected");
+
+        this.$.mainSlider.animateToMin();
 
         App.updateHistory("user/" + user.id + "/");
     },
@@ -111,28 +120,26 @@ enyo.kind({
     logout: function() {
         this.doLogout();
     },
+    toggleMenu: function() {
+        this.$.mainSlider.toggleMinMax();
+    },
     components: [
-        {classes: "mainheader", components: [
-            {classes: "mainheader-text", content: "chuisy"}
-            // {kind: "onyx.Button", name: "infoSliderButton", ontap: "toggleInfoSlider", components: [
-            //  {kind: "Image", src: "assets/images/menu-icon.png"}
-            // ]}
+        {classes: "mainmenu", components: [
+            {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
+            {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
+            {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"},
+            {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
+            {classes: "mainmenu-item", content: "Logout", ontap: "logout", name: "logoutMenuItem"}
         ]},
-        {kind: "FittableColumns", fit: true, components: [
-            {classes: "mainmenu", components: [
-                {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
-                {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
-                {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"},
-                {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
-                {classes: "mainmenu-item", content: "Logout", ontap: "logout", name: "logoutMenuItem"}
-            ]},
-            {kind: "Panels", arrangerKind: "CardArranger", fit: true, draggable: false, classes: "shadow-left", name: "primaryPanels", components: [
+        {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 100, overMoving: false, components: [
+            {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "shadow-left enyo-fill", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected"},
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
                 {kind: "ProfileView", onChuSelected: "chuSelected"}
-            ]}
+            ]},
+            {kind: "onyx.IconButton", src: "assets/images/menu-icon.png", classes: "mainmenu-flap", ontap: "toggleMenu"}
         ]}
     ]
 });

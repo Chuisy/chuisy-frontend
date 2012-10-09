@@ -1,7 +1,6 @@
 enyo.kind({
     name: "ChuView",
     classes: "chuview",
-    kind: "FittableColumns",
     published: {
         user: null,
         chu: null
@@ -40,6 +39,7 @@ enyo.kind({
         this.$.locationPicker.setLocation(this.location);
         this.updateLocationText();
         this.refreshComments();
+        this.$.commentsButton.setShowing((this.chu));
     },
     isOwned: function() {
         return !this.chu || this.user && this.chu.user.id == this.user.profile.id;
@@ -86,6 +86,12 @@ enyo.kind({
             this.updateChu();
         }
     },
+    openSecondarySlider: function() {
+        this.$.secondarySlider.animateToMin();
+    },
+    closeSecondarySlider: function() {
+        this.$.secondarySlider.animateToMax();
+    },
     visibiltySelected: function(sender, event) {
         var value = sender.value;
 
@@ -98,8 +104,10 @@ enyo.kind({
 
         if (value == "custom") {
             this.$.secondaryPanels.setIndex(1);
+            this.openSecondarySlider();
         } else {
             this.$.secondaryPanels.setIndex(0);
+            this.closeSecondarySlider();
         }
     },
     confirmVisibilityPeople: function() {
@@ -113,6 +121,7 @@ enyo.kind({
         }
 
         this.$.secondaryPanels.setIndex(0);
+        this.closeSecondarySlider();
     },
     refreshTaggedPersons: function() {
         this.$.taggedRepeater.setCount(this.taggedPersons.length);
@@ -164,6 +173,7 @@ enyo.kind({
     tagPerson: function() {
         if (this.isOwned()) {
             this.$.secondaryPanels.setIndex(2);
+            this.openSecondarySlider();
         }
     },
     confirmTaggedPeople: function() {
@@ -176,9 +186,11 @@ enyo.kind({
 
         this.refreshTaggedPersons();
         this.$.secondaryPanels.setIndex(0);
+        this.closeSecondarySlider();
     },
     addItem: function() {
         this.$.secondaryPanels.setIndex(3);
+        this.openSecondarySlider();
     },
     itemSelected: function(sender, event) {
         var item = this.chuboxItems[event.index];
@@ -191,6 +203,7 @@ enyo.kind({
 
         this.refreshChuItems();
         this.$.secondaryPanels.setIndex(0);
+        this.closeSecondarySlider();
     },
     postChu: function() {
         var data = {
@@ -232,12 +245,14 @@ enyo.kind({
     changeLocation: function() {
         this.$.secondaryPanels.setIndex(4);
         this.$.locationPicker.initialize();
+        this.openSecondarySlider();
     },
     locationChanged: function(sender, event) {
         this.log(event.location);
     },
     locationPickerBack: function() {
         this.$.secondaryPanels.setIndex(0);
+        this.closeSecondarySlider();
     },
     locationPickerChanged: function() {
         this.location = this.$.locationPicker.getLocation();
@@ -275,86 +290,100 @@ enyo.kind({
         this.refreshComments();
         this.$.commentInput.setValue("");
     },
+    toggleComments: function() {
+        this.$.secondaryPanels.setIndex(0);
+        this.$.secondarySlider.toggleMinMax();
+    },
+    locationPickerDrag: function() {
+        // Prevent drag event to propagate to slider
+        return true;
+    },
     components: [
-        {kind: "Scroller", fit: true, components: [
-            {classes: "pageheader", components: [
-                // TITLE
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
-                ]},
-                // VISIBILITY
-                {kind: "Group", classes: "pageheader-radiobuttongroup", components: [
-                    {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
-                    {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                    {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
-                    {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                    {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
-                ]}
-            ]},
-            {components: [
-                // TAGGED
-                {kind: "Repeater", name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                    {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
-                ]},
-                {kind: "onyx.IconButton", name: "tagButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
-                // LOCATION
-                {kind: "onyx.Button", classes: "chuview-location", name: "locationButton", ontap: "changeLocation", components: [
-                    {classes: "chuview-location-text", name: "locationText"},
-                    {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
-                ]}
-            ]},
-            // ITEMS
-            {style: "text-align: center;", components: [
-                {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"},
-                    {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
-                ]}
-            ]},
-            // POST
-            {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
-        ]},
-        {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "secondarypanels shadow-left", components: [
-            {classes: "enyo-fill", components: [
-                // CLOSE
-                {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"},
-                // COMMENTS
-                {kind: "Scroller", classes: "chuview-comments-scroller", components: [
-                    {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                        {kind: "onyx.Item", classes: "chuview-comment", components: [
-                            {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar"},
-                            {name: "commentText", classes: "chuview-comment-text"}
-                        ]}
+        {kind: "Scroller", classes: "enyo-fill", components: [
+            {classes: "main-content", components: [
+                {classes: "notification-button", content: "3"},
+                {classes: "pageheader", components: [
+                    // TITLE
+                    {kind: "onyx.InputDecorator", components: [
+                        {kind: "onyx.Input", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
+                    ]},
+                    // VISIBILITY
+                    {kind: "Group", classes: "pageheader-radiobuttongroup", components: [
+                        {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
+                        {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
+                        {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
+                        {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
+                        {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
                     ]}
                 ]},
-                // POST COMMENT
-                {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
-                    {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
-                ]}
-            ]},
-            // SELECT VISIBLE TO
-            {classes: "enyo-fill", components: [
-                {content: "Visible To"},
-                {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
-                {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
-            ]},
-            // SELECT TAGGED
-            {classes: "enyo-fill", components: [
-                {content: "Tagged People"},
-                {kind: "PeopleSelector", name: "taggedPeopleSelector"},
-                {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
-            ]},
-            // SELECT ITEM
-            {classes: "enyo-fill", components: [
-                {content: "Choose an Item!"},
-                {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", style: "width: 100%", onSetupItem: "setupChuboxItem", components: [
-                    {kind: "ListChuboxItem", ontap: "itemSelected"}
-                ]}
-            ]},
-            // PICK LOCATION
-            {classes: "enyo-fill", components: [
-                {kind: "LocationPicker", classes: "enyo-fill", onLocationChanged: "locationPickerChanged"},
-                {kind: "onyx.Button", classes: "chuview-map-back-button", content: "Back", ontap: "locationPickerBack"}
+                {style: "text-align: left", components: [
+                    // TAGGED
+                    {kind: "Repeater", name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
+                        {kind: "Image", name: "thumbnail", classes: "chuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                    ]},
+                    {kind: "onyx.IconButton", name: "tagButton", src: "assets/images/plus.png", ontap: "tagPerson", classes: "chuview-tagbutton"},
+                    // LOCATION
+                    {kind: "onyx.Button", classes: "chuview-location", name: "locationButton", ontap: "changeLocation", components: [
+                        {classes: "chuview-location-text", name: "locationText"},
+                        {kind: "Image", src: "assets/images/map-marker.png", classes: "chuview-location-icon"}
+                    ]}
+                ]},
+                // ITEMS
+                {style: "text-align: center;", components: [
+                    {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
+                        {kind: "ChuboxItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"},
+                        {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "chuview-new-item", ontap: "addItem"}
+                    ]}
+                ]},
+                // POST
+                {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
             ]}
+        ]},
+        {kind: "Slideable", overMoving: false, unit: "px", min: -300, max: 0, preventDragPropagation: true, classes: "secondarypanels shadow-left", name: "secondarySlider", components: [
+            {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
+                {classes: "enyo-fill", components: [
+                    // CLOSE
+                    {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"},
+                    // COMMENTS
+                    {kind: "Scroller", classes: "chuview-comments-scroller", components: [
+                        {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                            {kind: "onyx.Item", classes: "chuview-comment", components: [
+                                {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar"},
+                                {name: "commentText", classes: "chuview-comment-text"}
+                            ]}
+                        ]}
+                    ]},
+                    // POST COMMENT
+                    {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
+                        {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
+                    ]}
+                ]},
+                // SELECT VISIBLE TO
+                {classes: "enyo-fill", components: [
+                    {content: "Visible To"},
+                    {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
+                    {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
+                ]},
+                // SELECT TAGGED
+                {classes: "enyo-fill", components: [
+                    {content: "Tagged People"},
+                    {kind: "PeopleSelector", name: "taggedPeopleSelector"},
+                    {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
+                ]},
+                // SELECT ITEM
+                {classes: "enyo-fill", components: [
+                    {content: "Choose an Item!"},
+                    {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", onSetupItem: "setupChuboxItem", components: [
+                        {kind: "ListChuboxItem", ontap: "itemSelected"}
+                    ]}
+                ]},
+                // PICK LOCATION
+                {classes: "enyo-fill", components: [
+                    {kind: "LocationPicker", classes: "enyo-fill", onLocationChanged: "locationPickerChanged", ondrag: "locationPickerDrag"},
+                    {kind: "onyx.Button", classes: "chuview-map-back-button", content: "Back", ontap: "locationPickerBack"}
+                ]}
+            ]},
+            {kind: "onyx.IconButton", src: "assets/images/speachbubble.png", classes: "slider-flap", ontap: "toggleComments", name: "commentsButton"}
         ]}
     ]
 });

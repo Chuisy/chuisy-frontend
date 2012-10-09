@@ -1,6 +1,5 @@
 enyo.kind({
     name: "ChuFeed",
-    kind: "FittableColumns",
     published: {
         user: null
     },
@@ -29,11 +28,14 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "Scroller", fit: true, components: [
-            {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
-                {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
+        {kind: "Scroller", classes: "enyo-fill", components: [
+            {classes: "notification-button", content: "3"},
+            {classes: "main-content", components: [
+                {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
+                    {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
+                ]}
             ]}
         ]},
-        {classes: "secondarypanels shadow-left"}
+        {kind: "Slideable", overMoving: false, unit: "px", min: -300, max: 0, classes: "secondarypanels shadow-left"}
     ]
 });

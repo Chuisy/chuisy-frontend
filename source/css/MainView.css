@@ -1,6 +1,12 @@
-.mainview {}
+.mainview {
+	position: relative;
+}
 
 .mainmenu {
+	position: absolute;
+	height: 100%;
+	left: 0;
+	top: 0;
 }
 
 .mainmenu-item {
@@ -12,5 +18,9 @@
 }
 
 .mainmenu-item.selected {
+	background-color: White;
+}
+
+.mainslider {
 	background-color: White;
 }

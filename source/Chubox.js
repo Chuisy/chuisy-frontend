@@ -1,7 +1,6 @@
 enyo.kind({
     name: "Chubox",
     classes: "chubox",
-    kind: "FittableColumns",
     published: {
         user: null, // The currently signed in user
         boxOwner: null // The owner of this Chubox
@@ -105,14 +104,13 @@ enyo.kind({
         }));
     },
     components: [
-        {kind: "Scroller", style: "text-align: center;", fit: true, components: [
-            {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
-                //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
-            ]}
-        ]},
-        {kind: "Panels", name: "secondaryPanels", arrangerKind: "CarouselArranger", classes: "secondarypanels shadow-left", components: [
-            {classes: "enyo-fill", components: [
+        {kind: "Scroller", classes: "enyo-fill", style: "text-align: center;", components: [
+            {classes: "notification-button", content: 3},
+            {classes: "main-content", components: [
+                {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
+                    {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
+                    //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
+                ]}
             ]}
         ]}
     ]

@@ -24,7 +24,7 @@ body {
 }
 
 .app {
-	text-align: center;
+	/*text-align: center;*/
 }
 
 .apppanels {
@@ -39,10 +39,38 @@ body {
 .mainmenu {
 	width: 100px;
 	background-color: #888;
+	position: relative;
+}
+
+.mainmenu-flap {
+	position: absolute;
+	left: 0;
+	top: 30px;
+	background-color: #888;
+	border-radius: 0 5px 5px 0;
+	padding: 5px 5px;
+	background-position: center center;
+	box-shadow: inset -5px 0 10px #555;
 }
 
 .secondarypanels {
 	width: 300px;
+	position: absolute;
+	right: -300px;
+	top: 0;
+	height: 100%;
+	background-color: White;
+}
+
+.slider-flap {
+	position: absolute;
+	left: -42px;
+	top: 30px;
+	background-color: White;
+	border-radius: 5px 0 0 5px;
+	padding: 5px 5px;
+	background-position: center center;
+	box-shadow: -5px 0 10px #555;
 }
 
 .fading-separator {
@@ -93,6 +121,7 @@ body {
 .pageheader {
 	padding: 20px;
 	font-size: 23pt;
+	text-align: left;
 }
 
 .pageheader > .back-button {
@@ -128,4 +157,24 @@ button.pageheader-radiobutton {
 button.pageheader-radiobutton.active {
 	border: solid 1px;
 	border-radius: 5px;
+}
+
+.main-content {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.notification-button {
+	width: 96px;
+	height: 96px;
+	margin: 0 auto;
+	background: url(../../assets/images/heart.png) no-repeat center center;
+	background-size: contain;
+	text-align: center;
+	padding-top: 25px;
+	box-sizing: border-box;
+	font-size: 25pt;
+	font-family: "Annie Use Your Telescope";
+	color: Black;
 }
