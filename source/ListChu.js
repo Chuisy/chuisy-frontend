@@ -16,32 +16,25 @@ enyo.kind({
         }
     },
     refreshChuItems: function() {
-        this.$.itemRepeater.setCount(this.chu.items.length);
-        this.$.itemRepeater.render();
-    },
-    setupRepeaterItem: function(sender, event) {
-        if (this.chu) {
-            var c = event.item.$.miniChuboxItem;
-            var item = this.chu.items[event.index];
-            c.setItem(item);
+        for (var i=0; i<3; i++) {
+            this.setupItem(i);
         }
-        // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
-        // c.applyStyle("transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
-        return true;
+    },
+    setupItem: function(index) {
+        var component = this.$["item" + index];
+        var item = this.chu.items[index];
+        component.setItem(item);
+        component.setShowing((item));
     },
     components: [
         {kind: "Image", name: "avatar", classes: "listchu-avatar"},
         {fit: true, components: [
             {name: "title", classes: "listchu-title"},
             // {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "listchu-toolbutton"},
-            {kind: "Scroller", classes: "listchu-scroller", components: [
-                {kind: "Repeater", style: "white-space: nowrap;", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "MiniChuboxItem"}
-                ]}
+            {style: "white-space: nowrap;", components: [
+                {kind: "MiniChuboxItem", name: "item0"},
+                {kind: "MiniChuboxItem", name: "item1"},
+                {kind: "MiniChuboxItem", name: "item2"}
             ]}
         ]}
     ]

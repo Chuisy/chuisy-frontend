@@ -21,7 +21,7 @@ enyo.kind({
     },
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
-        event.item.$.listChu.setChu(chu);
+        this.$.listChu.setChu(chu);
     },
     chuTapped: function(sender, event) {
         var chu = this.chus[event.index];
@@ -30,7 +30,7 @@ enyo.kind({
     components: [
         {kind: "Scroller", classes: "enyo-fill main-scroller", components: [
             {classes: "main-content", components: [
-                {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
+                {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [
                     {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
                 ]}
             ]}
