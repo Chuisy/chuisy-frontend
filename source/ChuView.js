@@ -58,23 +58,26 @@ enyo.kind({
         this.chu = null;
         this.chuChanged();
     },
-    updateChu: function(callback) {
-        var params = enyo.clone(this.chu);
-        function toUriList(list) {
-            var temp = [];
-            for (var i=0; i<list.length; i++) {
-                temp.push(list[i].resource_uri);
-            }
-            return temp;
+    toUriList: function(list) {
+        var temp = [];
+        for (var i=0; i<list.length; i++) {
+            temp.push(list[i].resource_uri);
         }
+        return temp;
+    },
+    toParamsObj: function(obj) {
+        var params = enyo.clone(obj);
 
         // Have to do this because of bug in django-tastypie 0.9.11
-        params.items = toUriList(params.items);
-        params.tagged = toUriList(params.tagged);
-        params.visible_to = toUriList(params.visible_to);
-        params.expandable_by = toUriList(params.expandable_by);
+        params.items = this.toUriList(params.items);
+        params.tagged = this.toUriList(params.tagged);
+        params.visible_to = this.toUriList(params.visible_to);
+        params.expandable_by = this.toUriList(params.expandable_by);
 
-        chuisy.chu.put(this.chu.id, params, enyo.bind(this, function(sender, response) {
+        return params;
+    },
+    updateChu: function(callback) {
+        chuisy.chu.put(this.chu.id, this.toParamsObj(this.chu), enyo.bind(this, function(sender, response) {
             if (callback) {
                 callback();
             }
@@ -211,11 +214,12 @@ enyo.kind({
             visibility: this.visibility,
             expandability: "public", // TODO: Add option to change this
             user: this.user,
-            items: this.items,
-            tagged: this.taggedPersons,
-            visible_to: this.visibleTo,
-            expandable_by: [],
-            location: this.location
+            items: this.toUriList(this.items),
+            tagged: this.toUriList(this.taggedPersons),
+            visible_to: this.toUriList(this.visibleTo),
+            expandable_by: this.toUriList([]),
+            location: this.location,
+            comments: []
         };
 
         chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
