@@ -7,7 +7,7 @@ enyo.kind({
         onSignup: ""
     },
     facebookSignIn: function() {
-        window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://api.chuisy.com/v1/fb_auth/&scope=user_birthday,user_location,user_about_me";
+        window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://api.chuisy.com/v1/fb_auth/&scope=user_birthday,user_location,user_about_me,user_website,email";
     },
     showSignUp: function() {
         this.$.signInPanels.setIndex(1);
