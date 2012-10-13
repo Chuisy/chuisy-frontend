@@ -42,6 +42,10 @@ enyo.kind({
                     // chufeed/
                     // The chu feed it is! Let't open it.
                     this.$.mainView.openChuFeed();
+                } else if (match[1].match(/^settings\/$/)) {
+                    // settings/
+                    // Settings it is.
+                    this.$.mainView.openSettings();
                 } else if (match[1].match(/^chubox\/$/)) {
                     // chubox/
                     // User wants to see his Chu Box? Our pleasure!

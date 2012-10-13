@@ -12,7 +12,8 @@ enyo.kind({
         chubox: 1,
         chuView: 2,
         chuboxItemView: 3,
-        profileView: 4
+        profileView: 4,
+        settings: 5
     },
     events: {
         onLogout: ""
@@ -27,6 +28,7 @@ enyo.kind({
         this.$.chuView.setUser(this.user);
         this.$.chuboxItemView.setUser(this.user);
         this.$.profileView.setUser(this.user);
+        this.$.settings.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -37,6 +39,7 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+        this.$.settingsMenuItem.removeClass("selected");
 
         this.$.mainSlider.animateToMin();
 
@@ -48,6 +51,7 @@ enyo.kind({
         this.$.chuboxMenuItem.addClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+        this.$.settingsMenuItem.removeClass("selected");
 
         this.$.mainSlider.animateToMin();
 
@@ -65,6 +69,7 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.addClass("selected");
         this.$.profileMenuItem.removeClass("selected");
+        this.$.settingsMenuItem.removeClass("selected");
 
         this.$.mainSlider.animateToMin();
 
@@ -92,10 +97,24 @@ enyo.kind({
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");
         this.$.profileMenuItem.addClass("selected");
+        this.$.settingsMenuItem.removeClass("selected");
 
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("user/" + user.id + "/");
+    },
+    openSettings: function() {
+        this.showView("settings");
+
+        this.$.chuFeedMenuItem.removeClass("selected");
+        this.$.chuboxMenuItem.removeClass("selected");
+        this.$.postChuMenuItem.removeClass("selected");
+        this.$.profileMenuItem.removeClass("selected");
+        this.$.settingsMenuItem.addClass("selected");
+
+        this.$.mainSlider.animateToMin();
+
+        App.updateHistory("settings/");
     },
     openProfile: function() {
         this.openProfileView(this.user);
@@ -117,9 +136,6 @@ enyo.kind({
     back: function() {
         this.openChuFeed();
     },
-    logout: function() {
-        this.doLogout();
-    },
     toggleMenu: function() {
         this.$.mainSlider.toggleMinMax();
     },
@@ -129,7 +145,7 @@ enyo.kind({
             {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
             {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"},
             {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
-            {classes: "mainmenu-item", content: "Logout", ontap: "logout", name: "logoutMenuItem"}
+            {classes: "mainmenu-item", content: "Settings", ontap: "openSettings", name: "settingsMenuItem"}
         ]},
         {kind: "Slideable", layoutKind: "FittableRowsLayout", name: "mainSlider", classes: "mainslider shadow-left enyo-fill", unit: "px", min: 0, max: 100, overMoving: false, components: [
             {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
@@ -143,7 +159,8 @@ enyo.kind({
                 {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
-                {kind: "ProfileView", onChuSelected: "chuSelected"}
+                {kind: "ProfileView", onChuSelected: "chuSelected"},
+                {kind: "Settings", onLogout: "doLogout"}
             ]}
         ]}
     ]
