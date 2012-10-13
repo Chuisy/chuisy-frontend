@@ -375,9 +375,11 @@ enyo.kind({
                 ]},
                 // SELECT ITEM
                 {classes: "enyo-fill", components: [
+                    {kind: "Scroller", classes: "enyo-fill", components: [
                     {content: "Choose an Item!"},
-                    {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", onSetupItem: "setupChuboxItem", components: [
-                        {kind: "ListChuboxItem", ontap: "itemSelected"}
+                        {kind: "FlyweightRepeater", name: "chuboxList", classes: "enyo-fill", onSetupItem: "setupChuboxItem", components: [
+                            {kind: "ListChuboxItem", ontap: "itemSelected"}
+                        ]}
                     ]}
                 ]},
                 // PICK LOCATION

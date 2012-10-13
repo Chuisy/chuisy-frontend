@@ -50,7 +50,6 @@ enyo.kind({
     },
     chuChanged: function() {
         this.addRemoveClass("owned", this.isOwned());
-        this.log(this.isOwned());
     },
     isOwned: function() {
         return this.user && this.item && this.user.id == this.item.user.id;
