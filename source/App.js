@@ -15,9 +15,32 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
 
+        document.addEventListener('deviceready', enyo.bind(this, this.init));
+    },
+    init: function() {
+        // Initialize Facebook SDK
+        FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
+
+        // Check if user is logged in
         chuisy.authCredentials = this.fetchAuthCredentials();
         if (chuisy.authCredentials) {
             this.signedIn();
+        } else {
+            // Get facebook access token
+            FB.login(enyo.bind(this, function(response) {
+                console.log(response);
+                if (response.status == "connected") {
+                    chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
+                        if (success) {
+                            this.signedIn();
+                        } else {
+                            alert("Authentication failed!", response);
+                        }
+                    }));
+                } else {
+                    alert("Facebook signin failed!");
+                }
+            }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
         }
 
         window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
