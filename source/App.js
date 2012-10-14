@@ -15,9 +15,22 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
 
-        document.addEventListener('deviceready', enyo.bind(this, this.init));
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/)) {
+            document.addEventListener('deviceready', enyo.bind(this, this.initMobile));
+        } else {
+            this.initWeb();
+        }
     },
-    init: function() {
+    initWeb: function() {
+        chuisy.authCredentials = this.fetchAuthCredentials();
+        if (chuisy.authCredentials) {
+            this.signedIn();
+        }
+        
+        window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
+        this.recoverStateFromUri();
+    },
+    initMobile: function() {
         // Initialize Facebook SDK
         FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
 
@@ -42,9 +55,6 @@ enyo.kind({
                 }
             }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
         }
-
-        window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
-        this.recoverStateFromUri();
     },
     /**
         Scans uri for certain patterns and recovers the corresponding application state
