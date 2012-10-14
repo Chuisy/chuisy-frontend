@@ -1,21 +1,62 @@
 .listchu {
 	box-sizing: border-box;
+	padding: 5px;
+	width: 320px !important;
+	/*border: solid 1px;*/
 }
 
 .listchu-avatar {
 	border: none;
 	border-radius: 2px;
-	box-shadow: 2px 2px 2px #555;
-	margin: 30px 5px;
-	width: 50px;
-	height: 50px;
+	box-shadow: 1px 1px 1px #555;
+	margin: 5px;
+	width: 60px;
+	height: 60px;
+	background-color: White;
+	padding: 2px;
+	border: #ccc solid 1px;
+	box-sizing: border-box;
 }
 
 .listchu-title {
 	padding: 5px;
 	font-size: 15pt;
+	vertical-align: top;
+	width: 100%;
+	border-bottom: solid 1px #888;
+	text-align: right;
 }
 
 .listchu-toolbutton {
 	float: right;
+}
+
+.listchu-header {
+	position: relative;
+	width: 100%;
+}
+
+.listchu-header-right {
+	width: 230px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.listchu-time {
+	width: 100%;
+	text-align: right;
+	color: #555;
+	font-size: 11pt;
+}
+
+.listchu-itemrepeater {
+	position: relative;
+	top: -10px;
+	z-index: -5;
+	white-space: nowrap;
+	text-align: center;
+}
+
+.listchu .minichuboxitem {
+	margin: 0 -5px;
 }

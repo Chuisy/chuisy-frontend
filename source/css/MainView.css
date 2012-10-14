@@ -1,26 +1,45 @@
 .mainview {
 	position: relative;
+	background-image: url(../../assets/images/navy_blue.png);
 }
 
 .mainmenu {
+	width: 200px;
+	background-color: transparent;
 	position: absolute;
-	height: 100%;
-	left: 0;
-	top: 0;
+	padding: 10px 20px;
+	box-sizing: border-box;
 }
 
 .mainmenu-item {
-	padding: 10px;
+	padding: 10px 0;
+	border-bottom: solid 1px #222;
+}
+
+.mainmenu-item-icon {
+	background-position: center center;
+	vertical-align: top;
+}
+
+.mainmenu-item-text {
+	color: #eee;
+	font-size: 13pt;
+	display: inline-block;
+	vertical-align: top;
+	padding: 6px 8px;
+	/*line-height: 30px;*/
 }
 
 .mainmenu-item:hover {
-	background-color: White;
+	/*box-shadow: inset 0 2px 5px #000;*/
 }
 
 .mainmenu-item.selected {
-	background-color: White;
+	/*background-color: White;*/
 }
 
 .mainslider {
-	background-color: White;
+	background-color: #eee;
+	box-shadow: -2px 0 10px #000;
+	border-radius: 5px;
 }

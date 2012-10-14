@@ -36,30 +36,14 @@ body {
 	/*border: solid 1px;*/
 }
 
-.mainmenu {
-	width: 100px;
-	background-color: #888;
-	position: relative;
-}
-
-.mainmenu-flap {
+.secondaryslider {
+	width: 320px;
 	position: absolute;
-	left: 0;
-	top: 30px;
-	background-color: #888;
-	border-radius: 0 5px 5px 0;
-	padding: 5px 5px;
-	background-position: center center;
-	box-shadow: inset -5px 0 10px #555;
-}
-
-.secondarypanels {
-	width: 300px;
-	position: absolute;
-	right: -300px;
+	right: -330px;
 	top: 0;
 	height: 100%;
 	background-color: White;
+	box-shadow: -2px 0 10px #555;
 }
 
 .slider-flap {
@@ -94,7 +78,7 @@ body {
 	background-image: -o-linear-gradient(#E61E4B,#A00000);
 	background-image: -ms-linear-gradient(#E61E4B,#A00000);
 	background-image: linear-gradient(#E61E4B,#A00000);
-	/*border-radius: 5px 5px 0 0;*/
+	border-radius: 5px 5px 0 0;
 	box-shadow: 0 2px 5px #555;
 	position: relative;
 	z-index: 99;
@@ -108,7 +92,7 @@ body {
 .mainheader-text {
 	color: White;
 	font-size: 20pt;
-	font-family: PTSansCaptionBold;
+	font-family: PTSansCaptionRegular;
 	text-align: center;
 }
 
@@ -163,18 +147,4 @@ button.pageheader-radiobutton.active {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
-}
-
-.notification-button {
-	width: 96px;
-	height: 96px;
-	margin: 0 auto;
-	background: url(../../assets/images/heart.png) no-repeat center center;
-	background-size: contain;
-	text-align: center;
-	padding-top: 25px;
-	box-sizing: border-box;
-	font-size: 25pt;
-	font-family: "Annie Use Your Telescope";
-	color: Black;
 }

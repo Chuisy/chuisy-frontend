@@ -141,13 +141,28 @@ enyo.kind({
     },
     components: [
         {classes: "mainmenu", components: [
-            {classes: "mainmenu-item", content: "Chu Feed", ontap: "openChuFeed", name: "chuFeedMenuItem"},
-            {classes: "mainmenu-item", content: "Chu Box", ontap: "openChubox", name: "chuboxMenuItem"},
-            {classes: "mainmenu-item", content: "Profile", ontap: "openProfile", name: "profileMenuItem"},
-            {classes: "mainmenu-item", content: "Post Chu", ontap: "postChu", name: "postChuMenuItem"},
-            {classes: "mainmenu-item", content: "Settings", ontap: "openSettings", name: "settingsMenuItem"}
+            {classes: "mainmenu-item", ontap: "openChuFeed", name: "chuFeedMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Chu Feed"}
+            ]},
+            {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/chubox_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Chu Box"}
+            ]},
+            {classes: "mainmenu-item", ontap: "openProfile", name: "profileMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/profile_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Profile"}
+            ]},
+            {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/settings_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Settings"}
+            ]},
+            {classes: "mainmenu-item", ontap: "postChu", name: "postChuMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/photos_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Post Chu"}
+            ]}
         ]},
-        {kind: "Slideable", layoutKind: "FittableRowsLayout", name: "mainSlider", classes: "mainslider shadow-left enyo-fill", unit: "px", min: 0, max: 100, overMoving: false, components: [
+        {kind: "Slideable", layoutKind: "FittableRowsLayout", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
             {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
                 {kind: "onyx.Button", ontap: "toggleMenu", components: [
                     {kind: "Image", src: "assets/images/menu-icon.png"}
