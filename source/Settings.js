@@ -1,11 +1,13 @@
 enyo.kind({
 	name: "Settings",
+	kind: "FittableRows",
 	classes: "Settings",
 	published: {
 		user: null
 	},
 	events: {
-		onLogout: ""
+		onLogout: "",
+		onToggleMenu: ""
 	},
 	userChanged: function() {
 		if (this.user) {
@@ -45,7 +47,13 @@ enyo.kind({
 		}));
 	},
 	components: [
-		{classes: "main-content", components: [
+        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {classes: "mainheader-text", content: "Settings"}
+        ]},
+		{classes: "main-content", fit: true, components: [
 			{kind: "onyx.Groupbox", components: [
 				{kind: "onyx.GroupboxHeader", content: "Account Settings"},
 				{kind: "onyx.InputDecorator", components: [
@@ -68,7 +76,7 @@ enyo.kind({
 				]},
 				{kind: "onyx.InputDecorator", components: [
 					{kind: "onyx.Input", name: "newPassword", type: "password", placeholder: "New Password"}
-				]},	
+				]},
 				{kind: "onyx.Button", content: "Change Password", ontap: "changePassword", style: "width: 100%;"}
 			]},
 			{kind: "onyx.Button", content: "Logout", ontap: "doLogout"}

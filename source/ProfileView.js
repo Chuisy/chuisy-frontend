@@ -1,12 +1,14 @@
 enyo.kind({
     name: "ProfileView",
+    kind: "FittableRows",
     classes: "profileview",
     published: {
         user: null, // Currently signed in user
         showedUser: null // User who's profile to show
     },
     events: {
-        onChuSelected: ""
+        onChuSelected: "",
+        onToggleMenu: ""
     },
     showedUserChanged: function() {
         if (this.showedUser) {
@@ -36,7 +38,13 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "Scroller", classes: "profileview-mainpanel enyo-fill", components: [
+        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {classes: "mainheader-text", content: "Profile"}
+        ]},
+        {kind: "Scroller", classes: "profileview-mainpanel", fit: true, components: [
             {classes: "main-content", components: [
                 {classes: "pageheader", components: [
                     {kind: "Image", classes: "profileview-avatar", name: "avatar"},

@@ -1,10 +1,12 @@
 enyo.kind({
     name: "ChuFeed",
+    kind: "FittableRows",
     published: {
         user: null
     },
     events: {
-        onChuSelected: ""
+        onChuSelected: "",
+        onToggleMenu: ""
     },
     userChanged: function() {
         this.loadChus();
@@ -28,7 +30,13 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "Scroller", classes: "enyo-fill main-scroller", components: [
+        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {classes: "mainheader-text", content: "Chuisy"}
+        ]},
+        {kind: "Scroller", classes: "main-scroller", fit: true, components: [
             {classes: "main-content", components: [
                 {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [
                     {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}

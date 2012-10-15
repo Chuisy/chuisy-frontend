@@ -66,7 +66,7 @@ body {
 }
 
 .mainheader {
-	height: 50px;
+	height: 45px;
 	padding: 8px;
 	box-sizing: border-box;
 	background-color: #C30F26;
@@ -87,13 +87,33 @@ body {
 .mainheader .onyx-button {
 	background-color: transparent;
 	padding: 2px;
+	color: White;
+	border-radius: 7px;
+}
+
+.mainheader .menu-button {
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	top: 5px;
+	left: 5px;
+}
+
+.mainheader .back-button {
+	position: absolute;
+	padding: 2px 10px;
+	height: 35px;
+	top: 5px;
+	left: 5px;
 }
 
 .mainheader-text {
 	color: White;
-	font-size: 20pt;
+	font-size: 18pt;
 	font-family: PTSansCaptionRegular;
 	text-align: center;
+	width: 100%;
+
 }
 
 .ellipsis {

@@ -135,7 +135,7 @@ enyo.kind({
     contentPanelsBack: function() {
         this.$.contentPanels.setIndex(0);
     },
-    back: function() {
+    chuViewBack: function() {
         this.openChuFeed();
     },
     toggleMenu: function() {
@@ -164,20 +164,14 @@ enyo.kind({
                 {classes: "mainmenu-item-text", content: "Post Chu"}
             ]}
         ]},
-        {kind: "Slideable", layoutKind: "FittableRowsLayout", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
-            {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
-                {kind: "onyx.Button", ontap: "toggleMenu", components: [
-                    {kind: "Image", src: "assets/images/menu-icon.png"}
-                ]},
-                {classes: "mainheader-text", content: "Chuisy", fit: true}
-            ]},
-            {kind: "Panels", fit: true, arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "ChuFeed", onChuSelected: "chuSelected", onShowMenu: "toggleMenu"},
-                {kind: "Chubox", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
+        {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
+            {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
+                {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "Chubox", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
+                {kind: "NarrowChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
-                {kind: "ProfileView", onChuSelected: "chuSelected"},
-                {kind: "Settings", onLogout: "doLogout"}
+                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"}
             ]}
         ]}
     ]

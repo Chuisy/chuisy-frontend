@@ -1,5 +1,6 @@
 enyo.kind({
     name: "ChuView",
+    kind: "FittableRows",
     classes: "chuview",
     published: {
         user: null,
@@ -303,7 +304,11 @@ enyo.kind({
         return true;
     },
     components: [
-        {kind: "Scroller", classes: "enyo-fill", components: [
+        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {classes: "mainheader-text", content: "Chuisy"}
+        ]},
+        {kind: "Scroller", fit: true, components: [
             {classes: "main-content", components: [
                 {classes: "pageheader", components: [
                     // TITLE

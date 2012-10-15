@@ -1,12 +1,14 @@
 enyo.kind({
     name: "Chubox",
+    kind: "FittableRows",
     classes: "chubox",
     published: {
         user: null, // The currently signed in user
         boxOwner: null // The owner of this Chubox
     },
     events: {
-        onItemSelected: ""
+        onItemSelected: "",
+        onToggleMenu: ""
     },
     handlers: {
         ondrag: "drag",
@@ -104,7 +106,13 @@ enyo.kind({
         }));
     },
     components: [
-        {kind: "Scroller", classes: "enyo-fill", style: "text-align: center;", components: [
+        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {classes: "mainheader-text", content: "Chu Box"}
+        ]},
+        {kind: "Scroller", fit: true, style: "text-align: center;", components: [
             {classes: "main-content", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
