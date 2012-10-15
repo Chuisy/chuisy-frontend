@@ -42,7 +42,7 @@ enyo.kind({
         var c = event.item.$.chuboxItem;
         var item = this.items[event.index];
         c.setItem(item);
-        c.setUser(this.user);
+        // c.setUser(this.user);
         // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
         // c.applyStyle("transform", "rotate(" + rot + "deg)");
         // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
@@ -115,7 +115,7 @@ enyo.kind({
         {kind: "Scroller", fit: true, style: "text-align: center;", components: [
             {classes: "main-content", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "ChuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
+                    {kind: "MiniChuboxItem", name: "chuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
                     //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
                 ]}
             ]}

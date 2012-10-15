@@ -1,0 +1,137 @@
+.narrowchuview {
+	/*padding: 20px;*/
+}
+
+.narrowchuview-avatar {
+	width: 23px;
+	margin: 5px;
+	padding: 2px;
+	border-radius: 2px;
+	background-color: #fff;
+	border: solid 1px #ccc;
+	/*box-shadow: 1px 1px 1px #999;*/
+}
+
+.narrowchuview-username {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	padding: 9px 5px;
+}
+
+.narrowchuview-header {
+	padding: 10px;
+}
+
+.narrowchuview-title {
+	font-size: 15pt;
+	padding: 5px 10px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.narrowchuview-location {
+	float: right;
+	display: none;
+}
+
+.narrowchuview-location-text {
+	font-size: 12pt;
+	display: inline;
+}
+
+.narrowchuview-location-icon {
+	margin: 5px 5px 0 5px;
+	height: 20px;
+}
+
+.narrowchuview-taggedrepeater {
+	display: inline-block;
+	height: 25px;
+	display: none;
+}
+
+.narrowchuview-taggedrepeater-thumbnail {
+	height: 32px;
+	width: 32px;
+	margin: 5px 2px;
+}
+
+.narrowchuview-tagbutton {
+	display: inline-block;
+	border: dashed 1px;
+	border-radius: 2px;
+	margin: 5px 2px;
+	background-position: center center;
+}
+
+.narrowchuview-close-button {
+	display: none;
+}
+
+.narrowchuview.owned .narrowchuview-close-button {
+	display: inline-block;
+}
+
+.narrowchuview-post-button {
+	float: right;
+}
+
+.narrowchuview-new-item {
+	width: 300px;
+	height: 340px;
+	margin: 20px;
+	box-sizing: border-box;
+	border: #ccc dashed 1px;
+	background-color: transparent;
+	display: none;
+	border-radius: 5px;
+	background-image: none;
+	vertical-align: top;
+}
+
+.narrowchuview.owned .narrowchuview-new-item {
+	display: inline-block;
+}
+
+.onyx-button.narrowchuview-new-item:active {
+	background-color: Gray;
+	background-image: none;
+}
+
+.narrowchuview-map-back-button {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+}
+
+.narrowchuview-comments-scroller {
+	max-height: 200px;
+}
+
+.narrowchuview-comment-avatar {
+	width: 30px;
+}
+
+.narrowchuview-comment-text {
+	display: inline-block;
+	padding: 10px;
+	vertical-align: top;
+}
+
+.narrowchuview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.narrowchuview-commentinput-decorator > .enyo-input {
+	width: 100%;
+}
+
+.narrowchuview-comments-button {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 35px;
+	height: 35px;
+}

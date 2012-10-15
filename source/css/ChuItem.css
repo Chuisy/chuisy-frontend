@@ -1,0 +1,35 @@
+.chuitem {
+	padding: 5px;
+	width: 140px;
+	height: 140px;
+	margin: 5px;
+	box-sizing: border-box;
+	border: #ccc solid 1px;
+	box-shadow: 2px 2px 2px #555;
+	/*background-image: url(../../assets/images/lightpaperfibers.png);*/
+	background-color: White;
+	display: inline-block;
+	border-radius: 3px;
+	position: relative;
+}
+
+.chuitem.highlight {
+	background-color: Orange;
+	background-image: none;
+}
+
+.chuitem.liked {
+	background-color: #C30F26;
+}
+
+.chuitem-image {
+	width: 100%;
+	height: 100%;
+	background: url() no-repeat center center;
+	background-size: cover;
+	border: solid 1px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: Gray;
+}
