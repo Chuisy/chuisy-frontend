@@ -35,6 +35,8 @@ enyo.kind({
     },
     openChuFeed: function() {
         this.showView("chuFeed");
+        this.$.chuFeed.loadChus();
+
         this.$.chuFeedMenuItem.addClass("selected");
         this.$.chuboxMenuItem.removeClass("selected");
         this.$.postChuMenuItem.removeClass("selected");

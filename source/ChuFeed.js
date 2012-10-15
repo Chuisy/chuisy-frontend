@@ -35,6 +35,6 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -300, max: 0, classes: "secondarypanels shadow-left"}
+        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"}
     ]
 });

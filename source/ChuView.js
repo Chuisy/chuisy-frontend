@@ -223,7 +223,7 @@ enyo.kind({
         };
 
         chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
-            this.log(response);
+            this.doBack();
         }));
     },
     itemTap: function(sender, event) {
@@ -342,7 +342,7 @@ enyo.kind({
                 {kind: "onyx.Button", name: "postButton", classes: "chuview-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
             ]}
         ]},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -320, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
+        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
             {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
                 {classes: "enyo-fill", components: [
                     // CLOSE
