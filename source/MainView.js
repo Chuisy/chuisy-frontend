@@ -148,19 +148,19 @@ enyo.kind({
                 {classes: "mainmenu-item-text", content: "Chu Feed"}
             ]},
             {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
-                {kind: "onyx.Icon", src: "assets/images/chubox_light.png", classes: "mainmenu-item-icon"},
+                {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Chu Box"}
             ]},
             {classes: "mainmenu-item", ontap: "openProfile", name: "profileMenuItem", components: [
-                {kind: "onyx.Icon", src: "assets/images/profile_light.png", classes: "mainmenu-item-icon"},
+                {kind: "onyx.Icon", src: "assets/images/user_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Profile"}
             ]},
             {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
-                {kind: "onyx.Icon", src: "assets/images/settings_light.png", classes: "mainmenu-item-icon"},
+                {kind: "onyx.Icon", src: "assets/images/setting_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Settings"}
             ]},
             {classes: "mainmenu-item", ontap: "postChu", name: "postChuMenuItem", components: [
-                {kind: "onyx.Icon", src: "assets/images/photos_light.png", classes: "mainmenu-item-icon"},
+                {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Post Chu"}
             ]}
         ]},
