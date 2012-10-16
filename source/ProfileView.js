@@ -13,7 +13,7 @@ enyo.kind({
     showedUserChanged: function() {
         if (this.showedUser) {
             this.$.avatar.setSrc(this.showedUser.profile.avatar);
-            this.$.fullName.setContent(this.showedUser.profile.first_name + " " + this.showedUser.profile.last_name);
+            this.$.fullName.setContent(this.showedUser.first_name + " " + this.showedUser.last_name);
             this.$.userName.setContent(this.showedUser.username);
             this.$.bio.setContent(this.showedUser.profile.bio);
             this.loadChus();
