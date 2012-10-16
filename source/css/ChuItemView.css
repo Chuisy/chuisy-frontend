@@ -1,0 +1,33 @@
+.chuitemview {
+}
+
+.chuitemview-price {
+	float: right;
+}
+
+.chuitemview-likecount {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	padding: 2px;
+}
+
+.chuitemview.likeable .chuitemview-likes {
+	display: block;
+}
+
+.chuitemview-likerrepeater {
+	float: right;
+}
+
+.chuitemview.owned .chuitemview-collect-button,
+.chuitemview.owned .chuitemview-like-button {
+	display: none;
+}
+
+.chuitemview-productimage {
+	width: 100%;
+	padding: 10px;
+	background-color: White;
+	box-sizing: border-box;
+}

@@ -168,3 +168,11 @@ button.pageheader-radiobutton.active {
 	max-width: 800px;
 	margin: 0 auto;
 }
+
+.miniavatar {
+	width: 23px;
+	padding: 2px;
+	border-radius: 2px;
+	background-color: #fff;
+	border: solid 1px #ccc;
+}

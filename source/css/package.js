@@ -14,5 +14,6 @@ enyo.depends(
 	"ProfileView.css",
 	"ListChu.css",
 	"NarrowChuView.css",
-	"ChuItem.css"
+	"ChuItem.css",
+	"ChuItemView.css"
 );

@@ -21,5 +21,6 @@ enyo.depends(
 	"LocationPicker.js",
 	"Settings.js",
 	"NarrowChuView.js",
-	"ChuItem.js"
+	"ChuItem.js",
+	"ChuItemView.js"
 );

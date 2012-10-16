@@ -3,13 +3,7 @@
 }
 
 .narrowchuview-avatar {
-	width: 23px;
 	margin: 5px;
-	padding: 2px;
-	border-radius: 2px;
-	background-color: #fff;
-	border: solid 1px #ccc;
-	/*box-shadow: 1px 1px 1px #999;*/
 }
 
 .narrowchuview-username {
@@ -30,25 +24,15 @@
 	box-sizing: border-box;
 }
 
-.narrowchuview-location {
-	float: right;
-	display: none;
-}
-
 .narrowchuview-location-text {
-	font-size: 12pt;
-	display: inline;
-}
-
-.narrowchuview-location-icon {
-	margin: 5px 5px 0 5px;
-	height: 20px;
+	font-size: 13pt;
+	display: inline-block;
 }
 
 .narrowchuview-taggedrepeater {
 	display: inline-block;
 	height: 25px;
-	display: none;
+	text-align: right;
 }
 
 .narrowchuview-taggedrepeater-thumbnail {
@@ -134,4 +118,14 @@
 	top: 5px;
 	width: 35px;
 	height: 35px;
+}
+
+.narrowchuview-label {
+	font-size: 13pt;
+	display: inline-block;
+}
+
+.narrowchuview-section {
+	border-bottom: dashed 1px #ccc;
+	padding: 10px;
 }

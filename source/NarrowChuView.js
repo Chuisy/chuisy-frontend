@@ -24,6 +24,24 @@ enyo.kind({
             this.refreshTaggedPersons();
             this.updateLocationText();
             this.refreshComments();
+
+            for (var i=0; i<10; i++) {
+                this.setupItem(i);
+            }
+
+            this.$.carousel.setIndex(1);
+        }
+    },
+    setupItem: function(index) {
+        var c = this.$["chuItemView" + index];
+        var item = this.chu.items[index];
+        if (item) {
+            c.setItem(item);
+            c.setChu(this.chu);
+            c.setUser(this.user);
+            c.show();
+        } else {
+            c.hide();
         }
     },
     isOwned: function() {
@@ -83,7 +101,7 @@ enyo.kind({
         }));
     },
     updateLocationText: function() {
-        this.$.locationText.setContent(this.location ? this.location.address : "Tap to enter location...");
+        this.$.locationText.setContent(this.location ? this.location.address : "No location for this Chu!");
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
@@ -125,37 +143,56 @@ enyo.kind({
                 {kind: "Image", src: "assets/images/comment_light.png"}
             ]}
         ]},
-        {kind: "Scroller", fit: true, components: [
-            {classes: "main-content", components: [
-                {classes: "narrowchuview-header", components: [
-                    // AVATAR
-                    {kind: "Image", name: "avatar", classes: "narrowchuview-avatar"},
-                    // USERNAME
-                    {name: "username", classes: "narrowchuview-username"},
-                    // TITLE
-                    {classes: "narrowchuview-title", name: "title"}
-                ]},
-                {style: "text-align: left", components: [
+        {fit: true, style: "position: relative", components: [
+            {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+                {kind: "FittableRows", classes: "enyo-fill", components: [
+                    // SHARE
+                    {classes: "narrowchuview-section", components: [
+                        {classes: "narrowchuview-label", content: "Share this Chu"}
+                    ]},
                     // TAGGED
-                    {kind: "Repeater", name: "taggedRepeater", classes: "narrowchuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                        {kind: "Image", name: "thumbnail", classes: "narrowchuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                    {kind: "FittableColumns", classes: "narrowchuview-section", components: [
+                        {classes: "narrowchuview-label", content: "Tagged People:"},
+                        {kind: "Repeater", fit: true, name: "taggedRepeater", classes: "narrowchuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
+                            {kind: "Image", name: "thumbnail", classes: "narrowchuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                        ]}
                     ]},
                     // LOCATION
-                    {kind: "onyx.Button", classes: "narrowchuview-location", name: "locationButton", ontap: "changeLocation", components: [
-                        {classes: "narrowchuview-location-text", name: "locationText"},
-                        {kind: "Image", src: "assets/images/map-marker.png", classes: "narrowchuview-location-icon"}
+                    {classes: "narrowchuview-section", components: [
+                        {classes: "narrowchuview-location-text", name: "locationText"}
+                    ]},
+                    {fit: true}
+                ]},
+                {kind: "Scroller", classes: "enyo-fill", components: [
+                    {classes: "narrowchuview-header", components: [
+                        // AVATAR
+                        {kind: "Image", name: "avatar", classes: "miniavatar narrowchuview-avatar"},
+                        // USERNAME
+                        {name: "username", classes: "narrowchuview-username"},
+                        // TITLE
+                        {classes: "narrowchuview-title", name: "title"}
+                    ]},
+                    // CLOSE
+                    {style: "text-align: center; padding: 10px;", components: [
+                        {kind: "onyx.Button", name: "closeButton", classes: "narrowchuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
+                    ]},
+                    // ITEMS
+                    {style: "text-align: center;", components: [
+                        {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
+                            {kind: "ChuItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"}
+                        ]}
                     ]}
                 ]},
-                // CLOSE
-                {style: "text-align: center; padding: 10px;", components: [
-                    {kind: "onyx.Button", name: "closeButton", classes: "narrowchuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
-                ]},
-                // ITEMS
-                {style: "text-align: center;", components: [
-                    {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                        {kind: "ChuItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"}
-                    ]}
-                ]}
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView0"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView1"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView2"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView3"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView4"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView5"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView6"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView7"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView8"},
+                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView9"}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
                 // {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
