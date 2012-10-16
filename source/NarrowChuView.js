@@ -129,7 +129,9 @@ enyo.kind({
             user: this.user
         };
         this.chu.comments.push(comment);
-        this.updateChu();
+        chuisy.comment.create(comment, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
         this.refreshComments();
         this.$.commentInput.setValue("");
     },
@@ -209,7 +211,7 @@ enyo.kind({
                         {kind: "Scroller", classes: "narrowchuview-comments-scroller", components: [
                             {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                                 {kind: "onyx.Item", classes: "narrowchuview-comment", components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "narrowchuview-comment-avatar"},
+                                    {kind: "Image", name: "commentAvatar", classes: "miniavatar narrowchuview-comment-avatar"},
                                     {name: "commentText", classes: "narrowchuview-comment-text"}
                                 ]}
                             ]}

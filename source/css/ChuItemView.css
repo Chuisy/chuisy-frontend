@@ -16,10 +16,10 @@
 	float: right;
 }
 
-.chuitemview.owned .chuitemview-collect-button,
+/*.chuitemview.owned .chuitemview-collect-button,
 .chuitemview.owned .chuitemview-like-button {
 	display: none;
-}
+}*/
 
 .chuitemview-productimage {
 	width: 100%;

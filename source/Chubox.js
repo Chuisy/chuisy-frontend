@@ -85,7 +85,7 @@ enyo.kind({
         sender.removeClass("highlight");
     },
     itemTap: function(sender, event) {
-        this.doItemSelected({item: this.items[event.index]});
+        // this.doItemSelected({item: this.items[event.index]});
     },
     newItemSave: function() {
         var data = {
