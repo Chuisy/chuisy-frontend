@@ -88,7 +88,7 @@ enyo.kind({
                     if (match2[1].match(/new\/$/)) {
                         // chu/new/
                         // Always glad to see new Chus. Let's open an empty chu view.
-                        this.$.mainView.openChuView(null);
+                        this.$.mainView.composeChu();
                     } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                         // chu/{chu id}
                         // We have a URI pointing to a specific Chu. Let's open it.

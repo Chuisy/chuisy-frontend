@@ -13,7 +13,8 @@ enyo.kind({
         chuView: 2,
         chuboxItemView: 3,
         profileView: 4,
-        settings: 5
+        settings: 5,
+        composeChu: 6
     },
     events: {
         onLogout: ""
@@ -29,6 +30,7 @@ enyo.kind({
         this.$.chuboxItemView.setUser(this.user);
         this.$.profileView.setUser(this.user);
         this.$.settings.setUser(this.user);
+        this.$.composeChu.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -60,11 +62,7 @@ enyo.kind({
         App.updateHistory("chubox/");
     },
     openChuView: function(chu) {
-        if (chu) {
-            this.$.chuView.setChu(chu);
-        } else {
-            this.$.chuView.clear();
-        }
+        this.$.chuView.setChu(chu);
         this.showView("chuView");
 
         this.$.chuFeedMenuItem.removeClass("selected");
@@ -75,7 +73,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chu/" + (chu ? chu.id : "new") + "/");
+        App.updateHistory("chu/" + chu.id + "/");
     },
     openChuboxItemView: function(item, chu) {
         this.$.chuboxItemView.setItem(item);
@@ -118,13 +116,16 @@ enyo.kind({
 
         App.updateHistory("settings/");
     },
-    openProfile: function() {
-        this.openProfileView(this.user);
-    },
-    postChu: function() {
-        this.openChuView(null);
+    composeChu: function() {
+        this.$.composeChu.clear();
+        this.showView("composeChu");
+
+        this.$.mainSlider.animateToMin();
 
         App.updateHistory("chu/new/");
+    },
+    openProfile: function() {
+        this.openProfileView(this.user);
     },
     chuboxItemSelected: function(sender, event) {
         this.openChuboxItemView(event.item, event.chu);
@@ -136,6 +137,9 @@ enyo.kind({
         this.$.contentPanels.setIndex(0);
     },
     chuViewBack: function() {
+        this.openChuFeed();
+    },
+    composeChuBack: function() {
         this.openChuFeed();
     },
     toggleMenu: function() {
@@ -159,7 +163,7 @@ enyo.kind({
                 {kind: "onyx.Icon", src: "assets/images/setting_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Settings"}
             ]},
-            {classes: "mainmenu-item", ontap: "postChu", name: "postChuMenuItem", components: [
+            {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
                 {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Post Chu"}
             ]}
@@ -171,7 +175,8 @@ enyo.kind({
                 {kind: "NarrowChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
-                {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"}
+                {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
+                {kind: "ComposeChu", onBack: "composeChuBack"}
             ]}
         ]}
     ]
