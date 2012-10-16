@@ -104,13 +104,23 @@ enyo.kind({
     components: [
         {kind: "Scroller", classes: "enyo-fill", components: [
             {classes: "narrowchuview-section", components: [
-                {kind: "Image", src: "assets/images/favorite.png"},
-                {name: "likeCount", classes: "chuitemview-likecount"},
-                {kind: "Repeater", name: "likerRepeater", classes: "chuitemview-likerrepeater", onSetupItem: "setupLiker", components: [
-                    {kind: "Image", name: "likerImage", classes: "miniavatar"}
+                {style: "height: 35px", components: [
+                    {kind: "Image", src: "assets/images/favorite.png"},
+                    {name: "likeCount", classes: "chuitemview-likecount"},
+                    {kind: "Repeater", name: "likerRepeater", classes: "chuitemview-likerrepeater", onSetupItem: "setupLiker", components: [
+                        {kind: "Image", name: "likerImage", classes: "miniavatar"}
+                    ]}
                 ]},
-                {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike", classes: "chuitemview-like-button"},
-                {kind: "onyx.Button", content: "Put in Chubox!", ontap: "collect", classes: "chuitemview-collect-button"}
+                {components: [
+                    {kind: "onyx.Button", name: "likeButton", ontap: "toggleLike", classes: "chuitemview-like-button", components: [
+                        {kind: "Image", name: "heartImage", src: "assets/images/favorite_light.png"},
+                        {style: "display: inline;", content: "like"}
+                    ]},
+                    {kind: "onyx.Button", name: "collectButton", ontap: "collect", classes: "chuitemview-collect-button", components: [
+                        {kind: "Image", name: "chuboxImage", src: "assets/images/archive.png"},
+                        {style: "display: inline;", content: "put in chubox"}
+                    ]}
+                ]}
             ]},
             {kind: "Image", name: "image1", classes: "chuitemview-productimage"},
             {kind: "Image", name: "image2", classes: "chuitemview-productimage"},

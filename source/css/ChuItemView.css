@@ -12,10 +12,6 @@
 	padding: 2px;
 }
 
-.chuitemview.likeable .chuitemview-likes {
-	display: block;
-}
-
 .chuitemview-likerrepeater {
 	float: right;
 }
@@ -30,4 +26,15 @@
 	padding: 10px;
 	background-color: White;
 	box-sizing: border-box;
+}
+
+.chuitemview-like-button {
+	background-color: #C30F26;
+	color: White;
+	padding: 2px 8px 2px 0;
+}
+
+.chuitemview-collect-button {
+	float: right;
+	padding: 3px 8px 3px 2px;
 }
