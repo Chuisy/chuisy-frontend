@@ -30,18 +30,23 @@ enyo.kind({
             }
 
             this.$.carousel.setIndex(1);
+            this.$.pageThumb1.setActive(true);
         }
     },
     setupItem: function(index) {
         var c = this.$["chuItemView" + index];
+        var thumb = this.$["pageThumb" + (index + 2)];
         var item = this.chu.items[index];
         if (item) {
             c.setItem(item);
             c.setChu(this.chu);
             c.setUser(this.user);
             c.show();
+            thumb.applyStyle("background-image", "url(" + item.product.image_1 + ")");
+            thumb.show();
         } else {
             c.hide();
+            thumb.hide();
         }
     },
     isOwned: function() {
@@ -135,6 +140,9 @@ enyo.kind({
         // Prevent drag event to propagate to slider
         return true;
     },
+    carouselTransitionStart: function(sender, event) {
+        this.$["pageThumb" + event.toIndex].setActive(true);
+    },
     components: [
         {classes: "mainheader", content: "Chuisy", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
@@ -144,7 +152,7 @@ enyo.kind({
             ]}
         ]},
         {fit: true, style: "position: relative", components: [
-            {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+            {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionStart: "carouselTransitionStart", components: [
                 {kind: "FittableRows", classes: "enyo-fill", components: [
                     // SHARE
                     {classes: "narrowchuview-section", components: [
@@ -212,6 +220,22 @@ enyo.kind({
                         ]}
                     ]}
                 // ]}
+            ]}
+        ]},
+        {classes: "narrowchuview-pageindicator", components: [
+            {kind: "Group", components: [
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item info", name: "pageThumb0"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item overview", name: "pageThumb1"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb2"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb3"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb4"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb5"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb6"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb7"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb8"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb9"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb10"},
+                {kind: "GroupItem", classes: "narrowchuview-pageindicator-item itemthumb", name: "pageThumb11"}
             ]}
         ]}
     ]
