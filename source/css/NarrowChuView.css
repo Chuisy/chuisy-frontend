@@ -174,3 +174,21 @@
 	box-sizing: border-box;
 	margin: 0 1px;
 }
+
+.narrowchuview-share-button {
+	width: 32px;
+	height: 32px;
+	background: url() no-repeat center center;
+	float: right;
+	background-size: contain;
+	vertical-align: top;
+	margin-top: -5px;
+}
+
+.narrowchuview-share-button.facebook {
+	background-image: url(../../assets/images/facebook.png);
+}
+
+.narrowchuview-share-button.twitter {
+	background-image: url(../../assets/images/twitter.png);
+}

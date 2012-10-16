@@ -158,13 +158,15 @@ enyo.kind({
                 {kind: "FittableRows", classes: "enyo-fill", components: [
                     // SHARE
                     {classes: "narrowchuview-section", components: [
-                        {classes: "narrowchuview-label", content: "Share this Chu"}
+                        {classes: "narrowchuview-label", content: "Share this Chu"},
+                        {classes: "narrowchuview-share-button twitter"},
+                        {classes: "narrowchuview-share-button facebook"}
                     ]},
                     // TAGGED
                     {kind: "FittableColumns", classes: "narrowchuview-section", components: [
                         {classes: "narrowchuview-label", content: "Tagged People:"},
                         {kind: "Repeater", fit: true, name: "taggedRepeater", classes: "narrowchuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                            {kind: "Image", name: "thumbnail", classes: "narrowchuview-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                            {kind: "Image", name: "thumbnail", classes: "miniavatar", ontap: "tagPerson"}
                         ]}
                     ]},
                     // LOCATION
