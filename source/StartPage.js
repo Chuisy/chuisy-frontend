@@ -1,6 +1,6 @@
 enyo.kind({
     name: "StartPage",
-    classes: "startpage",
+    classes: "startpage bg-light",
     kind: "FittableRows",
     events: {
         onSignIn: "",

@@ -1,5 +1,6 @@
 enyo.kind({
     name: "ChuFeed",
+    classes: "chufeed",
     kind: "FittableRows",
     published: {
         user: null
@@ -36,11 +37,9 @@ enyo.kind({
             ]},
             {classes: "mainheader-text", content: "Chuisy"}
         ]},
-        {kind: "Scroller", classes: "main-scroller", fit: true, components: [
-            {classes: "main-content", components: [
-                {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [
-                    {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;"}
-                ]}
+        {kind: "Scroller", style: "padding: 10px;", fit: true, components: [
+            {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [
+                {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;", tapHighlight: true}
             ]}
         ]},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"}

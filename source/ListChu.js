@@ -10,40 +10,37 @@ enyo.kind({
     chuChanged: function() {
         if (this.chu) {
             this.$.title.setContent(this.chu.title);
+            this.$.username.setContent(this.chu.user.username);
             this.$.avatar.setSrc(this.chu.user.profile.avatar);
-            this.refreshChuItems();
+            this.$.image1.applyStyle("background-image", "url(" + (this.chu.items[0] ? this.chu.items[0].product.image_1 : "") + ")");
+            this.$.image2.applyStyle("background-image", "url(" + (this.chu.items[1] ? this.chu.items[1].product.image_1 : "") + ")");
+            this.$.image3.applyStyle("background-image", "url(" + (this.chu.items[2] ? this.chu.items[2].product.image_1 : "") + ")");
         }
     },
-    refreshChuItems: function() {
-        for (var i=0; i<3; i++) {
-            this.setupItem(i);
-        }
-    },
-    setupItem: function(index) {
-        var component = this.$["item" + index];
-        var item = this.chu.items[index];
-        component.setItem(item);
-        component.setShowing((item));
-        var rot = Math.random() * 20 - 10; // Rotate by a random angle between -5 and 5 deg
-        component.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
-    },
+    // refreshChuItems: function() {
+    //     for (var i=0; i<3; i++) {
+    //         this.setupItem(i);
+    //     }
+    // },
+    // setupItem: function(index) {
+    //     var component = this.$["item" + index];
+    //     var item = this.chu.items[index];
+    //     component.setItem(item);
+    //     component.setShowing((item));
+    // },
     components: [
-        {classes: "listchu-header", components: [
-            {kind: "Image", name: "avatar", classes: "listchu-avatar"},
-            {classes: "listchu-header-right", components: [
-                {name: "title", classes: "listchu-title"},
-                {name: "time", classes: "listchu-time", content: "1 hour ago"}
-            ]}
-        ]},
-        // {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "listchu-toolbutton"},
-        {classes: "listchu-itemrepeater", components: [
-            {kind: "MiniChuboxItem", name: "item0"},
-            {kind: "MiniChuboxItem", name: "item1"},
-            {kind: "MiniChuboxItem", name: "item2"}
+        {components: [
+            {style: "width: 100%; text-align: center;", components: [
+                {name: "image1", classes: "listchu-image1"},
+                {style: "display: inline-block;", components: [
+                    {name: "image2", classes: "listchu-image2"},
+                    {name: "image3", classes: "listchu-image3"}
+                ]}
+            ]},
+            {kind: "Image", name: "avatar", classes: "miniavatar"},
+            {name: "username", classes: "listchu-username"},
+            {name: "time", classes: "listchu-time", content: "1 hour ago"},
+            {name: "title", classes: "listchu-title"}
         ]}
     ]
 });
