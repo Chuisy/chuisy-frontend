@@ -10,6 +10,7 @@ enyo.kind({
     },
     userChanged: function() {
         this.loadChuboxItems();
+        this.loadFriends();
     },
     clear: function() {
         this.$.title.setValue("");
@@ -63,11 +64,10 @@ enyo.kind({
             this.closeSecondarySlider();
         }
     },
-    confirmVisibilityPeople: function() {
+    visibilityPeopleChanged: function() {
         var people = this.$.visibilityPeopleSelector.getSelectedItems();
 
         this.visibleTo = people;
-        this.closeSecondarySlider();
     },
     refreshTaggedPersons: function() {
         this.$.taggedRepeater.setCount(this.taggedPersons.length);
@@ -110,15 +110,24 @@ enyo.kind({
         var item = this.chuboxItems[event.index];
         event.item.$.chuboxItem.setItem(item);
     },
+    loadFriends: function() {
+        chuisy.followingrelation.list(['follower', this.user.id], enyo.bind(this, function(sender, response) {
+            var users = [];
+            for (var i=0; i<response.objects.length; i++) {
+                users.push(response.objects[i].followee);
+            }
+            this.$.taggedPeopleSelector.setItems(users);
+            this.$.visibilityPeopleSelector.setItems(users);
+        }));
+    },
     tagPerson: function() {
         this.$.secondaryPanels.setIndex(1);
         this.openSecondarySlider();
     },
-    confirmTaggedPeople: function() {
+    taggedPeopleChanged: function() {
         this.taggedPersons = this.$.taggedPeopleSelector.getSelectedItems();
 
         this.refreshTaggedPersons();
-        this.closeSecondarySlider();
     },
     addItem: function() {
         this.$.secondaryPanels.setIndex(2);
@@ -196,7 +205,7 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", content: "Chuisy", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
             {classes: "mainheader-text", content: "Chuisy"}
         ]},
@@ -242,15 +251,11 @@ enyo.kind({
                 {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
                     // SELECT VISIBLE TO
                     {classes: "enyo-fill", components: [
-                        {content: "Visible To"},
-                        {kind: "PeopleSelector", name: "visibilityPeopleSelector"},
-                        {kind: "onyx.Button", content: "OK", ontap: "confirmVisibilityPeople"}
+                        {kind: "PeopleSelector", name: "visibilityPeopleSelector", onChange: "visibilityPeopleChanged"}
                     ]},
                     // SELECT TAGGED
                     {classes: "enyo-fill", components: [
-                        {content: "Tagged People"},
-                        {kind: "PeopleSelector", name: "taggedPeopleSelector"},
-                        {kind: "onyx.Button", content: "OK", ontap: "confirmTaggedPeople"}
+                        {kind: "PeopleSelector", name: "taggedPeopleSelector", onChange: "taggedPeopleChanged"}
                     ]},
                     // SELECT ITEM
                     {classes: "enyo-fill", components: [

@@ -1,5 +1,22 @@
 .peopleselector {}
 
+.peopleselector-avatar {
+	width: 50px;
+	height: 50px;
+	padding: 3px;
+	border-radius: 3px;
+	background-color: #fff;
+	border: solid 1px #ccc;
+	display: inline-block;
+	margin: 2px;
+}
+
+.peopleselector-avatar.selected {
+	background-color: Orange;
+}
+
+/*.peopleselector {}
+
 .peopleselector .peopleselector-listitem.onyx-menu-item {
 	text-align: left;
 }
@@ -16,4 +33,4 @@
 .peopleselector-removebutton {
 	margin: 0 5px;
 	background-position: center center;
-}
+}*/
