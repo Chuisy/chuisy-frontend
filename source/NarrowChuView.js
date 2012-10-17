@@ -146,7 +146,7 @@ enyo.kind({
         this.$["pageThumb" + event.toIndex].setActive(true);
     },
     components: [
-        {classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {classes: "mainheader-text", content: "Chuisy"},
             {kind: "onyx.Button", classes: "narrowchuview-comments-button", ontap: "toggleComments", name: "commentsButton", components: [
