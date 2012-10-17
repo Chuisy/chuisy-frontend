@@ -41,7 +41,6 @@ enyo.kind({
         } else {
             // Get facebook access token
             FB.login(enyo.bind(this, function(response) {
-                console.log(response);
                 if (response.status == "connected") {
                     chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
                         if (success) {

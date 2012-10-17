@@ -113,12 +113,10 @@ enyo.kind({
             {classes: "mainheader-text", content: "Chu Box"}
         ]},
         {kind: "Scroller", fit: true, style: "text-align: center;", components: [
-            {classes: "main-content", components: [
                 {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
                     {kind: "MiniChuboxItem", name: "chuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
                     //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
                 ]}
-            ]}
         ]}
     ]
 });
