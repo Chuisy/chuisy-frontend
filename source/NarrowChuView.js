@@ -106,7 +106,7 @@ enyo.kind({
         }));
     },
     updateLocationText: function() {
-        this.$.locationText.setContent(this.location ? this.location.address : "No location for this Chu!");
+        this.$.locationText.setContent(this.chu.location ? this.chu.location.address : "No location for this Chu!");
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
