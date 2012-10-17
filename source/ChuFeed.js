@@ -31,11 +31,11 @@ enyo.kind({
         this.doChuSelected({chu: chu});
     },
     components: [
-        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
             ]},
-            {classes: "mainheader-text", content: "Chuisy"}
+            {classes: "mainheader-text", content: "chuisy"}
         ]},
         {kind: "Scroller", style: "padding: 10px;", fit: true, components: [
             {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [

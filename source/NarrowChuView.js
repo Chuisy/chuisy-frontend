@@ -106,7 +106,7 @@ enyo.kind({
         }));
     },
     updateLocationText: function() {
-        this.$.locationText.setContent(this.location ? this.location.address : "No location for this Chu!");
+        this.$.locationText.setContent(this.chu.location ? this.chu.location.address : "No location for this Chu!");
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
@@ -146,7 +146,7 @@ enyo.kind({
         this.$["pageThumb" + event.toIndex].setActive(true);
     },
     components: [
-        {classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {classes: "mainheader-text", content: "Chuisy"},
             {kind: "onyx.Button", classes: "narrowchuview-comments-button", ontap: "toggleComments", name: "commentsButton", components: [

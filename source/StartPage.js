@@ -30,7 +30,7 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {classes: "mainheader-text", fit: true, content: "chuisy", style: "width: 100%"}
+            {classes: "mainheader-text", fit: true, content: "chuisy"}
         ]},
         {fit: true, classes: "startpage-content", components: [
             {kind: "Panels", name: "signInPanels", arrangerKind: "CarouselArranger", classes: "startpage-signin-panels", components: [

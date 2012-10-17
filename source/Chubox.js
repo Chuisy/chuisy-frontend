@@ -106,7 +106,7 @@ enyo.kind({
         }));
     },
     components: [
-        {kind: "FittableColumns", classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
             ]},
