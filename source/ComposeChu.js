@@ -214,41 +214,41 @@ enyo.kind({
         {style: "position: relative;", fit: true, components: [
             {kind: "Scroller", classes: "enyo-fill", components: [
                 {style: "padding: 10px;", components: [
-                // TITLE
-                {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", alwaysLooksFocused: true, components: [
-                    {kind: "onyx.TextArea", style: "width: 100%;", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
-                ]},
-                {style: "height: 38px;", components: [
-                    // TAGGED
-                    {kind: "Repeater", name: "taggedRepeater", classes: "composechu-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                        {kind: "Image", name: "thumbnail", classes: "miniavatar composechu-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                    // TITLE
+                    {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", alwaysLooksFocused: true, components: [
+                        {kind: "onyx.TextArea", style: "width: 100%;", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
                     ]},
-                    {name: "tagButton", ontap: "tagPerson", classes: "composechu-tag-button"},
-                    // LOCATION
-                    {kind: "onyx.Button", classes: "composechu-location-button", name: "locationButton", ontap: "changeLocation", components: [
-                        // {classes: "composechu-location-text", name: "locationText"},
-                        {kind: "Image", src: "assets/images/location.png"}
-                    ]}
-                ]},
-                // ITEMS
-                {style: "text-align: center;", components: [
-                    {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                        {kind: "ChuItem", ontap: "itemTap"},
-                        {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "composechu-new-item", ontap: "addItem"}
-                    ]}
-                ]},
-                {components: [
-                    // VISIBILITY
-                    {kind: "Group", classes: "composechu-visibility-selector", components: [
-                        {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
-                        {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                        {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
-                        {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                        {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
+                    {style: "height: 38px;", components: [
+                        // TAGGED
+                        {kind: "Repeater", name: "taggedRepeater", classes: "composechu-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
+                            {kind: "Image", name: "thumbnail", classes: "miniavatar composechu-taggedrepeater-thumbnail", ontap: "tagPerson"}
+                        ]},
+                        {name: "tagButton", ontap: "tagPerson", classes: "composechu-tag-button"},
+                        // LOCATION
+                        {kind: "onyx.Button", classes: "composechu-location-button", name: "locationButton", ontap: "changeLocation", components: [
+                            // {classes: "composechu-location-text", name: "locationText"},
+                            {kind: "Image", src: "assets/images/location.png"}
+                        ]}
                     ]},
-                    // POST
-                    {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
-                ]}
+                    // ITEMS
+                    {style: "text-align: center;", components: [
+                        {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
+                            {kind: "ChuItem", ontap: "itemTap"},
+                            {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "composechu-new-item", ontap: "addItem"}
+                        ]}
+                    ]},
+                    {components: [
+                        // VISIBILITY
+                        {kind: "Group", classes: "composechu-visibility-selector", components: [
+                            {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
+                            {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
+                            {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
+                            {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
+                            {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
+                        ]},
+                        // POST
+                        {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
+                    ]}
                 ]}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
