@@ -35,20 +35,15 @@ enyo.kind({
         }));
     },
     refreshItems: function() {
-        this.$.itemRepeater.setCount(this.items ? this.items.length : 0);
-        this.$.itemRepeater.render();
+        this.$.itemList.setCount(this.items ? Math.ceil(this.items.length/3) : 0);
+        this.$.itemList.refresh();
     },
-    setupRepeaterItem: function(sender, event) {
-        var c = event.item.$.chuboxItem;
-        var item = this.items[event.index];
-        c.setItem(item);
-        // c.setUser(this.user);
-        // var rot = Math.random() * 20 - 10; // Rotate by a random angle between -10 and 10 deg
-        // c.applyStyle("transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-webkit-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-ms-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-moz-transform", "rotate(" + rot + "deg)");
-        // c.applyStyle("-o-transform", "rotate(" + rot + "deg)");
+    setupItem: function(sender, event) {
+        var startIndex = event.index * 3;
+
+        this.$.chuboxItem0.setItem(this.items[startIndex]);
+        this.$.chuboxItem1.setItem(this.items[startIndex + 1]);
+        this.$.chuboxItem2.setItem(this.items[startIndex + 2]);
     },
     itemHold: function(sender, event) {
         this.log(event);
@@ -112,11 +107,11 @@ enyo.kind({
             ]},
             {classes: "mainheader-text", content: "Chu Box"}
         ]},
-        {kind: "Scroller", fit: true, style: "text-align: center;", components: [
-                {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                    {kind: "MiniChuboxItem", name: "chuboxItem", ontap: "itemTap", onRemove: "itemRemove"}
-                    //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
-                ]}
+        {kind: "List", name: "itemList", fit: true, onSetupItem: "setupItem", components: [
+            {kind: "MiniChuboxItem", name: "chuboxItem0", hIndex: 0, ontap: "itemTap", onRemove: "itemRemove"},
+            {kind: "MiniChuboxItem", name: "chuboxItem1", hIndex: 1, ontap: "itemTap", onRemove: "itemRemove"},
+            {kind: "MiniChuboxItem", name: "chuboxItem2", hIndex: 2, ontap: "itemTap", onRemove: "itemRemove"}
+            //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
         ]}
     ]
 });

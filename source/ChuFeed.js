@@ -20,7 +20,7 @@ enyo.kind({
     },
     refreshChus: function() {
         this.$.chuList.setCount(this.chus.length);
-        this.$.chuList.render();
+        this.$.chuList.refresh();
     },
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
