@@ -46,6 +46,9 @@ enyo.kind({
 			this.$.newPassword.setValue("");
 		}));
 	},
+    facebookSignIn: function() {
+        window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://api.chuisy.com/v1/fb_auth/&scope=user_birthday,user_location,user_about_me,user_website,email";
+    },
 	components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
@@ -79,6 +82,7 @@ enyo.kind({
 				]},
 				{kind: "onyx.Button", content: "Change Password", ontap: "changePassword", style: "width: 100%;"}
 			]},
+			{kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
 			{kind: "onyx.Button", content: "Logout", ontap: "doLogout"}
 		]}
 	]

@@ -9,8 +9,10 @@ enyo.kind({
         onBack: ""
     },
     userChanged: function() {
-        this.loadChuboxItems();
-        this.loadFriends();
+        if (this.user) {
+            this.loadChuboxItems();
+            this.loadFriends();
+        }
     },
     clear: function() {
         this.$.title.setValue("");

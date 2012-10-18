@@ -41,7 +41,6 @@ enyo.kind({
         } else {
             // Get facebook access token
             FB.login(enyo.bind(this, function(response) {
-                console.log(response);
                 if (response.status == "connected") {
                     chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
                         if (success) {
@@ -166,7 +165,7 @@ enyo.kind({
     signedIn: function() {
         this.saveAuthCredentials();
         this.loadUserData();
-        this.$.panels.setIndex(1);
+        // this.$.panels.setIndex(1);
     },
     userChanged: function() {
         this.$.mainView.setUser(this.user);
@@ -177,13 +176,13 @@ enyo.kind({
     logout: function() {
         this.deleteAuthCredentials();
         this.setUser(null);
-        this.$.panels.setIndex(0);
+        // this.$.panels.setIndex(0);
         App.updateHistory("");
     },
     components: [
-        {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
-            {kind: "StartPage", onSignIn: "signedIn"},
+        // {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
+            // {kind: "StartPage", onSignIn: "signedIn"},
             {kind: "MainView", classes: "enyo-fill", onLogout: "logout"}
-        ]}
+        // ]}
     ]
 });
