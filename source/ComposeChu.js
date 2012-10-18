@@ -212,7 +212,8 @@ enyo.kind({
             {classes: "mainheader-text", content: "Chuisy"}
         ]},
         {style: "position: relative;", fit: true, components: [
-            {kind: "Scroller", classes: "enyo-fill", style: "padding: 10px; box-sizing: border-box;", components: [
+            {kind: "Scroller", classes: "enyo-fill", components: [
+                {style: "padding: 10px;", components: [
                 // TITLE
                 {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", alwaysLooksFocused: true, components: [
                     {kind: "onyx.TextArea", style: "width: 100%;", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
@@ -247,6 +248,7 @@ enyo.kind({
                     ]},
                     // POST
                     {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
+                ]}
                 ]}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
