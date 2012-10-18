@@ -37,10 +37,8 @@ enyo.kind({
             ]},
             {classes: "mainheader-text", content: "chuisy"}
         ]},
-        {kind: "Scroller", style: "padding: 10px;", fit: true, components: [
-            {kind: "FlyweightRepeater", name: "chuList", onSetupItem: "setupChu", components: [
-                {kind: "ListChu", ontap: "chuTapped", style: "width: 100%;", tapHighlight: true}
-            ]}
+        {kind: "List", fit: true, name: "chuList", onSetupItem: "setupChu", components: [
+            {kind: "ListChu", ontap: "chuTapped", tapHighlight: true}
         ]},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"}
     ]

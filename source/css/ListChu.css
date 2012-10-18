@@ -1,10 +1,10 @@
 .listchu {
 	box-sizing: border-box;
 	border: #ccc solid 1px;
-	box-shadow: 2px 2px 2px #555;
+	/*box-shadow: 0 0 3px #555;*/
 	background-color: White;
 	border-radius: 3px;
-	margin: 5px 0;
+	margin: 5px 5px;
 	padding: 5px;
 }
 
