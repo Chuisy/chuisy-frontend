@@ -10,7 +10,8 @@ enyo.kind({
     },
     userChanged: function() {
         if (this.user) {
-            this.loadChuboxItems();
+            this.$.chubox.setUser(this.user);
+            this.$.chubox.setBoxOwner(this.user);
             this.loadFriends();
         }
     },
@@ -96,22 +97,6 @@ enyo.kind({
             event.item.$.newItemButton.show();
         }
     },
-    loadChuboxItems: function() {
-        if (this.user) {
-            chuisy.chuboxitem.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
-                this.chuboxItems = response.objects;
-                this.refreshChuboxItems();
-            }));
-        }
-    },
-    refreshChuboxItems: function() {
-        this.$.chuboxRepeater.setCount(this.chuboxItems.length);
-        this.$.chuboxRepeater.render();
-    },
-    setupChuboxItem: function(sender, event) {
-        var item = this.chuboxItems[event.index];
-        event.item.$.chuboxItem.setItem(item);
-    },
     loadFriends: function() {
         chuisy.followingrelation.list(['follower', this.user.id], enyo.bind(this, function(sender, response) {
             var users = [];
@@ -136,11 +121,10 @@ enyo.kind({
         this.openSecondarySlider();
     },
     itemSelected: function(sender, event) {
-        var item = this.chuboxItems[event.index];
-        this.items.push(item);
-
+        this.items.push(event.item);
         this.refreshChuItems();
         this.closeSecondarySlider();
+        return true;
     },
     postChu: function() {
         var data = {
@@ -263,11 +247,7 @@ enyo.kind({
                     ]},
                     // SELECT ITEM
                     {classes: "enyo-fill", components: [
-                        {kind: "Scroller", classes: "enyo-fill", components: [
-                            {kind: "Repeater", name: "chuboxRepeater", onSetupItem: "setupChuboxItem", components: [
-                                {kind: "MiniChuboxItem", name: "chuboxItem", ontap: "itemSelected"}
-                            ]}
-                        ]}
+                        {kind: "Chubox", name: "chubox", classes: "enyo-fill", onItemSelected: "itemSelected"}
                     ]},
                     // PICK LOCATION
                     {classes: "enyo-fill", style: "position: relative", components: [

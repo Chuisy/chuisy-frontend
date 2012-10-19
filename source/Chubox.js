@@ -26,8 +26,7 @@ enyo.kind({
 
 enyo.kind({
     name: "Chubox",
-    style: "text-align: center",
-    published: {
+        published: {
         user: null, // The currently signed in user
         boxOwner: null // The owner of this Chubox
     },
