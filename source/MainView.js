@@ -23,8 +23,7 @@ enyo.kind({
         return this.getBounds().width < this.narrowWidth;
     },
     userChanged: function() {
-        this.$.chubox.setUser(this.user);
-        this.$.chubox.setBoxOwner(this.user);
+        this.$.chuboxView.setUser(this.user);
         this.$.chuFeed.setUser(this.user);
         this.$.chuView.setUser(this.user);
         this.$.chuboxItemView.setUser(this.user);
@@ -171,7 +170,7 @@ enyo.kind({
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
             {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
-                {kind: "Chubox", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
+                {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
                 {kind: "NarrowChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},

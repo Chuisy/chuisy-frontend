@@ -1,24 +1,38 @@
 enyo.kind({
-    name: "Chubox",
+    name: "ChuboxView",
     kind: "FittableRows",
     classes: "chubox",
     published: {
-        user: null, // The currently signed in user
-        boxOwner: null // The owner of this Chubox
+        user: null // The currently signed in user
+    },
+    userChanged: function() {
+        this.$.chubox.setUser(this.user);
+        this.$.chubox.setBoxOwner(this.user);
     },
     events: {
         onItemSelected: "",
         onToggleMenu: ""
     },
-    handlers: {
-        ondrag: "drag",
-        ondragfinish: "dragFinish",
-        // ondragstart: "dragStart",
-        onmouseup: "mouseUp"
+    components: [
+        {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {classes: "mainheader-text", content: "Chu Box"}
+        ]},
+        {kind: "Chubox", name: "chubox", fit: true}
+    ]
+});
+
+enyo.kind({
+    name: "Chubox",
+    style: "text-align: center",
+    published: {
+        user: null, // The currently signed in user
+        boxOwner: null // The owner of this Chubox
     },
-    create: function() {
-        this.inherited(arguments);
-        this.userChanged();
+    events: {
+        onItemSelected: ""
     },
     userChanged: function() {
         this.refreshItems();
@@ -42,56 +56,17 @@ enyo.kind({
         var startIndex = event.index * 3;
 
         this.$.chuboxItem0.setItem(this.items[startIndex]);
+        this.$.chuboxItem0.setShowing((this.items[startIndex]));
         this.$.chuboxItem1.setItem(this.items[startIndex + 1]);
+        this.$.chuboxItem1.setShowing((this.items[startIndex +1]));
         this.$.chuboxItem2.setItem(this.items[startIndex + 2]);
-    },
-    itemHold: function(sender, event) {
-        this.log(event);
-        this.createComponent({kind: "DragAvatar", offsetX: -150, offsetY: 150, name: "dragAvatar", components: [
-            {kind: "ChuboxItem", item: this.items[event.index]}
-        ]});
-        this.dragging = true;
-        this.$.dragAvatar.drag(event);
-    },
-    drag: function(sender, event) {
-        if (this.dragging) {
-            this.$.dragAvatar.drag(event);
-            this.itemHeld = false;
-        }
-    },
-    dragFinish: function() {
-        if (this.dragging) {
-            this.$.dragAvatar.destroy();
-            this.dragging = false;
-            document.body.style.cursor = "auto";
-        }
-    },
-    mouseUp: function(sender, event) {
-        if (this.dragging) {
-            this.$.dragAvatar.destroy();
-            this.dragging = false;
-            document.body.style.cursor = "auto";
-        }
-    },
-    itemMouseDown: function(sender, event) {
-        sender.addClass("highlight");
-    },
-    itemMouseUp: function(sender, event) {
-        sender.removeClass("highlight");
+        this.$.chuboxItem2.setShowing((this.items[startIndex + 2]));
+
+        return true;
     },
     itemTap: function(sender, event) {
-        // this.doItemSelected({item: this.items[event.index]});
-    },
-    newItemSave: function() {
-        var data = {
-            user: this.user.resource_uri,
-            // product: this.$.productForm.getData()
-            product: "/v1/product/1/"
-        };
-        this.log(data);
-        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
+        var index = event.index * 3 + sender.hIndex;
+        this.doItemSelected({item: this.items[index]});
     },
     itemRemove: function(sender, event) {
         var item = this.items[event.index];
@@ -101,13 +76,7 @@ enyo.kind({
         }));
     },
     components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
-                {kind: "Image", src: "assets/images/menu-icon.png"}
-            ]},
-            {classes: "mainheader-text", content: "Chu Box"}
-        ]},
-        {kind: "List", name: "itemList", fit: true, onSetupItem: "setupItem", components: [
+        {kind: "List", name: "itemList", classes: "enyo-fill", onSetupItem: "setupItem", fixedHeight: true, components: [
             {kind: "MiniChuboxItem", name: "chuboxItem0", hIndex: 0, ontap: "itemTap", onRemove: "itemRemove"},
             {kind: "MiniChuboxItem", name: "chuboxItem1", hIndex: 1, ontap: "itemTap", onRemove: "itemRemove"},
             {kind: "MiniChuboxItem", name: "chuboxItem2", hIndex: 2, ontap: "itemTap", onRemove: "itemRemove"}
