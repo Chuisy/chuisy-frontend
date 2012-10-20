@@ -38,16 +38,16 @@ enyo.kind({
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
-            panControl: true,
+            panControl: false,
             panControlOptions: {
                 position: google.maps.ControlPosition.RIGHT_BOTTOM
             },
-            zoomControl: true,
+            zoomControl: false,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.LARGE,
                 position: google.maps.ControlPosition.LEFT_CENTER
             },
-            mapTypeControl: true,
+            mapTypeControl: false,
             mapTypeControlOptions: {
                 position: google.maps.ControlPosition.LEFT_BOTTOM
             },
@@ -73,10 +73,6 @@ enyo.kind({
                 this.doLocationChanged({location: loc});
             }));
         }));
-
-        if (!this.location) {
-            this.getGeolocation();
-        }
     },
     getGeolocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
@@ -127,11 +123,11 @@ enyo.kind({
         }
     },
     components: [
-        {classes: "enyo-fill", name: "map"},
-        {style: "position: absolute; top: 5px; right: 5px;", components: [
-            {kind: "onyx.InputDecorator", alwaysLooksFocused: true, style: "border-radius: 20px;", components: [
-                {kind: "onyx.Input", name: "searchInput", placeholder: "Type Address...", onkeydown: "searchInputKeyDown"}
-            ]}
-        ]}
+        {classes: "enyo-fill", name: "map"}
+//        {style: "position: absolute; top: 5px; right: 5px;", components: [
+//            {kind: "onyx.InputDecorator", alwaysLooksFocused: true, style: "border-radius: 20px;", components: [
+//                {kind: "onyx.Input", name: "searchInput", placeholder: "Type Address...", onkeydown: "searchInputKeyDown"}
+//            ]}
+//        ]}
     ]
 });

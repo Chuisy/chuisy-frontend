@@ -15,6 +15,10 @@ enyo.kind({
             this.loadFriends();
         }
     },
+    rendered: funciton() {
+        this.inherited(arguments);
+        this.$.locationPicker.initialize();
+    },
     clear: function() {
         this.$.title.setValue("");
         this.visibility = "public";
@@ -29,7 +33,9 @@ enyo.kind({
         this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
         this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
         this.$.locationPicker.setLocation(this.location);
-        this.updateLocationText();
+//        this.updateLocationText();
+        
+        this.$.locationPicker.getGeoLocation();
     },
     toUriList: function(list) {
         var temp = [];
@@ -155,7 +161,6 @@ enyo.kind({
     },
     changeLocation: function() {
         this.$.secondaryPanels.setIndex(3);
-        this.$.locationPicker.initialize();
         this.openSecondarySlider();
     },
     locationPickerBack: function() {
