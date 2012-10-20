@@ -15,7 +15,7 @@ enyo.kind({
             this.loadFriends();
         }
     },
-    rendered: funciton() {
+    rendered: function() {
         this.inherited(arguments);
         this.$.locationPicker.initialize();
     },
@@ -35,7 +35,7 @@ enyo.kind({
         this.$.locationPicker.setLocation(this.location);
 //        this.updateLocationText();
         
-        this.$.locationPicker.getGeoLocation();
+        this.$.locationPicker.getGeolocation();
     },
     toUriList: function(list) {
         var temp = [];
@@ -159,7 +159,7 @@ enyo.kind({
 
         this.refreshChuItems();
     },
-    changeLocation: function() {
+    showLocation: function() {
         this.$.secondaryPanels.setIndex(3);
         this.openSecondarySlider();
     },
@@ -214,7 +214,7 @@ enyo.kind({
                         ]},
                         {name: "tagButton", ontap: "tagPerson", classes: "composechu-tag-button"},
                         // LOCATION
-                        {kind: "onyx.Button", classes: "composechu-location-button", name: "locationButton", ontap: "changeLocation", components: [
+                        {kind: "onyx.Button", classes: "composechu-location-button", name: "locationButton", ontap: "showLocation", components: [
                             // {classes: "composechu-location-text", name: "locationText"},
                             {kind: "Image", src: "assets/images/location.png"}
                         ]}
@@ -241,7 +241,7 @@ enyo.kind({
                 ]}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
-                {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
+                {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, animate: false, classes: "enyo-fill", components: [
                     // SELECT VISIBLE TO
                     {classes: "enyo-fill", components: [
                         {kind: "PeopleSelector", name: "visibilityPeopleSelector", onChange: "visibilityPeopleChanged"}

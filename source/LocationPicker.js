@@ -6,12 +6,13 @@ enyo.kind({
     events: {
         onLocationChanged: ""
     },
+    handlers: {
+        onresize: "resize"
+    },
     locationChanged: function() {
         if (this.map) {
             if (this.location) {
-                latlng = new google.maps.LatLng(this.location.latitude, this.location.longitude);
-                // this.map.setZoom(15);
-                this.map.panTo(latlng);
+                this.panToLocation();
                 this.locationMarker.setVisible(true);
                 this.locationMarker.setPosition(latlng);
                 // this.$.searchInput.setValue(this.location.address);
@@ -34,7 +35,7 @@ enyo.kind({
         }
 
         var options = {
-            zoom: 15,
+            zoom: 19,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
@@ -58,12 +59,12 @@ enyo.kind({
 
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
         this.locationMarker = new google.maps.Marker({
-            position: latlng, 
+            position: latlng,
             map: this.map,
-            animation: google.maps.Animation.DROP,
+            // animation: google.maps.Animation.DROP,
             draggable: true,
             visible: this.location !== null
-        });        
+        });
         this.placesService = new google.maps.places.PlacesService(this.map);
         // this.autoComplete = new google.maps.places.Autocomplete(this.$.searchInput.hasNode(), {});
 
@@ -73,6 +74,14 @@ enyo.kind({
                 this.doLocationChanged({location: loc});
             }));
         }));
+    },
+    panToLocation: function() {
+        latlng = new google.maps.LatLng(this.location.latitude, this.location.longitude);
+        this.map.panTo(latlng);
+    },
+    resize: function() {
+        google.maps.event.trigger(this.map, 'resize');
+        this.panToLocation();
     },
     getGeolocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
