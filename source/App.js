@@ -24,15 +24,40 @@ enyo.kind({
     },
     initWeb: function() {
         this.log("Initializing for web...");
+
         chuisy.authCredentials = this.fetchAuthCredentials();
         if (chuisy.authCredentials) {
             this.signedIn();
-            // Update facebook access token.
-            this.facebookSignIn();
+            this.recoverStateFromUri();
         }
-        
-        window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
-        this.recoverStateFromUri();
+
+        window.fbAsyncInit = enyo.bind(this, function() {
+            // init the FB JS SDK
+            FB.init({
+                appId      : '180626725291316', // App ID from the App Dashboard
+                status     : true, // check the login status upon init?
+                cookie     : true, // set sessions cookies to allow your server to access the session?
+                xfbml      : true  // parse XFBML tags on this page?
+            });
+
+            if (chuisy.authCredentials) {
+                // Update facebook access token.
+                this.facebookSignIn();
+            }
+        });
+
+        // Load the SDK's source Asynchronously
+        this.log("Loading facebook sdk...");
+        window.FB = null;
+        (function(d){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "http://connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document));
     },
     initMobile: function() {
         if (!this.initialized) {
@@ -178,6 +203,7 @@ enyo.kind({
             this.loadUser();
         }
         this.$.panels.setIndex(1);
+        window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
     },
     userChanged: function() {
         this.$.mainView.setUser(this.user);
