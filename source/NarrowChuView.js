@@ -129,7 +129,9 @@ enyo.kind({
             user: this.user
         };
         this.chu.comments.push(comment);
-        chuisy.comment.create(comment, enyo.bind(this, function(sender, response) {
+        var params = enyo.clone(comment);
+        delete params.user;
+        chuisy.comment.create(params, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
         this.refreshComments();

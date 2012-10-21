@@ -104,7 +104,7 @@ enyo.kind({
         }
     },
     loadFriends: function() {
-        chuisy.followingrelation.list(['follower', this.user.id], enyo.bind(this, function(sender, response) {
+        chuisy.followingrelation.list(['user', this.user.id], enyo.bind(this, function(sender, response) {
             var users = [];
             for (var i=0; i<response.objects.length; i++) {
                 users.push(response.objects[i].followee);
@@ -137,7 +137,7 @@ enyo.kind({
             title: this.$.title.getValue(),
             visibility: this.visibility,
             expandability: "public", // TODO: Add option to change this
-            user: this.user,
+            // user: this.user,
             items: this.toUriList(this.items),
             tagged: this.toUriList(this.taggedPersons),
             visible_to: this.toUriList(this.visibleTo),
