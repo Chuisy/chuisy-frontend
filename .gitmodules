@@ -10,3 +10,6 @@
 [submodule "lib/sdk"]
 	path = lib/sdk
 	url = https://MaKleSoft@github.com/Chuisy/chuisy-sdk-js.git
+[submodule "lib/extra"]
+	path = lib/extra
+	url = https://github.com/enyojs/extra.git
