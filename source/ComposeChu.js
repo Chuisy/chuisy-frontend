@@ -162,6 +162,7 @@ enyo.kind({
     showLocation: function() {
         this.$.secondaryPanels.setIndex(3);
         this.openSecondarySlider();
+        this.$.locationPicker.panToLocation();
     },
     locationPickerBack: function() {
         this.closeSecondarySlider();

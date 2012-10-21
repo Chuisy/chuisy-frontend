@@ -75,7 +75,7 @@ enyo.kind({
         }));
     },
     components: [
-        {kind: "List", name: "itemList", classes: "enyo-fill", onSetupItem: "setupItem", fixedHeight: true, components: [
+        {kind: "List", name: "itemList", classes: "enyo-fill", onSetupItem: "setupItem", fixedHeight: true, style: "text-align: center;", components: [
             {kind: "MiniChuboxItem", name: "chuboxItem0", hIndex: 0, ontap: "itemTap", onRemove: "itemRemove"},
             {kind: "MiniChuboxItem", name: "chuboxItem1", hIndex: 1, ontap: "itemTap", onRemove: "itemRemove"},
             {kind: "MiniChuboxItem", name: "chuboxItem2", hIndex: 2, ontap: "itemTap", onRemove: "itemRemove"}
