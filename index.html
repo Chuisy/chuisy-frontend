@@ -36,9 +36,12 @@
 	<body class="enyo-unselectable" ontouchmove="touchMove(event);">
 		<script>
 			if (!window.App) {
-				alert('No application build found, redirecting to debug.html.');
+				// alert('No application build found, redirecting to debug.html.');
 				location = 'debug.html';
 			}
+	        // tell Enyo to listen for deviceready event
+	        enyo.dispatcher.listen(document, "deviceready");
+	        
 			new App().renderInto(document.body);
 		</script>
 	</body>

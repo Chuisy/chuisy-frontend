@@ -15,44 +15,38 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
 
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/)) {
-            document.addEventListener('deviceready', enyo.bind(this, this.initMobile));
-        } else {
+        if (!this.isMobile()) {
             this.initWeb();
         }
     },
+    isMobile: function() {
+        return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
+    },
     initWeb: function() {
+        this.log("Initializing for web...");
         chuisy.authCredentials = this.fetchAuthCredentials();
         if (chuisy.authCredentials) {
             this.signedIn();
+            // Update facebook access token.
+            this.facebookSignIn();
         }
         
         window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
         this.recoverStateFromUri();
     },
     initMobile: function() {
-        // Initialize Facebook SDK
-        FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
+        if (!this.initialized) {
+            this.log("Initializing for mobile...");
+            // Initialize Facebook SDK
+            FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
 
-        // Check if user is logged in
-        chuisy.authCredentials = this.fetchAuthCredentials();
-        if (chuisy.authCredentials) {
-            this.signedIn();
-        } else {
-            // Get facebook access token
-            FB.login(enyo.bind(this, function(response) {
-                if (response.status == "connected") {
-                    chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
-                        if (success) {
-                            this.signedIn();
-                        } else {
-                            alert("Authentication failed!", response);
-                        }
-                    }));
-                } else {
-                    alert("Facebook signin failed!");
-                }
-            }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+            // Check if user is logged in
+            chuisy.authCredentials = this.fetchAuthCredentials();
+            if (chuisy.authCredentials) {
+                this.signedIn();
+            }
+
+            this.initialized = true;
         }
     },
     /**
@@ -138,7 +132,24 @@ enyo.kind({
 
         window.ignoreHashChange = false;
     },
-    loadUserData: function() {
+    facebookSignIn: function() {
+        // Get facebook access token
+        FB.login(enyo.bind(this, function(response) {
+            if (response.status == "connected") {
+                chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
+                    if (success) {
+                        this.saveAuthCredentials();
+                        this.signedIn();
+                    } else {
+                        alert("Authentication failed!", response);
+                    }
+                }));
+            } else {
+                alert("Facebook signin failed!");
+            }
+        }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+    },
+    loadUser: function() {
         var credentials = this.fetchAuthCredentials();
         if (credentials) {
             chuisy.user.detail(credentials.id, enyo.bind(this, function(sender, response) {
@@ -163,9 +174,10 @@ enyo.kind({
         localStorage.removeItem("authCredentials");
     },
     signedIn: function() {
-        this.saveAuthCredentials();
-        this.loadUserData();
-        // this.$.panels.setIndex(1);
+        if (!this.user) {
+            this.loadUser();
+        }
+        this.$.panels.setIndex(1);
     },
     userChanged: function() {
         this.$.mainView.setUser(this.user);
@@ -176,13 +188,16 @@ enyo.kind({
     logout: function() {
         this.deleteAuthCredentials();
         this.setUser(null);
-        // this.$.panels.setIndex(0);
+        this.$.panels.setIndex(0);
         App.updateHistory("");
     },
     components: [
-        // {kind: "Panels", draggable: false, classes: "enyo-fill", components: [
-            // {kind: "StartPage", onSignIn: "signedIn"},
+        {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+            {classes: "enyo-fill", components: [
+                {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"}
+            ]},
             {kind: "MainView", classes: "enyo-fill", onLogout: "logout"}
-        // ]}
+        ]},
+        {kind: "Signals", ondeviceready: "initMobile"}
     ]
 });

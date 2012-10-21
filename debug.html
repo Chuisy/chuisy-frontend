@@ -32,6 +32,9 @@
 	</head>
 	<body class="enyo-unselectable" ontouchmove="touchMove(event);">
 		<script>
+	        // tell Enyo to listen for deviceready event
+	        enyo.dispatcher.listen(document, "deviceready");
+	        
 			new App().renderInto(document.body);
 			// new LocationPicker({fit: true}).renderInto(document.body);
 		</script>
