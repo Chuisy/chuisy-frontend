@@ -23,5 +23,7 @@ enyo.depends(
 	"NarrowChuView.js",
 	"ChuItem.js",
 	"ChuItemView.js",
-	"ComposeChu.js"
+	"ComposeChu.js",
+	"Map.js",
+	"PickLocation.js"
 );
