@@ -25,5 +25,6 @@ enyo.depends(
 	"ChuItemView.js",
 	"ComposeChu.js",
 	"Map.js",
-	"PickLocation.js"
+	"PickLocation.js",
+	"ChuboxItemForm.js"
 );

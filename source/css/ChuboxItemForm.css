@@ -1,0 +1,36 @@
+.chuboxitemform {
+	background: none no-repeat center -20px;
+	background-size: 110%;
+	background-color: Gray;
+}
+
+.chuboxitemform-spacer {
+	height: 320px;
+}
+
+.chuboxitemform-content {
+	background-color: white;
+	position: relative;
+}
+
+.chuboxitemform-location-text {
+	text-align: right;
+	width: 100%;
+	position: absolute;
+	top: -30px;
+	color: white;
+}
+
+.chuboxitemform-picker .onyx-button {
+	width: 100%;
+}
+
+.chuboxitemform .onyx-item {
+	box-sizing: border-box;
+	padding: 5px;
+	min-height: 40px;
+}
+
+.chuboxitemform-post-button {
+	float: right;
+}
