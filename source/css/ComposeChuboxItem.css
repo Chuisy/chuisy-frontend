@@ -1,0 +1,11 @@
+.composechuboxitem {}
+
+.composechuboxitem-addimage-button.onyx-button {
+	padding: 2px;
+	margin: 5px;
+}
+
+.composechuboxitem-addimage-image {
+	width: 80px;
+	height: 80px;
+}

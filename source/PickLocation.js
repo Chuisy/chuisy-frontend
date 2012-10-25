@@ -18,7 +18,8 @@ enyo.kind({
             this.$.map.placeMarker(this.location.latitude, this.location.longitude);
             this.lookupPlaces();
         }), enyo.bind(this, function() {
-            this.log("fail!");
+            this.error("Failed to retrieve geolocation!");
+            alert("Failed to get location!");
         }));
     },
     lookupPlaces: function() {
@@ -40,7 +41,7 @@ enyo.kind({
     },
     placesLoaded: function(sender, response) {
         this.places = response.response.venues.filter(function(item) {
-            return item.location.distance < 30;
+            return item.location.distance < 500;
         }).sort(function(a, b) {
             return a.location.distance - b.location.distance;
         });
@@ -69,7 +70,7 @@ enyo.kind({
     components: [
         {kind: "Map", classes: "picklocation-map"},
         {kind: "List", fit: true, name: "placesList", onSetupItem: "setupItem", components: [
-            {kind: "onyx.Item", name: "place", ontap: "placeTapped"}
+            {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true}
         ]}
     ]
 });

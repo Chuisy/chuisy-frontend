@@ -1,11 +1,11 @@
 .chuboxitemform {
-	background: none no-repeat center -20px;
-	background-size: 110%;
+	background: none no-repeat center top;
+	background-size: contain;
 	background-color: Gray;
 }
 
 .chuboxitemform-spacer {
-	height: 320px;
+	/*height: 320px;*/
 }
 
 .chuboxitemform-content {
@@ -31,6 +31,4 @@
 	min-height: 40px;
 }
 
-.chuboxitemform-post-button {
-	float: right;
-}
+.chuboxitemform-post-button {}
