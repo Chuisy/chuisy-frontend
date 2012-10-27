@@ -11,8 +11,10 @@ enyo.kind({
         onresize: "resize"
     },
     centerChanged: function () {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-        this.map.setCenter(latlng);
+        if (this.map) {
+            latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
+            this.map.setCenter(latlng);
+        }
     },
     initialize: function() {
         latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);

@@ -14,7 +14,8 @@ enyo.kind({
         chuboxItemView: 3,
         profileView: 4,
         settings: 5,
-        composeChu: 6
+        composeChu: 6,
+        composeChuboxItem: 7
     },
     events: {
         onLogout: ""
@@ -123,6 +124,14 @@ enyo.kind({
 
         App.updateHistory("chu/new/");
     },
+    composeChuboxItem: function() {
+        this.$.composeChuboxItem.initialize();
+        this.showView("composeChuboxItem");
+
+        this.$.mainSlider.animateToMin();
+
+        App.updateHistory("chuboxitem/new/");
+    },
     openProfile: function() {
         this.openProfileView(this.user);
     },
@@ -139,6 +148,9 @@ enyo.kind({
         this.openChuFeed();
     },
     composeChuBack: function() {
+        this.openChuFeed();
+    },
+    composeChuboxItemBack: function() {
         this.openChuFeed();
     },
     toggleMenu: function() {
@@ -165,6 +177,10 @@ enyo.kind({
             {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
                 {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Post Chu"}
+            ]},
+            {classes: "mainmenu-item", ontap: "composeChuboxItem", name: "composeChuboxItemMenuItem", components: [
+                {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
+                {classes: "mainmenu-item-text", content: "Add Chu Box Item"}
             ]}
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
@@ -175,7 +191,8 @@ enyo.kind({
                 {kind: "ChuboxItemView"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
-                {kind: "ComposeChu", onBack: "composeChuBack"}
+                {kind: "ComposeChu", onBack: "composeChuBack"},
+                {kind: "ComposeChuboxItem", onBack: "composeChuboxItemBack"}
             ]}
         ]}
     ]

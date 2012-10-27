@@ -81,6 +81,13 @@ enyo.kind({
             }));
         }));
     },
+    back: function() {
+        if (this.$.panels.getIndex() == 1) {
+            this.$.panels.setIndex(0);
+        } else {
+            this.doBack();
+        }
+    },
     components: [
         {classes: "mainheader", content: "Chuisy", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
