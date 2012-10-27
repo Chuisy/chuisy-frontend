@@ -14,6 +14,7 @@ enyo.kind({
             latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
             this.$.map.setCenter(this.location);
+            this.$.map.clearMarkers();
             this.$.map.placeMarker(this.location.latitude, this.location.longitude);
             this.lookupPlaces();
         }), enyo.bind(this, function() {

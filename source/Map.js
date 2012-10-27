@@ -44,6 +44,7 @@ enyo.kind({
         };
 
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
+        this.markers = [];
     },
     panToCenter: function() {
         latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
@@ -55,14 +56,23 @@ enyo.kind({
     },
     placeMarker: function(lat, lng, animation) {
         var latlng = new google.maps.LatLng(lat, lng);
-        return new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: latlng,
             map: this.map,
             animation: animation
         });
+        this.markers.push(marker);
+        return marker;
     },
     preventPropagation: function() {
         return true;
+    },
+    clearMarkers: function() {
+        for (var i=0; i<this.markers.length; i++) {
+            this.markers[i].setMap(null);
+            delete this.markers[i];
+        }
+        this.markers = [];
     },
     components: [
         {classes: "enyo-fill", name: "map"}
