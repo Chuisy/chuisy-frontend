@@ -8,7 +8,6 @@ enyo.kind({
     rendered: function() {
         this.inherited(arguments);
         this.$.map.initialize();
-        this.getGeoLocation();
     },
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
@@ -57,13 +56,14 @@ enyo.kind({
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
+        this.log(place);
         this.location.place = {
             name: place.name,
             address: place.location.address,
             zip_code: place.location.postalCode,
             city: place.location.city,
             country: place.location.country,
-            fs_id: place.id
+            foursquare_id: place.id
         };
         this.doLocationPicked({location: this.location});
     },
