@@ -4,6 +4,7 @@ enyo.depends(
 	"$lib/onyx",
 	"$lib/sdk",
 	"$lib/Base64.js",
+	"$lib/extra/phonegap",
 	"css/",
 	"App.js",
 	"MainView.js",
@@ -25,5 +26,7 @@ enyo.depends(
 	"ChuItemView.js",
 	"ComposeChu.js",
 	"Map.js",
-	"PickLocation.js"
+	"PickLocation.js",
+	"ChuboxItemForm.js",
+	"ComposeChuboxItem.js"
 );

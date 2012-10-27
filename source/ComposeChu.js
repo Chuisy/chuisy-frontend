@@ -17,7 +17,6 @@ enyo.kind({
     },
     rendered: function() {
         this.inherited(arguments);
-        this.$.locationPicker.initialize();
     },
     clear: function() {
         this.$.title.setValue("");
@@ -32,10 +31,6 @@ enyo.kind({
         this.refreshTaggedPersons();
         this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
         this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
-        this.$.locationPicker.setLocation(this.location);
-//        this.updateLocationText();
-        
-        this.$.locationPicker.getGeolocation();
     },
     toUriList: function(list) {
         var temp = [];
@@ -164,13 +159,6 @@ enyo.kind({
         this.openSecondarySlider();
         this.$.locationPicker.panToLocation();
     },
-    locationPickerBack: function() {
-        this.closeSecondarySlider();
-    },
-    locationPickerChanged: function() {
-        this.location = this.$.locationPicker.getLocation();
-        this.updateLocationText();
-    },
     updateLocationText: function() {
         // this.$.locationText.setContent(this.location ? this.location.address : "Tap to enter location...");
     },
@@ -184,10 +172,6 @@ enyo.kind({
         this.updateChu();
         this.refreshComments();
         this.$.commentInput.setValue("");
-    },
-    locationPickerDrag: function() {
-        // Prevent drag event to propagate to slider
-        return true;
     },
     back: function() {
         if (this.$.secondarySlider.getValue() == this.$.secondarySlider.getMin()) {
@@ -254,10 +238,6 @@ enyo.kind({
                     // SELECT ITEM
                     {classes: "enyo-fill", components: [
                         {kind: "Chubox", name: "chubox", classes: "enyo-fill", onItemSelected: "itemSelected"}
-                    ]},
-                    // PICK LOCATION
-                    {classes: "enyo-fill", style: "position: relative", components: [
-                        {kind: "LocationPicker", classes: "enyo-fill", onLocationChanged: "locationPickerChanged", ondrag: "locationPickerDrag"}
                     ]}
                 ]}
             ]}

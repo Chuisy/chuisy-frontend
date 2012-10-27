@@ -8,7 +8,6 @@ enyo.kind({
     rendered: function() {
         this.inherited(arguments);
         this.$.map.initialize();
-        this.getGeoLocation();
     },
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
@@ -18,7 +17,8 @@ enyo.kind({
             this.$.map.placeMarker(this.location.latitude, this.location.longitude);
             this.lookupPlaces();
         }), enyo.bind(this, function() {
-            this.log("fail!");
+            this.error("Failed to retrieve geolocation!");
+            alert("Failed to get location!");
         }));
     },
     lookupPlaces: function() {
@@ -40,7 +40,7 @@ enyo.kind({
     },
     placesLoaded: function(sender, response) {
         this.places = response.response.venues.filter(function(item) {
-            return item.location.distance < 30;
+            return item.location.distance < 500;
         }).sort(function(a, b) {
             return a.location.distance - b.location.distance;
         });
@@ -56,20 +56,21 @@ enyo.kind({
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
+        this.log(place);
         this.location.place = {
             name: place.name,
             address: place.location.address,
             zip_code: place.location.postalCode,
             city: place.location.city,
             country: place.location.country,
-            fs_id: place.id
+            foursquare_id: place.id
         };
         this.doLocationPicked({location: this.location});
     },
     components: [
         {kind: "Map", classes: "picklocation-map"},
         {kind: "List", fit: true, name: "placesList", onSetupItem: "setupItem", components: [
-            {kind: "onyx.Item", name: "place", ontap: "placeTapped"}
+            {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true}
         ]}
     ]
 });

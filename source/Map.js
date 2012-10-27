@@ -8,11 +8,14 @@ enyo.kind({
         zoom: 19
     },
     handlers: {
-        onresize: "resize"
+        onresize: "resize",
+        ondrag: "preventPropagation"
     },
     centerChanged: function () {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-        this.map.setCenter(latlng);
+        if (this.map) {
+            latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
+            this.map.setCenter(latlng);
+        }
     },
     initialize: function() {
         latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
@@ -57,6 +60,9 @@ enyo.kind({
             map: this.map,
             animation: animation
         });
+    },
+    preventPropagation: function() {
+        return true;
     },
     components: [
         {classes: "enyo-fill", name: "map"}
