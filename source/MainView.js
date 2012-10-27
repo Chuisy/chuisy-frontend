@@ -117,7 +117,7 @@ enyo.kind({
         App.updateHistory("settings/");
     },
     composeChu: function() {
-        this.$.composeChu.clear();
+        this.$.composeChu.initialize();
         this.showView("composeChu");
 
         this.$.mainSlider.animateToMin();

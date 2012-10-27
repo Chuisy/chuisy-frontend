@@ -18,19 +18,14 @@ enyo.kind({
     rendered: function() {
         this.inherited(arguments);
     },
-    clear: function() {
+    initialize: function() {
         this.$.title.setValue("");
         this.visibility = "public";
-        this.items = [];
-        this.visibleTo = [];
-        this.taggedPersons = [];
+        this.selectedItems = {};
         this.location = null;
 
         this.$[this.visibility + "Button"].setActive(true);
-        this.refreshChuItems();
-        this.refreshTaggedPersons();
-        this.$.visibilityPeopleSelector.setSelectedItems(this.visibleTo);
-        this.$.taggedPeopleSelector.setSelectedItems(this.taggedPersons);
+        this.$.friendsSelector.setSelectedItems([]);
     },
     toUriList: function(list) {
         var temp = [];
@@ -44,9 +39,7 @@ enyo.kind({
 
         // Have to do this because of bug in django-tastypie 0.9.11
         params.items = this.toUriList(params.items);
-        params.tagged = this.toUriList(params.tagged);
-        params.visible_to = this.toUriList(params.visible_to);
-        params.expandable_by = this.toUriList(params.expandable_by);
+        params.friends = this.toUriList(params.friends);
 
         return params;
     },
@@ -61,42 +54,16 @@ enyo.kind({
 
         this.visibility = value;
 
-        if (value == "custom") {
+        if (value == "friends") {
             this.$.secondaryPanels.setIndex(0);
             this.openSecondarySlider();
         } else {
             this.closeSecondarySlider();
         }
     },
-    visibilityPeopleChanged: function() {
-        var people = this.$.visibilityPeopleSelector.getSelectedItems();
-
-        this.visibleTo = people;
-    },
-    refreshTaggedPersons: function() {
-        this.$.taggedRepeater.setCount(this.taggedPersons.length);
-        this.$.taggedRepeater.render();
-    },
-    refreshChuItems: function() {
-        this.$.itemRepeater.setCount(this.items.length + 1);
-        this.$.itemRepeater.render();
-    },
     setupTaggedPerson: function(sender, event) {
         var user = this.taggedPersons[event.index];
         event.item.$.thumbnail.setSrc(user.profile.avatar);
-    },
-    setupRepeaterItem: function(sender, event) {
-        if (event.index < this.items.length) {
-            var item = this.items[event.index];
-            event.item.$.chuItem.setItem(item);
-            event.item.$.chuItem.setUser(this.user);
-            event.item.$.chuItem.setChu(this.chu);
-            event.item.$.newItemButton.hide();
-            event.item.$.chuItem.show();
-        } else {
-            event.item.$.chuItem.hide();
-            event.item.$.newItemButton.show();
-        }
     },
     loadFriends: function() {
         chuisy.followingrelation.list(['user', this.user.id], enyo.bind(this, function(sender, response) {
@@ -104,39 +71,53 @@ enyo.kind({
             for (var i=0; i<response.objects.length; i++) {
                 users.push(response.objects[i].followee);
             }
-            this.$.taggedPeopleSelector.setItems(users);
-            this.$.visibilityPeopleSelector.setItems(users);
+            this.$.friendsSelector.setItems(users);
         }));
     },
-    tagPerson: function() {
-        this.$.secondaryPanels.setIndex(1);
-        this.openSecondarySlider();
+    itemTap: function(sender, event) {
+        // var item = this.items[event.index];
     },
-    taggedPeopleChanged: function() {
-        this.taggedPersons = this.$.taggedPeopleSelector.getSelectedItems();
-
-        this.refreshTaggedPersons();
+    back: function() {
+        if (this.$.secondarySlider.getValue() == this.$.secondarySlider.getMin()) {
+            this.closeSecondarySlider();
+        } else {
+            this.doBack();
+        }
     },
-    addItem: function() {
-        this.$.secondaryPanels.setIndex(2);
-        this.openSecondarySlider();
+    isSelected: function(item) {
+        return this.selectedItems.hasOwnProperty(item.id);
+    },
+    selectItem: function(item) {
+        this.selectedItems[item.id] = item;
+    },
+    deselectItem: function(item) {
+        delete this.selectedItems[item.id];
+    },
+    toggleSelected: function(item) {
+        if (!this.isSelected(item)) {
+            this.selectItem(item);
+        } else {
+            this.deselectItem(item);
+        }
     },
     itemSelected: function(sender, event) {
-        this.items.push(event.item);
-        this.refreshChuItems();
-        this.closeSecondarySlider();
-        return true;
+        this.toggleSelected(event.item);
+        event.originator.addRemoveClass("selected", this.isSelected(event.item));
+        this.log(this.selectedItems);
+    },
+    getSelectedItems: function() {
+        var items = [];
+        for (var x in this.selectedItems) {
+            items.push(this.selectedItems[x]);
+        }
+        return items;
     },
     postChu: function() {
         var data = {
             title: this.$.title.getValue(),
             visibility: this.visibility,
-            expandability: "public", // TODO: Add option to change this
-            // user: this.user,
-            items: this.toUriList(this.items),
-            tagged: this.toUriList(this.taggedPersons),
-            visible_to: this.toUriList(this.visibleTo),
-            expandable_by: this.toUriList([]),
+            items: this.toUriList(this.getSelectedItems()),
+            friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
             location: this.location,
             comments: []
         };
@@ -146,98 +127,34 @@ enyo.kind({
             this.doBack();
         }));
     },
-    itemTap: function(sender, event) {
-        // var item = this.items[event.index];
-    },
-    itemRemove: function(sender, event) {
-        this.items.remove(event.index);
-
-        this.refreshChuItems();
-    },
-    showLocation: function() {
-        this.$.secondaryPanels.setIndex(3);
-        this.openSecondarySlider();
-        this.$.locationPicker.panToLocation();
-    },
-    updateLocationText: function() {
-        // this.$.locationText.setContent(this.location ? this.location.address : "Tap to enter location...");
-    },
-    commentEnter: function() {
-        var comment = {
-            text: this.$.commentInput.getValue(),
-            chu: this.chu.resource_uri,
-            user: this.user
-        };
-        this.chu.comments.push(comment);
-        this.updateChu();
-        this.refreshComments();
-        this.$.commentInput.setValue("");
-    },
-    back: function() {
-        if (this.$.secondarySlider.getValue() == this.$.secondarySlider.getMin()) {
-            this.closeSecondarySlider();
-        } else {
-            this.doBack();
-        }
-    },
     components: [
         {classes: "mainheader", content: "Chuisy", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
             {classes: "mainheader-text", content: "Chuisy"}
         ]},
         {style: "position: relative;", fit: true, components: [
-            {kind: "Scroller", classes: "enyo-fill", components: [
-                {style: "padding: 10px;", components: [
-                    // TITLE
-                    {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.TextArea", style: "width: 100%;", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
+            {kind: "FittableRows", classes: "enyo-fill", components: [
+                // TITLE
+                {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.TextArea", style: "width: 100%;", name: "title", placeholder: "Type title here...", onchange: "titleChanged"}
+                ]},
+                {kind: "Chubox", fit: true, onItemSelected: "itemSelected"},
+                {components: [
+                    // VISIBILITY
+                    {kind: "Group", classes: "composechu-visibility-selector", components: [
+                        {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
+                        {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
+                        {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "friends", ontap: "visibiltySelected"}
                     ]},
-                    {style: "height: 38px;", components: [
-                        // TAGGED
-                        {kind: "Repeater", name: "taggedRepeater", classes: "composechu-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                            {kind: "Image", name: "thumbnail", classes: "miniavatar composechu-taggedrepeater-thumbnail", ontap: "tagPerson"}
-                        ]},
-                        {name: "tagButton", ontap: "tagPerson", classes: "composechu-tag-button"},
-                        // LOCATION
-                        {kind: "onyx.Button", classes: "composechu-location-button", name: "locationButton", ontap: "showLocation", components: [
-                            // {classes: "composechu-location-text", name: "locationText"},
-                            {kind: "Image", src: "assets/images/location.png"}
-                        ]}
-                    ]},
-                    // ITEMS
-                    {style: "text-align: center;", components: [
-                        {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                            {kind: "ChuItem", ontap: "itemTap"},
-                            {kind: "onyx.Button", content: "Add Item", name: "newItemButton", classes: "composechu-new-item", ontap: "addItem"}
-                        ]}
-                    ]},
-                    {components: [
-                        // VISIBILITY
-                        {kind: "Group", classes: "composechu-visibility-selector", components: [
-                            {kind: "Button", name: "publicButton", classes: "pageheader-radiobutton", content: "public", value: "public", ontap: "visibiltySelected"},
-                            {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                            {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "private", ontap: "visibiltySelected"},
-                            {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
-                            {kind: "Button", name: "customButton", classes: "pageheader-radiobutton", content: "select", value: "custom", ontap: "visibiltySelected"}
-                        ]},
-                        // POST
-                        {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
-                    ]}
+                    // POST
+                    {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
                 ]}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
                 {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, animate: false, classes: "enyo-fill", components: [
                     // SELECT VISIBLE TO
                     {classes: "enyo-fill", components: [
-                        {kind: "PeopleSelector", name: "visibilityPeopleSelector", onChange: "visibilityPeopleChanged"}
-                    ]},
-                    // SELECT TAGGED
-                    {classes: "enyo-fill", components: [
-                        {kind: "PeopleSelector", name: "taggedPeopleSelector", onChange: "taggedPeopleChanged"}
-                    ]},
-                    // SELECT ITEM
-                    {classes: "enyo-fill", components: [
-                        {kind: "Chubox", name: "chubox", classes: "enyo-fill", onItemSelected: "itemSelected"}
+                        {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
                     ]}
                 ]}
             ]}
