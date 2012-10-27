@@ -31,6 +31,7 @@ enyo.kind({
         this.$.profileView.setUser(this.user);
         this.$.settings.setUser(this.user);
         this.$.composeChu.setUser(this.user);
+        this.$.composeChuboxItem.setUser(this.user);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
