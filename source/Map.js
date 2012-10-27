@@ -8,7 +8,8 @@ enyo.kind({
         zoom: 19
     },
     handlers: {
-        onresize: "resize"
+        onresize: "resize",
+        ondrag: "preventPropagation"
     },
     centerChanged: function () {
         if (this.map) {
@@ -59,6 +60,9 @@ enyo.kind({
             map: this.map,
             animation: animation
         });
+    },
+    preventPropagation: function() {
+        return true;
     },
     components: [
         {classes: "enyo-fill", name: "map"}
