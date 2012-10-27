@@ -77,13 +77,13 @@ enyo.kind({
 
         if (item) {
             var page = this.$.carousel.getClientControls()[pageIndex];
-            page.createComponent({classes: "chuboxitem", pageIndex: pageIndex, itemIndex: itemIndex, onTap: "itemTap", components: [
+            page.createComponent({classes: "chuboxitem", pageIndex: pageIndex, itemIndex: itemIndex, ontap: "itemTap", owner: this, components: [
                 {kind: "Image", classes: "chuboxitem-image", src: item.image}
             ]});
         }
     },
     itemTap: function(sender, event) {
-        this.doItemSelected({item: this.items[sender.itemIndex]});
+        this.doItemSelected({originator: sender, item: this.items[sender.itemIndex]});
     },
     itemRemove: function(sender, event) {
         var item = this.items[event.index];
