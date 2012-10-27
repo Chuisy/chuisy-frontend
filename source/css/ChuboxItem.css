@@ -1,122 +1,5 @@
+
 .chuboxitem {
-	padding: 20px;
-	width: 300px;
-	height: 340px;
-	margin: 20px;
-	box-sizing: border-box;
-	border: #ccc solid 1px;
-	box-shadow: 2px 2px 5px #333;
-	background-image: url(../../assets/images/lightpaperfibers.png);
-	display: inline-block;
-	border-radius: 5px;
-	position: relative;
-}
-
-.chuboxitem.highlight {
-	background-color: Orange;
-	background-image: none;
-}
-
-.chuboxitem-image {
-	width: 260px;
-	height: 260px;
-	background: url() no-repeat center center;
-	background-size: cover;
-	border: solid 1px;
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	background-color: Gray;
-}
-
-.chuboxitem-caption {
-	font-family: 'Annie Use Your Telescope';
-	padding: 10px;
-	font-size: 18pt;
-}
-
-.chuboxitem-toolbar {
-	display: none;
-	position: absolute;
-	top: -20px;
-	left: -20px;
-}
-
-.chuboxitem-toolbar-button {
-	background-color: White;
-	border: solid 1px;
-	border-radius: 20px;
-	background-position: center center;
-	margin: 2px;
-}
-
-.chuboxitem:hover .chuboxitem-toolbar {
-	display: block;
-}
-
-.chuboxitem-toolbar-button:hover {
-	background-color: Gray;
-}
-
-.chuboxitem-remove-button {
-	display: none;
-}
-
-.chuboxitem.owned .chuboxitem-remove-button {
-	display: block;
-}
-
-.chuboxitem.owned .chuboxitem-collect-button {
-	display: none;
-}
-
-.chuboxitem .chuboxitem-like-button {
-	display: none;
-	position: absolute;
-	top: 150px;
-	left: 120px;
-}
-
-.chuboxitem.likeable:hover:not(.owned) .chuboxitem-like-button {
-	display: block;
-}
-
-.listchuboxitem {
-	background-color: White;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 5px;
-	border: #ccc solid 1px;
-	box-shadow: 2px 2px 5px #333;
-	background-image: url(../../assets/images/lightpaperfibers.png);
-}
-
-.listchuboxitem-image {
-	width: 50px;
-	height: 50px;
-	background: url() no-repeat center center;
-	background-size: cover;
-	border: #ccc solid 1px;
-	border-radius: 2px;
-	box-sizing: border-box;
-	margin: 5px;
-	padding: 0;
-	background-color: White;
-}
-
-.listchuboxitem-caption {
-	font-family: 'Annie Use Your Telescope';
-	font-size: 20pt;
-	line-height: 40px;
-	padding: 10px;
-}
-
-.listchuboxitem.onyx-highlight {
-	background-color: Orange;
-	background-image: none;
-}
-
-.minichuboxitem {
 	padding: 5px;
 	width: 100px;
 	height: 100px;
@@ -130,7 +13,7 @@
 	border-radius: 2px;
 }
 
-.minichuboxitem-image {
+.chuboxitem-image {
 	width: 100%;
 	height: 100%;
 	background: url() no-repeat center center;
@@ -141,39 +24,3 @@
 	padding: 0;
 	background-color: Gray;
 }
-
-/*.minichuboxitem {
-	padding: 10px;
-	width: 140px;
-	height: 160px;
-	margin: 5px;
-	box-sizing: border-box;
-	border: #ccc solid 1px;
-	box-shadow: 2px 2px 5px #333;
-	background-image: url(../../assets/images/lightpaperfibers.png);
-	display: inline-block;
-	border-radius: 4px;
-}
-
-.minichuboxitem.highlight {
-	background-color: Orange;
-	background-image: none;
-}
-
-.minichuboxitem-image {
-	width: 120px;
-	height: 120px;
-	background: url() no-repeat center center;
-	background-size: cover;
-	border: solid 1px #555;
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	background-color: Gray;
-}
-
-.minichuboxitem-caption {
-	font-family: 'Annie Use Your Telescope';
-	padding: 5px;
-	font-size: 12pt;
-}*/

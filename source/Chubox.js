@@ -33,6 +33,9 @@ enyo.kind({
     events: {
         onItemSelected: ""
     },
+    handlers: {
+        onresize: "refreshItems"
+    },
     userChanged: function() {
         this.refreshItems();
     },
@@ -48,24 +51,39 @@ enyo.kind({
         }));
     },
     refreshItems: function() {
-        this.$.itemList.setCount(this.items ? Math.ceil(this.items.length/3) : 0);
-        this.$.itemList.refresh();
+        if (this.items) {
+            var colCount = Math.floor(this.getBounds().width / 100);
+            var rowCount = Math.floor(this.getBounds().height / 100);
+            if (colCount && rowCount) {
+                this.itemCount = colCount * rowCount;
+                this.pageCount = Math.ceil(this.items.length / this.itemCount);
+                this.$.carousel.destroyClientControls();
+
+                for (var i=0; i<this.pageCount; i++) {
+                    this.buildPage(i);
+                }
+                this.$.carousel.render();
+            }
+        }
     },
-    setupItem: function(sender, event) {
-        var startIndex = event.index * 3;
+    buildPage: function(pageIndex) {
+        this.$.carousel.createComponent({classes: "enyo-fill"});
+        for (var i=0; i<this.itemCount; i++) {
+            this.buildItem(pageIndex, (pageIndex+1) * i);
+        }
+    },
+    buildItem: function(pageIndex, itemIndex) {
+        var item = this.items[itemIndex];
 
-        this.$.chuboxItem0.setItem(this.items[startIndex]);
-        this.$.chuboxItem0.setShowing((this.items[startIndex]));
-        this.$.chuboxItem1.setItem(this.items[startIndex + 1]);
-        this.$.chuboxItem1.setShowing((this.items[startIndex +1]));
-        this.$.chuboxItem2.setItem(this.items[startIndex + 2]);
-        this.$.chuboxItem2.setShowing((this.items[startIndex + 2]));
-
-        return true;
+        if (item) {
+            var page = this.$.carousel.getClientControls()[pageIndex];
+            page.createComponent({classes: "chuboxitem", pageIndex: pageIndex, itemIndex: itemIndex, onTap: "itemTap", components: [
+                {kind: "Image", classes: "chuboxitem-image", src: item.image}
+            ]});
+        }
     },
     itemTap: function(sender, event) {
-        var index = event.index * 3 + sender.hIndex;
-        this.doItemSelected({item: this.items[index]});
+        this.doItemSelected({item: this.items[sender.itemIndex]});
     },
     itemRemove: function(sender, event) {
         var item = this.items[event.index];
@@ -75,11 +93,6 @@ enyo.kind({
         }));
     },
     components: [
-        {kind: "List", name: "itemList", classes: "enyo-fill", onSetupItem: "setupItem", fixedHeight: true, style: "text-align: center;", components: [
-            {kind: "MiniChuboxItem", name: "chuboxItem0", hIndex: 0, ontap: "itemTap", onRemove: "itemRemove"},
-            {kind: "MiniChuboxItem", name: "chuboxItem1", hIndex: 1, ontap: "itemTap", onRemove: "itemRemove"},
-            {kind: "MiniChuboxItem", name: "chuboxItem2", hIndex: 2, ontap: "itemTap", onRemove: "itemRemove"}
-            //onhold: "itemHold", onmousedown: "itemMouseDown", onmouseup: "itemMouseUp", onmouseout: "itemMouseUp"}
-        ]}
+        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill"}
     ]
 });
