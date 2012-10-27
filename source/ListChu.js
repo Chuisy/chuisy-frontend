@@ -12,9 +12,9 @@ enyo.kind({
             this.$.title.setContent(this.chu.title);
             this.$.username.setContent(this.chu.user.username);
             this.$.avatar.setSrc(this.chu.user.profile.avatar);
-            this.$.image1.applyStyle("background-image", "url(" + (this.chu.items[0] ? this.chu.items[0].product.image_1 : "") + ")");
-            this.$.image2.applyStyle("background-image", "url(" + (this.chu.items[1] ? this.chu.items[1].product.image_1 : "") + ")");
-            this.$.image3.applyStyle("background-image", "url(" + (this.chu.items[2] ? this.chu.items[2].product.image_1 : "") + ")");
+            this.$.image1.applyStyle("background-image", "url(" + (this.chu.items[0] ? this.chu.items[0].image : "") + ")");
+            this.$.image2.applyStyle("background-image", "url(" + (this.chu.items[1] ? this.chu.items[1].image : "") + ")");
+            this.$.image3.applyStyle("background-image", "url(" + (this.chu.items[2] ? this.chu.items[2].image : "") + ")");
         }
     },
     // refreshChuItems: function() {
