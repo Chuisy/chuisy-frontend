@@ -13,6 +13,9 @@ enyo.kind({
         onItemSelected: "",
         onToggleMenu: ""
     },
+    refresh: function() {
+        this.$.chubox.loadItems();
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [

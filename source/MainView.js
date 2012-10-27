@@ -50,6 +50,7 @@ enyo.kind({
         App.updateHistory("chufeed/");
     },
     openChubox: function() {
+        this.$.chuboxView.refresh();
         this.showView("chubox");
         this.$.chuFeedMenuItem.removeClass("selected");
         this.$.chuboxMenuItem.addClass("selected");
