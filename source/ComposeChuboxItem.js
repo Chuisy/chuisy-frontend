@@ -32,7 +32,7 @@ enyo.kind({
     gotImage: function(uri) {
         this.imageTicket = new Date().getTime();
         try {
-            this.upload(uri, this.ticket);
+            this.upload(uri, this.imageTicket);
         } catch (e) {
             this.warn("No uploading service available!");
         }
@@ -70,9 +70,7 @@ enyo.kind({
     submit: function() {
         var data = this.$.chuboxItemForm.getData();
         var userId = this.user ? this.user.id : "null";
-        data.image = "http://api.chuisy.com/static/uploaded/" +  userId + "_" + this.imageTicket + ".jpg";
-        data.user = this.user;
-        this.log(data);
+        data.image = "http://api.chuisy.com/static/uploads/" +  userId + "_" + this.imageTicket + ".jpg";
         // Have to create the place first as deeply nested resources are not created automatically
         chuisy.place.create(data.location.place, enyo.bind(this, function(sender, response) {
             data.location.place = response.resource_uri;
@@ -80,6 +78,7 @@ enyo.kind({
                 this.log(response);
             }));
         }));
+        this.doBack();
     },
     back: function() {
         if (this.$.panels.getIndex() == 1) {
