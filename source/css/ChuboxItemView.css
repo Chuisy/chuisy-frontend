@@ -26,6 +26,34 @@
 
 }
 
-/*.chuboxitemview.owned .chuboxitemview-like-button {
+.chuboxitemview-comments-scroller {
+	max-height: 200px;
+}
+
+.chuboxitemview-comment {
+	padding: 5px;
+	border-bottom: dashed 1px #ccc;
+}
+
+.chuboxitemview-comment-avatar {
+	width: 30px;
+}
+
+.chuboxitemview-comment-text {
+	display: inline-block;
+	padding: 0 10px;
+	vertical-align: top;
+}
+
+.chuboxitemview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.chuboxitemview-commentinput-decorator > .enyo-input {
+	width: 100%;
+}
+
+.chuboxitemview.owned .chuboxitemview-like-button {
 	display: none;
-}*/
+}

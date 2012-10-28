@@ -37,6 +37,8 @@ enyo.kind({
 
             this.$.likeCount.setContent(this.item.likes.length + " likes");
             this.refreshLikerRepeater();
+
+            this.refreshComments();
             
             this.addRemoveClass("owned", this.isOwned());
         }
@@ -87,6 +89,35 @@ enyo.kind({
         var user = this.item.likes[event.index].user;
         event.item.$.likerImage.setSrc(user.profile.avatar);
     },
+    refreshComments: function() {
+        this.$.commentsRepeater.setCount(this.item ? this.item.comments.length : 0);
+        this.$.commentsRepeater.render();
+    },
+    setupComment: function(sender, event) {
+        var comment = this.item.comments[event.index];
+        this.$.commentText.setContent(comment.text);
+        this.$.commentAvatar.setSrc(comment.user.profile.avatar);
+    },
+    commentInputKeydown: function(sender, event) {
+        if (event.keyCode == 13) {
+            this.commentEnter();
+        }
+    },
+    commentEnter: function() {
+        var comment = {
+            text: this.$.commentInput.getValue(),
+            item: this.item.resource_uri,
+            user: this.user
+        };
+        this.item.comments.push(comment);
+        var params = enyo.clone(comment);
+        delete params.user;
+        chuisy.chuboxitemcomment.create(params, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+        this.refreshComments();
+        this.$.commentInput.setValue("");
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
@@ -106,7 +137,19 @@ enyo.kind({
                 {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike"}
             ]},
             {classes: "chuboxitemview-price", name: "price"},
-            {classes: "chuboxitemview-location", name: "locationText"}
+            {classes: "chuboxitemview-location", name: "locationText"},
+            {kind: "Scroller", classes: "chuboxitemview-comments-scroller", components: [
+                {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                    {kind: "onyx.Item", classes: "chuboxitemview-comment", components: [
+                        {kind: "Image", name: "commentAvatar", classes: "miniavatar chuboxitemview-comment-avatar"},
+                        {name: "commentText", classes: "chuboxitemview-comment-text"}
+                    ]}
+                ]}
+            ]},
+            {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
+                {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
+            ]}
+
         ]}
     ]
 });
