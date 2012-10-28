@@ -48,10 +48,12 @@ enyo.kind({
         }
     },
     loadItems: function() {
-        chuisy.chuboxitem.list([["user", this.boxOwner.id]], enyo.bind(this, function(sender, response) {
-            this.items = response.objects;
-            this.refreshItems();
-        }));
+        if (this.boxOwner) {
+            chuisy.chuboxitem.list([["user", this.boxOwner.id]], enyo.bind(this, function(sender, response) {
+                this.items = response.objects;
+                this.refreshItems();
+            }));
+        }
     },
     refreshItems: function() {
         if (this.items) {
