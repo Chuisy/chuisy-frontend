@@ -79,14 +79,7 @@ enyo.kind({
     },
     openChuboxItemView: function(item, chu) {
         this.$.chuboxItemView.setItem(item);
-        this.$.chuboxItemView.setChu(chu);
-        if (chu) {
-            this.$.chuboxItemView.setLikeable(true);
-            App.updateHistory("chu/" + chu.id + "/item/" + item.id + "/");
-        } else {
-            this.$.chuboxItemView.setLikeable(false);
-            App.updateHistory("item/" + item.id + "/");
-        }
+        App.updateHistory("item/" + item.id + "/");
         this.showView("chuboxItemView");
 
         this.$.mainSlider.animateToMin();
@@ -146,6 +139,9 @@ enyo.kind({
     contentPanelsBack: function() {
         this.$.contentPanels.setIndex(0);
     },
+    chuboxItemViewBack: function() {
+        this.openChuFeed();
+    },
     chuViewBack: function() {
         this.openChuFeed();
     },
@@ -190,7 +186,7 @@ enyo.kind({
                 {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuboxItemView"},
+                {kind: "ChuboxItemView", onBack: "chuboxItemViewBack"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
                 {kind: "ComposeChu", onBack: "composeChuBack"},

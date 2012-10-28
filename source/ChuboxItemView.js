@@ -1,16 +1,14 @@
 enyo.kind({
     name: "ChuboxItemView",
     classes: "chuboxitemview",
-    kind: "FittableColumns",
+    kind: "FittableRows",
     published: {
         item: null,
         user: null,
-        likeable: false,
-        liked: false,
-        chu: null
+        liked: false
     },
     events: {
-        onRemove: ""
+        onBack: ""
     },
     currencies: {
         "USD": "$",
@@ -19,18 +17,16 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        this.likeableChanged();
         this.itemChanged();
         this.userChanged();
     },
     itemChanged: function() {
         if (this.item) {
-            this.$.name.setContent(this.item.product.name);
+            this.$.image.setSrc(this.item.image);
+            this.$.avatar.setSrc(this.item.user.profile.avatar);
+            this.$.username.setContent(this.item.user.username);
             this.$.price.setContent(this.currencies[this.item.product.price_currency] + this.item.product.price);
-            this.$.description.setContent(this.item.product.description);
-            this.$.image1.setSrc(this.item.product.image_1);
-            this.$.image2.setSrc(this.item.product.image_2);
-            this.$.image3.setSrc(this.item.product.image_3);
+            this.$.locationText.setContent(this.item.location && this.item.location.place ? this.item.location.place.name + ", " + this.item.location.place.address : "");
 
             if (this.item.liked) {
                 this.setLiked(true);
@@ -48,32 +44,12 @@ enyo.kind({
     userChanged: function() {
         this.addRemoveClass("owned", this.isOwned());
     },
-    chuChanged: function() {
-        this.addRemoveClass("owned", this.isOwned());
-    },
     isOwned: function() {
         return this.user && this.item && this.user.id == this.item.user.id;
-    },
-    likeableChanged: function() {
-        this.addRemoveClass("likeable", this.likeable);
     },
     likedChanged: function() {
         this.addRemoveClass("liked", this.liked);
         this.$.likeButton.addRemoveClass("active", this.liked);
-    },
-    remove: function(sender, event) {
-        this.doRemove(event);
-        return true;
-    },
-    collect: function(sender, event) {
-        var data = {
-            product: this.item.product.resource_uri,
-            user: this.user.resource_uri
-        };
-        chuisy.chuboxitem.create(data, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
-        return true;
     },
     toggleLike: function(sender, event) {
         this.$.likeButton.setDisabled(true);
@@ -93,12 +69,9 @@ enyo.kind({
             }));
         } else {
             var likeData = {
-                item: this.item.resource_uri,
-                user: this.user.resource_uri,
-                chu: this.chu.resource_uri
+                item: this.item.resource_uri
             };
             chuisy.like.create(likeData, enyo.bind(this, function(sender, response) {
-                // this.setLiked(true);
                 this.item.liked = response.id;
                 this.item.likes.push(response);
                 this.itemChanged();
@@ -115,25 +88,25 @@ enyo.kind({
         event.item.$.likerImage.setSrc(user.profile.avatar);
     },
     components: [
+        {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {classes: "mainheader-text", content: "Chuisy"}
+        ]},
         {kind: "Scroller", fit: true, components: [
-            {classes: "main-content", components: [
-                {classes: "pageheader", components: [
-                    {classes: "pageheader-title", name: "name"},
-                    {classes: "chuboxitemview-price", name: "price"}
+            {kind: "Image", name: "image", classes: "chuboxitemview-productimage"},
+            {components: [
+                {kind: "Image", name: "avatar", classes: "miniavatar"},
+                {classes: "chuboxitemview-username", name: "username"}
+            ]},
+            {classes: "chuboxitemview-likes", components: [
+                {name: "likeCount"},
+                {kind: "Repeater", name: "likerRepeater", classes: "chuboxitemview-likerrepeater", onSetupItem: "setupLiker", components: [
+                    {kind: "Image", name: "likerImage", classes: "miniavatar"}
                 ]},
-                {classes: "chuboxitemview-description", name: "description"},
-                {classes: "chuboxitemview-likes", components: [
-                    {name: "likeCount"},
-                    {kind: "Repeater", name: "likerRepeater", classes: "chuboxitemview-likerrepeater", onSetupItem: "setupLiker", components: [
-                        {kind: "Image", name: "likerImage", classes: "chuboxitemview-likerimage"}
-                    ]},
-                    {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike"}
-                ]},
-                {kind: "onyx.Button", content: "Put in Chubox!", ontap: "collect", classes: "chuboxitemview-collect-button"},
-                {kind: "Image", name: "image1", classes: "chuboxitemview-productimage"},
-                {kind: "Image", name: "image2", classes: "chuboxitemview-productimage"},
-                {kind: "Image", name: "image3", classes: "chuboxitemview-productimage"}
-            ]}
+                {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike"}
+            ]},
+            {classes: "chuboxitemview-price", name: "price"},
+            {classes: "chuboxitemview-location", name: "locationText"}
         ]}
     ]
 });

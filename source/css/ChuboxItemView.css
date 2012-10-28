@@ -1,19 +1,19 @@
 .chuboxitemview {
 }
 
+.chuboxitemview-productimage {
+	width: 100%;
+}
+
+.chuboxitemview-username {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	padding: 9px 5px;
+}
+
 .chuboxitemview-price {
-	float: right;
-}
-
-.chuboxitemview-likes {
-	display: none;
-}
-
-.chuboxitemview.likeable .chuboxitemview-likes {
-	display: block;
-}
-
-.chuboxitemview-taggedrepeater {
+	
 }
 
 .chuboxitemview-likerimage {
@@ -22,6 +22,10 @@
 	margin: 5px 2px;
 }
 
-.chuboxitemview.owned .chuboxitemview-collect-button {
-	display: none;
+.chuboxitemview-location {
+
 }
+
+/*.chuboxitemview.owned .chuboxitemview-like-button {
+	display: none;
+}*/
