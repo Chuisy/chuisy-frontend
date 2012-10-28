@@ -27,7 +27,7 @@ enyo.kind({
             this.$.price.setContent(this.currencies[this.item.product.price_currency] + this.item.product.price);
             // this.$.description.setContent(this.item.product.description);
             this.$.image.setSrc(this.item.image);
-            this.$.locationText.setContent(this.location && this.location.place ? this.location.place.name + ", " + this.location.place.address : "");
+            this.$.locationText.setContent(this.item.location && this.item.location.place ? this.item.location.place.name + ", " + this.item.location.place.address : "");
             this.addRemoveClass("owned", this.isOwned());
         }
     },
