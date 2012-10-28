@@ -1,29 +1,55 @@
-.profileview .pageheader > * {
-	display: inline-block;
+.profileview-avatar {
+	width: 80px;
+	margin: 10px;
 	vertical-align: top;
 }
 
-.profileview-mainpanel {
-	padding: 20px;
-}
-
-.profileview-avatar {
-	width: 150px;
-	margin: 0 10px;
+.profileview-profileinfo {
+	display: inline-block;
+	vertical-align: top;
+	height: 100px;
 }
 
 .profileview-fullname {
-	padding: 10px;
-	font-size: 25pt;
+	padding: 5px;
+	font-size: 15pt;
 }
 
 .profileview-username {
 	padding: 5px;
-	font-size: 20pt;
+	font-size: 13pt;
 	font-weight: bold;
 }
 
 .profileview-bio {
-	padding: 10px;
-	font-size: 12pt;
+	padding: 5px;
+	font-size: 11pt;
+}
+
+.profileview-menu {
+	width: 100%;
+	box-sizing: border-box;
+	height: 50px;
+}
+
+.profileview-menu-button {
+	width: 25%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 0;
+}
+
+.profileview-menu-button-caption {
+	font-size: 10pt;
+	vertical-align: top;
+}
+
+.profileview-list-avatar {
+	width: 40px;
+	margin: 5px;
+}
+
+.profileview-list-username {
+	display: inline-block;
+	vertical-align: top;
 }
