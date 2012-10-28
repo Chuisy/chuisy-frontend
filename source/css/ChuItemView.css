@@ -5,14 +5,14 @@
 	float: right;
 }
 
-.chuitemview-likecount {
+.chuitemview-votescount {
 	display: inline-block;
 	vertical-align: top;
 	font-size: 13pt;
 	padding: 2px;
 }
 
-.chuitemview-likerrepeater {
+.chuitemview-votesrepeater {
 	float: right;
 }
 
@@ -28,13 +28,8 @@
 	box-sizing: border-box;
 }
 
-.chuitemview-like-button {
+.chuitemview-vote-button {
 	background-color: #C30F26;
 	color: White;
-	padding: 2px 8px 2px 0;
-}
-
-.chuitemview-collect-button {
-	float: right;
-	padding: 3px 8px 3px 2px;
+	/*padding: 2px 8px 2px 0;*/
 }

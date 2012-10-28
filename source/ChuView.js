@@ -18,35 +18,60 @@ enyo.kind({
             this.$.title.setContent(this.chu.title);
             this.$.avatar.setSrc(this.chu.user.profile.avatar);
             this.$.username.setContent(this.chu.user.username);
-            this.visibility = this.chu.visibility;
             this.applyPermissions();
-            this.refreshChuItems();
-            this.refreshTaggedPersons();
-            this.updateLocationText();
             this.refreshComments();
 
-            for (var i=0; i<10; i++) {
+            for (var i=0; i<4; i++) {
                 this.setupItem(i);
             }
 
             this.$.carousel.setIndex(1);
             this.$.pageThumb1.setActive(true);
+
+            this.digestVotes();
         }
     },
     setupItem: function(index) {
-        var c = this.$["chuItemView" + index];
+        var view = this.$["chuItemView" + index];
         var thumb = this.$["pageThumb" + (index + 2)];
+        var itemComp = this.$["chuItem" + index];
+        var itemImage = this.$["chuItemImage" + index];
         var item = this.chu.items[index];
         if (item) {
-            c.setItem(item);
-            c.setChu(this.chu);
-            c.setUser(this.user);
-            c.show();
-            thumb.applyStyle("background-image", "url(" + item.product.image_1 + ")");
+            view.setItem(item);
+            view.setChu(this.chu);
+            view.setUser(this.user);
+            view.setVotes();
+            view.show();
+            itemImage.setSrc(item.image);
+            itemComp.show();
+            thumb.applyStyle("background-image", "url(" + item.image + ")");
             thumb.show();
         } else {
-            c.hide();
+            view.hide();
             thumb.hide();
+            itemComp.hide();
+        }
+    },
+    digestVotes: function() {
+        var itemVotes = [];
+        for (var i=0; i<this.chu.items.length; i++) {
+            var item = this.chu.items[i];
+            var votes = [];
+            for (var j=0; j<this.chu.votes.length; j++) {
+                var vote = this.chu.votes[j];
+                if (vote.item == item.resource_uri) {
+                    votes.push(vote);
+                    if (vote.user.id == this.user.id) {
+                        this.$["chuItem" + i].setActive(true);
+                        // this.$["chuItemView" + i].setVotedFor(true);
+                    }
+                }
+            }
+            itemVotes.push(votes);
+        }
+        for (var k=0; k<itemVotes.length; k++) {
+            this.$["chuItemView" + k].setVotes(itemVotes[k]);
         }
     },
     isOwned: function() {
@@ -60,53 +85,11 @@ enyo.kind({
         this.chu = null;
         this.chuChanged();
     },
-    openSecondarySlider: function() {
-        this.$.secondarySlider.animateToMin();
-    },
-    closeSecondarySlider: function() {
-        this.$.secondarySlider.animateToMax();
-    },
-    refreshTaggedPersons: function() {
-        this.$.taggedRepeater.setCount(this.chu.tagged.length);
-        this.$.taggedRepeater.render();
-    },
-    refreshChuItems: function() {
-        this.$.itemRepeater.setCount(this.chu.items.length);
-        this.$.itemRepeater.render();
-    },
-    setupTaggedPerson: function(sender, event) {
-        var user = this.chu.tagged[event.index];
-        event.item.$.thumbnail.setSrc(user.profile.avatar);
-    },
-    setupRepeaterItem: function(sender, event) {
-        var item = this.chu.items[event.index];
-        event.item.$.chuItem.setItem(item);
-        event.item.$.chuItem.setUser(this.user);
-        event.item.$.chuItem.setChu(this.chu);
-    },
-    itemTap: function(sender, event) {
-        // var item = this.chu.items[event.index];
-        // this.doItemSelected({item: item, chu: this.chu});
-        sender.toggleLiked();
-    },
-    itemRemove: function(sender, event) {
-        this.items.remove(event.index);
-
-        if (this.chu) {
-            this.chu.item = this.items;
-            this.updateChu();
-        }
-
-        this.refreshChuItems();
-    },
     closeChu: function() {
         this.chu.closed = true;
         this.updateChu(enyo.bind(this, function() {
             this.doBack();
         }));
-    },
-    updateLocationText: function() {
-        this.$.locationText.setContent(this.chu.location ? this.chu.location.address : "No location for this Chu!");
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
@@ -131,51 +114,72 @@ enyo.kind({
         this.chu.comments.push(comment);
         var params = enyo.clone(comment);
         delete params.user;
-        chuisy.comment.create(params, enyo.bind(this, function(sender, response) {
+        chuisy.chucomment.create(params, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
         this.refreshComments();
         this.$.commentInput.setValue("");
     },
-    toggleComments: function() {
-        this.$.secondarySlider.toggleMinMax();
-    },
-    locationPickerDrag: function() {
-        // Prevent drag event to propagate to slider
-        return true;
+    showComments: function() {
+        this.$.carousel.setIndex(0);
     },
     carouselTransitionStart: function(sender, event) {
         this.$["pageThumb" + event.toIndex].setActive(true);
+    },
+    itemTap: function(sender, event) {
+        sender.setActive(true);
+        this.voteFor(this.chu.items[sender.index]);
+    },
+    groupActivate: function(sender, event) {
+        var itemComp = event.originator;
+        this.$["chuItemView" + itemComp.index].setVotedFor(itemComp.getActive());
+    },
+    chuItemViewVote: function(sender, event) {
+        this.$["chuItem" + sender.itemIndex].setActive(true);
+        this.voteFor(this.chu.items[sender.itemIndex]);
+    },
+    voteFor: function(item) {
+        chuisy.vote.create({
+            chu: this.chu.resource_uri,
+            item: item.resource_uri
+        }, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+        this.updateVote(item);
+    },
+    updateVote: function(item) {
+        for (var i=0; i<this.chu.votes.length; i++) {
+            var vote = this.chu.votes[i];
+            if (vote.user.id == this.user.id) {
+                vote.item = item.resource_uri;
+            }
+        }
+        this.digestVotes();
     },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {classes: "mainheader-text", content: "Chuisy"},
-            {kind: "onyx.Button", classes: "chuview-comments-button", ontap: "toggleComments", name: "commentsButton", components: [
+            {kind: "onyx.Button", classes: "chuview-comments-button", ontap: "showComments", name: "commentsButton", components: [
                 {kind: "Image", src: "assets/images/comment_light.png"}
             ]}
         ]},
         {fit: true, style: "position: relative", components: [
             {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionStart: "carouselTransitionStart", components: [
-                {kind: "FittableRows", classes: "enyo-fill", components: [
-                    // SHARE
-                    {classes: "chuview-section", components: [
-                        {classes: "chuview-label", content: "Share this Chu"},
-                        {classes: "chuview-share-button twitter"},
-                        {classes: "chuview-share-button facebook"}
-                    ]},
-                    // TAGGED
-                    {kind: "FittableColumns", classes: "chuview-section", components: [
-                        {classes: "chuview-label", content: "Tagged People:"},
-                        {kind: "Repeater", fit: true, name: "taggedRepeater", classes: "chuview-taggedrepeater", onSetupItem: "setupTaggedPerson", components: [
-                            {kind: "Image", name: "thumbnail", classes: "miniavatar", ontap: "tagPerson"}
+                {classes: "enyo-fill", components: [
+                    // COMMENTS
+                    {kind: "Scroller", classes: "chuview-comments-scroller", components: [
+                        {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                            {kind: "onyx.Item", classes: "chuview-comment", components: [
+                                {kind: "Image", name: "commentAvatar", classes: "miniavatar chuview-comment-avatar"},
+                                {name: "commentText", classes: "chuview-comment-text"}
+                            ]}
                         ]}
                     ]},
-                    // LOCATION
-                    {classes: "chuview-section", components: [
-                        {classes: "chuview-location-text", name: "locationText"}
-                    ]},
-                    {fit: true}
+                    // POST COMMENT
+                    {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
+                        {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
+                    ]}
                 ]},
                 {kind: "Scroller", classes: "enyo-fill", components: [
                     {classes: "chuview-header", components: [
@@ -192,40 +196,26 @@ enyo.kind({
                     ]},
                     // ITEMS
                     {style: "text-align: center;", components: [
-                        {kind: "Repeater", name: "itemRepeater", onSetupItem: "setupRepeaterItem", components: [
-                            {kind: "ChuItem", likeable: true, ontap: "itemTap", onRemove: "itemRemove"}
+                        {kind: "Group", onActivate: "groupActivate", components: [
+                            {kind: "GroupItem", index: 0, classes: "chuitem", ontap: "itemTap", name: "chuItem0", components: [
+                                {kind: "Image", classes: "chuitem-image", name: "chuItemImage0"}
+                            ]},
+                            {kind: "GroupItem", index: 1, classes: "chuitem", ontap: "itemTap", name: "chuItem1", components: [
+                                {kind: "Image", classes: "chuitem-image", name: "chuItemImage1"}
+                            ]},
+                            {kind: "GroupItem", index: 2, classes: "chuitem", ontap: "itemTap", name: "chuItem2", components: [
+                                {kind: "Image", classes: "chuitem-image", name: "chuItemImage2"}
+                            ]},
+                            {kind: "GroupItem", index: 3, classes: "chuitem", ontap: "itemTap", name: "chuItem3", components: [
+                                {kind: "Image", classes: "chuitem-image", name: "chuItemImage3"}
+                            ]}
                         ]}
                     ]}
                 ]},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView0"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView1"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView2"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView3"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView4"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView5"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView6"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView7"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView8"},
-                {kind: "ChuItemView", classes: "enyo-fill", name: "chuItemView9"}
-            ]},
-            {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
-                // {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", components: [
-                    {classes: "enyo-fill", components: [
-                        // COMMENTS
-                        {kind: "Scroller", classes: "chuview-comments-scroller", components: [
-                            {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                                {kind: "onyx.Item", classes: "chuview-comment", components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "miniavatar chuview-comment-avatar"},
-                                    {name: "commentText", classes: "chuview-comment-text"}
-                                ]}
-                            ]}
-                        ]},
-                        // POST COMMENT
-                        {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
-                        ]}
-                    ]}
-                // ]}
+                {kind: "ChuItemView", itemIndex: 0, classes: "enyo-fill", name: "chuItemView0", onVote: "chuItemViewVote"},
+                {kind: "ChuItemView", itemIndex: 1, classes: "enyo-fill", name: "chuItemView1", onVote: "chuItemViewVote"},
+                {kind: "ChuItemView", itemIndex: 2, classes: "enyo-fill", name: "chuItemView2", onVote: "chuItemViewVote"},
+                {kind: "ChuItemView", itemIndex: 3, classes: "enyo-fill", name: "chuItemView3", onVote: "chuItemViewVote"}
             ]}
         ]},
         {classes: "chuview-pageindicator", components: [
@@ -235,13 +225,7 @@ enyo.kind({
                 {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb2"},
                 {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb3"},
                 {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb4"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb5"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb6"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb7"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb8"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb9"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb10"},
-                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb11"}
+                {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb5"}
             ]}
         ]}
     ]

@@ -24,69 +24,12 @@
 	box-sizing: border-box;
 }
 
-.chuview-location-text {
-	font-size: 13pt;
-	display: inline-block;
-}
-
-.chuview-taggedrepeater {
-	display: inline-block;
-	height: 25px;
-	text-align: right;
-}
-
-.chuview-taggedrepeater-thumbnail {
-	height: 32px;
-	width: 32px;
-	margin: 5px 2px;
-}
-
-.chuview-tagbutton {
-	display: inline-block;
-	border: dashed 1px;
-	border-radius: 2px;
-	margin: 5px 2px;
-	background-position: center center;
-}
-
 .chuview-close-button {
 	display: none;
 }
 
 .chuview.owned .chuview-close-button {
 	display: inline-block;
-}
-
-.chuview-post-button {
-	float: right;
-}
-
-.chuview-new-item {
-	width: 300px;
-	height: 340px;
-	margin: 20px;
-	box-sizing: border-box;
-	border: #ccc dashed 1px;
-	background-color: transparent;
-	display: none;
-	border-radius: 5px;
-	background-image: none;
-	vertical-align: top;
-}
-
-.chuview.owned .chuview-new-item {
-	display: inline-block;
-}
-
-.onyx-button.chuview-new-item:active {
-	background-color: Gray;
-	background-image: none;
-}
-
-.chuview-map-back-button {
-	position: absolute;
-	top: 5px;
-	left: 5px;
 }
 
 .chuview-comments-scroller {
@@ -175,20 +118,6 @@
 	margin: 0 1px;
 }
 
-.chuview-share-button {
-	width: 32px;
-	height: 32px;
-	background: url() no-repeat center center;
-	float: right;
-	background-size: contain;
-	vertical-align: top;
-	margin-top: -5px;
-}
-
-.chuview-share-button.facebook {
-	background-image: url(../../assets/images/facebook.png);
-}
-
-.chuview-share-button.twitter {
-	background-image: url(../../assets/images/twitter.png);
+.chuview .chuitem.active {
+	background-color: green;
 }
