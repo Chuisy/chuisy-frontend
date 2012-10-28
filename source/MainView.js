@@ -189,7 +189,7 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
-                {kind: "NarrowChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
+                {kind: "ChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
