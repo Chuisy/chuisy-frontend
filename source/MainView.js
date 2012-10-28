@@ -151,6 +151,9 @@ enyo.kind({
     composeChuboxItemBack: function() {
         this.openChuFeed();
     },
+    profileViewBack: function(sender, event) {
+        this.openChuFeed();
+    },
     toggleMenu: function() {
         this.$.mainSlider.toggleMinMax();
     },
@@ -190,7 +193,7 @@ enyo.kind({
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView", onBack: "chuboxItemViewBack"},
-                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onChuboxItemSelected: "chuboxItemSelected", onShowProfile: "showProfile"},
+                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onChuboxItemSelected: "chuboxItemSelected", onShowProfile: "showProfile", onBack: "profileViewBack"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
                 {kind: "ComposeChu", onBack: "composeChuBack"},
                 {kind: "ComposeChuboxItem", onBack: "composeChuboxItemBack"}
