@@ -27,6 +27,8 @@ enyo.kind({
             this.loadFriends();
             this.loadFollowers();
             this.$.followButton.addRemoveClass("active", this.showedUser.following);
+            this.$.chusMenuButton.setActive(true);
+            this.$.panels.setIndex(0);
         }
     },
     loadChus: function() {

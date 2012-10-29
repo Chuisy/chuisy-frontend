@@ -103,7 +103,6 @@ enyo.kind({
     itemSelected: function(sender, event) {
         this.toggleSelected(event.item);
         event.originator.addRemoveClass("selected", this.isSelected(event.item));
-        this.log(this.selectedItems);
     },
     getSelectedItems: function() {
         var items = [];
