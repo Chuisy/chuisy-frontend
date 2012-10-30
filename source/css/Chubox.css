@@ -4,8 +4,33 @@
 	position: relative;
 }
 
+.chubox .chuboxitem {
+	position: relative;
+	/*margin: 5px 2px 2px 5px;*/
+}
+
 .chubox-thumbs {
 	position: absolute;
 	bottom: 5px;
 	width: 100%;
+}
+
+.chubox-delete-button {
+	position: absolute;
+	left: -10px;
+	top: -10px;
+	display: none;
+	background-color: White;
+	border-radius: 100px;
+	border: solid 1px;
+	width: 25px;
+	height: 25px;
+}
+
+.chubox-delete-button:active {
+	background-color: Gray;
+}
+
+.chubox.editing .chubox-delete-button {
+	display: block;
 }

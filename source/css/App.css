@@ -108,6 +108,15 @@ body {
 	left: 5px;
 }
 
+.mainheader .done-button {
+	position: absolute;
+	padding: 2px 10px;
+	height: 35px;
+	top: 5px;
+	right: 5px;
+}
+
+
 .mainheader-text {
 	color: White;
 	font-size: 18pt;

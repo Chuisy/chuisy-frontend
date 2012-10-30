@@ -16,14 +16,22 @@ enyo.kind({
     refresh: function() {
         this.$.chubox.loadItems();
     },
+    startEditing: function() {
+        this.$.doneButton.show();
+    },
+    done: function() {
+        this.$.chubox.setEditing(false);
+        this.$.doneButton.hide();
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
             ]},
-            {classes: "mainheader-text", content: "Chu Box"}
+            {classes: "mainheader-text", content: "Chu Box"},
+            {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton", showing: false}
         ]},
-        {kind: "Chubox", name: "chubox", fit: true}
+        {kind: "Chubox", name: "chubox", fit: true, editable: true, onStartEditing: "startEditing"}
     ]
 });
 
@@ -32,13 +40,18 @@ enyo.kind({
     classes: "chubox",
     published: {
         user: null, // The currently signed in user
-        boxOwner: null // The owner of this Chubox
+        boxOwner: null, // The owner of this Chubox
+        editable: false,
+        editing: false
     },
     events: {
-        onItemSelected: ""
+        onItemSelected: "",
+        onStartEditing: "",
+        onFinishEditing: ""
     },
     handlers: {
-        onresize: "refreshItems"
+        onresize: "refreshItems",
+        onhold: "hold"
     },
     userChanged: function() {
         this.refreshItems();
@@ -47,6 +60,14 @@ enyo.kind({
         if (this.boxOwner) {
             this.loadItems();
         }
+    },
+    editingChanged: function() {
+        if (this.editing && !this.editable) {
+            this.warn("'editing' can't be set to true when 'editable' is false!");
+            this.editing = false;
+        }
+
+        this.addRemoveClass("editing", this.editing);
     },
     loadItems: function() {
         if (this.boxOwner) {
@@ -58,6 +79,7 @@ enyo.kind({
     },
     refreshItems: function() {
         if (this.items) {
+            var currentPageIndex = this.$.carousel.getIndex();
             var colCount = Math.floor(this.getBounds().width / 100);
             var rowCount = Math.floor(this.getBounds().height / 100);
             if (colCount && rowCount) {
@@ -71,12 +93,17 @@ enyo.kind({
                 this.$.carousel.render();
             }
             this.$.thumbs.setCount(this.pageCount);
+            if (currentPageIndex && currentPageIndex< this.pageCount) {
+                this.$.carousel.setIndexDirect(currentPageIndex);
+                this.updatePageIndex();
+            }
         }
     },
     buildPage: function(pageIndex) {
         this.$.carousel.createComponent({classes: "enyo-fill"});
         for (var i=0; i<this.itemCount; i++) {
-            this.buildItem(pageIndex, (pageIndex+1) * i);
+            var itemIndex = pageIndex * this.itemCount + i;
+            this.buildItem(pageIndex, itemIndex);
         }
     },
     buildItem: function(pageIndex, itemIndex) {
@@ -85,25 +112,36 @@ enyo.kind({
         if (item) {
             var page = this.$.carousel.getClientControls()[pageIndex];
             page.createComponent({classes: "chuboxitem", pageIndex: pageIndex, itemIndex: itemIndex, ontap: "itemTap", owner: this, components: [
-                {kind: "Image", classes: "chuboxitem-image", src: item.image}
+                {kind: "Image", classes: "chuboxitem-image", src: item.image},
+                {kind: "Button", classes: "chubox-delete-button", ontap: "itemRemove", itemIndex: itemIndex}
             ]});
         }
     },
     itemTap: function(sender, event) {
-        this.doItemSelected({originator: sender, item: this.items[sender.itemIndex]});
+        if (!this.editing) {
+            this.doItemSelected({originator: sender, item: this.items[sender.itemIndex]});
+        }
     },
-    itemRemove: function(sender, event) {
-        var item = this.items[event.index];
-        chuisy.chuboxitem.remove(item.id, enyo.bind(this, function(sender, response) {
-            this.log(response);
-            this.loadItems();
-        }));
-    },
-    updateThumbs: function() {
+    updatePageIndex: function() {
         this.$.thumbs.setIndex(this.$.carousel.getIndex());
     },
+    hold: function() {
+        if (this.editable) {
+            this.setEditing(true);
+            this.doStartEditing();
+        }
+    },
+    itemRemove: function(sender, event) {
+        var item = this.items[sender.itemIndex];
+        chuisy.chuboxitem.remove(item.id, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+        this.items.remove(sender.itemIndex);
+        this.refreshItems();
+        return true;
+    },
     components: [
-        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updateThumbs"},
+        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updatePageIndex"},
         {kind: "Thumbs", classes: "chubox-thumbs"}
     ]
 });
