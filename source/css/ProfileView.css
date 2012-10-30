@@ -53,3 +53,7 @@
 	display: inline-block;
 	vertical-align: top;
 }
+
+.profileview.owned .follow-button {
+	display: none;
+}

@@ -15,24 +15,29 @@ enyo.kind({
     },
     userChanged: function() {
         this.$.chubox.setUser(this.user);
+        this.showedUserChanged();
     },
     showedUserChanged: function() {
-        if (this.showedUser) {
-            this.$.avatar.setSrc(this.showedUser.profile.avatar);
-            this.$.fullName.setContent(this.showedUser.first_name + " " + this.showedUser.last_name);
-            this.$.userName.setContent(this.showedUser.username);
-            this.$.bio.setContent(this.showedUser.profile.bio);
-            this.loadChus();
-            this.$.chubox.setBoxOwner(this.showedUser);
-            this.loadFriends();
-            this.loadFollowers();
-            this.$.followButton.addRemoveClass("active", this.showedUser.following);
+        var user = this.showedUser == "me" ? this.user : this.showedUser;
+        if (user) {
+            this.$.avatar.setSrc(user.profile.avatar);
+            this.$.fullName.setContent(user.first_name + " " + user.last_name);
+            this.$.userName.setContent(user.username);
+            this.$.bio.setContent(user.profile.bio);
+            this.loadChus(user);
+            this.$.chubox.setBoxOwner(user);
+            this.loadFriends(user);
+            this.loadFollowers(user);
+            this.$.followButton.addRemoveClass("active", user.following);
             this.$.chusMenuButton.setActive(true);
             this.$.panels.setIndex(0);
+            this.addRemoveClass("owned", this.user.id == user.id);
         }
+        this.$.menuButton.setShowing(this.showedUser == "me");
+        this.$.backButton.setShowing(this.showedUser != "me");
     },
-    loadChus: function() {
-        chuisy.chu.list([["user", this.showedUser.id]], enyo.bind(this, function(sender, response) {
+    loadChus: function(user) {
+        chuisy.chu.list([["user", user.id]], enyo.bind(this, function(sender, response) {
             this.chus = response.objects;
             this.refreshChus();
         }));
@@ -58,8 +63,8 @@ enyo.kind({
         this.doChuboxItemSelected(event);
         return true;
     },
-    loadFriends: function() {
-        chuisy.followingrelation.list([["user", this.showedUser.id]], enyo.bind(this, function(sender, response) {
+    loadFriends: function(user) {
+        chuisy.followingrelation.list([["user", user.id]], enyo.bind(this, function(sender, response) {
             this.friends = response.objects;
             this.refreshFriends();
         }));
@@ -78,8 +83,8 @@ enyo.kind({
         var user = this.friends[event.index].followee;
         this.doShowProfile({user: user});
     },
-    loadFollowers: function() {
-        chuisy.followingrelation.list([["followee", this.showedUser.id]], enyo.bind(this, function(sender, response) {
+    loadFollowers: function(user) {
+        chuisy.followingrelation.list([["followee", user.id]], enyo.bind(this, function(sender, response) {
             this.followers = response.objects;
             this.refreshFollowers();
         }));
@@ -138,7 +143,10 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
+                {kind: "Image", src: "assets/images/menu-icon.png"}
+            ]},
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
             {classes: "mainheader-text", content: "Profile"}
         ]},
         {classes: "provileview-info", components: [
@@ -148,7 +156,7 @@ enyo.kind({
                 {classes: "profileview-username", name: "userName"},
                 {classes: "profileview-bio", name: "bio"}
             ]},
-            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "toggleFollow"}
+            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "toggleFollow", classes: "follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
             {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
