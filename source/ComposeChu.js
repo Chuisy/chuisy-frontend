@@ -24,6 +24,13 @@ enyo.kind({
         this.selectedItems = {};
         this.location = null;
 
+        navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
+            this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+        }), enyo.bind(this, function() {
+            this.error("Failed to retrieve geolocation!");
+            alert("Failed to get location!");
+        }));
+
         this.$[this.visibility + "Button"].setActive(true);
         this.$.friendsSelector.setSelectedItems([]);
     },
