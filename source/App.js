@@ -97,6 +97,10 @@ enyo.kind({
                     // settings/
                     // Settings it is.
                     this.$.mainView.openSettings();
+                } else if (match[1].match(/^me\/$/)) {
+                    // chubox/
+                    // User wants to see his Chu Box? Our pleasure!
+                    this.$.mainView.showOwnProfile();
                 } else if (match[1].match(/^chubox\/$/)) {
                     // chubox/
                     // User wants to see his Chu Box? Our pleasure!
@@ -113,27 +117,20 @@ enyo.kind({
                         chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
                             this.$.mainView.openChuView(response);
                         }));
-                    } else if ((match3 = match2[1].match(/^(\d+)\/item\/(\d+)\/$/))) {
-                        // chu/{chu id}/item/{item id}/
-                        // This is a Chubox Item within a certain Chu. Let's open the ChuboxItemView with a Chu specified
-                        chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
-                            var item;
-                            // Find the right item inside the chu's item array
-                            for (var i=0; i<response.items.length; i++) {
-                                if (response.items[i].id == match3[2]) {
-                                    item = response.items[i];
-                                    break;
-                                }
-                            }
-                            this.$.mainView.openChuboxItemView(item, response);
+                    }
+                } else if ((match2 = match[1].match(/^item\/(.+)$/))) {
+                    // chu/..
+                    if (match2[1].match(/new\/$/)) {
+                        // item/new/
+                        // Add a new item to the chu box? Let's do it
+                        this.$.mainView.composeChuboxItem();
+                    } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
+                        // item/{item id}
+                        // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
+                        chuisy.chuboxitem.detail(match3[1], enyo.bind(this, function(sender, response) {
+                            this.$.mainView.openChuboxItemView(response);
                         }));
                     }
-                } else if ((match2 = match[1].match(/^item\/(\d+)\/$/))) {
-                    // item/{item id}
-                    // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
-                    chuisy.chuboxitem.detail(match2[1], enyo.bind(this, function(sender, response) {
-                        this.$.mainView.openChuboxItemView(response);
-                    }));
                 } else if ((match2 = match[1].match(/^user\/(\d+)\/$/))) {
                     // {user id}/
                     // This is the URI to a users profile

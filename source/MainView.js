@@ -40,12 +40,6 @@ enyo.kind({
         this.showView("chuFeed");
         this.$.chuFeed.loadChus();
 
-        this.$.chuFeedMenuItem.addClass("selected");
-        this.$.chuboxMenuItem.removeClass("selected");
-        this.$.postChuMenuItem.removeClass("selected");
-        this.$.profileMenuItem.removeClass("selected");
-        this.$.settingsMenuItem.removeClass("selected");
-
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chufeed/");
@@ -53,11 +47,6 @@ enyo.kind({
     openChubox: function() {
         this.$.chuboxView.refresh();
         this.showView("chubox");
-        this.$.chuFeedMenuItem.removeClass("selected");
-        this.$.chuboxMenuItem.addClass("selected");
-        this.$.postChuMenuItem.removeClass("selected");
-        this.$.profileMenuItem.removeClass("selected");
-        this.$.settingsMenuItem.removeClass("selected");
 
         this.$.mainSlider.animateToMin();
 
@@ -67,17 +56,11 @@ enyo.kind({
         this.$.chuView.setChu(chu);
         this.showView("chuView");
 
-        this.$.chuFeedMenuItem.removeClass("selected");
-        this.$.chuboxMenuItem.removeClass("selected");
-        this.$.postChuMenuItem.addClass("selected");
-        this.$.profileMenuItem.removeClass("selected");
-        this.$.settingsMenuItem.removeClass("selected");
-
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chu/" + chu.id + "/");
     },
-    openChuboxItemView: function(item, chu) {
+    openChuboxItemView: function(item) {
         this.$.chuboxItemView.setItem(item);
         App.updateHistory("item/" + item.id + "/");
         this.showView("chuboxItemView");
@@ -88,24 +71,15 @@ enyo.kind({
         this.$.profileView.setShowedUser(user);
         this.showView("profileView");
 
-        this.$.chuFeedMenuItem.removeClass("selected");
-        this.$.chuboxMenuItem.removeClass("selected");
-        this.$.postChuMenuItem.removeClass("selected");
-        this.$.profileMenuItem.addClass("selected");
-        this.$.settingsMenuItem.removeClass("selected");
+        App.updateHistory(user == "me" ? "me/": ("user/" + user.id + "/"));
+    },
+    showOwnProfile: function() {
+        this.openProfileView("me");
 
         this.$.mainSlider.animateToMin();
-
-        App.updateHistory("user/" + user.id + "/");
     },
     openSettings: function() {
         this.showView("settings");
-
-        this.$.chuFeedMenuItem.removeClass("selected");
-        this.$.chuboxMenuItem.removeClass("selected");
-        this.$.postChuMenuItem.removeClass("selected");
-        this.$.profileMenuItem.removeClass("selected");
-        this.$.settingsMenuItem.addClass("selected");
 
         this.$.mainSlider.animateToMin();
 
@@ -136,23 +110,8 @@ enyo.kind({
     chuSelected: function(sender, event) {
         this.openChuView(event.chu);
     },
-    contentPanelsBack: function() {
-        this.$.contentPanels.setIndex(0);
-    },
-    chuboxItemViewBack: function() {
-        this.openChuFeed();
-    },
-    chuViewBack: function() {
-        this.openChuFeed();
-    },
-    composeChuBack: function() {
-        this.openChuFeed();
-    },
-    composeChuboxItemBack: function() {
-        this.openChuFeed();
-    },
-    profileViewBack: function(sender, event) {
-        this.openChuFeed();
+    back: function() {
+        history.back();
     },
     toggleMenu: function() {
         this.$.mainSlider.toggleMinMax();
@@ -170,7 +129,7 @@ enyo.kind({
                 {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Chu Box"}
             ]},
-            {classes: "mainmenu-item", ontap: "openProfile", name: "profileMenuItem", components: [
+            {classes: "mainmenu-item", ontap: "showOwnProfile", name: "profileMenuItem", components: [
                 {kind: "onyx.Icon", src: "assets/images/user_light.png", classes: "mainmenu-item-icon"},
                 {classes: "mainmenu-item-text", content: "Profile"}
             ]},
@@ -191,12 +150,12 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
-                {kind: "ChuView", name: "chuView", onBack: "chuViewBack", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuboxItemView", onBack: "chuboxItemViewBack"},
-                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onChuboxItemSelected: "chuboxItemSelected", onShowProfile: "showProfile", onBack: "profileViewBack"},
+                {kind: "ChuView", name: "chuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
+                {kind: "ChuboxItemView", onBack: "back"},
+                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onChuboxItemSelected: "chuboxItemSelected", onShowProfile: "showProfile", onBack: "back"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
-                {kind: "ComposeChu", onBack: "composeChuBack"},
-                {kind: "ComposeChuboxItem", onBack: "composeChuboxItemBack"}
+                {kind: "ComposeChu", onBack: "back"},
+                {kind: "ComposeChuboxItem", onBack: "back"}
             ]}
         ]}
     ]
