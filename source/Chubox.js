@@ -1,7 +1,7 @@
 enyo.kind({
     name: "ChuboxView",
     kind: "FittableRows",
-    classes: "chubox",
+    classes: "chuboxview",
     published: {
         user: null // The currently signed in user
     },
@@ -29,7 +29,8 @@ enyo.kind({
 
 enyo.kind({
     name: "Chubox",
-        published: {
+    classes: "chubox",
+    published: {
         user: null, // The currently signed in user
         boxOwner: null // The owner of this Chubox
     },
@@ -69,6 +70,7 @@ enyo.kind({
                 }
                 this.$.carousel.render();
             }
+            this.$.thumbs.setCount(this.pageCount);
         }
     },
     buildPage: function(pageIndex) {
@@ -97,7 +99,11 @@ enyo.kind({
             this.loadItems();
         }));
     },
+    updateThumbs: function() {
+        this.$.thumbs.setIndex(this.$.carousel.getIndex());
+    },
     components: [
-        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill"}
+        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updateThumbs"},
+        {kind: "Thumbs", classes: "chubox-thumbs"}
     ]
 });

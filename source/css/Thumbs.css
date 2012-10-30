@@ -1,0 +1,17 @@
+.thumbs {
+	text-align: center;
+}
+
+.thumbs-thumb {
+	width: 10px;
+	height: 10px;
+	border-radius: 100px;
+	background-color: #000000;
+	opacity: 0.5;
+	display: inline-block;
+	margin: 2px;
+}
+
+.thumbs-thumb.active {
+	opacity: 0.9;
+}

@@ -17,5 +17,6 @@ enyo.depends(
 	"ChuItemView.css",
 	"ComposeChu.css",
 	"PickLocation.css",
-	"ChuboxItemForm.css"
+	"ChuboxItemForm.css",
+	"Thumbs.css"
 );
