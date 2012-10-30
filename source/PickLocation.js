@@ -11,7 +11,6 @@ enyo.kind({
     },
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
-            latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
             this.$.map.setCenter(this.location);
             this.$.map.clearMarkers();
