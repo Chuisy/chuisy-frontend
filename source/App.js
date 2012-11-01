@@ -29,6 +29,8 @@ enyo.kind({
         if (chuisy.authCredentials) {
             this.signedIn();
             this.recoverStateFromUri();
+        } else {
+            this.$.panels.setIndex(1);
         }
 
         window.fbAsyncInit = enyo.bind(this, function() {
@@ -69,6 +71,8 @@ enyo.kind({
             chuisy.authCredentials = this.fetchAuthCredentials();
             if (chuisy.authCredentials) {
                 this.signedIn();
+            } else {
+                this.$.panels.setIndex(1);
             }
 
             this.initialized = true;
@@ -199,7 +203,8 @@ enyo.kind({
         if (!this.user) {
             this.loadUser();
         }
-        this.$.panels.setIndex(1);
+        this.$.panels.setIndex(0);
+        this.$.mainView.openChuFeed();
         window.onhashchange = enyo.bind(this, this.recoverStateFromUri);
     },
     userChanged: function() {
@@ -211,15 +216,15 @@ enyo.kind({
     logout: function() {
         this.deleteAuthCredentials();
         this.setUser(null);
-        this.$.panels.setIndex(0);
+        this.$.panels.setIndex(1);
         App.updateHistory("");
     },
     components: [
         {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+            {kind: "MainView", classes: "enyo-fill", onLogout: "logout"},
             {classes: "enyo-fill", components: [
                 {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"}
-            ]},
-            {kind: "MainView", classes: "enyo-fill", onLogout: "logout"}
+            ]}
         ]},
         {kind: "Signals", ondeviceready: "initMobile"}
     ]
