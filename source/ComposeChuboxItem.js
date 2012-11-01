@@ -54,7 +54,7 @@ enyo.kind({
 
         this.uploading = true;
         ft.upload(uri,
-            encodeURI("http://api.chuisy.com/v1/upload_product_image/?username=" + chuisy.authCredentials.username + "&api_key=" + chuisy.authCredentials.api_key),
+            encodeURI("http://api.chuisy.com/v1/upload_chubox_image/?username=" + chuisy.authCredentials.username + "&api_key=" + chuisy.authCredentials.api_key),
             enyo.bind(this, function(r) {
                 this.image = r.response;
                 this.log("file uploaded! " + r.response);
@@ -70,7 +70,7 @@ enyo.kind({
     submit: function() {
         var data = this.$.chuboxItemForm.getData();
         var userId = this.user ? this.user.id : "null";
-        data.image = "http://api.chuisy.com/static/uploads/" +  userId + "_" + this.imageTicket + ".jpg";
+        data.image = "chubox/" + userId + "/" + this.imageTicket + ".jpg";
         // Have to create the place first as deeply nested resources are not created automatically
         chuisy.place.create(data.location.place, enyo.bind(this, function(sender, response) {
             data.location.place = response.resource_uri;
