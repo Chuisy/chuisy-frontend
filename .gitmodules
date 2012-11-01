@@ -13,3 +13,6 @@
 [submodule "lib/extra"]
 	path = lib/extra
 	url = https://github.com/enyojs/extra.git
+[submodule "lib/arrangers"]
+	path = lib/arrangers
+	url = https://github.com/ShiftyAxel/more-arrangers.git
