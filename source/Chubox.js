@@ -112,7 +112,7 @@ enyo.kind({
         if (item) {
             var page = this.$.carousel.getClientControls()[pageIndex];
             page.createComponent({classes: "chuboxitem", pageIndex: pageIndex, itemIndex: itemIndex, ontap: "itemTap", owner: this, components: [
-                {kind: "Image", classes: "chuboxitem-image", src: item.image},
+                {kind: "Image", classes: "chuboxitem-image", src: item.thumbnails["100x100"]},
                 {kind: "Button", classes: "chubox-delete-button", ontap: "itemRemove", itemIndex: itemIndex}
             ]});
         }
