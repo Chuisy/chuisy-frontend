@@ -23,6 +23,10 @@ enyo.kind({
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
+    create: function() {
+        this.inherited(arguments);
+        this.$.primaryPanels.getAnimator().setDuration(1000);
+    },
     userChanged: function() {
         this.$.chuboxView.setUser(this.user);
         this.$.chuFeed.setUser(this.user);
@@ -147,7 +151,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 200, overMoving: false, components: [
-            {kind: "Panels", arrangerKind: "CardArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
+            {kind: "Panels", arrangerKind: "HFlipArranger", draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
