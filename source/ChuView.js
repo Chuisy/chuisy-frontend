@@ -43,9 +43,9 @@ enyo.kind({
             view.setUser(this.user);
             view.setVotes();
             view.show();
-            itemImage.setSrc(item.image);
+            itemImage.setSrc(item.thumbnails["100x100"]);
             itemComp.show();
-            thumb.applyStyle("background-image", "url(" + item.image + ")");
+            // thumb.applyStyle("background-image", "url(" + item.thumbnails["100x100"] + ")");
             thumb.show();
         } else {
             view.hide();
@@ -55,20 +55,22 @@ enyo.kind({
     },
     digestVotes: function() {
         var itemVotes = [];
-        for (var i=0; i<this.chu.items.length; i++) {
-            var item = this.chu.items[i];
-            var votes = [];
-            for (var j=0; j<this.chu.votes.length; j++) {
-                var vote = this.chu.votes[j];
-                if (vote.item == item.resource_uri) {
-                    votes.push(vote);
-                    if (vote.user.id == this.user.id) {
-                        this.$["chuItem" + i].setActive(true);
-                        // this.$["chuItemView" + i].setVotedFor(true);
+        if (this.chu.items && this.chu.votes) {
+            for (var i=0; i<this.chu.items.length; i++) {
+                var item = this.chu.items[i];
+                var votes = [];
+                for (var j=0; j<this.chu.votes.length; j++) {
+                    var vote = this.chu.votes[j];
+                    if (vote.item == item.resource_uri) {
+                        votes.push(vote);
+                        if (vote.user.id == this.user.id) {
+                            this.$["chuItem" + i].setActive(true);
+                            // this.$["chuItemView" + i].setVotedFor(true);
+                        }
                     }
                 }
+                itemVotes.push(votes);
             }
-            itemVotes.push(votes);
         }
         for (var k=0; k<itemVotes.length; k++) {
             this.$["chuItemView" + k].setVotes(itemVotes[k]);
