@@ -33,6 +33,7 @@ enyo.kind({
 
         this.$[this.visibility + "Button"].setActive(true);
         this.$.friendsSelector.setSelectedItems([]);
+        this.$.chubox.refreshItems();
     },
     toUriList: function(list) {
         var temp = [];
