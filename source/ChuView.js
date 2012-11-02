@@ -17,8 +17,9 @@ enyo.kind({
         if (this.chu) {
             this.chu.votes = this.chu.votes || [];
             this.$.title.setContent(this.chu.title);
-            this.$.avatar.setSrc(this.chu.user.profile.avatar);
+            this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.username.setContent(this.chu.user.username);
+            this.$.headerText.setContent("#" + this.chu.id);
             this.applyPermissions();
             this.refreshComments();
 
@@ -160,7 +161,7 @@ enyo.kind({
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "Chuisy"},
+            {classes: "mainheader-text", content: "chuisy", name: "headerText"},
             {kind: "onyx.Button", classes: "chuview-comments-button", ontap: "showComments", name: "commentsButton", components: [
                 {kind: "Image", src: "assets/images/comment_light.png"}
             ]}
@@ -187,7 +188,7 @@ enyo.kind({
                         // AVATAR
                         {kind: "Image", name: "avatar", classes: "miniavatar chuview-avatar"},
                         // USERNAME
-                        {name: "username", classes: "chuview-username"},
+                        {name: "username", classes: "chuview-username ellipsis"},
                         // TITLE
                         {classes: "chuview-title", name: "title"}
                     ]},

@@ -11,7 +11,7 @@ enyo.kind({
         if (this.chu) {
             this.$.title.setContent(this.chu.title);
             this.$.username.setContent(this.chu.user.username);
-            this.$.avatar.setSrc(this.chu.user.profile.avatar);
+            this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.image1.applyStyle("background-image", "url(" + (this.chu.items[0] ? this.chu.items[0].thumbnails["100x100"] : "") + ")");
             this.$.image2.applyStyle("background-image", "url(" + (this.chu.items[1] ? this.chu.items[1].thumbnails["100x100"] : "") + ")");
             this.$.image3.applyStyle("background-image", "url(" + (this.chu.items[2] ? this.chu.items[2].thumbnails["100x100"] : "") + ")");
@@ -38,7 +38,7 @@ enyo.kind({
                 ]}
             ]},
             {kind: "Image", name: "avatar", classes: "miniavatar"},
-            {name: "username", classes: "listchu-username"},
+            {name: "username", classes: "listchu-username ellipsis"},
             {name: "time", classes: "listchu-time", content: "1 hour ago"},
             {name: "title", classes: "listchu-title"}
         ]}

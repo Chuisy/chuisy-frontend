@@ -23,10 +23,11 @@ enyo.kind({
     itemChanged: function() {
         if (this.item) {
             this.$.image.setSrc(this.item.image);
-            this.$.avatar.setSrc(this.item.user.profile.avatar);
+            this.$.avatar.setSrc(this.item.user.profile.avatar_thumbnail);
             this.$.username.setContent(this.item.user.username);
             this.$.price.setContent(this.currencies[this.item.product.price_currency] + this.item.product.price);
             this.$.locationText.setContent(this.item.location && this.item.location.place ? this.item.location.place.name + ", " + this.item.location.place.address : "");
+            this.$.headerText.setContent("#" + this.item.id);
 
             if (this.item.liked) {
                 this.setLiked(true);
@@ -121,13 +122,13 @@ enyo.kind({
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "Chuisy"}
+            {classes: "mainheader-text", content: "chuisy", name: "headerText"}
         ]},
         {kind: "Scroller", fit: true, components: [
             {kind: "Image", name: "image", classes: "chuboxitemview-productimage"},
             {components: [
                 {kind: "Image", name: "avatar", classes: "miniavatar"},
-                {classes: "chuboxitemview-username", name: "username"}
+                {classes: "chuboxitemview-username ellipsis", name: "username"}
             ]},
             {classes: "chuboxitemview-likes", components: [
                 {name: "likeCount"},

@@ -88,9 +88,9 @@ enyo.kind({
         }
     },
     components: [
-        {classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "Chuisy"}
+            {classes: "mainheader-text", content: "chuisy"}
         ]},
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked"},

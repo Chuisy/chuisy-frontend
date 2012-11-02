@@ -135,9 +135,9 @@ enyo.kind({
         }));
     },
     components: [
-        {classes: "mainheader", content: "Chuisy", components: [
+        {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "Chuisy"}
+            {classes: "mainheader-text", content: "chuisy"}
         ]},
         {style: "position: relative;", fit: true, components: [
             {kind: "FittableRows", classes: "enyo-fill", components: [

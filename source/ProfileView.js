@@ -75,7 +75,7 @@ enyo.kind({
     },
     setupFriend: function(sender, event) {
         var relation = this.friends[event.index];
-        this.$.friendAvatar.setSrc(relation.followee.profile.avatar);
+        this.$.friendAvatar.setSrc(relation.followee.profile.avatar_thumbnail);
         this.$.friendUsername.setContent(relation.followee.username);
         this.$.friendFollowButton.addRemoveClass("active", relation.followee.following);
     },
@@ -95,7 +95,7 @@ enyo.kind({
     },
     setupFollower: function(sender, event) {
         var relation = this.followers[event.index];
-        this.$.followerAvatar.setSrc(relation.user.profile.avatar);
+        this.$.followerAvatar.setSrc(relation.user.profile.avatar_thumbnail);
         this.$.followerUsername.setContent(relation.user.username);
         this.$.followerFollowButton.addRemoveClass("active", relation.user.following);
     },
@@ -153,7 +153,7 @@ enyo.kind({
             {kind: "Image", classes: "profileview-avatar", name: "avatar"},
             {classes: "profileview-profileinfo", components: [
                 {classes: "profileview-fullname", name: "fullName"},
-                {classes: "profileview-username", name: "userName"},
+                {classes: "profileview-username ellipsis", name: "userName"},
                 {classes: "profileview-bio", name: "bio"}
             ]},
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "toggleFollow", classes: "follow-button"}
@@ -183,15 +183,15 @@ enyo.kind({
             {kind: "Chubox", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
             {kind: "List", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
                 {kind: "onyx.Item", classes: "profileview-list-person", ontap: "friendTapped", components: [
-                    {kind: "Image", classes: "profileview-list-avatar", name: "friendAvatar"},
-                    {classes: "profileview-list-username", name: "friendUsername"},
+                    {kind: "Image", classes: "miniavatar", name: "friendAvatar"},
+                    {classes: "profileview-list-username ellipsis", name: "friendUsername"},
                     {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", list: "friends", name: "friendFollowButton"}
                 ]}
             ]},
             {kind: "List", name: "followerList", onSetupItem: "setupFollower", classes: "enyo-fill", components: [
                 {kind: "onyx.Item", classes: "profileview-list-person", ontap: "followerTapped", components: [
-                    {kind: "Image", classes: "profileview-list-avatar", name: "followerAvatar"},
-                    {classes: "profileview-list-username", name: "followerUsername"},
+                    {kind: "Image", classes: "miniavatar", name: "followerAvatar"},
+                    {classes: "profileview-list-username ellipsis", name: "followerUsername"},
                     {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", list: "followers", name: "followerFollowButton"}
                 ]}
             ]}

@@ -10,6 +10,7 @@
 	vertical-align: top;
 	font-size: 13pt;
 	padding: 9px 5px;
+	max-width: 200px;
 }
 
 .chuboxitemview-price {

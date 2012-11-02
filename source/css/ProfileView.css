@@ -19,6 +19,7 @@
 	padding: 5px;
 	font-size: 13pt;
 	font-weight: bold;
+	max-width: 200px;
 }
 
 .profileview-bio {
@@ -52,6 +53,7 @@
 .profileview-list-username {
 	display: inline-block;
 	vertical-align: top;
+	max-width: 100px;
 }
 
 .profileview.owned .follow-button {

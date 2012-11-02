@@ -38,14 +38,14 @@ enyo.kind({
 			this.log(response);
 		}));
 	},
-	changePassword: function() {
-		chuisy.changePassword(this.user.username, this.$.oldPassword.getValue(), this.$.newPassword.getValue(), enyo.bind(this, function(sender, response) {
-			this.log(response);
-			alert("Password changed successfully!");
-			this.$.oldPassword.setValue("");
-			this.$.newPassword.setValue("");
-		}));
-	},
+	// changePassword: function() {
+	// 	chuisy.changePassword(this.user.username, this.$.oldPassword.getValue(), this.$.newPassword.getValue(), enyo.bind(this, function(sender, response) {
+	// 		this.log(response);
+	// 		alert("Password changed successfully!");
+	// 		this.$.oldPassword.setValue("");
+	// 		this.$.newPassword.setValue("");
+	// 	}));
+	// },
     // facebookSignIn: function() {
     //     window.location = "https://www.facebook.com/dialog/oauth?client_id=180626725291316&redirect_uri=http://api.chuisy.com/v1/fb_auth/&scope=user_birthday,user_location,user_about_me,user_website,email";
     // },
@@ -72,16 +72,16 @@ enyo.kind({
 					{kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
 				]}
 			]},
-			{kind: "onyx.Groupbox", components: [
-				{kind: "onyx.GroupboxHeader", content: "Change Password"},
-				{kind: "onyx.InputDecorator", components: [
-					{kind: "onyx.Input", name: "oldPassword", type: "password", placeholder: "Old Password"}
-				]},
-				{kind: "onyx.InputDecorator", components: [
-					{kind: "onyx.Input", name: "newPassword", type: "password", placeholder: "New Password"}
-				]},
-				{kind: "onyx.Button", content: "Change Password", ontap: "changePassword", style: "width: 100%;"}
-			]},
+			// {kind: "onyx.Groupbox", components: [
+			// 	{kind: "onyx.GroupboxHeader", content: "Change Password"},
+			// 	{kind: "onyx.InputDecorator", components: [
+			// 		{kind: "onyx.Input", name: "oldPassword", type: "password", placeholder: "Old Password"}
+			// 	]},
+			// 	{kind: "onyx.InputDecorator", components: [
+			// 		{kind: "onyx.Input", name: "newPassword", type: "password", placeholder: "New Password"}
+			// 	]},
+			// 	{kind: "onyx.Button", content: "Change Password", ontap: "changePassword", style: "width: 100%;"}
+			// ]},
 			{kind: "onyx.Button", content: "Logout", ontap: "doLogout"}
 		]}
 	]

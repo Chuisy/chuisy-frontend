@@ -6,12 +6,17 @@
 	width: 10px;
 	height: 10px;
 	border-radius: 100px;
-	background-color: #000000;
-	opacity: 0.5;
+	/*background-color: #000000;*/
+	border: solid 1px;
+	box-sizing: border-box;
+	/*opacity: 0.5;*/
 	display: inline-block;
 	margin: 2px;
+	-webkit-transition-property: border-width;
+	-webkit-transition-duration: 0.2s;
 }
 
 .thumbs-thumb.active {
-	opacity: 0.9;
+	/*opacity: 0.9;*/
+	border-width: 5px;
 }
