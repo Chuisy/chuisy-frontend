@@ -45,17 +45,6 @@
 	vertical-align: top;
 }
 
-.profileview-list-avatar {
-	width: 40px;
-	margin: 5px;
-}
-
-.profileview-list-username {
-	display: inline-block;
-	vertical-align: top;
-	max-width: 100px;
-}
-
 .profileview.owned .follow-button {
 	display: none;
 }

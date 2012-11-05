@@ -31,7 +31,7 @@ enyo.kind({
             this.$.followButton.addRemoveClass("active", user.following);
             this.$.chusMenuButton.setActive(true);
             this.$.panels.setIndex(0);
-            this.addRemoveClass("owned", this.user.id == user.id);
+            this.addRemoveClass("owned", this.user && this.user.id == user.id);
         }
         this.$.menuButton.setShowing(this.showedUser == "me");
         this.$.backButton.setShowing(this.showedUser != "me");
@@ -71,13 +71,12 @@ enyo.kind({
     },
     refreshFriends: function() {
         this.$.friendList.setCount(this.friends.length);
-        this.$.friendList.refresh();
+        this.$.friendList.build();
     },
     setupFriend: function(sender, event) {
         var relation = this.friends[event.index];
-        this.$.friendAvatar.setSrc(relation.followee.profile.avatar_thumbnail);
-        this.$.friendUsername.setContent(relation.followee.username);
-        this.$.friendFollowButton.addRemoveClass("active", relation.followee.following);
+        event.item.$.friendItem.setShowedUser(relation.followee);
+        event.item.$.friendItem.setUser(this.user);
     },
     friendTapped: function(sender, event) {
         var user = this.friends[event.index].followee;
@@ -91,36 +90,20 @@ enyo.kind({
     },
     refreshFollowers: function() {
         this.$.followerList.setCount(this.followers.length);
-        this.$.followerList.refresh();
+        this.$.followerList.build();
     },
     setupFollower: function(sender, event) {
         var relation = this.followers[event.index];
-        this.$.followerAvatar.setSrc(relation.user.profile.avatar_thumbnail);
-        this.$.followerUsername.setContent(relation.user.username);
-        this.$.followerFollowButton.addRemoveClass("active", relation.user.following);
+        event.item.$.followerItem.setShowedUser(relation.user);
+        event.item.$.followerItem.setUser(this.user);
     },
     followerTapped: function(sender, event) {
         var user = this.followers[event.index].user;
         this.doShowProfile({user: user});
     },
     toggleFollow: function(sender, event) {
-        var user, list;
-        var button = sender;
-        if (typeof(event.index) != "undefined") {
-            if (button.list == "friends") {
-                user = this.friends[event.index].followee;
-                list = this.$.friendList;
-            } else {
-                user = this.followers[event.index].user;
-                list = this.$.followerList;
-            }
-        } else {
-            user = this.showedUser;
-        }
-
-        if (list) {
-            list.prepareRow(event.index);
-        }
+        var user = this.showedUser;
+        var button = this.$.followButton;
 
         button.setDisabled(true);
         if (user.following) {
@@ -141,6 +124,19 @@ enyo.kind({
         }
         return true;
     },
+    // followingChanged: function(sender, event) {
+    //     // var user = sender.getShowedUser();
+    //     // this.log(user, event.following);
+    //     // if (event.following) {
+    //     //     this.friends.push(user);
+    //     // } else {
+    //     //     enyo.remove(user, this.friends);
+    //     // }
+    //     // this.log(this.friends);
+
+    //     // this.refreshFriends();
+    //     this.loadFriends("me" ? this.user : this.showedUser);
+    // },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
@@ -181,18 +177,14 @@ enyo.kind({
                 {kind: "ListChu", ontap: "chuTapped"}
             ]},
             {kind: "Chubox", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
-            {kind: "List", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
-                {kind: "onyx.Item", classes: "profileview-list-person", ontap: "friendTapped", components: [
-                    {kind: "Image", classes: "miniavatar", name: "friendAvatar"},
-                    {classes: "profileview-list-username ellipsis", name: "friendUsername"},
-                    {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", list: "friends", name: "friendFollowButton"}
+            {kind: "Scroller", classes: "enyo-fill", components: [
+                {kind: "Repeater", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
+                    {kind: "UserListItem", name: "friendItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"}
                 ]}
             ]},
-            {kind: "List", name: "followerList", onSetupItem: "setupFollower", classes: "enyo-fill", components: [
-                {kind: "onyx.Item", classes: "profileview-list-person", ontap: "followerTapped", components: [
-                    {kind: "Image", classes: "miniavatar", name: "followerAvatar"},
-                    {classes: "profileview-list-username ellipsis", name: "followerUsername"},
-                    {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", list: "followers", name: "followerFollowButton"}
+            {kind: "Scroller", classes: "enyo-fill", components: [
+                {kind: "Repeater", name: "followerList", onSetupItem: "setupFollower", classes: "enyo-fill", components: [
+                    {kind: "UserListItem", name: "followerItem", ontap: "followerTapped", onFollowingChanged: "followingChanged"}
                 ]}
             ]}
         ]}

@@ -1,0 +1,10 @@
+.userlistitem-avatar {
+	width: 40px;
+	margin: 5px;
+}
+
+.userlistitem-username {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 100px;
+}
