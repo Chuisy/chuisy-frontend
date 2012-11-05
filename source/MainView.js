@@ -105,9 +105,6 @@ enyo.kind({
 
         App.updateHistory("chuboxitem/new/");
     },
-    openProfile: function() {
-        this.openProfileView(this.user);
-    },
     chuboxItemSelected: function(sender, event) {
         this.openChuboxItemView(event.item, event.chu);
     },
@@ -121,7 +118,7 @@ enyo.kind({
         this.$.mainSlider.toggleMinMax();
     },
     showProfile: function(sender, event) {
-        this.openProfile(event.user);
+        this.openProfileView(event.user);
     },
     components: [
         {classes: "mainmenu", components: [
