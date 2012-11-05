@@ -10,12 +10,13 @@ enyo.kind({
 		onFollowingChanged: ""
 	},
 	userChanged: function() {
-		this.$.followButton.setShowing(this.user && this.user.id != this.showedUser.id);
+		this.$.followButton.setShowing(this.user && this.showedUser && this.user.id != this.showedUser.id);
 	},
 	showedUserChanged: function() {
 		this.$.avatar.setSrc(this.showedUser.profile.avatar_thumbnail);
 		this.$.username.setContent(this.showedUser.username);
 		this.$.followButton.addRemoveClass("active", this.showedUser.following);
+		this.$.followButton.setShowing(this.user && this.showedUser && this.user.id != this.showedUser.id);
 	},
     toggleFollow: function(sender, event) {
         var user = this.showedUser;
@@ -45,6 +46,6 @@ enyo.kind({
 	components: [
         {kind: "Image", classes: "miniavatar", name: "avatar"},
         {classes: "userlistitem-username ellipsis", name: "username"},
-        {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", name: "followButton"}
+        {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });

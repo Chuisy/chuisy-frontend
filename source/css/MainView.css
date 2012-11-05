@@ -4,11 +4,13 @@
 }
 
 .mainmenu {
-	width: 200px;
+	width: 270px;
 	background-color: transparent;
 	position: absolute;
 	padding: 0 10px;
 	box-sizing: border-box;
+	height: 100%;
+	color: #eee;
 }
 
 .mainmenu-item {
@@ -21,9 +23,7 @@
 	vertical-align: top;
 }
 
-.mainmenu-item-text {
-	color: #eee;
-	font-size: 13pt;
+.mainmenu-item-text {	font-size: 13pt;
 	display: inline-block;
 	vertical-align: top;
 	padding: 6px 8px;
@@ -42,4 +42,10 @@
 	background-color: #eee;
 	box-shadow: -2px 0 10px #000;
 	border-radius: 5px;
+}
+
+.mainview-search-input {
+	border-radius: 20px;
+	margin: 2px 0;
+	width: 100%;
 }
