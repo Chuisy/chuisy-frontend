@@ -31,5 +31,6 @@ enyo.depends(
 	"ComposeChuboxItem.js",
 	"Thumbs.js",
 	"UserListItem.js",
-	"SearchResults.js"
+	"SearchResults.js",
+	"SearchInput.js"
 );

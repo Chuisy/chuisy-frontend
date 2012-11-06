@@ -1,0 +1,22 @@
+.searchinput {
+	border-radius: 20px;
+	margin: 2px 0;
+	position: relative;
+}
+
+.searchinput input {
+	width: 100%;
+}
+
+.searchinput-icon {
+	width: 16px;
+	height: 16px;
+	background: url(../../assets/images/searchinput-search.png) no-repeat center center;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.searchinput.active .searchinput-icon {
+	background-image: url(../../assets/images/searchinput-cancel.png);
+}

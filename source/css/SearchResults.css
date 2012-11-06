@@ -1,0 +1,16 @@
+.chulistitem {
+	padding: 10px 0;
+	border-bottom: solid 1px #222;
+}
+
+.chulistitem-avatar {
+	width: 40px;
+	margin: 5px;
+}
+
+.chulistitem-title {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 200px;
+	padding: 5px;
+}

@@ -121,26 +121,30 @@ enyo.kind({
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
     },
-    searchInputKeyup: function() {
+    searchInputChange: function() {
         var query = this.$.searchInput.getValue();
 
-        if (query) {
-            chuisy.user.search(query, enyo.bind(this, function(sender, request) {
-                this.$.searchResults.setUsers(request.objects);
-            }));
-            chuisy.chu.search(query, enyo.bind(this, function(sender, request) {
-                this.$.searchResults.setChus(request.objects);
-            }));
-            this.$.menuPanels.setIndex(1);
-        } else {
-            this.$.menuPanels.setIndex(0);
-        }
+        this.latestQuery = query;
+        this.$.searchResults.setUsers("loading");
+        chuisy.user.search(query, enyo.bind(this, function(sender, response) {
+            if (response.meta.query == this.latestQuery) {
+                this.$.searchResults.setUsers(response.objects);            }
+        }));
+        this.$.searchResults.setChus("loading");
+        chuisy.chu.search(query, enyo.bind(this, function(sender, response) {
+            if (response.meta.query == this.latestQuery) {
+                this.$.searchResults.setChus(response.objects);
+            }
+        }));
+        this.$.menuPanels.setIndex(1);
+    },
+    searchInputCancel: function() {
+        this.$.menuPanels.setIndex(0);
+        this.latestQuery = null;
     },
     components: [
         {kind: "FittableRows", classes: "mainmenu", components: [
-            {kind: "onyx.InputDecorator", classes: "mainview-search-input", alwaysLooksFocused: true, components: [
-                {kind: "onyx.Input", style: "width: 100%", name: "searchInput", placeholder: "Type to search...", onkeyup: "searchInputKeyup"}
-            ]},
+            {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;"},
             {kind: "Panels", name: "menuPanels", animate: false, fit: true, components: [
                 {components: [
                     {classes: "mainmenu-item", ontap: "openChuFeed", name: "chuFeedMenuItem", components: [
@@ -168,7 +172,7 @@ enyo.kind({
                         {classes: "mainmenu-item-text", content: "Add Chu Box Item"}
                     ]}
                 ]},
-                {kind: "SearchResults", onUserSelected: "showProfile"}
+                {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected"}
             ]}
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, components: [
