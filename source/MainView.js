@@ -8,7 +8,7 @@ enyo.kind({
         user: null
     },
     views: {
-        chuFeed: 0,
+        feed: 0,
         chubox: 1,
         chuView: 2,
         chuboxItemView: 3,
@@ -29,7 +29,7 @@ enyo.kind({
     },
     userChanged: function() {
         this.$.chuboxView.setUser(this.user);
-        this.$.chuFeed.setUser(this.user);
+        this.$.feed.setUser(this.user);
         this.$.chuView.setUser(this.user);
         this.$.chuboxItemView.setUser(this.user);
         this.$.profileView.setUser(this.user);
@@ -41,13 +41,12 @@ enyo.kind({
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
     },
-    openChuFeed: function() {
-        this.showView("chuFeed");
-        this.$.chuFeed.loadChus();
+    openFeed: function() {
+        this.showView("feed");
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chufeed/");
+        App.updateHistory("feed/");
     },
     openChubox: function() {
         this.$.chuboxView.refresh();
@@ -142,12 +141,19 @@ enyo.kind({
         this.$.menuPanels.setIndex(0);
         this.latestQuery = null;
     },
+    itemClusterSelected: function(sender, event) {
+        if (event.items.length == 1) {
+            this.openChuboxItemView(event.items[0]);
+        } else {
+            this.openProfileView(event.items[0].user);
+        }
+    },
     components: [
         {kind: "FittableRows", classes: "mainmenu", components: [
             {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;"},
             {kind: "Panels", name: "menuPanels", animate: false, fit: true, components: [
                 {components: [
-                    {classes: "mainmenu-item", ontap: "openChuFeed", name: "chuFeedMenuItem", components: [
+                    {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Feed"}
                     ]},
@@ -177,7 +183,7 @@ enyo.kind({
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "ChuFeed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onItemClusterSelected: "itemClusterSelected"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
                 {kind: "ChuboxItemView", onBack: "back"},

@@ -15,7 +15,7 @@ enyo.depends(
 	"FormField.js",
 	"SignUpForm.js",
 	"StartPage.js",
-	"ChuFeed.js",
+	"Feed.js",
 	"ChuView.js",
 	"PeopleSelector.js",
 	"ProfileView.js",
@@ -32,5 +32,6 @@ enyo.depends(
 	"Thumbs.js",
 	"UserListItem.js",
 	"SearchResults.js",
-	"SearchInput.js"
+	"SearchInput.js",
+	"ItemCluster.js"
 );

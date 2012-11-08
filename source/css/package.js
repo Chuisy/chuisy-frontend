@@ -8,7 +8,7 @@ enyo.depends(
 	"SignUpForm.css",
 	"StartPage.css",
 	"ChuView.css",
-	"ChuFeed.css",
+	"Feed.css",
 	"MainView.css",
 	"PeopleSelector.css",
 	"ProfileView.css",
@@ -21,5 +21,6 @@ enyo.depends(
 	"Thumbs.css",
 	"UserListItem.css",
 	"SearchResults.css",
-	"SearchInput.css"
+	"SearchInput.css",
+	"ItemCluster.css"
 );

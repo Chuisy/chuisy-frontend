@@ -98,10 +98,10 @@ enyo.kind({
                 chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
                 this.signedIn();
                 App.updateHistory("");
-            } else if (match[1].match(/^chufeed\/$/)) {
+            } else if (match[1].match(/^feed\/$/)) {
                 // chufeed/
                 // The chu feed it is! Let't open it.
-                this.$.mainView.openChuFeed();
+                this.$.mainView.openFeed();
             } else if (match[1].match(/^settings\/$/)) {
                 // settings/
                 // Settings it is.
@@ -157,10 +157,10 @@ enyo.kind({
             } else {
                 this.log("Uri hash provided but no known pattern found!");
                 // TODO: Show 404 Page
-                this.$.mainView.openChuFeed();
+                this.$.mainView.openFeed();
             }
         } else {
-            this.$.mainView.openChuFeed();
+            this.$.mainView.openFeed();
         }
     },
     facebookSignIn: function() {
