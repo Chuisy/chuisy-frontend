@@ -5,15 +5,24 @@ enyo.kind({
 	alwaysLooksFocused: true,
 	published: {
 		value: "",
-		changeDelay: 100
+		changeDelay: 100,
+        disabled: false
 	},
 	events: {
 		onCancel: "",
 		onChange: ""
 	},
+    create: function() {
+        this.inherited(arguments);
+        this.valueChanged();
+        this.disabledChanged();
+    },
 	valueChanged: function() {
 		this.$.input.setValue(this.value);
 	},
+    disabledChanged: function() {
+        this.$.input.setDisabled(this.disabled);
+    },
 	getValue: function() {
 		return this.$.input.getValue();
 	},
@@ -31,11 +40,17 @@ enyo.kind({
 			this.cancel();
 		}
 	},
-	cancel: function() {
+	cancel: function(sender, event) {
 		this.$.input.setValue("");
 		this.removeClass("active");
 		this.doCancel();
+        this.blur();
+        event.preventDefault();
+        return true;
 	},
+    blur: function() {
+        this.$.input.hasNode().blur();
+    },
 	components: [
         {kind: "onyx.Input", placeholder: "Type to search...", onkeyup: "inputKeyup"},
         {classes: "searchinput-icon", ontap: "cancel"}

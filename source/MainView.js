@@ -115,7 +115,8 @@ enyo.kind({
         history.back();
     },
     toggleMenu: function() {
-        this.$.mainSlider.toggleMinMax();
+          this.$.mainSlider.toggleMinMax();
+          event.preventDefault();
     },
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
@@ -148,9 +149,18 @@ enyo.kind({
             this.openProfileView(event.items[0].user);
         }
     },
+    sliderAnimateFinish: function() {
+//        this.$.searchInput.setDisabled(!this.isSliderOpen());
+        if (!this.isSliderOpen()) {
+            this.$.searchInput.blur();
+        }
+    },
+    isSliderOpen: function() {
+        return this.$.mainSlider.getValue() == this.$.mainSlider.getMax();
+    },
     components: [
         {kind: "FittableRows", classes: "mainmenu", components: [
-            {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;"},
+            {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
             {kind: "Panels", name: "menuPanels", animate: false, fit: true, components: [
                 {components: [
                     {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
@@ -181,7 +191,7 @@ enyo.kind({
                 {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected"}
             ]}
         ]},
-        {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, components: [
+        {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onItemClusterSelected: "itemClusterSelected"},
                 {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
