@@ -9,7 +9,8 @@ enyo.kind({
         chu: null
     },
     events: {
-        onVote: ""
+        onVote: "",
+        onOpenItem: ""
     },
     currencies: {
         "USD": "$",
@@ -53,7 +54,7 @@ enyo.kind({
     },
     setupVote: function(sender, event) {
         var vote = this.votes[event.index];
-        event.item.$.voterImage.setSrc(vote.user.profile.avatar);
+        event.item.$.voterImage.setSrc(vote.user.profile.avatar_thumbnail);
         return true;
     },
     isOwned: function() {
@@ -62,6 +63,9 @@ enyo.kind({
     vote: function() {
         this.setVotedFor(true);
         this.doVote({item: this.item});
+    },
+    openItem: function() {
+        this.doOpenItem({item: this.item});
     },
     // collect: function(sender, event) {
     //     var data = {

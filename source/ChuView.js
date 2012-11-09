@@ -100,7 +100,7 @@ enyo.kind({
     setupComment: function(sender, event) {
         var comment = this.chu.comments[event.index];
         this.$.commentText.setContent(comment.text);
-        this.$.commentAvatar.setSrc(comment.user.profile.avatar);
+        this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -158,6 +158,9 @@ enyo.kind({
         }
         this.digestVotes();
     },
+    openItem: function(sender, event) {
+        this.doItemSelected(event);
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
@@ -192,10 +195,10 @@ enyo.kind({
                         // TITLE
                         {classes: "chuview-title", name: "title"}
                     ]},
-                    // CLOSE
-                    {style: "text-align: center; padding: 10px;", components: [
-                        {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
-                    ]},
+                    // // CLOSE
+                    // {style: "text-align: center; padding: 10px;", components: [
+                    //     {kind: "onyx.Button", name: "closeButton", classes: "chuview-close-button onyx-negative", content: "Close Chu", ontap: "closeChu"}
+                    // ]},
                     // ITEMS
                     {style: "text-align: center;", components: [
                         {kind: "Group", onActivate: "groupActivate", components: [
@@ -214,10 +217,10 @@ enyo.kind({
                         ]}
                     ]}
                 ]},
-                {kind: "ChuItemView", itemIndex: 0, classes: "enyo-fill", name: "chuItemView0", onVote: "chuItemViewVote"},
-                {kind: "ChuItemView", itemIndex: 1, classes: "enyo-fill", name: "chuItemView1", onVote: "chuItemViewVote"},
-                {kind: "ChuItemView", itemIndex: 2, classes: "enyo-fill", name: "chuItemView2", onVote: "chuItemViewVote"},
-                {kind: "ChuItemView", itemIndex: 3, classes: "enyo-fill", name: "chuItemView3", onVote: "chuItemViewVote"}
+                {kind: "ChuItemView", itemIndex: 0, classes: "enyo-fill", name: "chuItemView0", onVote: "chuItemViewVote", onOpenItem: "openItem"},
+                {kind: "ChuItemView", itemIndex: 1, classes: "enyo-fill", name: "chuItemView1", onVote: "chuItemViewVote", onOpenItem: "openItem"},
+                {kind: "ChuItemView", itemIndex: 2, classes: "enyo-fill", name: "chuItemView2", onVote: "chuItemViewVote", onOpenItem: "openItem"},
+                {kind: "ChuItemView", itemIndex: 3, classes: "enyo-fill", name: "chuItemView3", onVote: "chuItemViewVote", onOpenItem: "openItem"}
             ]}
         ]},
         {classes: "chuview-pageindicator", components: [

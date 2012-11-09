@@ -28,7 +28,7 @@ enyo.kind({
         if (this.pulled) {
             this.$.feedList.completePull();
         } else {
-            this.$.feedList.refresh();
+            this.$.feedList.reset();
         }
     },
     pullRelease: function() {
@@ -37,7 +37,7 @@ enyo.kind({
     },
     pullComplete: function() {
         this.pulled = false;
-        this.$.feedList.refresh();
+        this.$.feedList.reset();
     },
     setupFeedItem: function(sender, event) {
         var item = this.feedItems[event.index];

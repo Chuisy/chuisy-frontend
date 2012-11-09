@@ -88,7 +88,7 @@ enyo.kind({
     },
     setupLiker: function(sender, event) {
         var user = this.item.likes[event.index].user;
-        event.item.$.likerImage.setSrc(user.profile.avatar);
+        event.item.$.likerImage.setSrc(user.profile.avatar_thumbnail);
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.item ? this.item.comments.length : 0);
@@ -97,7 +97,7 @@ enyo.kind({
     setupComment: function(sender, event) {
         var comment = this.item.comments[event.index];
         this.$.commentText.setContent(comment.text);
-        this.$.commentAvatar.setSrc(comment.user.profile.avatar);
+        this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
