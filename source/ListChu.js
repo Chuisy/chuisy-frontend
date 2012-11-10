@@ -15,6 +15,7 @@ enyo.kind({
             this.$.image1.applyStyle("background-image", "url(" + (this.chu.items[0] ? this.chu.items[0].thumbnails["100x100"] : "") + ")");
             this.$.image2.applyStyle("background-image", "url(" + (this.chu.items[1] ? this.chu.items[1].thumbnails["100x100"] : "") + ")");
             this.$.image3.applyStyle("background-image", "url(" + (this.chu.items[2] ? this.chu.items[2].thumbnails["100x100"] : "") + ")");
+            this.$.time.setContent(chuisy.timeToText(this.chu.time));
         }
     },
     // refreshChuItems: function() {
@@ -39,7 +40,7 @@ enyo.kind({
             ]},
             {kind: "Image", name: "avatar", classes: "miniavatar"},
             {name: "username", classes: "listchu-username ellipsis"},
-            {name: "time", classes: "listchu-time", content: "1 hour ago"},
+            {name: "time", classes: "listchu-time"},
             {name: "title", classes: "listchu-title"}
         ]}
     ]

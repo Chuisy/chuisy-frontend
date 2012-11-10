@@ -15,6 +15,7 @@ enyo.kind({
 		for (var i=0; i<3; i++) {
 			this.setupItem(i);
 		}
+        this.$.time.setContent(chuisy.timeToText(this.items[this.items.length-1].time));
 	},
 	setupItem: function(index) {
 		var item = this.items[index];
@@ -36,6 +37,7 @@ enyo.kind({
             {kind: "Image", classes: "itemcluster-item", name: "item0"},
             {kind: "Image", classes: "itemcluster-item", name: "item1"},
             {kind: "Image", classes: "itemcluster-item", name: "item2"}
-		]}
+		]},
+		{name: "time"}
 	]
 });
