@@ -7,6 +7,9 @@ enyo.kind({
     events: {
         onBack: ""
     },
+    userChanged: function() {
+        this.$.chuboxItemForm.setUser(this.user);
+    },
     create: function() {
         chuisy.authCredentials = {
             username: "martin.kleinschrodt.5",
