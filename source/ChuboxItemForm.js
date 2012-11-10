@@ -54,6 +54,22 @@ enyo.kind({
             this.$.categoryPicker.render();
         }));
     },
+    loadFriends: function() {
+        chuisy.followingrelation.list(['user', this.user.id], enyo.bind(this, function(sender, response) {
+            var users = [];
+            for (var i=0; i<response.objects.length; i++) {
+                users.push(response.objects[i].followee);
+            }
+            this.$.friendsSelector.setItems(users);
+        }));
+    },
+    toUriList: function(list) {
+        var temp = [];
+        for (var i=0; i<list.length; i++) {
+            temp.push(list[i].resource_uri);
+        }
+        return temp;
+    },
     getData: function() {
         return {
             product: {
@@ -66,7 +82,8 @@ enyo.kind({
             share_facebook: this.facebook,
             share_twitter: this.twitter,
             share_pinterest: this.pinterest,
-            location: this.location
+            location: this.location,
+            friends: this.toUriList(this.$.friendsSelector.getSelectedItems())
         };
     },
     getPrice: function() {
@@ -78,6 +95,26 @@ enyo.kind({
         var knobPosition = this.$.priceSlider.$.knob.getBounds();
         this.$.priceLabel.applyStyle("left", (knobPosition.left + 20) + "px");
         this.$.priceLabel.setContent(this.getPrice() + " €");
+    },
+    visibilityChanged: function(sender, event) {
+        if (event.originator.getActive()) {
+            var value = event.originator.value;
+            this.log(value);
+
+            this.visibility = value;
+
+            if (value == "friends") {
+                this.openSecondarySlider();
+            } else {
+                this.closeSecondarySlider();
+            }
+        }
+    },
+    openSecondarySlider: function() {
+        this.$.slider.animateToMin();
+    },
+    closeSecondarySlider: function() {
+        this.$.slider.animateToMax();
     },
     components: [
         {kind: "FittableRows", classes: "enyo-fill", components: [
@@ -100,14 +137,20 @@ enyo.kind({
                     {kind: "onyx.Button", name: "facebookButton", content: "f", platform: "facebook", ontap: "togglePlatform"},
                     {kind: "onyx.Button", name: "twitterButton", content: "t", platform: "twitter", ontap: "togglePlatform"},
                     {kind: "onyx.Button", name: "pinterestButton", content: "p", platform: "pinterest", ontap: "togglePlatform"},
-                    {kind: "onyx.RadioGroup", style: "float: right;", components: [
+                    {kind: "onyx.RadioGroup", onActivate: "visibilityChanged", style: "float: right;", components: [
                         {content: "public", active: true, value: "public"},
+                        {content: "friends", value: "friends"},
                         {content: "private", value: "private"}
                     ]}
                 ]},
                 {kind: "onyx.Item", style: "text-align: right", components: [
                     {kind: "onyx.Button", name: "postButton", classes: "chuboxitemform-post-button", content: "Post", ontap: "doSubmit"}
                 ]}
+            ]}
+        ]},
+        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "slider", components: [
+            {classes: "enyo-fill", components: [
+                {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
             ]}
         ]}
     ]
