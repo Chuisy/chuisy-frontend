@@ -63,7 +63,6 @@ enyo.kind({
         this.visibility = value;
 
         if (value == "friends") {
-            this.$.secondaryPanels.setIndex(0);
             this.openSecondarySlider();
         } else {
             this.closeSecondarySlider();
@@ -126,13 +125,21 @@ enyo.kind({
             items: this.toUriList(this.getSelectedItems()),
             friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
             location: this.location,
-            comments: []
+            comments: [],
+            share_facebook: this.facebook,
+            share_twitter: this.twitter,
+            share_pinterest: this.pinterest
         };
 
         chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
             this.log(response);
             this.doBack();
         }));
+    },
+    togglePlatform: function(sender, event) {
+        var p = sender.platform;
+        this[p] = !this[p];
+        this.$[p + "Button"].addRemoveClass("active", this[p]);
     },
     components: [
         {classes: "mainheader", components: [
@@ -153,16 +160,16 @@ enyo.kind({
                         {classes: "enyo-inline", allowHtml: true, content: "&#183;"},
                         {kind: "Button", name: "privateButton", classes: "pageheader-radiobutton", content: "friends", value: "friends", ontap: "visibiltySelected"}
                     ]},
+                    {kind: "onyx.Button", name: "facebookButton", content: "f", platform: "facebook", ontap: "togglePlatform"},
+                    {kind: "onyx.Button", name: "twitterButton", content: "t", platform: "twitter", ontap: "togglePlatform"},
+                    {kind: "onyx.Button", name: "pinterestButton", content: "p", platform: "pinterest", ontap: "togglePlatform"},
                     // POST
                     {kind: "onyx.Button", name: "postButton", classes: "composechu-post-button onyx-affirmative", content: "Post Chu", ontap: "postChu"}
                 ]}
             ]},
             {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "secondarySlider", components: [
-                {kind: "Panels", name: "secondaryPanels", arrangerKind: "CardArranger", draggable: false, animate: false, classes: "enyo-fill", components: [
-                    // SELECT VISIBLE TO
-                    {classes: "enyo-fill", components: [
-                        {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
-                    ]}
+                {classes: "enyo-fill", components: [
+                    {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
                 ]}
             ]}
         ]}
