@@ -74,7 +74,7 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
         // event.item.$.user.applyStyle("background-image", "url(" + item.profile.avatar + ")");
-        event.item.$.avatar.setSrc(item.profile.avatar);
+        event.item.$.avatar.setSrc(item.profile.avatar_thumbnail);
         event.item.$.avatar.addRemoveClass("selected", this.isSelected(item));
         return true;
     },

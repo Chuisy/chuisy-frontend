@@ -3,10 +3,16 @@ enyo.kind({
     classes: "chuboxitemform",
     published: {
         image: "",
+        user: null,
         location: null
     },
     events: {
         onSubmit: ""
+    },
+    userChanged: function() {
+        if (this.user) {
+            this.loadFriends();
+        }
     },
     clear: function() {
         this.facebook = false;
