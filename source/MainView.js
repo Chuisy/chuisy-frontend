@@ -93,7 +93,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chuboxitem/new/");
+        App.updateHistory("item/new/");
     },
     chuboxItemSelected: function(sender, event) {
         this.openChuboxItemView(event.item, event.chu);

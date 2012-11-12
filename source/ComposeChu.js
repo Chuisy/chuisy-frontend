@@ -8,15 +8,12 @@ enyo.kind({
     events: {
         onBack: ""
     },
-    userChanged: function() {
-        if (this.user) {
-            this.$.chubox.setUser(this.user);
-            this.$.chubox.setBoxOwner(this.user);
+    userChanged: function(sender, event) {
+        if (!this.user || this.user.id != event.user.id) {
+            this.user = event.user;
             this.loadFriends();
+            this.$.chubox.setUser(this.user);
         }
-    },
-    rendered: function() {
-        this.inherited(arguments);
     },
     initialize: function() {
         this.$.title.setValue("");
@@ -68,17 +65,9 @@ enyo.kind({
             this.closeSecondarySlider();
         }
     },
-    setupTaggedPerson: function(sender, event) {
-        var user = this.taggedPersons[event.index];
-        event.item.$.thumbnail.setSrc(user.profile.avatar);
-    },
     loadFriends: function() {
-        chuisy.followingrelation.list(['user', this.user.id], enyo.bind(this, function(sender, response) {
-            var users = [];
-            for (var i=0; i<response.objects.length; i++) {
-                users.push(response.objects[i].followee);
-            }
-            this.$.friendsSelector.setItems(users);
+        chuisy.friends({}, enyo.bind(this, function(sender, response) {
+            this.$.friendsSelector.setItems(response.objects);
         }));
     },
     itemTap: function(sender, event) {
@@ -172,6 +161,7 @@ enyo.kind({
                     {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
                 ]}
             ]}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });

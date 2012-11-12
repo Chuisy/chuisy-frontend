@@ -61,9 +61,7 @@ enyo.kind({
         }));
     },
     loadFriends: function() {
-        this.log("loading Friends...");
         chuisy.friends({}, enyo.bind(this, function(sender, response) {
-            this.log(response);
             this.$.friendsSelector.setItems(response.objects);
         }));
     },
