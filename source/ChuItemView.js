@@ -3,7 +3,6 @@ enyo.kind({
     classes: "chuitemview",
         published: {
         item: null,
-        user: null,
         votedFor: false,
         votes: [],
         chu: null
@@ -17,11 +16,6 @@ enyo.kind({
         "EUR": "€",
         "GBP": "£"
     },
-    create: function() {
-        this.inherited(arguments);
-        this.itemChanged();
-        this.userChanged();
-    },
     itemChanged: function() {
         if (this.item) {
             // this.$.name.setContent(this.item.product.name);
@@ -32,7 +26,8 @@ enyo.kind({
             this.addRemoveClass("owned", this.isOwned());
         }
     },
-    userChanged: function() {
+    userChanged: function(sender, event) {
+        this.user = event.user;
         this.addRemoveClass("owned", this.isOwned());
     },
     chuChanged: function() {
@@ -126,6 +121,7 @@ enyo.kind({
                 {classes: "chuitemview-location-text", name: "locationText"},
                 {classes: "chuitemview-price", name: "price"}
             ]}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });

@@ -3,14 +3,14 @@ enyo.kind({
     kind: "FittableRows",
     classes: "chuview",
     published: {
-        user: null,
         chu: null
     },
     events: {
         onBack: "",
         onItemSelected: ""
     },
-    userChanged: function() {
+    userChanged: function(sender, event) {
+        this.user = event.user;
         this.applyPermissions();
     },
     chuChanged: function() {
@@ -42,7 +42,6 @@ enyo.kind({
         if (item) {
             view.setItem(item);
             view.setChu(this.chu);
-            view.setUser(this.user);
             view.setVotes();
             view.show();
             itemImage.setSrc(item.thumbnails["100x100"]);
@@ -232,6 +231,7 @@ enyo.kind({
                 {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb4"},
                 {kind: "GroupItem", classes: "chuview-pageindicator-item itemthumb", name: "pageThumb5"}
             ]}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });
