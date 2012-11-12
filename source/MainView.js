@@ -2,11 +2,6 @@ enyo.kind({
     name: "MainView",
     classes: "mainview",
     narrowWidth: 800,
-    published: {
-        // menuShowing: true,
-        // infoSliderShowing: true,
-        user: null
-    },
     views: {
         feed: 0,
         chubox: 1,
@@ -27,16 +22,8 @@ enyo.kind({
         this.inherited(arguments);
         this.$.primaryPanels.getAnimator().setDuration(1000);
     },
-    userChanged: function() {
-        this.$.chuboxView.setUser(this.user);
-        this.$.feed.setUser(this.user);
-        this.$.chuView.setUser(this.user);
-        this.$.chuboxItemView.setUser(this.user);
-        this.$.profileView.setUser(this.user);
-        this.$.settings.setUser(this.user);
-        this.$.composeChu.setUser(this.user);
-        this.$.composeChuboxItem.setUser(this.user);
-        this.$.searchResults.setUser(this.user);
+    userChanged: function(sender, event) {
+        this.user = event.user;
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -48,13 +35,16 @@ enyo.kind({
 
         App.updateHistory("feed/");
     },
-    openChubox: function() {
-        this.$.chuboxView.refresh();
+    openChubox: function(user) {
+        this.$.chuboxView.setUser(user);
         this.showView("chubox");
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chubox/");
+        App.updateHistory((user && user != "me" ? "user/" + user.id + "/" : "") + "chubox/");
+    },
+    openOwnChubox: function() {
+        this.openChubox("me");
     },
     openChuView: function(chu) {
         this.$.chuView.setChu(chu);
@@ -167,7 +157,7 @@ enyo.kind({
                         {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Feed"}
                     ]},
-                    {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
+                    {classes: "mainmenu-item", ontap: "openOwnChubox", name: "chuboxMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Box"}
                     ]},
@@ -202,6 +192,7 @@ enyo.kind({
                 {kind: "ComposeChu", onBack: "back"},
                 {kind: "ComposeChuboxItem", onBack: "back"}
             ]}
-        ]}
+        ]},
+        {kind: "enyo.Signals", onUserChanged: "userChanged"}
     ]
 });
