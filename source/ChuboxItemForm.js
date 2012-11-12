@@ -105,7 +105,6 @@ enyo.kind({
     visibilityChanged: function(sender, event) {
         if (event.originator.getActive()) {
             var value = event.originator.value;
-            this.log(value);
 
             this.visibility = value;
 
