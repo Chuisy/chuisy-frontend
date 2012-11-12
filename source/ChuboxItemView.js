@@ -4,7 +4,6 @@ enyo.kind({
     kind: "FittableRows",
     published: {
         item: null,
-        user: null,
         liked: false
     },
     events: {
@@ -14,11 +13,6 @@ enyo.kind({
         "USD": "$",
         "EUR": "€",
         "GBP": "£"
-    },
-    create: function() {
-        this.inherited(arguments);
-        this.itemChanged();
-        this.userChanged();
     },
     itemChanged: function() {
         if (this.item) {
@@ -44,7 +38,8 @@ enyo.kind({
             this.addRemoveClass("owned", this.isOwned());
         }
     },
-    userChanged: function() {
+    userChanged: function(sender, event) {
+        this.user = event.user;
         this.addRemoveClass("owned", this.isOwned());
     },
     isOwned: function() {
@@ -150,7 +145,7 @@ enyo.kind({
             {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
                 {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
             ]}
-
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });
