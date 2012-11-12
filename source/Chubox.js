@@ -5,9 +5,21 @@ enyo.kind({
     published: {
         user: null // The currently signed in user
     },
+    authUserChanged: function(sender, event) {
+        if (!this.authUser || this.authUser.id != event.user.id) {
+            this.authUser = event.user;
+            if (this.user == "me") {
+                this.userChanged();
+            }
+        }
+    },
     userChanged: function() {
-        this.$.chubox.setUser(this.user);
-        this.$.chubox.setBoxOwner(this.user);
+        var user = this.user == "me" ? this.authUser : this.user;
+        if (user) {
+            this.$.chubox.setUser(user);
+        }
+        this.$.menuButton.setShowing(this.user == "me");
+        this.$.backButton.setShowing(this.user != "me");
     },
     events: {
         onItemSelected: "",
@@ -25,13 +37,15 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
             ]},
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
             {classes: "mainheader-text", content: "Chu Box"},
             {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton", showing: false}
         ]},
-        {kind: "Chubox", name: "chubox", fit: true, editable: true, onStartEditing: "startEditing"}
+        {kind: "Chubox", name: "chubox", fit: true, editable: true, onStartEditing: "startEditing"},
+        {kind: "Signals", onUserChanged: "authUserChanged"}
     ]
 });
 
@@ -39,8 +53,7 @@ enyo.kind({
     name: "Chubox",
     classes: "chubox",
     published: {
-        user: null, // The currently signed in user
-        boxOwner: null, // The owner of this Chubox
+        user: null,
         editable: false,
         editing: false
     },
@@ -54,10 +67,7 @@ enyo.kind({
         onhold: "hold"
     },
     userChanged: function() {
-        this.refreshItems();
-    },
-    boxOwnerChanged: function() {
-        if (this.boxOwner) {
+        if (this.user) {
             this.loadItems();
         }
     },
@@ -70,8 +80,8 @@ enyo.kind({
         this.addRemoveClass("editing", this.editing);
     },
     loadItems: function() {
-        if (this.boxOwner) {
-            chuisy.chuboxitem.list([["user", this.boxOwner.id]], enyo.bind(this, function(sender, response) {
+        if (this.user) {
+            chuisy.chuboxitem.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
                 this.items = response.objects;
                 this.refreshItems();
             }));
@@ -142,6 +152,7 @@ enyo.kind({
     },
     components: [
         {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updatePageIndex"},
-        {kind: "Thumbs", classes: "chubox-thumbs"}
+        {kind: "Thumbs", classes: "chubox-thumbs"},
+        {kind: "Signals", onUserChanged: "authUserChanged"}
     ]
 });
