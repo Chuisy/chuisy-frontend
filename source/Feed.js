@@ -2,16 +2,16 @@ enyo.kind({
     name: "Feed",
     classes: "feed",
     kind: "FittableRows",
-    published: {
-        user: null
-    },
     events: {
         onChuSelected: "",
         onItemClusterSelected: "",
         onToggleMenu: ""
     },
-    userChanged: function() {
-        this.loadFeed();
+    userChanged: function(sender, event) {
+        if (!this.authUser || this.authUser.id != event.user.id) {
+            this.authUser = event.user;
+            this.loadFeed();
+        }
     },
     loadFeed: function() {
         if (!this.pulled) {
@@ -88,6 +88,7 @@ enyo.kind({
             {kind: "ListChu", tapHighlight: true},
             {kind: "ItemCluster", tapHighlight: true}
         ]},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"}
+        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });
