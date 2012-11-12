@@ -32,8 +32,12 @@ enyo.kind({
         }
     },
     pullRelease: function() {
-        this.pulled = true;
-        this.loadFeed();
+        if (App.isOnline()) {
+            this.pulled = true;
+            this.loadFeed();
+        } else {
+            this.$.feedList.completePull();
+        }
     },
     pullComplete: function() {
         this.pulled = false;
@@ -75,6 +79,12 @@ enyo.kind({
                 break;
         }
     },
+    online: function() {
+        this.$.errorBox.hide();
+    },
+    offline: function() {
+        this.$.errorBox.show();
+    },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {classes: "mainheader", components: [
@@ -83,12 +93,15 @@ enyo.kind({
             ]},
             {classes: "mainheader-text", content: "chuisy"}
         ]},
+        {classes: "error-box", name: "errorBox", showing: false, components: [
+            {classes: "error-text", content: "No internet connection available!"}
+        ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", fixedHeight: false,
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ListChu", tapHighlight: true},
             {kind: "ItemCluster", tapHighlight: true}
         ]},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
-        {kind: "Signals", onUserChanged: "userChanged"}
+        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline"}
     ]
 });

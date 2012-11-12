@@ -59,17 +59,12 @@ enyo.kind({
         window.onhashchange = enyo.bind(this, this.hashChanged);
         chuisy.init();
 
+        enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
+
         enyo.dispatcher.listen(document, "online");
         enyo.dispatcher.listen(document, "offline");
-
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
-        var signInStatus = chuisy.getSignInStatus();
-        this.log(signInStatus);
-        if (signInStatus.signedIn) {
-            enyo.Signals.send("onUserChanged", {user: signInStatus.user});
-            chuisy.loadUserDetails();
-        }
         this.hashChanged();
     },
     initMobile: function() {
@@ -86,11 +81,12 @@ enyo.kind({
     },
     online: function() {
         chuisy.setOnline(true);
-        this.log("online");
+        if (chuisy.getSignInStatus().signedIn) {
+            chuisy.loadUserDetails();
+        }
     },
     offline: function() {
         chuisy.setOnline(false);
-        this.log("offline");
     },
     hashChanged: function() {
         if (!window.ignoreHashChange) {

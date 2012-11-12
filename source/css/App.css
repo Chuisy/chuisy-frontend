@@ -196,3 +196,14 @@ button.pageheader-radiobutton.active {
 	margin: auto;
 	z-index: 100;
 }
+
+.error-box {
+	text-align: center;
+	padding: 10px;
+	background-color: #C30F26;
+}
+
+.error-text {
+	display: inline-block;
+	color: #FFFFFF;
+}
