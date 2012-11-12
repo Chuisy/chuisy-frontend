@@ -62,7 +62,7 @@ enyo.kind({
         this.$.mainSlider.animateToMin();
     },
     openProfileView: function(user) {
-        this.$.profileView.setShowedUser(user);
+        this.$.profileView.setUser(user);
         this.showView("profileView");
 
         this.$.mainSlider.animateToMin();

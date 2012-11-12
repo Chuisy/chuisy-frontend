@@ -3,8 +3,7 @@ enyo.kind({
     kind: "FittableRows",
     classes: "profileview",
     published: {
-        user: null, // Currently signed in user
-        showedUser: null // User who's profile to show
+        user: null
     },
     events: {
         onChuSelected: "",
@@ -13,28 +12,30 @@ enyo.kind({
         onToggleMenu: "",
         onBack: ""
     },
-    userChanged: function() {
-        this.$.chubox.setUser(this.user);
-        this.showedUserChanged();
+    authUserChanged: function(sender, event) {
+        if (!this.authUser || this.authUser.id != event.user.id) {
+            this.authUser = event.user;
+            this.userChanged();
+        }
     },
-    showedUserChanged: function() {
-        var user = this.showedUser == "me" ? this.user : this.showedUser;
+    userChanged: function() {
+        var user = this.user == "me" ? this.authUser : this.user;
         if (user) {
             this.$.avatar.setSrc(user.profile.avatar);
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
             this.$.userName.setContent(user.username);
             this.$.bio.setContent(user.profile.bio);
             this.loadChus(user);
-            this.$.chubox.setBoxOwner(user);
+            this.$.chubox.setUser(user);
             this.loadFriends(user);
             this.loadFollowers(user);
             this.$.followButton.addRemoveClass("active", user.following);
             this.$.chusMenuButton.setActive(true);
             this.$.panels.setIndex(0);
-            this.addRemoveClass("owned", this.user && this.user.id == user.id);
+            this.addRemoveClass("owned", this.authUser && this.authUser.id == user.id);
         }
-        this.$.menuButton.setShowing(this.showedUser == "me");
-        this.$.backButton.setShowing(this.showedUser != "me");
+        this.$.menuButton.setShowing(this.user == "me");
+        this.$.backButton.setShowing(this.user != "me");
     },
     loadChus: function(user) {
         chuisy.chu.list([["user", user.id]], enyo.bind(this, function(sender, response) {
@@ -187,6 +188,7 @@ enyo.kind({
                     {kind: "UserListItem", name: "followerItem", ontap: "followerTapped", onFollowingChanged: "followingChanged"}
                 ]}
             ]}
-        ]}
+        ]},
+        {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
     ]
 });
