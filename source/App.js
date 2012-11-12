@@ -10,6 +10,14 @@ enyo.kind({
         updateHistory: function(uri) {
             window.ignoreHashChange = true;
             window.location.hash = "!/" + uri;
+        },
+        isOnline: function() {
+            if (navigator.connection) {
+                var networkState = navigator.connection.type;
+                return networkState != Connection.UNKNOWN && networkState != Connection.NONE;
+            } else {
+                return true;
+            }
         }
     },
     create: function() {
@@ -25,14 +33,6 @@ enyo.kind({
     initWeb: function() {
         this.log("Initializing for web...");
 
-        chuisy.authCredentials = this.fetchAuthCredentials();
-        if (chuisy.authCredentials) {
-            this.signedIn();
-            this.recoverStateFromUri();
-        } else {
-            this.$.panels.setIndex(1);
-        }
-
         window.fbAsyncInit = enyo.bind(this, function() {
             // init the FB JS SDK
             FB.init({
@@ -41,11 +41,6 @@ enyo.kind({
                 cookie     : true, // set sessions cookies to allow your server to access the session?
                 xfbml      : true  // parse XFBML tags on this page?
             });
-
-            // if (chuisy.authCredentials) {
-            //     // Update facebook access token.
-            //     this.facebookSignIn();
-            // }
         });
 
         // Load the SDK's source Asynchronously
@@ -60,23 +55,42 @@ enyo.kind({
             js.src = "http://connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
         }(document));
+
+        window.onhashchange = enyo.bind(this, this.hashChanged);
+        chuisy.init();
+
+        enyo.dispatcher.listen(document, "online");
+        enyo.dispatcher.listen(document, "offline");
+
+        enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
+
+        var signInStatus = chuisy.getSignInStatus();
+        this.log(signInStatus);
+        if (signInStatus.signedIn) {
+            enyo.Signals.send("onUserChanged", {user: signInStatus.user});
+            chuisy.loadUserDetails();
+        }
+        this.hashChanged();
     },
     initMobile: function() {
         if (!this.initialized) {
             this.log("Initializing for mobile...");
             // Initialize Facebook SDK
             FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
+            chuisy.init();
 
-            // Check if user is logged in
-            chuisy.authCredentials = this.fetchAuthCredentials();
-            if (chuisy.authCredentials) {
-                this.signedIn();
-            } else {
-                this.$.panels.setIndex(1);
-            }
+            window.onhashchange = enyo.bind(this, this.hashChanged);
 
             this.initialized = true;
         }
+    },
+    online: function() {
+        chuisy.setOnline(true);
+        this.log("online");
+    },
+    offline: function() {
+        chuisy.setOnline(false);
+        this.log("offline");
     },
     hashChanged: function() {
         if (!window.ignoreHashChange) {
@@ -96,6 +110,7 @@ enyo.kind({
                 // auth/{base64-encoded auth credentials}
                 // The user has been redirected from the backend with authentication credentials. Let's sign him in.
                 chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
+                chuisy.savePersistentObject("authCredentials", chuisy.authCredentials);
                 this.signedIn();
                 App.updateHistory("");
             } else if (match[1].match(/^feed\/$/)) {
@@ -113,7 +128,7 @@ enyo.kind({
             } else if (match[1].match(/^chubox\/$/)) {
                 // chubox/
                 // User wants to see his Chu Box? Our pleasure!
-                this.$.mainView.openChubox();
+                this.$.mainView.openOwnChubox();
             } else if ((match2 = match[1].match(/^chu\/(.+)$/))) {
                 // chu/..
                 if (match2[1].match(/new\/$/)) {
@@ -146,6 +161,12 @@ enyo.kind({
                 chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
                     this.$.mainView.openProfileView(response);
                 }));
+            } else if ((match2 = match[1].match(/^user\/(\d+)\/chubox\/$/))) {
+                // {user id}/
+                // This is the URI to a users profile
+                chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+                    this.$.mainView.openChubox(response);
+                }));
             } else if ((match2 = match[1].match(/^([^\/]+)\/$/))) {
                 // {username}/
                 // Might be a username. Lets try finding a user that matches.
@@ -167,69 +188,22 @@ enyo.kind({
         // Get facebook access token
         FB.login(enyo.bind(this, function(response) {
             if (response.status == "connected") {
-                chuisy.authenticate({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function(success, response) {
-                    if (success) {
-                        this.saveAuthCredentials();
-                        this.signedIn();
-                    } else {
-                        alert("Authentication failed!", response);
-                    }
-                }));
+                chuisy.signIn({fb_access_token: response.authResponse.accessToken});
             } else {
                 alert("Facebook signin failed!");
             }
         }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
     },
-    loadUser: function() {
-        var credentials = this.fetchAuthCredentials();
-        if (credentials) {
-            chuisy.user.detail(credentials.id, enyo.bind(this, function(sender, response) {
-                this.setUser(response);
-            }));
-        } else {
-            this.setUser(null);
-        }
-    },
-    fetchAuthCredentials: function() {
-        var credentials = null;
-        try {
-            credentials = JSON.parse(localStorage.getItem("authCredentials"));
-        } catch(e) {
-        }
-        return credentials;
-    },
-    saveAuthCredentials: function() {
-        localStorage.setItem("authCredentials", JSON.stringify(chuisy.authCredentials));
-    },
-    deleteAuthCredentials: function() {
-        localStorage.removeItem("authCredentials");
-    },
-    signedIn: function() {
-        if (!this.user) {
-            this.loadUser();
-        }
-        this.$.panels.setIndex(0);
-        window.onhashchange = enyo.bind(this, this.hashChanged);
-    },
-    userChanged: function() {
-        this.$.mainView.setUser(this.user);
-    },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
-    logout: function() {
-        this.deleteAuthCredentials();
-        this.setUser(null);
-        this.$.panels.setIndex(1);
-        App.updateHistory("");
-    },
     components: [
         {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
-            {kind: "MainView", classes: "enyo-fill", onLogout: "logout"},
+            {kind: "MainView", classes: "enyo-fill"},
             {classes: "enyo-fill", components: [
                 {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"}
             ]}
         ]},
-        {kind: "Signals", ondeviceready: "initMobile"}
+        {kind: "Signals", ondeviceready: "initMobile", ononline: "online", onoffline: "offline"}
     ]
 });
