@@ -1,14 +1,11 @@
 enyo.kind({
     name: "ComposeChuboxItem",
     kind: "FittableRows",
-    published: {
-        user: null
-    },
     events: {
         onBack: ""
     },
-    userChanged: function() {
-        this.$.chuboxItemForm.setUser(this.user);
+    userChanged: function(sender, event) {
+        this.user = event.user;
     },
     create: function() {
         chuisy.authCredentials = {
@@ -98,6 +95,7 @@ enyo.kind({
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked"},
             {kind: "ChuboxItemForm", classes: "enyo-fill", onSubmit: "submit"}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });

@@ -3,14 +3,14 @@ enyo.kind({
     classes: "chuboxitemform",
     published: {
         image: "",
-        user: null,
         location: null
     },
     events: {
         onSubmit: ""
     },
-    userChanged: function() {
-        if (this.user) {
+    userChanged: function(sender, event) {
+        if (!this.user || this.user.id != event.user.id) {
+            this.user = event.user;
             this.loadFriends();
         }
     },
@@ -61,12 +61,10 @@ enyo.kind({
         }));
     },
     loadFriends: function() {
-        chuisy.followingrelation.list(['user', this.user.id], enyo.bind(this, function(sender, response) {
-            var users = [];
-            for (var i=0; i<response.objects.length; i++) {
-                users.push(response.objects[i].followee);
-            }
-            this.$.friendsSelector.setItems(users);
+        this.log("loading Friends...");
+        chuisy.friends({}, enyo.bind(this, function(sender, response) {
+            this.log(response);
+            this.$.friendsSelector.setItems(response.objects);
         }));
     },
     toUriList: function(list) {
@@ -157,6 +155,7 @@ enyo.kind({
             {classes: "enyo-fill", components: [
                 {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
             ]}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });
