@@ -67,7 +67,7 @@ enyo.kind({
             }));
         } else {
             var likeData = {
-                item: this.chu.resource_uri
+                chu: this.chu.resource_uri
             };
             chuisy.like.create(likeData, enyo.bind(this, function(sender, response) {
                 this.chu.liked = response.id;
@@ -102,7 +102,7 @@ enyo.kind({
     commentEnter: function() {
         var comment = {
             text: this.$.commentInput.getValue(),
-            item: this.chu.resource_uri,
+            chu: this.chu.resource_uri,
             user: this.user
         };
         this.chu.comments.push(comment);
