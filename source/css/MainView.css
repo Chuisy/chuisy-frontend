@@ -39,7 +39,7 @@
 }
 
 .mainslider {
-	background-color: #eee;
+	background: url(../../assets/images/light_noise_diagonal.png);
 	box-shadow: -2px 0 10px #000;
 	border-radius: 5px;
 }

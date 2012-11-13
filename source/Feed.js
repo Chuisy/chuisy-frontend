@@ -44,13 +44,11 @@ enyo.kind({
     },
     setupFeedItem: function(sender, event) {
         var item = this.chus[event.index];
-
-        // this.$.chuListItem.setChu(item.obj);
-
+        this.$.chuFeedItem.setChu(item);
         return true;
     },
-    chuTapped: function(chu) {
-        this.doChuSelected({chu: chu});
+    chuTapped: function(sender, event) {
+        this.doChuSelected({chu: this.chus[event.index]});
     },
     online: function() {
         this.$.errorBox.hide();
@@ -60,6 +58,8 @@ enyo.kind({
     },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
+        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
+        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline"},
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
@@ -71,9 +71,7 @@ enyo.kind({
         ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", fixedHeight: false,
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
-            // {kind: "ChuFeedItem", tapHighlight: true}
-        ]},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
-        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline"}
+            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped"}
+        ]}
     ]
 });
