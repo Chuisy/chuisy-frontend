@@ -28,7 +28,7 @@ enyo.kind({
             this.loadFriends(user);
             this.loadFollowers(user);
             this.$.followButton.addRemoveClass("active", user.following);
-            this.$.chusMenuButton.setActive(true);
+            this.$.chuboxMenuButton.setActive(true);
             this.$.panels.setIndex(0);
             this.addRemoveClass("owned", this.authUser && this.authUser.id == user.id);
         }

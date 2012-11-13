@@ -138,19 +138,19 @@ enyo.kind({
                         this.$.mainView.openChuView(response);
                     }));
                 }
-            } else if ((match2 = match[1].match(/^item\/(.+)$/))) {
-                // chu/..
-                if (match2[1].match(/new\/$/)) {
-                    // item/new/
-                    // Add a new item to the chu box? Let's do it
-                    this.$.mainView.composeChuboxItem();
-                } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
-                    // item/{item id}
-                    // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
-                    chuisy.chuboxitem.detail(match3[1], enyo.bind(this, function(sender, response) {
-                        this.$.mainView.openChuboxItemView(response);
-                    }));
-                }
+            // } else if ((match2 = match[1].match(/^item\/(.+)$/))) {
+            //     // chu/..
+            //     if (match2[1].match(/new\/$/)) {
+            //         // item/new/
+            //         // Add a new item to the chu box? Let's do it
+            //         this.$.mainView.composeChuboxItem();
+            //     } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
+            //         // item/{item id}
+            //         // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
+            //         chuisy.chuboxitem.detail(match3[1], enyo.bind(this, function(sender, response) {
+            //             this.$.mainView.openChuboxItemView(response);
+            //         }));
+            //     }
             } else if ((match2 = match[1].match(/^user\/(\d+)\/$/))) {
                 // {user id}/
                 // This is the URI to a users profile
