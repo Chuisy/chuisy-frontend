@@ -122,7 +122,7 @@ enyo.kind({
         if (chu) {
             var page = this.$.carousel.getClientControls()[pageIndex];
             page.createComponent({classes: "chubox-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {kind: "Image", classes: "chubox-chu-image", src: chu.thumbnails["100x100"]},
+                {kind: "Image", classes: "chubox-chu-image", src: chu.thumbnails["100x100"] || "assets/images/chu_placeholder.png"},
                 {kind: "Button", classes: "chubox-delete-button", ontap: "chuRemove", chuIndex: chuIndex}
             ]});
         }
