@@ -1,19 +1,19 @@
-.chuboxitemform {
+.chuform {
 	background: none no-repeat center top;
 	background-size: contain;
 	background-color: Gray;
 }
 
-.chuboxitemform-spacer {
+.chuform-spacer {
 	/*height: 320px;*/
 }
 
-.chuboxitemform-content {
+.chuform-content {
 	background-color: white;
 	position: relative;
 }
 
-.chuboxitemform-location-text {
+.chuform-location-text {
 	text-align: right;
 	width: 100%;
 	position: absolute;
@@ -21,18 +21,18 @@
 	color: white;
 }
 
-.chuboxitemform-picker .onyx-button {
+.chuform-picker .onyx-button {
 	width: 100%;
 }
 
-.chuboxitemform .onyx-item {
+.chuform .onyx-item {
 	box-sizing: border-box;
 	padding: 5px;
 	min-height: 40px;
 }
 
-.chuboxitemform-post-button {}
+.chuform-post-button {}
 
-.chuboxitemform-price-label {
+.chuform-price-label {
 	position: absolute;
 }

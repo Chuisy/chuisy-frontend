@@ -47,7 +47,7 @@ enyo.kind({
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
         event.item.$.chuAvatar.setSrc(chu.user.profile.avatar_thumbnail);
-        event.item.$.chuTitle.setContent(chu.title);
+        event.item.$.chuCategory.setContent(chu.product.category.name);
         return true;
     },
     userTap: function(sender, event) {
@@ -78,7 +78,7 @@ enyo.kind({
                 {kind: "Repeater", name: "chuList", onSetupItem: "setupChu", components: [
                     {kind: "onyx.Item", classes: "chulistitem", ontap: "chuTap", components: [
                         {kind: "Image", classes: "miniavatar", name: "chuAvatar"},
-                        {classes: "chulistitem-title ellipsis", name: "chuTitle"}
+                        {classes: "chulistitem-title ellipsis", name: "chuCategory"}
                     ]}
                 ]},
                 {kind: "onyx.Spinner", name: "chuSpinner"},

@@ -4,7 +4,7 @@
 	position: relative;
 }
 
-.chubox .chuboxitem {
+.chubox .chu {
 	position: relative;
 	/*margin: 5px 2px 2px 5px;*/
 }
@@ -33,4 +33,34 @@
 
 .chubox.editing .chubox-delete-button {
 	display: block;
+}
+
+.chubox-chu {
+	padding: 5px;
+	width: 100px;
+	height: 100px;
+	margin: 2px;
+	box-sizing: border-box;
+	border: #ccc solid 1px;
+	/*box-shadow: 1px 1px 1px #555;*/
+	/*background-image: url(../../assets/images/lightpaperfibers.png);*/
+	background-color: White;
+	display: inline-block;
+	border-radius: 2px;
+}
+
+.chubox-chu-image {
+	width: 100%;
+	height: 100%;
+	background: url() no-repeat center center;
+	background-size: cover;
+	border: solid 1px #555;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: Gray;
+}
+
+.chubox-chu.selected {
+	background-color: orange;
 }

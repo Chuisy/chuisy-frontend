@@ -6,11 +6,9 @@ enyo.kind({
         feed: 0,
         chubox: 1,
         chuView: 2,
-        chuboxItemView: 3,
-        profileView: 4,
-        settings: 5,
-        composeChu: 6,
-        composeChuboxItem: 7
+        profileView: 3,
+        settings: 4,
+        composeChu: 5
     },
     events: {
         onLogout: ""
@@ -54,13 +52,6 @@ enyo.kind({
 
         App.updateHistory("chu/" + chu.id + "/");
     },
-    openChuboxItemView: function(item) {
-        this.$.chuboxItemView.setItem(item);
-        App.updateHistory("item/" + item.id + "/");
-        this.showView("chuboxItemView");
-
-        this.$.mainSlider.animateToMin();
-    },
     openProfileView: function(user) {
         this.$.profileView.setUser(user);
         this.showView("profileView");
@@ -86,17 +77,6 @@ enyo.kind({
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chu/new/");
-    },
-    composeChuboxItem: function() {
-        this.$.composeChuboxItem.initialize();
-        this.showView("composeChuboxItem");
-
-        this.$.mainSlider.animateToMin();
-
-        App.updateHistory("item/new/");
-    },
-    chuboxItemSelected: function(sender, event) {
-        this.openChuboxItemView(event.item, event.chu);
     },
     chuSelected: function(sender, event) {
         this.openChuView(event.chu);
@@ -132,13 +112,6 @@ enyo.kind({
         this.$.menuPanels.setIndex(0);
         this.latestQuery = null;
     },
-    itemClusterSelected: function(sender, event) {
-        if (event.items.length == 1) {
-            this.openChuboxItemView(event.items[0]);
-        } else {
-            this.openProfileView(event.items[0].user);
-        }
-    },
     sliderAnimateFinish: function() {
 //        this.$.searchInput.setDisabled(!this.isSliderOpen());
         if (!this.isSliderOpen()) {
@@ -172,10 +145,6 @@ enyo.kind({
                     {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Post Chu"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "composeChuboxItem", name: "composeChuboxItemMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
-                        {classes: "mainmenu-item-text", content: "Add Chu Box Item"}
                     ]}
                 ]},
                 {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected"}
@@ -183,14 +152,12 @@ enyo.kind({
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onItemClusterSelected: "itemClusterSelected"},
-                {kind: "ChuboxView", onItemSelected: "chuboxItemSelected", onToggleMenu: "toggleMenu"},
-                {kind: "ChuView", name: "chuView", onBack: "back", onItemSelected: "chuboxItemSelected"},
-                {kind: "ChuboxItemView", onBack: "back"},
-                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onChuboxItemSelected: "chuboxItemSelected", onShowProfile: "showProfile", onBack: "back"},
+                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "ChuboxView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "ChuView", name: "chuView", onBack: "back"},
+                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
-                {kind: "ComposeChu", onBack: "back"},
-                {kind: "ComposeChuboxItem", onBack: "back"}
+                {kind: "ComposeChu", onBack: "back"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}

@@ -1,6 +1,6 @@
 enyo.kind({
-    name: "ChuboxItemForm",
-    classes: "chuboxitemform",
+    name: "ChuForm",
+    classes: "chuform",
     published: {
         image: "",
         location: null
@@ -119,13 +119,13 @@ enyo.kind({
     },
     components: [
         {kind: "FittableRows", classes: "enyo-fill", components: [
-            {classes: "chuboxitemform-spacer", fit: true},
+            {classes: "chuform-spacer", fit: true},
             // {name: "price", classes: "chubox"},
-            {classes: "chuboxitemform-content", components: [
-                {kind: "onyx.Item", name: "locationText", classes: "chuboxitemform-location-text"},
+            {classes: "chuform-content", components: [
+                {kind: "onyx.Item", name: "locationText", classes: "chuform-location-text"},
                 {kind: "onyx.Item", components: [
                     {kind: "onyx.Slider", name: "priceSlider", onChanging: "priceChange", onChange: "priceChange"},
-                    {classes: "chuboxitemform-price-label", name: "priceLabel"}
+                    {classes: "chuform-price-label", name: "priceLabel"}
                 ]},
                 {kind: "onyx.Item", components: [
                     {kind: "onyx.RadioGroup", name: "categoryPicker", components: [
@@ -145,7 +145,7 @@ enyo.kind({
                     ]}
                 ]},
                 {kind: "onyx.Item", style: "text-align: right", components: [
-                    {kind: "onyx.Button", name: "postButton", classes: "chuboxitemform-post-button", content: "Post", ontap: "doSubmit"}
+                    {kind: "onyx.Button", name: "postButton", classes: "chuform-post-button", content: "Post", ontap: "doSubmit"}
                 ]}
             ]}
         ]},

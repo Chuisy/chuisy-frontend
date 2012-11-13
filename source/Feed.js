@@ -4,7 +4,6 @@ enyo.kind({
     kind: "FittableRows",
     events: {
         onChuSelected: "",
-        onItemClusterSelected: "",
         onToggleMenu: ""
     },
     userChanged: function(sender, event) {
@@ -17,14 +16,14 @@ enyo.kind({
         if (!this.pulled) {
             this.$.spinner.show();
         }
-        chuisy.feed({}, enyo.bind(this, function(sender, response) {
-            this.feedItems = response.objects;
+        chuisy.chu.feed({}, enyo.bind(this, function(sender, response) {
+            this.chus = response.objects;
             this.refreshFeed();
             this.$.spinner.hide();
         }));
     },
     refreshFeed: function() {
-        this.$.feedList.setCount(this.feedItems.length);
+        this.$.feedList.setCount(this.chus.length);
         if (this.pulled) {
             this.$.feedList.completePull();
         } else {
@@ -44,40 +43,14 @@ enyo.kind({
         this.$.feedList.reset();
     },
     setupFeedItem: function(sender, event) {
-        var item = this.feedItems[event.index];
+        var item = this.chus[event.index];
 
-        switch (item.obj_type) {
-            case "chu":
-                this.$.listChu.setChu(item.obj);
-                this.$.listChu.show();
-                this.$.itemCluster.hide();
-                break;
-            case "item_cluster":
-                this.$.itemCluster.setItems(item.obj.items);
-                this.$.listChu.hide();
-                this.$.itemCluster.show();
-                break;
-        }
+        // this.$.chuListItem.setChu(item.obj);
 
         return true;
     },
     chuTapped: function(chu) {
         this.doChuSelected({chu: chu});
-    },
-    itemClusterTapped: function(items) {
-        this.doItemClusterSelected({items: items});
-    },
-    feedItemTapped: function(sender, event) {
-        var item = this.feedItems[event.index];
-
-        switch (item.obj_type) {
-            case "chu":
-                this.chuTapped(item.obj);
-                break;
-            case "item_cluster":
-                this.itemClusterTapped(item.obj.items);
-                break;
-        }
     },
     online: function() {
         this.$.errorBox.hide();
@@ -98,8 +71,7 @@ enyo.kind({
         ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", fixedHeight: false,
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
-            {kind: "ListChu", tapHighlight: true},
-            {kind: "ItemCluster", tapHighlight: true}
+            // {kind: "ChuFeedItem", tapHighlight: true}
         ]},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
         {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline"}

@@ -97,14 +97,14 @@
 // });
 
 enyo.kind({
-    name: "ChuboxItem",
-    classes: "chuboxitem",
+    name: "Chu",
+    classes: "chu",
     published: {
-        item: null
+        chu: null
     },
-    itemChanged: function() {
-        if (this.item) {
-            this.$.productImage.applyStyle("background-image", "url(" + this.item.image + ")");
+    chuChanged: function() {
+        if (this.chu) {
+            this.$.productImage.applyStyle("background-image", "url(" + this.chu.image + ")");
         }
     },
     create: function() {
@@ -112,7 +112,7 @@ enyo.kind({
         this.itemChanged();
     },
     components: [
-        {name: "productImage", classes: "chuboxitem-image"}
+        {name: "productImage", classes: "chu-image"}
         // {classes: "minichuitem-caption ellipsis", name: "caption"}
     ]
 });

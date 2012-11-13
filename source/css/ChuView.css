@@ -1,9 +1,8 @@
 .chuview {
-	/*padding: 20px;*/
 }
 
-.chuview-avatar {
-	margin: 5px;
+.chuview-productimage {
+	width: 100%;
 }
 
 .chuview-username {
@@ -14,23 +13,18 @@
 	max-width: 200px;
 }
 
-.chuview-header {
-	padding: 10px;
+.chuview-price {
+	
 }
 
-.chuview-title {
-	font-size: 15pt;
-	padding: 5px 10px;
-	width: 100%;
-	box-sizing: border-box;
+.chuview-likerimage {
+	height: 32px;
+	width: 32px;
+	margin: 5px 2px;
 }
 
-.chuview-close-button {
-	display: none;
-}
+.chuview-location {
 
-.chuview.owned .chuview-close-button {
-	display: inline-block;
 }
 
 .chuview-comments-scroller {
@@ -61,64 +55,6 @@
 	width: 100%;
 }
 
-.chuview-comments-button {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-	width: 35px;
-	height: 35px;
-}
-
-.chuview-label {
-	font-size: 13pt;
-	display: inline-block;
-}
-
-.chuview-section {
-	border-bottom: dashed 1px #ccc;
-	padding: 10px;
-}
-
-.chuview-pageindicator {
-	height: 20px;
-	background-color: White;
-	border-top: dashed 1px #ccc;
-	text-align: center;
-}
-
-.chuview-pageindicator-item {
-	width: 18px;
-	height: 18px;
-	background: url() no-repeat center center;
-	background-size: cover;
-	display: inline-block;
-	-webkit-transform-origin: 50% 100%;
-	-webkit-transition: all 0.5s;
-	-webkit-transform: scale(0.8);
-	vertical-align: top;
-}
-
-.chuview-pageindicator-item.active {
-	-webkit-transform: scale(1.0);
-}
-
-.chuview-pageindicator-item.info {
-	background-image: url(../../assets/images/info.png);
-}
-
-.chuview-pageindicator-item.overview {
-	background-image: url(../../assets/images/photo-album.png);
-}
-
-.chuview-pageindicator-item.itemthumb {
-	padding: 2px;
-	border-radius: 2px;
-	background-color: #fff;
-	border: solid 1px #ccc;
-	box-sizing: border-box;
-	margin: 0 1px;
-}
-
-.chuview .chuitem.active {
-	background-color: green;
+.chuview.owned .chuview-like-button {
+	display: none;
 }

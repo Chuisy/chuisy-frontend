@@ -7,7 +7,6 @@ enyo.kind({
     },
     events: {
         onChuSelected: "",
-        onChuboxItemSelected: "",
         onShowProfile: "",
         onToggleMenu: "",
         onBack: ""
@@ -25,7 +24,6 @@ enyo.kind({
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
             this.$.userName.setContent(user.username);
             this.$.bio.setContent(user.profile.bio);
-            this.loadChus(user);
             this.$.chubox.setUser(user);
             this.loadFriends(user);
             this.loadFollowers(user);
@@ -37,31 +35,13 @@ enyo.kind({
         this.$.menuButton.setShowing(this.user == "me");
         this.$.backButton.setShowing(this.user != "me");
     },
-    loadChus: function(user) {
-        chuisy.chu.list([["user", user.id]], enyo.bind(this, function(sender, response) {
-            this.chus = response.objects;
-            this.refreshChus();
-        }));
-    },
-    refreshChus: function() {
-        this.$.chuList.setCount(this.chus.length);
-        this.$.chuList.refresh();
-    },
-    setupChu: function(sender, event) {
-        var chu = this.chus[event.index];
-        this.$.listChu.setChu(chu);
-    },
-    chuTapped: function(sender, event) {
-        var chu = this.chus[event.index];
-        this.doChuSelected({chu: chu});
-    },
     menuItemSelected: function(sender, event) {
         if (event.originator.getActive()) {
             this.$.panels.setIndex(event.originator.value);
         }
     },
-    chuboxItemSelected: function(sender, event) {
-        this.doChuboxItemSelected(event);
+    chuSelected: function(sender, event) {
+        this.doChuSelected(event);
         return true;
     },
     loadFriends: function(user) {
@@ -125,19 +105,6 @@ enyo.kind({
         }
         return true;
     },
-    // followingChanged: function(sender, event) {
-    //     // var user = sender.getShowedUser();
-    //     // this.log(user, event.following);
-    //     // if (event.following) {
-    //     //     this.friends.push(user);
-    //     // } else {
-    //     //     enyo.remove(user, this.friends);
-    //     // }
-    //     // this.log(this.friends);
-
-    //     // this.refreshFriends();
-    //     this.loadFriends("me" ? this.user : this.showedUser);
-    // },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
@@ -156,27 +123,20 @@ enyo.kind({
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "toggleFollow", classes: "follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
-            {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: "Chus"},
-                {classes: "profileview-menu-button-count", name: "chuCount"}
-            ]},
-            {classes: "profileview-menu-button", value: 1, name: "chuboxMenuButton", components: [
+            {classes: "profileview-menu-button", value: 0, name: "chuboxMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: "Chu Box"},
                 {classes: "profileview-menu-button-count", name: "chuboxCount"}
             ]},
-            {classes: "profileview-menu-button", value: 2, name: "friendsMenuButton", components: [
+            {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: "Following"},
                 {classes: "profileview-menu-button-count", name: "friendCount"}
             ]},
-            {classes: "profileview-menu-button", value: 3, name: "followersMenuButton", components: [
+            {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: "Followers"},
                 {classes: "profileview-menu-button-count", name: "followerCount"}
             ]}
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-            {kind: "List", name: "chuList", onSetupItem: "setupChu", classes: "enyo-fill", components: [
-                {kind: "ListChu", ontap: "chuTapped"}
-            ]},
             {kind: "Chubox", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
             {kind: "Scroller", classes: "enyo-fill", components: [
                 {kind: "Repeater", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [

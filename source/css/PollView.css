@@ -1,0 +1,124 @@
+.chuview {
+	/*padding: 20px;*/
+}
+
+.chuview-avatar {
+	margin: 5px;
+}
+
+.chuview-username {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	padding: 9px 5px;
+	max-width: 200px;
+}
+
+.chuview-header {
+	padding: 10px;
+}
+
+.chuview-title {
+	font-size: 15pt;
+	padding: 5px 10px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.chuview-close-button {
+	display: none;
+}
+
+.chuview.owned .chuview-close-button {
+	display: inline-block;
+}
+
+.chuview-comments-scroller {
+	max-height: 200px;
+}
+
+.chuview-comment {
+	padding: 5px;
+	border-bottom: dashed 1px #ccc;
+}
+
+.chuview-comment-avatar {
+	width: 30px;
+}
+
+.chuview-comment-text {
+	display: inline-block;
+	padding: 0 10px;
+	vertical-align: top;
+}
+
+.chuview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.chuview-commentinput-decorator > .enyo-input {
+	width: 100%;
+}
+
+.chuview-comments-button {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 35px;
+	height: 35px;
+}
+
+.chuview-label {
+	font-size: 13pt;
+	display: inline-block;
+}
+
+.chuview-section {
+	border-bottom: dashed 1px #ccc;
+	padding: 10px;
+}
+
+.chuview-pageindicator {
+	height: 20px;
+	background-color: White;
+	border-top: dashed 1px #ccc;
+	text-align: center;
+}
+
+.chuview-pageindicator-item {
+	width: 18px;
+	height: 18px;
+	background: url() no-repeat center center;
+	background-size: cover;
+	display: inline-block;
+	-webkit-transform-origin: 50% 100%;
+	-webkit-transition: all 0.5s;
+	-webkit-transform: scale(0.8);
+	vertical-align: top;
+}
+
+.chuview-pageindicator-item.active {
+	-webkit-transform: scale(1.0);
+}
+
+.chuview-pageindicator-item.info {
+	background-image: url(../../assets/images/info.png);
+}
+
+.chuview-pageindicator-item.overview {
+	background-image: url(../../assets/images/photo-album.png);
+}
+
+.chuview-pageindicator-item.itemthumb {
+	padding: 2px;
+	border-radius: 2px;
+	background-color: #fff;
+	border: solid 1px #ccc;
+	box-sizing: border-box;
+	margin: 0 1px;
+}
+
+.chuview .chuitem.active {
+	background-color: green;
+}
