@@ -65,7 +65,7 @@ enyo.kind({
         enyo.dispatcher.listen(document, "offline");
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
-        this.hashChanged();
+        this.recoverStateFromUri();
     },
     initMobile: function() {
         if (!this.initialized) {

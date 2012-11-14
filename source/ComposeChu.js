@@ -7,13 +7,6 @@ enyo.kind({
     userChanged: function(sender, event) {
         this.user = event.user;
     },
-    create: function() {
-        chuisy.authCredentials = {
-            username: "martin.kleinschrodt.5",
-            api_key: "3f69fe1c06d967c43e28feb14102aee029fc3ae9"
-        };
-        this.inherited(arguments);
-    },
     initialize: function() {
         this.$.panels.setIndex(0);
         this.getImage();

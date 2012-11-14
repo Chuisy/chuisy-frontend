@@ -7,7 +7,7 @@ enyo.kind({
 	chuChanged: function() {
 		if (this.chu) {
 			this.$.image.setSrc(this.chu.thumbnails["300x300"] || "assets/images/chu_placeholder.png");
-			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
+			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "assets/images/avatar_placeholder.png");
 			this.$.username.setContent(this.chu.user.username);
 			this.$.time.setContent(chuisy.timeToText(this.chu.time));
 		}

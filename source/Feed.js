@@ -69,7 +69,7 @@ enyo.kind({
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}
         ]},
-        {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", fixedHeight: false,
+        {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem",
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped"}
         ]}
