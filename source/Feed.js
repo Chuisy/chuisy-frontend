@@ -60,7 +60,6 @@ enyo.kind({
         if (isLastItem && !this.allPagesLoaded()) {
             this.nextPage();
             this.$.loadingNextPage.show();
-            this.log("load next page...");
         } else {
             this.$.loadingNextPage.hide();
         }
