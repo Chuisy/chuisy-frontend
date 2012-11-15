@@ -18,21 +18,42 @@ enyo.kind({
             } else {
                 return true;
             }
+        },
+        isMobile: function() {
+            return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
         }
     },
     create: function() {
         this.inherited(arguments);
-
-        if (!this.isMobile()) {
-            this.initWeb();
+        if (!App.isMobile()) {
+            this.init();
         }
     },
-    isMobile: function() {
-        return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
+    deviceReady: function() {
+        if (!this.initialized) {
+            this.init();
+            this.initialized = true;
+        }
     },
-    initWeb: function() {
-        this.log("Initializing for web...");
+    init: function() {
+        if (App.isMobile()) {
+            this.initFacebookMobile();
+        } else {
+            this.initFacebookWeb();
+        }
 
+        window.onhashchange = enyo.bind(this, this.hashChanged);
+        chuisy.init();
+
+        enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
+
+        enyo.dispatcher.listen(document, "online");
+        enyo.dispatcher.listen(document, "offline");
+        enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
+
+        this.recoverStateFromUri();
+    },
+    initFacebookWeb: function() {
         window.fbAsyncInit = enyo.bind(this, function() {
             // init the FB JS SDK
             FB.init({
@@ -55,29 +76,9 @@ enyo.kind({
             js.src = "http://connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
         }(document));
-
-        window.onhashchange = enyo.bind(this, this.hashChanged);
-        chuisy.init();
-
-        enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
-
-        enyo.dispatcher.listen(document, "online");
-        enyo.dispatcher.listen(document, "offline");
-        enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
-
-        this.recoverStateFromUri();
     },
-    initMobile: function() {
-        if (!this.initialized) {
-            this.log("Initializing for mobile...");
-            // Initialize Facebook SDK
-            FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
-            chuisy.init();
-
-            window.onhashchange = enyo.bind(this, this.hashChanged);
-
-            this.initialized = true;
-        }
+    initFacebookMobile: function() {
+        FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
     },
     online: function() {
         chuisy.setOnline(true);
@@ -200,6 +201,6 @@ enyo.kind({
                 {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"}
             ]}
         ]},
-        {kind: "Signals", ondeviceready: "initMobile", ononline: "online", onoffline: "offline"}
+        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline"}
     ]
 });
