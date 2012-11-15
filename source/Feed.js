@@ -6,6 +6,11 @@ enyo.kind({
         onChuSelected: "",
         onToggleMenu: ""
     },
+    meta: {
+        limit: 20,
+        offset: 0,
+        total_count: 0
+    },
     userChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
             this.authUser = event.user;
@@ -16,15 +21,21 @@ enyo.kind({
         if (!this.pulled) {
             this.$.spinner.show();
         }
-        chuisy.feed.load({limit: 20}, enyo.bind(this, function(items) {
-            this.chus = items;
+        chuisy.chu.feed({limit: 20}, enyo.bind(this, function(sender, response) {
+            this.meta = response.meta;
+            this.chus = response.objects;
             this.feedLoaded();
             this.$.spinner.hide();
         }));
     },
     nextPage: function() {
-        chuisy.feed.nextPage(enyo.bind(this, function(items) {
-            this.chus = this.chus.concat(items);
+        var params = {
+            limit: this.meta.limit,
+            offset: this.meta.offset + this.meta.limit
+        };
+        chuisy.chu.feed(params, enyo.bind(this, function(sender, response) {
+            this.meta = response.meta;
+            this.chus = this.chus.concat(response.objects);
             this.refreshFeed();
         }));
     },
@@ -67,7 +78,7 @@ enyo.kind({
         return true;
     },
     allPagesLoaded: function() {
-        return chuisy.feed.allPagesLoaded();
+        return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
     chuTapped: function(sender, event) {
         this.doChuSelected({chu: this.chus[event.index]});
