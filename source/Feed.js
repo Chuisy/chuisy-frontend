@@ -16,19 +16,29 @@ enyo.kind({
         if (!this.pulled) {
             this.$.spinner.show();
         }
-        chuisy.chu.feed({}, enyo.bind(this, function(sender, response) {
-            this.chus = response.objects;
-            this.refreshFeed();
+        chuisy.feed.load({limit: 20}, enyo.bind(this, function(items) {
+            this.chus = items;
+            this.feedLoaded();
             this.$.spinner.hide();
         }));
     },
-    refreshFeed: function() {
+    nextPage: function() {
+        chuisy.feed.nextPage(enyo.bind(this, function(items) {
+            this.chus = this.chus.concat(items);
+            this.refreshFeed();
+        }));
+    },
+    feedLoaded: function() {
         this.$.feedList.setCount(this.chus.length);
         if (this.pulled) {
             this.$.feedList.completePull();
         } else {
             this.$.feedList.reset();
         }
+    },
+    refreshFeed: function() {
+        this.$.feedList.setCount(this.chus.length);
+        this.$.feedList.refresh();
     },
     pullRelease: function() {
         if (App.isOnline()) {
@@ -45,7 +55,20 @@ enyo.kind({
     setupFeedItem: function(sender, event) {
         var item = this.chus[event.index];
         this.$.chuFeedItem.setChu(item);
+
+        var isLastItem = event.index == this.chus.length-1;
+        if (isLastItem && !this.allPagesLoaded()) {
+            this.nextPage();
+            this.$.loadingNextPage.show();
+            this.log("load next page...");
+        } else {
+            this.$.loadingNextPage.hide();
+        }
+
         return true;
+    },
+    allPagesLoaded: function() {
+        return chuisy.feed.allPagesLoaded();
     },
     chuTapped: function(sender, event) {
         this.doChuSelected({chu: this.chus[event.index]});
@@ -69,9 +92,10 @@ enyo.kind({
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}
         ]},
-        {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem",
+        {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20,
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
-            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped"}
+            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped"},
+            {name: "loadingNextPage", content: "Loading...", classes: "feed-nextpage"}
         ]}
     ]
 });
