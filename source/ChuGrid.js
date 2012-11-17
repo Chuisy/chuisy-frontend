@@ -51,7 +51,8 @@ enyo.kind({
             var pageComp = this.$.carousel.getClientControls()[pageIndex];
             var chuComps = pageComp.getClientControls();
             for (var i=0; i<chuComps.length; i++) {
-                chuComps[i].getClientControls()[0].setSrc(page[i].thumbnails["100x100"]);
+                var image = page[i].thumbnails && page[i].thumbnails["100x100"] ? page[i].thumbnails["100x100"] : page[i].image;
+                chuComps[i].getClientControls()[0].applyStyle("background-image", "url(" + image + ");");
             }
         }));
     },
@@ -89,7 +90,7 @@ enyo.kind({
         if (absChuIndex < this.count) {
             var page = this.$.carousel.getClientControls()[pageIndex];
             page.createComponent({classes: "chugrid-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {kind: "Image", classes: "chugrid-chu-image"}
+                {classes: "chugrid-chu-image"}
             ]});
         }
     },

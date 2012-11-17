@@ -18,7 +18,7 @@ enyo.kind({
         if (this.chu) {
             this.chu.likes = this.chu.likes || [];
             this.chu.comments = this.chu.comments || [];
-            this.$.image.setSrc(this.chu.image);
+            this.$.image.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.username.setContent(this.chu.user.username);
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);

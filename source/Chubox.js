@@ -66,7 +66,7 @@ enyo.kind({
             var page = this.$.carousel.getClientControls()[pageIndex];
             var image = chu.localImage || (chu.thumbnails ? chu.thumbnails["100x100"] : chu.image) || "assets/images/chu_placeholder.png";
             page.createComponent({classes: "chubox-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {kind: "Image", classes: "chubox-chu-image", src: image},
+                {classes: "chubox-chu-image", style: "background-image: url(" + image + ");"},
                 {kind: "Button", classes: "chubox-delete-button", ontap: "chuRemove", chuIndex: chuIndex}
             ]});
         }
