@@ -63,9 +63,6 @@ enyo.kind({
         } else {
             this.log("Loading page " + pageIndex + "...");
             chuisy.chu.list(this.filters, enyo.bind(this, function(sender, response) {
-                // if (!this.count || response.meta.total_count < this.count) {
-                //     this.setCount(response.meta.total_count);
-                // }
                 this.pages[pageIndex] = response.objects;
                 callback(response.objects);
             }), {limit: this.chusPerPage, offset: pageIndex * this.chusPerPage});
