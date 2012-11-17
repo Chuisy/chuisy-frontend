@@ -87,7 +87,7 @@ enyo.kind({
             share_pinterest: this.pinterest,
             location: this.location,
             friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
-            image: this.image
+            localImage: this.image
         };
     },
     getPrice: function() {

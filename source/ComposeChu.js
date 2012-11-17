@@ -23,39 +23,9 @@ enyo.kind({
         }
     },
     gotImage: function(uri) {
-        this.imageUri = uri;
-        this.imageTicket = new Date().getTime();
-        try {
-            this.upload(uri, this.imageTicket);
-        } catch (e) {
-            this.warn("No uploading service available!");
-        }
         this.$.chuForm.clear();
         this.$.chuForm.setImage(uri);
         this.$.pickLocation.getGeoLocation();
-    },
-    upload: function(uri, ticket) {
-        var options = new FileUploadOptions();
-        options.fileKey="image";
-        options.fileName=uri.substr(uri.lastIndexOf('/')+1);
-        options.mimeType="image/jpeg";
-                                
-        options.params = {
-            ticket: ticket
-        };
-                                
-        var ft = new FileTransfer();
-
-        this.uploading = true;
-        ft.upload(uri,
-            encodeURI("http://api.chuisy.com/v1/upload_chubox_image/?username=" + chuisy.authCredentials.username + "&api_key=" + chuisy.authCredentials.api_key),
-            enyo.bind(this, function(r) {
-                this.image = r.response;
-                this.log("file uploaded! " + r.response);
-                this.uploading = false;
-            }), function(error) {
-                console.log("fail!", error);
-            }, options);
     },
     locationPicked: function (sender, event) {
         this.$.chuForm.setLocation(event.location);

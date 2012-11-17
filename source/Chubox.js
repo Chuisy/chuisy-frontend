@@ -36,7 +36,7 @@ enyo.kind({
         this.$.doneButton.hide();
     },
     refreshChus: function() {
-        this.chus = chuisy.chubox.chus;
+        this.chus = chuisy.chubox.getChus();
         this.calculateGrid();
         var currentPageIndex = this.$.carousel.getIndex();
         this.$.carousel.destroyClientControls();
@@ -64,9 +64,9 @@ enyo.kind({
 
         if (chu) {
             var page = this.$.carousel.getClientControls()[pageIndex];
-            var image = chu.thumbnails ? chu.thumbnails["100x100"] : chu.image;
+            var image = chu.localImage || (chu.thumbnails ? chu.thumbnails["100x100"] : chu.image) || "assets/images/chu_placeholder.png";
             page.createComponent({classes: "chubox-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {kind: "Image", classes: "chubox-chu-image", src: image || "assets/images/chu_placeholder.png"},
+                {kind: "Image", classes: "chubox-chu-image", src: image},
                 {kind: "Button", classes: "chubox-delete-button", ontap: "chuRemove", chuIndex: chuIndex}
             ]});
         }
@@ -81,6 +81,7 @@ enyo.kind({
     },
     chuRemove: function(sender, event) {
         var chu = this.chus[sender.chuIndex];
+        chuisy.chubox.remove(chu);
         return true;
     },
     components: [
