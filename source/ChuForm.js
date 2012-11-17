@@ -76,6 +76,7 @@ enyo.kind({
         return {
             product: {
                 price: this.getPrice(),
+                price_currency: "EUR",
                 category: {
                     name: this.$.categoryPicker.getActive().value
                 }
@@ -85,7 +86,8 @@ enyo.kind({
             share_twitter: this.twitter,
             share_pinterest: this.pinterest,
             location: this.location,
-            friends: this.toUriList(this.$.friendsSelector.getSelectedItems())
+            friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
+            image: this.image
         };
     },
     getPrice: function() {

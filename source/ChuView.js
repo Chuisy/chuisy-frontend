@@ -16,6 +16,8 @@ enyo.kind({
     },
     chuChanged: function() {
         if (this.chu) {
+            this.chu.likes = this.chu.likes || [];
+            this.chu.comments = this.chu.comments || [];
             this.$.image.setSrc(this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.username.setContent(this.chu.user.username);
@@ -86,7 +88,7 @@ enyo.kind({
         event.item.$.likerImage.setSrc(user.profile.avatar_thumbnail);
     },
     refreshComments: function() {
-        this.$.commentsRepeater.setCount(this.chu ? this.chu.comments.length : 0);
+        this.$.commentsRepeater.setCount(this.chu.comments ? this.chu.comments.length : 0);
         this.$.commentsRepeater.render();
     },
     setupComment: function(sender, event) {

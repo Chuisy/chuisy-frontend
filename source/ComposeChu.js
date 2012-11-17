@@ -23,6 +23,7 @@ enyo.kind({
         }
     },
     gotImage: function(uri) {
+        this.imageUri = uri;
         this.imageTicket = new Date().getTime();
         try {
             this.upload(uri, this.imageTicket);
@@ -61,16 +62,18 @@ enyo.kind({
         this.$.panels.setIndex(1);
     },
     submit: function() {
-        var data = this.$.chuForm.getData();
-        var userId = this.user ? this.user.id : "null";
-        data.image = "chubox/" + userId + "/" + this.imageTicket + ".jpg";
+        var chu = this.$.chuForm.getData();
+        // var userId = this.user ? this.user.id : "null";
+        // data.image = "chubox/" + userId + "/" + this.imageTicket + ".jpg";
+        // chu.image = this.imageUri;
         // Have to create the place first as deeply nested resources are not created automatically
-        chuisy.place.create(data.location.place, enyo.bind(this, function(sender, response) {
-            data.location.place = response.resource_uri;
-            chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
-                this.log(response);
-            }));
-        }));
+        // chuisy.place.create(data.location.place, enyo.bind(this, function(sender, response) {
+        //     data.location.place = response.resource_uri;
+        //     chuisy.chu.create(data, enyo.bind(this, function(sender, response) {
+        //         this.log(response);
+        //     }));
+        // }));
+        chuisy.chubox.add(chu);
         this.doBack();
     },
     back: function() {
