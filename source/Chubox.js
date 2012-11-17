@@ -1,118 +1,61 @@
 enyo.kind({
-    name: "ChuboxView",
-    kind: "FittableRows",
-    classes: "chuboxview",
-    published: {
-        user: null // The currently signed in user
-    },
-    authUserChanged: function(sender, event) {
-        if (!this.authUser || this.authUser.id != event.user.id) {
-            this.authUser = event.user;
-            if (this.user == "me") {
-                this.userChanged();
-            }
-        }
-    },
-    userChanged: function() {
-        var user = this.user == "me" ? this.authUser : this.user;
-        if (user) {
-            this.$.chubox.setUser(user);
-        }
-        this.$.menuButton.setShowing(this.user == "me");
-        this.$.backButton.setShowing(this.user != "me");
-    },
+    name: "Chubox",
+    classes: "chubox",
     events: {
         onChuSelected: "",
         onToggleMenu: ""
     },
-    refresh: function() {
-        this.$.chubox.loadChus();
-    },
-    startEditing: function() {
-        this.$.doneButton.show();
-    },
-    done: function() {
-        this.$.chubox.setEditing(false);
-        this.$.doneButton.hide();
-    },
-    components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
-                {kind: "Image", src: "assets/images/menu-icon.png"}
-            ]},
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
-            {classes: "mainheader-text", content: "Chu Box"},
-            {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton", showing: false}
-        ]},
-        {kind: "Chubox", name: "chubox", fit: true, editable: true, onStartEditing: "startEditing"},
-        {kind: "Signals", onUserChanged: "authUserChanged"}
-    ]
-});
-
-enyo.kind({
-    name: "Chubox",
-    classes: "chubox",
-    published: {
-        user: null,
-        editable: false,
-        editing: false
-    },
-    events: {
-        onChuSelected: "",
-        onStartEditing: "",
-        onFinishEditing: ""
-    },
     handlers: {
         onresize: "refreshChus",
-        onhold: "hold"
+        onhold: "startEditing"
     },
-    userChanged: function() {
-        if (this.user) {
-            this.loadChus();
-        }
+    rowCount: 0,
+    colCount: 0,
+    pageCount: 0,
+    chusPerPage: 0,
+    chus: [],
+    rendered: function() {
+        this.inherited(arguments);
+        this.refreshChus();
     },
-    editingChanged: function() {
-        if (this.editing && !this.editable) {
-            this.warn("'editing' can't be set to true when 'editable' is false!");
-            this.editing = false;
-        }
-
-        this.addRemoveClass("editing", this.editing);
+    calculateGrid: function() {
+        this.colCount = Math.floor(this.getBounds().width / 100);
+        this.rowCount = Math.floor(this.getBounds().height / 100);
+        this.chusPerPage = this.colCount * this.rowCount;
+        this.pageCount = this.chusPerPage ? Math.ceil(this.chus.length / this.chusPerPage) : 0;
     },
-    loadChus: function() {
-        if (this.user) {
-            chuisy.chu.list([["user", this.user.id]], enyo.bind(this, function(sender, response) {
-                this.chus = response.objects;
-                this.refreshChus();
-            }));
-        }
+    startEditing: function(sender, event) {
+        this.editing = true;
+        this.$.doneButton.show();
+        this.addClass("editing");
+        event.preventDefault();
+    },
+    finishEditing: function() {
+        this.editing = false;
+        this.removeClass("editing");
+        this.$.doneButton.hide();
     },
     refreshChus: function() {
-        if (this.chus) {
-            var currentPageIndex = this.$.carousel.getIndex();
-            var colCount = Math.floor(this.getBounds().width / 100);
-            var rowCount = Math.floor(this.getBounds().height / 100);
-            if (colCount && rowCount) {
-                this.chuCount = colCount * rowCount;
-                this.pageCount = Math.ceil(this.chus.length / this.chuCount);
-                this.$.carousel.destroyClientControls();
+        this.chus = chuisy.chubox.chus;
+        this.calculateGrid();
+        var currentPageIndex = this.$.carousel.getIndex();
+        this.$.carousel.destroyClientControls();
 
-                for (var i=0; i<this.pageCount; i++) {
-                    this.buildPage(i);
-                }
-                this.$.carousel.render();
-            }
-            this.$.thumbs.setCount(this.pageCount);
-            if (currentPageIndex && currentPageIndex< this.pageCount) {
-                this.$.carousel.setIndexDirect(currentPageIndex);
-                this.updatePageIndex();
-            }
+        for (var i=0; i<this.pageCount; i++) {
+            this.buildPage(i);
+        }
+
+        this.$.carousel.render();
+        this.$.thumbs.setCount(this.pageCount);
+        if (currentPageIndex && currentPageIndex < this.pageCount) {
+            this.$.carousel.setIndexDirect(currentPageIndex);
+            this.updatePageIndex();
         }
     },
     buildPage: function(pageIndex) {
         this.$.carousel.createComponent({classes: "enyo-fill"});
-        for (var i=0; i<this.chuCount; i++) {
-            var chuIndex = pageIndex * this.chuCount + i;
+        for (var i=0; i<this.chusPerPage; i++) {
+            var chuIndex = pageIndex * this.chusPerPage + i;
             this.buildChu(pageIndex, chuIndex);
         }
     },
@@ -121,38 +64,37 @@ enyo.kind({
 
         if (chu) {
             var page = this.$.carousel.getClientControls()[pageIndex];
+            var image = chu.thumbnails ? chu.thumbnails["100x100"] : chu.image;
             page.createComponent({classes: "chubox-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {kind: "Image", classes: "chubox-chu-image", src: chu.thumbnails["100x100"] || "assets/images/chu_placeholder.png"},
+                {kind: "Image", classes: "chubox-chu-image", src: image || "assets/images/chu_placeholder.png"},
                 {kind: "Button", classes: "chubox-delete-button", ontap: "chuRemove", chuIndex: chuIndex}
             ]});
         }
     },
     chuTap: function(sender, event) {
         if (!this.editing) {
-            this.doChuSelected({originator: sender, chu: this.chus[sender.chuIndex]});
+            this.doChuSelected({chu: this.chus[sender.chuIndex]});
         }
     },
     updatePageIndex: function() {
         this.$.thumbs.setIndex(this.$.carousel.getIndex());
     },
-    hold: function() {
-        if (this.editable) {
-            this.setEditing(true);
-            this.doStartEditing();
-        }
-    },
     chuRemove: function(sender, event) {
         var chu = this.chus[sender.chuIndex];
-        chuisy.chu.remove(chu.id, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
-        this.chus.remove(sender.chuIndex);
-        this.refreshChus();
         return true;
     },
     components: [
-        {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updatePageIndex"},
         {kind: "Thumbs", classes: "chubox-thumbs"},
-        {kind: "Signals", onUserChanged: "authUserChanged"}
+        {kind: "Signals", onChuboxUpdated: "refreshChus"},
+        {kind: "FittableRows", classes: "enyo-fill", components: [
+            {classes: "mainheader", components: [
+                {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
+                    {kind: "Image", src: "assets/images/menu-icon.png"}
+                ]},
+                {classes: "mainheader-text", content: "Chu Box"},
+                {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false}
+            ]},
+            {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", fit: true, onTransitionFinish: "updatePageIndex"}
+        ]}
     ]
 });

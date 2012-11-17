@@ -125,7 +125,7 @@ enyo.kind({
             } else if (match[1].match(/^chubox\/$/)) {
                 // chubox/
                 // User wants to see his Chu Box? Our pleasure!
-                this.$.mainView.openOwnChubox();
+                this.$.mainView.openChubox();
             } else if ((match2 = match[1].match(/^chu\/(.+)$/))) {
                 // chu/..
                 if (match2[1].match(/new\/$/)) {

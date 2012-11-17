@@ -34,15 +34,11 @@ enyo.kind({
         App.updateHistory("feed/");
     },
     openChubox: function(user) {
-        this.$.chuboxView.setUser(user);
         this.showView("chubox");
-
+        this.$.chubox.refreshChus();
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory((user && user != "me" ? "user/" + user.id + "/" : "") + "chubox/");
-    },
-    openOwnChubox: function() {
-        this.openChubox("me");
+        App.updateHistory("chubox/");
     },
     openChuView: function(chu) {
         this.$.chuView.setChu(chu);
@@ -130,7 +126,7 @@ enyo.kind({
                         {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Feed"}
                     ]},
-                    {classes: "mainmenu-item", ontap: "openOwnChubox", name: "chuboxMenuItem", components: [
+                    {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Box"}
                     ]},
@@ -153,7 +149,7 @@ enyo.kind({
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
-                {kind: "ChuboxView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "back"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
                 {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
