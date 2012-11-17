@@ -17,15 +17,17 @@ enyo.kind({
     pageCount: 0,
     chusPerPage: 0,
     pages: {},
-    rendered: function() {
-        this.inherited(arguments);
-        this.countChanged();
-        this.pageIndexChanged();
-    },
-    countChanged: function() {        
+    // rendered: function() {
+    //     var pageIndex = this.pageIndex;
+    //     this.inherited(arguments);
+    //     this.pageIndex = pageIndex;
+    //     this.countChanged();
+    // },
+    countChanged: function() {
         this.calculateGrid();
         this.$.thumbs.setCount(this.pageCount);
         this.buildPages();
+        this.reset();
     },
     pageIndexChanged: function() {
         this.$.thumbs.setIndex(this.pageIndex);
@@ -34,7 +36,7 @@ enyo.kind({
         if (this.pageIndex > 0) {
             this.loadPage(this.pageIndex-1);
         }
-        if (this.pageIndex < this.pageCount) {
+        if (this.pageIndex < this.pageCount-1) {
             this.loadPage(this.pageIndex+1);
         }
     },
@@ -42,7 +44,7 @@ enyo.kind({
         this.colCount = Math.floor(this.getBounds().width / 100);
         this.rowCount = Math.floor(this.getBounds().height / 100);
         this.chusPerPage = this.colCount * this.rowCount;
-        this.pageCount = Math.ceil(this.count / this.chusPerPage);
+        this.pageCount = this.chusPerPage ? Math.ceil(this.count / this.chusPerPage) : 0;
     },
     loadPage: function(pageIndex) {
         this.getPage(pageIndex, enyo.bind(this, function(page) {
@@ -54,6 +56,7 @@ enyo.kind({
         }));
     },
     getPage: function(pageIndex, callback) {
+        this.log("Getting page " + pageIndex + "...");
         callback = callback || function() {};
         if (this.pages[pageIndex]) {
             callback(this.pages[pageIndex]);
@@ -68,31 +71,20 @@ enyo.kind({
             }), {limit: this.chusPerPage, offset: pageIndex * this.chusPerPage});
         }
     },
-    refreshChus: function() {
-        if (this.chus) {
-            var currentPageIndex = this.$.carousel.getIndex();
-            if (colCount && rowCount) {                
-                
-            }
-            if (currentPageIndex && currentPageIndex< this.pageCount) {
-                this.$.carousel.setIndexDirect(currentPageIndex);
-                this.updatePageIndex();
-            }
-        }
-    },
     buildPages: function() {
+        var currentPageIndex = this.pageIndex;
         this.$.carousel.destroyClientControls();
         for (var i=0; i<this.pageCount; i++) {
             this.buildPage(i);
         }
         this.$.carousel.render();
-
+        this.$.carousel.setIndexDirect(currentPageIndex);
+        this.updatePageIndex();
     },
     buildPage: function(pageIndex) {
         this.$.carousel.createComponent({classes: "enyo-fill"});
         for (var i=0; i<this.chusPerPage; i++) {
-            var chuIndex = pageIndex * this.chusPerPage + i;
-            this.buildChu(pageIndex, chuIndex);
+            this.buildChu(pageIndex, i);
         }
     },
     buildChu: function(pageIndex, chuIndex) {
@@ -105,12 +97,18 @@ enyo.kind({
         }
     },
     chuTap: function(sender, event) {
-        if (!this.editing) {
-            this.doChuSelected({originator: sender, chu: this.pages[sender.pageIndex][sender.chuIndex]});
+        if (this.pages[sender.pageIndex] && this.pages[sender.pageIndex][sender.chuIndex]) {
+            var chu = this.pages[sender.pageIndex][sender.chuIndex];
+            this.doChuSelected({originator: sender, chu: chu});
         }
     },
     updatePageIndex: function() {
         this.setPageIndex(this.$.carousel.getIndex());
+    },
+    reset: function() {
+        this.pages = [];
+        this.pageIndex = 0;
+        this.pageIndexChanged();
     },
     components: [
         {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", classes: "enyo-fill", onTransitionFinish: "updatePageIndex"},

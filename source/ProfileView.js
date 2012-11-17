@@ -24,7 +24,8 @@ enyo.kind({
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
             this.$.userName.setContent(user.username);
             this.$.bio.setContent(user.profile.bio);
-            this.$.chubox.setUser(user);
+            this.$.chuGrid.setFilters([["user", user.id]]);
+            this.$.chuGrid.setCount(user.chu_count);
             this.loadFriends(user);
             this.loadFollowers(user);
             this.$.followButton.addRemoveClass("active", user.following);
@@ -137,7 +138,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-            {kind: "Chubox", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
+            {kind: "ChuGrid", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
             {kind: "Scroller", classes: "enyo-fill", components: [
                 {kind: "Repeater", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
                     {kind: "UserListItem", name: "friendItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"}

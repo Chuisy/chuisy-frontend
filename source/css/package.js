@@ -15,5 +15,6 @@ enyo.depends(
 	"UserListItem.css",
 	"SearchResults.css",
 	"SearchInput.css",
-	"ChuFeedItem.css"
+	"ChuFeedItem.css",
+	"ChuGrid.css"
 );
