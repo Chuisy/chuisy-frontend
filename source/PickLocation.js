@@ -19,6 +19,7 @@ enyo.kind({
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
             alert("Failed to get location!");
+            this.doLocationPicked({location: null});
         }));
     },
     lookupPlaces: function() {
@@ -56,7 +57,6 @@ enyo.kind({
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
-        this.log(place);
         this.location.place = {
             name: place.name,
             address: place.location.address,

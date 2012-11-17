@@ -85,9 +85,11 @@ enyo.kind({
     },
     online: function() {
         this.$.errorBox.hide();
+        return true;
     },
     offline: function() {
         this.$.errorBox.show();
+        return true;
     },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},

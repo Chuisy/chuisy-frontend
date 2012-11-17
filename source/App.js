@@ -12,8 +12,8 @@ enyo.kind({
             window.location.hash = "!/" + uri;
         },
         isOnline: function() {
-            if (navigator.connection) {
-                var networkState = navigator.connection.type;
+            if (navigator.network && navigator.network.connection) {
+                var networkState = navigator.network.connection.type;
                 return networkState != Connection.UNKNOWN && networkState != Connection.NONE;
             } else {
                 return true;
@@ -47,10 +47,7 @@ enyo.kind({
 
         enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
 
-        enyo.dispatcher.listen(document, "online");
-        enyo.dispatcher.listen(document, "offline");
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
-
         this.recoverStateFromUri();
     },
     initFacebookWeb: function() {
@@ -81,13 +78,17 @@ enyo.kind({
         FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
     },
     online: function() {
+        this.log("online");
         chuisy.setOnline(true);
         if (chuisy.getSignInStatus().signedIn) {
             chuisy.loadUserDetails();
         }
+        return true;
     },
     offline: function() {
+        this.log("offline");
         chuisy.setOnline(false);
+        return true;
     },
     hashChanged: function() {
         if (!window.ignoreHashChange) {

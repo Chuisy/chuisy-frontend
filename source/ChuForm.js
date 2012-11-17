@@ -35,6 +35,8 @@ enyo.kind({
     locationChanged: function() {
         if (this.location) {
             this.$.locationText.setContent(this.location.place.name + ", " + this.location.place.address);
+        } else {
+            this.$.locationText.setContent("");
         }
     },
     // scroll: function(sender, event) {
