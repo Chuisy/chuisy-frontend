@@ -12,9 +12,14 @@ enyo.kind({
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
             this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            this.$.map.setCenter(this.location);
-            this.$.map.clearMarkers();
-            this.$.map.placeMarker(this.location.latitude, this.location.longitude);
+            if (App.isOnline()) {
+                this.$.map.show();
+                this.$.map.setCenter(this.location);
+                this.$.map.clearMarkers();
+                this.$.map.placeMarker(this.location.latitude, this.location.longitude);
+            } else {
+                this.$.map.hide();
+            }
             this.lookupPlaces();
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
