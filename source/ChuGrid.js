@@ -47,10 +47,12 @@ enyo.kind({
     loadPage: function(pageIndex) {
         this.getPage(pageIndex, enyo.bind(this, function(page) {
             var pageComp = this.$.carousel.getClientControls()[pageIndex];
-            var chuComps = pageComp.getClientControls();
-            for (var i=0; i<chuComps.length; i++) {
-                var image = page[i].thumbnails && page[i].thumbnails["100x100"] ? page[i].thumbnails["100x100"] : page[i].image;
-                chuComps[i].getClientControls()[0].applyStyle("background-image", "url(" + image + ");");
+            if (pageComp) {
+                var chuComps = pageComp.getClientControls();
+                for (var i=0; i<chuComps.length; i++) {
+                    var image = page[i].thumbnails && page[i].thumbnails["100x100"] ? page[i].thumbnails["100x100"] : page[i].image;
+                    chuComps[i].getClientControls()[0].applyStyle("background-image", "url(" + image + ");");
+                }
             }
         }));
     },
@@ -102,6 +104,7 @@ enyo.kind({
     reset: function() {
         this.pages = [];
         this.pageIndex = 0;
+        this.$.carousel.setIndexDirect(0);
         this.pageIndexChanged();
     },
     components: [
