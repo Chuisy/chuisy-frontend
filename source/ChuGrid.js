@@ -17,12 +17,10 @@ enyo.kind({
     pageCount: 0,
     chusPerPage: 0,
     pages: {},
-    // rendered: function() {
-    //     var pageIndex = this.pageIndex;
-    //     this.inherited(arguments);
-    //     this.pageIndex = pageIndex;
-    //     this.countChanged();
-    // },
+    rendered: function() {
+        this.inherited(arguments);
+        this.countChanged();
+    },
     countChanged: function() {
         this.calculateGrid();
         this.$.thumbs.setCount(this.pageCount);
@@ -41,8 +39,8 @@ enyo.kind({
         }
     },
     calculateGrid: function() {
-        this.colCount = Math.floor(this.getBounds().width / 100);
-        this.rowCount = Math.floor(this.getBounds().height / 100);
+        this.colCount = this.hasNode() ? Math.floor(this.getBounds().width / 100) : 0;
+        this.rowCount = this.hasNode() ? Math.floor(this.getBounds().height / 100) : 0;
         this.chusPerPage = this.colCount * this.rowCount;
         this.pageCount = this.chusPerPage ? Math.ceil(this.count / this.chusPerPage) : 0;
     },
