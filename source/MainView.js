@@ -53,6 +53,17 @@ enyo.kind({
 
         App.updateHistory(user == "me" ? "me/": ("user/" + user.id + "/"));
     },
+    profileMenuItemTapped: function() {
+        this.$.mainSlider.animateToMin();
+
+        if (chuisy.getSignInStatus().signedIn) {
+            this.showOwnProfile();
+        } else {
+            enyo.Signals.send("onRequestSignIn", {
+                success: enyo.bind(this, this.showOwnProfile)
+            });
+        }
+    },
     showOwnProfile: function() {
         this.openProfileView("me");
     },
@@ -127,7 +138,7 @@ enyo.kind({
                         {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Chu Box"}
                     ]},
-                    {classes: "mainmenu-item", ontap: "showOwnProfile", name: "profileMenuItem", components: [
+                    {classes: "mainmenu-item", ontap: "profileMenuItemTapped", name: "profileMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/user_light.png", classes: "mainmenu-item-icon"},
                         {classes: "mainmenu-item-text", content: "Profile"}
                     ]},
