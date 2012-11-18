@@ -57,8 +57,7 @@ enyo.kind({
     },
     setupFriend: function(sender, event) {
         var relation = this.friends[event.index];
-        event.item.$.friendItem.setShowedUser(relation.followee);
-        event.item.$.friendItem.setUser(this.user);
+        event.item.$.friendItem.setUser(relation.followee);
     },
     friendTapped: function(sender, event) {
         var user = this.friends[event.index].followee;
@@ -76,12 +75,20 @@ enyo.kind({
     },
     setupFollower: function(sender, event) {
         var relation = this.followers[event.index];
-        event.item.$.followerItem.setShowedUser(relation.user);
-        event.item.$.followerItem.setUser(this.user);
+        event.item.$.followerItem.setUser(relation.user);
     },
     followerTapped: function(sender, event) {
         var user = this.followers[event.index].user;
         this.doShowProfile({user: user});
+    },
+    followButtonTapped: function() {
+        if (chuisy.getSignInStatus().signedIn) {
+            this.toggleFollow();
+        } else {
+            enyo.Signals.send("onRequestSignIn", {
+                success: enyo.bind(this, this.toggleFollow)
+            });
+        }
     },
     toggleFollow: function(sender, event) {
         var user = this.showedUser;
@@ -121,7 +128,7 @@ enyo.kind({
                 {classes: "profileview-username ellipsis", name: "userName"},
                 {classes: "profileview-bio", name: "bio"}
             ]},
-            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "toggleFollow", classes: "follow-button"}
+            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
             {classes: "profileview-menu-button", value: 0, name: "chuboxMenuButton", components: [

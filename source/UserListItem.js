@@ -3,23 +3,29 @@ enyo.kind({
 	kind: "onyx.Item",
 	classes: "userlistitem",
 	published: {
-		showedUser: null,
 		user: null
 	},
 	events: {
 		onFollowingChanged: ""
 	},
 	userChanged: function() {
-		this.$.followButton.setShowing(this.user && this.showedUser && this.user.id != this.showedUser.id);
+		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail);
+		this.$.username.setContent(this.user.username);
+		this.$.followButton.addRemoveClass("active", this.user.following);
+        var authUser = chuisy.getSignInStatus().user;
+        this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
 	},
-	showedUserChanged: function() {
-		this.$.avatar.setSrc(this.showedUser.profile.avatar_thumbnail);
-		this.$.username.setContent(this.showedUser.username);
-		this.$.followButton.addRemoveClass("active", this.showedUser.following);
-		this.$.followButton.setShowing(this.user && this.showedUser && this.user.id != this.showedUser.id);
-	},
+    followButtonTapped: function() {
+        if (chuisy.getSignInStatus().signedIn) {
+            this.toggleFollow();
+        } else {
+            enyo.Signals.send("onRequestSignIn", {
+                success: enyo.bind(this, this.toggleFollow)
+            });
+        }
+    },
     toggleFollow: function(sender, event) {
-        var user = this.showedUser;
+        var user = this.user;
         var button = this.$.followButton;
 
         button.setDisabled(true);
@@ -46,6 +52,6 @@ enyo.kind({
 	components: [
         {kind: "Image", classes: "miniavatar", name: "avatar"},
         {classes: "userlistitem-username ellipsis", name: "username"},
-        {kind: "onyx.Button", content: "follow", ontap: "toggleFollow", name: "followButton", classes: "userlistitem-follow-button"}
+        {kind: "onyx.Button", content: "follow", ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });
