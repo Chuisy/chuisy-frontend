@@ -29,6 +29,9 @@ enyo.kind({
             this.init();
         }
     },
+    isNarrow: function() {
+        return this.getBounds().width < this.narrowWidth;
+    },
     deviceReady: function() {
         if (!this.initialized) {
             this.init();
@@ -186,22 +189,42 @@ enyo.kind({
         // Get facebook access token
         FB.login(enyo.bind(this, function(response) {
             if (response.status == "connected") {
-                chuisy.signIn({fb_access_token: response.authResponse.accessToken});
+                chuisy.signIn({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function() {
+                    if (this.signInSuccessCallback) {
+                        this.signInSuccessCallback();
+                        this.signInSuccessCallback = null;
+                        this.signInFailureCallback = null;
+                    }
+                    this.$.panels.setIndex(0);
+                }), enyo.bind(this, function() {
+                    alert("Authentication failed!");
+                }));
             } else {
                 alert("Facebook signin failed!");
             }
         }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
     },
-    isNarrow: function() {
-        return this.getBounds().width < this.narrowWidth;
+    facebookCancel: function() {
+        if (this.signInFailureCallback) {
+            this.signInFailureCallback();
+            this.signInSuccessCallback = null;
+            this.signInFailureCallback = null;
+        }
+        this.$.panels.setIndex(0);
+    },
+    requestSignIn: function(sender, event) {
+        this.signInSuccessCallback = event.success;
+        this.signInFailureCallback = event.failure;
+        this.$.panels.setIndex(1);
     },
     components: [
         {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
             {kind: "MainView", classes: "enyo-fill"},
             {classes: "enyo-fill", components: [
-                {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"}
+                {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
+                {kind: "onyx.Button", content: "Cancel", ontap: "facebookCancel"}
             ]}
         ]},
-        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline"}
+        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onRequestSignIn: "requestSignIn"}
     ]
 });

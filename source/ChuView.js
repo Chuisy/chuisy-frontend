@@ -35,8 +35,10 @@ enyo.kind({
             this.refreshLikes();
             this.refreshComments();
 
-            this.loadLikes();
-            this.loadComments();
+            if (App.isOnline()) {
+                this.loadLikes();
+                this.loadComments();
+            }
             
             this.addRemoveClass("owned", this.isOwned());
         }
@@ -52,11 +54,20 @@ enyo.kind({
         this.addRemoveClass("liked", this.liked);
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
+    likeButtonTapped: function() {
+        if (chuisy.getSignInStatus().signedIn) {
+            this.toggleLike();
+        } else {
+            enyo.Signals.send("onRequestSignIn", {
+                success: enyo.bind(this, this.toggleLike)
+            });
+        }
+    },
     toggleLike: function(sender, event) {
         this.$.likeButton.setDisabled(true);
         if (this.liked) {
             chuisy.like.remove(this.likeId, enyo.bind(this, function(sender, response) {
-                this.chu.liked = false;
+                this.setLiked(false);
                 // Remove this user's like from the likes array.
                 this.loadLikes();
                 this.$.likeButton.setDisabled(false);
@@ -66,7 +77,7 @@ enyo.kind({
                 chu: this.chu.resource_uri
             };
             chuisy.like.create(params, enyo.bind(this, function(sender, response) {
-                this.chu.liked = response.id;
+                this.setLiked(response.id);
                 this.loadLikes();
                 this.$.likeButton.setDisabled(false);
             }));
@@ -95,6 +106,7 @@ enyo.kind({
     },
     refreshComments: function() {
         this.$.commentsRepeater.setCount(this.comments.length);
+        this.$.commentsRepeater.render();
     },
     setupComment: function(sender, event) {
         var comment = this.comments[event.index];
@@ -107,6 +119,15 @@ enyo.kind({
         }
     },
     commentEnter: function() {
+        if (chuisy.getSignInStatus().signedIn) {
+            this.postComment();
+        } else {
+            enyo.Signals.send("onRequestSignIn", {
+                success: enyo.bind(this, this.postComment)
+            });
+        }
+    },
+    postComment: function() {
         var params = {
             text: this.$.commentInput.getValue(),
             chu: this.chu.resource_uri
@@ -114,8 +135,19 @@ enyo.kind({
         chuisy.chucomment.create(params, enyo.bind(this, function(sender, response) {
             this.loadComments();
         }));
-        this.refreshComments();
         this.$.commentInput.setValue("");
+    },
+    online: function() {
+        this.$.likeButton.setDisabled(false);
+        this.$.commentInput.setDisabled(false);
+        if (this.chu) {
+            this.loadLikes();
+            this.loadComments();
+        }
+    },
+    offline: function() {
+        this.$.likeButton.setDisabled(true);
+        this.$.commentInput.setDisabled(true);
     },
     components: [
         {classes: "mainheader", components: [
@@ -133,7 +165,7 @@ enyo.kind({
                 {kind: "Repeater", name: "likerRepeater", classes: "chuview-likerrepeater", onSetupItem: "setupLiker", components: [
                     {kind: "Image", name: "likerImage", classes: "miniavatar"}
                 ]},
-                {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "toggleLike"}
+                {kind: "onyx.Button", name: "likeButton", content: "Like", ontap: "likeButtonTapped"}
             ]},
             {classes: "chuview-price", name: "price"},
             {classes: "chuview-location", name: "locationText"},
@@ -149,6 +181,6 @@ enyo.kind({
                 {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
             ]}
         ]},
-        {kind: "Signals", onUserChanged: "userChanged"}
+        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline"}
     ]
 });
