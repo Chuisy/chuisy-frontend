@@ -94,7 +94,7 @@ enyo.kind({
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
-        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline"},
+        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {kind: "Image", src: "assets/images/menu-icon.png"}
