@@ -16,8 +16,6 @@ enyo.kind({
     },
     chuChanged: function() {
         if (this.chu) {
-            this.chu.likes = this.chu.likes || [];
-            this.chu.comments = this.chu.comments || [];
             this.$.image.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.username.setContent(this.chu.user.username);
@@ -32,10 +30,13 @@ enyo.kind({
                 this.setLiked(false);
             }
 
-            this.$.likeCount.setContent(this.chu.likes.length + " likes");
-            this.refreshLikerRepeater();
-
+            this.likes = [];
+            this.comments = [];
+            this.refreshLikes();
             this.refreshComments();
+
+            this.loadLikes();
+            this.loadComments();
             
             this.addRemoveClass("owned", this.isOwned());
         }
@@ -55,44 +56,48 @@ enyo.kind({
         this.$.likeButton.setDisabled(true);
         if (this.liked) {
             chuisy.like.remove(this.likeId, enyo.bind(this, function(sender, response) {
-                // this.setLiked(false);
                 this.chu.liked = false;
                 // Remove this user's like from the likes array.
-                for (var i=0; i<this.chu.likes.length; i++) {
-                    if (this.chu.likes[i].user.id == this.user.id) {
-                        this.chu.likes.remove(i);
-                        break;
-                    }
-                }
-                this.chuChanged();
+                this.loadLikes();
                 this.$.likeButton.setDisabled(false);
             }));
         } else {
-            var likeData = {
+            var params = {
                 chu: this.chu.resource_uri
             };
-            chuisy.like.create(likeData, enyo.bind(this, function(sender, response) {
+            chuisy.like.create(params, enyo.bind(this, function(sender, response) {
                 this.chu.liked = response.id;
-                this.chu.likes.push(response);
-                this.chuChanged();
+                this.loadLikes();
                 this.$.likeButton.setDisabled(false);
             }));
         }
         return true;
     },
-    refreshLikerRepeater: function() {
-        this.$.likerRepeater.setCount(Math.min(this.chu.likes.length, 10));
+    loadLikes: function() {
+        chuisy.like.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
+            this.likes = response.objects;
+            this.refreshLikes();
+        }));
+    },
+    refreshLikes: function() {
+        this.$.likeCount.setContent(this.likes.length);
+        this.$.likerRepeater.setCount(Math.min(this.likes.length, 10));
     },
     setupLiker: function(sender, event) {
-        var user = this.chu.likes[event.index].user;
+        var user = this.likes[event.index].user;
         event.item.$.likerImage.setSrc(user.profile.avatar_thumbnail);
     },
+    loadComments: function() {
+        chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
+            this.comments = response.objects;
+            this.refreshComments();
+        }));
+    },
     refreshComments: function() {
-        this.$.commentsRepeater.setCount(this.chu.comments ? this.chu.comments.length : 0);
-        this.$.commentsRepeater.render();
+        this.$.commentsRepeater.setCount(this.comments.length);
     },
     setupComment: function(sender, event) {
-        var comment = this.chu.comments[event.index];
+        var comment = this.comments[event.index];
         this.$.commentText.setContent(comment.text);
         this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
     },
@@ -102,16 +107,12 @@ enyo.kind({
         }
     },
     commentEnter: function() {
-        var comment = {
+        var params = {
             text: this.$.commentInput.getValue(),
-            chu: this.chu.resource_uri,
-            user: this.user
+            chu: this.chu.resource_uri
         };
-        this.chu.comments.push(comment);
-        var params = enyo.clone(comment);
-        delete params.user;
         chuisy.chucomment.create(params, enyo.bind(this, function(sender, response) {
-            this.log(response);
+            this.loadComments();
         }));
         this.refreshComments();
         this.$.commentInput.setValue("");
