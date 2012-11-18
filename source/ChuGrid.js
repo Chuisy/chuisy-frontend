@@ -57,12 +57,10 @@ enyo.kind({
         }));
     },
     getPage: function(pageIndex, callback) {
-        this.log("Getting page " + pageIndex + "...");
         callback = callback || function() {};
         if (this.pages[pageIndex]) {
             callback(this.pages[pageIndex]);
         } else {
-            this.log("Loading page " + pageIndex + "...");
             chuisy.chu.list(this.filters, enyo.bind(this, function(sender, response) {
                 this.pages[pageIndex] = response.objects;
                 callback(response.objects);
