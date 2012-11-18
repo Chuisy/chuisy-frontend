@@ -10,9 +10,6 @@ enyo.kind({
         settings: 4,
         composeChu: 5
     },
-    events: {
-        onLogout: ""
-    },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
@@ -152,7 +149,7 @@ enyo.kind({
                 {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
                 {kind: "ChuView", name: "chuView", onBack: "back"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
-                {kind: "Settings", onLogout: "doLogout", onToggleMenu: "toggleMenu"},
+                {kind: "Settings", onToggleMenu: "toggleMenu"},
                 {kind: "ComposeChu", onBack: "back"}
             ]}
         ]},
