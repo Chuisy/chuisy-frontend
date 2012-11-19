@@ -89,9 +89,7 @@ enyo.kind({
         {kind: "Signals", onChuboxUpdated: "refreshChus"},
         {kind: "FittableRows", classes: "enyo-fill", components: [
             {classes: "mainheader", components: [
-                {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
-                    {kind: "Image", src: "assets/images/menu-icon.png"}
-                ]},
+                {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton"},
                 {classes: "mainheader-text", content: "Chu Box"},
                 {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false}
             ]},

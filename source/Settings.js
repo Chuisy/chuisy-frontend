@@ -52,9 +52,7 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
-                {kind: "Image", src: "assets/images/menu-icon.png"}
-            ]},
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button"},
             {classes: "mainheader-text", content: "Settings"}
         ]},
         {classes: "main-content", fit: true, components: [
