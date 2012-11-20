@@ -246,3 +246,22 @@ button.pageheader-radiobutton.active {
 	display: inline-block;
 	color: #FFFFFF;
 }
+
+.post-chu-button {
+	width: 36px;
+	height: 36px;
+	background-size: 36px 72px;
+	vertical-align: top;
+	display: inline-block;
+	background-image: url(../../assets/images/post_chu_button.png);
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+	z-index: 100;
+	background-position: 0 0;
+}
+
+.post-chu-button:active:hover:not([disabled]) {
+	background-position: 0 -36px;
+}
+

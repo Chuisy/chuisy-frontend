@@ -3,7 +3,8 @@ enyo.kind({
     classes: "chubox",
     events: {
         onChuSelected: "",
-        onToggleMenu: ""
+        onToggleMenu: "",
+        onComposeChu: ""
     },
     handlers: {
         onresize: "refreshChus",
@@ -87,6 +88,7 @@ enyo.kind({
     components: [
         {kind: "Thumbs", classes: "chubox-thumbs"},
         {kind: "Signals", onChuboxUpdated: "refreshChus"},
+        {classes: "post-chu-button", ontap: "doComposeChu"},
         {kind: "FittableRows", classes: "enyo-fill", components: [
             {classes: "mainheader", components: [
                 {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [

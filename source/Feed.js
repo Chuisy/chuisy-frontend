@@ -4,7 +4,8 @@ enyo.kind({
     kind: "FittableRows",
     events: {
         onChuSelected: "",
-        onToggleMenu: ""
+        onToggleMenu: "",
+        onComposeChu: ""
     },
     meta: {
         limit: 20,
@@ -95,6 +96,7 @@ enyo.kind({
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
         {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
+        {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {classes: "menu-button-icon"}
