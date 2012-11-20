@@ -19,6 +19,8 @@ enyo.kind({
     },
     userChanged: function(sender, event) {
         this.user = event.user;
+        this.$.menuAvatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
+        this.$.menuName.setContent(event.user.first_name + " " + event.user.last_name);
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
@@ -127,29 +129,32 @@ enyo.kind({
     },
     components: [
         {kind: "FittableRows", classes: "mainmenu", components: [
-            {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
+            // {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
             {kind: "Panels", name: "menuPanels", animate: false, fit: true, components: [
                 {components: [
+                    {classes: "mainmenu-avatar", name: "menuAvatar", components: [
+                        {classes: "mainmenu-name", name: "menuName"}
+                    ]},
                     {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
+                        {classes: "mainmenu-item-icon feed"},
                         {classes: "mainmenu-item-text", content: "Feed"}
                     ]},
                     {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},
+                        {classes: "mainmenu-item-icon chubox"},
                         {classes: "mainmenu-item-text", content: "Chu Box"}
                     ]},
                     {classes: "mainmenu-item", ontap: "profileMenuItemTapped", name: "profileMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/user_light.png", classes: "mainmenu-item-icon"},
+                        {classes: "mainmenu-item-icon profile"},
                         {classes: "mainmenu-item-text", content: "Profile"}
                     ]},
                     {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/setting_light.png", classes: "mainmenu-item-icon"},
+                        {classes: "mainmenu-item-icon settings"},
                         {classes: "mainmenu-item-text", content: "Settings"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
-                        {kind: "onyx.Icon", src: "assets/images/photo-album_light.png", classes: "mainmenu-item-icon"},
-                        {classes: "mainmenu-item-text", content: "Post Chu"}
                     ]}
+                    // {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
+                    //     {classes: "mainmenu-item-icon postchu"},
+                    //     {classes: "mainmenu-item-text", content: "Post Chu"}
+                    // ]}
                 ]},
                 {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected"}
             ]}
