@@ -98,6 +98,38 @@ body {
 	margin-top: -2px;
 }
 
+.mainheader .notification-button {
+	position: absolute;
+	width: 40px;
+	height: 30px;
+	top: 7px;
+	right: 5px;
+	padding: 0;
+	overflow: visible;
+}
+
+.mainheader .notification-button > .notification-button-icon {
+	background: url(../../assets/images/notifications@2x.png) no-repeat center center;
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	margin-top: -1px;
+}
+
+.mainheader .notification-button > .notification-button-badge {
+	background: url(../../assets/images/badge@2x.png) no-repeat center center;
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: -8px;
+	left: -8px;
+	font-family: Verdana;
+	font-size: 8pt;
+	box-sizing: border-box;
+	padding: 3px 0;
+}
+
 .mainheader .back-button {
 	position: absolute;
 	padding: 2px 10px;

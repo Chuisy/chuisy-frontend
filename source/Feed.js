@@ -99,7 +99,11 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {classes: "menu-button-icon"}
             ]},
-            {classes: "mainheader-logo"}
+            {classes: "mainheader-logo"},
+            {kind: "onyx.Button", classes: "notification-button", components: [
+                {classes: "notification-button-icon"},
+                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+            ]}
         ]},
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}
