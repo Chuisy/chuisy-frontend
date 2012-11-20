@@ -97,6 +97,9 @@ enyo.kind({
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
     },
+    openSearch: function() {
+        this.$.menuPanels.setIndex(1);
+    },
     searchInputChange: function() {
         var query = this.$.searchInput.getValue();
 
@@ -118,19 +121,18 @@ enyo.kind({
         this.$.menuPanels.setIndex(0);
         this.latestQuery = null;
     },
-    sliderAnimateFinish: function() {
-//        this.$.searchInput.setDisabled(!this.isSliderOpen());
-        if (!this.isSliderOpen()) {
-            this.$.searchInput.blur();
-        }
-    },
+//     sliderAnimateFinish: function() {
+// //        this.$.searchInput.setDisabled(!this.isSliderOpen());
+//         if (!this.isSliderOpen()) {
+//             this.$.searchInput.blur();
+//         }
+//     },
     isSliderOpen: function() {
         return this.$.mainSlider.getValue() == this.$.mainSlider.getMax();
     },
     components: [
-        {kind: "FittableRows", classes: "mainmenu", components: [
-            // {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
-            {kind: "Panels", name: "menuPanels", animate: false, fit: true, components: [
+        {classes: "mainmenu", components: [
+            {kind: "Panels", name: "menuPanels", draggable: false, animate: false, classes: "enyo-fill", components: [
                 {components: [
                     {classes: "mainmenu-avatar", name: "menuAvatar", components: [
                         {classes: "mainmenu-name", name: "menuName"}
@@ -150,19 +152,22 @@ enyo.kind({
                     {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
                         {classes: "mainmenu-item-icon settings"},
                         {classes: "mainmenu-item-text", content: "Settings"}
+                    ]},
+                    {classes: "mainmenu-item", ontap: "openSearch", name: "searchMenuItem", components: [
+                        {classes: "mainmenu-item-icon search"},
+                        {classes: "mainmenu-item-text", content: "Search"}
                     ]}
-                    // {classes: "mainmenu-item", ontap: "composeChu", name: "postChuMenuItem", components: [
-                    //     {classes: "mainmenu-item-icon postchu"},
-                    //     {classes: "mainmenu-item-text", content: "Post Chu"}
-                    // ]}
                 ]},
-                {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected"}
+                {kind: "FittableRows", components: [
+                    {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
+                    {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected", fit: true}
+                ]}
             ]}
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
-                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu"},
+                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu"},
+                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu"},
                 {kind: "ChuView", name: "chuView", onBack: "back"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
                 {kind: "Settings", onToggleMenu: "toggleMenu"},

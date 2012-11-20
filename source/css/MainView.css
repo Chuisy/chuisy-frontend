@@ -43,6 +43,11 @@
 	background-image: url(../../assets/images/settings.png);
 }
 
+.mainmenu-item-icon.search {
+	background-image: url(../../assets/images/search.png);
+}
+
+
 
 .mainmenu-item-text {
 	font-size: 12pt;
