@@ -96,8 +96,10 @@ enyo.kind({
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
         {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button"},
-            {kind: "Image", src: "assets/images/logo.png", classes: "mainheader-logo"}
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
+                {classes: "menu-button-icon"}
+            ]},
+            {classes: "mainheader-logo"}
         ]},
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}

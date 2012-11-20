@@ -132,7 +132,7 @@ enyo.kind({
                 {components: [
                     {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/home_light.png", classes: "mainmenu-item-icon"},
-                        {classes: "mainmenu-item-text", content: "Chu Feed"}
+                        {classes: "mainmenu-item-text", content: "Feed"}
                     ]},
                     {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
                         {kind: "onyx.Icon", src: "assets/images/archive_light.png", classes: "mainmenu-item-icon"},

@@ -1,12 +1,6 @@
 .chubox {
-	/*text-align: center;*/
-	/*padding: 20px;*/
 	position: relative;
-}
-
-.chubox-chu {
-	position: relative;
-	/*margin: 5px 2px 2px 5px;*/
+	text-align: center;
 }
 
 .chubox-thumbs {
@@ -37,10 +31,11 @@
 }
 
 .chubox-chu {
+	position: relative;
 	padding: 5px;
 	width: 100px;
 	height: 100px;
-	margin: 2px;
+	margin: 0 2px 0 2px;
 	box-sizing: border-box;
 	border: #ccc solid 1px;
 	background-color: White;

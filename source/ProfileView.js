@@ -115,7 +115,9 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton"},
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
+                {classes: "menu-button-icon"}
+            ]},
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
             {classes: "mainheader-text", content: "Profile"}
         ]},

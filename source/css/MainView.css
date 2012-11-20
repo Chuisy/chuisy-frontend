@@ -39,7 +39,8 @@
 }
 
 .mainslider {
-	background: url(../../assets/images/arab_tile.png);
+	background-image: url(../../assets/images/roughcloth@2x.png);
+	background-size: 320px 320px;
 	box-shadow: -2px 0 10px #000;
 	border-radius: 5px;
 }
