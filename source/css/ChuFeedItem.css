@@ -1,11 +1,12 @@
 .chufeeditem {
 	box-sizing: border-box;
-	border: #ccc solid 1px;
+	/*border: #ccc solid 1px;*/
 	background-color: White;
 	/*margin: 10px;*/
-	padding: 5px 5px 2px 5px;
-	height: 290px;
-	margin: 10px;
+	box-shadow: 0 0 5px #555;
+	padding: 8px;
+	height: 346px;
+	margin: 8px;
 }
 
 .chufeeditem.onyx-highlight {
@@ -13,30 +14,65 @@
 }
 
 .chufeeditem-avatar {
-	margin-top: 2px;
+	margin-left: 1px;
+	margin-right: 10px;
+	width: 35px;
+	height: 35px;
+	float: left;
 }
 
 .chufeeditem-username {
-	display: inline-block;
+	display: block;
 	vertical-align: top;
-	font-size: 13pt;
-	padding: 5px 5px;
+	font-size: 11pt;
+	padding: 0 0;
 	max-width: 150px
 }
 
 .chufeeditem-time {
 	color: #555;
-	font-size: 11pt;
-	float: right;
-	padding: 7px;
+	font-size: 10pt;
+	padding: 0 10px;
 }
 
 .chufeeditem-image {
 	width: 100%;
-	height: 250px;
+	height: 288px;
 	background: url() no-repeat center center;
 	background-size: cover;
 	background-color: White;
 	box-sizing: border-box;
-	border: solid 1px #ddd;
+	/*border: solid 1px #ddd;*/
+	margin-bottom: 8px;
+}
+
+.chufeeditem-likes-comments {
+	float: right;
+}
+
+.chufeeditem-likes-count,
+.chufeeditem-comments-count {
+	color: #555;
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 2px;
+}
+
+.chufeeditem-likes-icon {
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/likes.png);
+	background-size: 16px 16px;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.chufeeditem-comments-icon {
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/comments.png);
+	background-size: 16px 16px;
+	vertical-align: top;
+	display: inline-block;
 }
