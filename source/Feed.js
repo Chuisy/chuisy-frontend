@@ -5,7 +5,8 @@ enyo.kind({
     events: {
         onChuSelected: "",
         onToggleMenu: "",
-        onComposeChu: ""
+        onComposeChu: "",
+        onShowProfile: ""
     },
     meta: {
         limit: 20,
@@ -92,6 +93,9 @@ enyo.kind({
         this.$.errorBox.show();
         return true;
     },
+    userTapped: function(sender, event) {
+        this.doShowProfile({user: this.chus[event.index].user});
+    },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
@@ -112,7 +116,7 @@ enyo.kind({
         ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20,
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
-            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped"},
+            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
             {name: "loadingNextPage", content: "Loading...", classes: "feed-nextpage"}
         ]}
     ]

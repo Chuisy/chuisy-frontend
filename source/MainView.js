@@ -166,7 +166,7 @@ enyo.kind({
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu"},
+                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile"},
                 {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu"},
                 {kind: "ChuView", name: "chuView", onBack: "back"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
