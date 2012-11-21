@@ -3,7 +3,7 @@
 	/*border: #ccc solid 1px;*/
 	background-color: White;
 	/*margin: 10px;*/
-	box-shadow: 0 0 5px #555;
+	box-shadow: 0 0 4px #666;
 	padding: 8px;
 	height: 346px;
 	margin: 8px;
@@ -75,4 +75,8 @@
 	background-size: 16px 16px;
 	vertical-align: top;
 	display: inline-block;
+}
+
+.chufeeditem:active:hover:not([disabled]) {
+	background-color: #ddd;
 }
