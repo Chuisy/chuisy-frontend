@@ -25,5 +25,6 @@ enyo.depends(
 	"SearchResults.js",
 	"SearchInput.js",
 	"ChuFeedItem.js",
-	"ChuGrid.js"
+	"ChuGrid.js",
+	"Notifications.js"
 );

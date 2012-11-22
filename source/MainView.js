@@ -8,7 +8,8 @@ enyo.kind({
         chuView: 2,
         profileView: 3,
         settings: 4,
-        composeChu: 5
+        notifications: 5,
+        composeChu: 6
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -127,8 +128,16 @@ enyo.kind({
 //             this.$.searchInput.blur();
 //         }
 //     },
+    showNotifications: function() {
+        this.showView("notifications");
+
+        App.updateHistory("notifications/");
+    },
     isSliderOpen: function() {
         return this.$.mainSlider.getValue() == this.$.mainSlider.getMax();
+    },
+    notificationSelected: function(sender, event) {
+        App.navigateTo(event.notification.uri);
     },
     components: [
         {classes: "mainmenu", components: [
@@ -166,12 +175,13 @@ enyo.kind({
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile"},
-                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu"},
-                {kind: "ChuView", name: "chuView", onBack: "back"},
-                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back"},
-                {kind: "Settings", onToggleMenu: "toggleMenu"},
-                {kind: "ComposeChu", onBack: "back"}
+                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
+                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
+                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications"},
+                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
+                {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
+                {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
+                {kind: "ComposeChu", onBack: "back", onShowNotifications: "showNotifications"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}

@@ -9,7 +9,8 @@ enyo.kind({
         onChuSelected: "",
         onShowProfile: "",
         onToggleMenu: "",
-        onBack: ""
+        onBack: "",
+        onShowNotifications: ""
     },
     authUserChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
@@ -119,7 +120,11 @@ enyo.kind({
                 {classes: "menu-button-icon"}
             ]},
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
-            {classes: "mainheader-text", content: "Profile"}
+            {classes: "mainheader-text", content: "Profile"},
+            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
+                {classes: "notification-button-icon"},
+                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+            ]}
         ]},
         {classes: "provileview-info", components: [
             {kind: "Image", classes: "profileview-avatar", name: "avatar"},

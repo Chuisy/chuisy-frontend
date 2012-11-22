@@ -11,6 +11,9 @@ enyo.kind({
             window.ignoreHashChange = true;
             window.location.hash = "!/" + uri;
         },
+        navigateTo: function(uri) {
+            window.location.hash = "!/" + uri;
+        },
         isOnline: function() {
             if (navigator.network && navigator.network.connection) {
                 var networkState = navigator.network.connection.type;
@@ -130,6 +133,10 @@ enyo.kind({
                 // chubox/
                 // User wants to see his Chu Box? Our pleasure!
                 this.$.mainView.openChubox();
+            } else if (match[1].match(/^notifications\/$/)) {
+                // chubox/
+                // Whats new? Let's check out the notifications
+                this.$.mainView.showNotifications();
             } else if ((match2 = match[1].match(/^chu\/(.+)$/))) {
                 // chu/..
                 if (match2[1].match(/new\/$/)) {

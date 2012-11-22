@@ -6,7 +6,8 @@ enyo.kind({
         user: null
     },
     events: {
-        onToggleMenu: ""
+        onToggleMenu: "",
+        onShowNotifications: ""
     },
     userChanged: function() {
         if (this.user) {
@@ -55,7 +56,11 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
                 {classes: "menu-button-icon"}
             ]},
-            {classes: "mainheader-text", content: "Settings"}
+            {classes: "mainheader-text", content: "Settings"},
+            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
+                {classes: "notification-button-icon"},
+                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+            ]}
         ]},
         {classes: "main-content", fit: true, components: [
             {kind: "onyx.Groupbox", components: [

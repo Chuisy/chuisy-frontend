@@ -6,7 +6,8 @@ enyo.kind({
         onChuSelected: "",
         onToggleMenu: "",
         onComposeChu: "",
-        onShowProfile: ""
+        onShowProfile: "",
+        onShowNotifications: ""
     },
     meta: {
         limit: 20,
@@ -106,7 +107,7 @@ enyo.kind({
                 {classes: "menu-button-icon"}
             ]},
             {classes: "mainheader-logo"},
-            {kind: "onyx.Button", classes: "notification-button", components: [
+            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
                 {classes: "notification-button-icon"},
                 {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
             ]}

@@ -4,7 +4,8 @@ enyo.kind({
     events: {
         onChuSelected: "",
         onToggleMenu: "",
-        onComposeChu: ""
+        onComposeChu: "",
+        onShowNotifications: ""
     },
     handlers: {
         onresize: "refreshChus",
@@ -27,6 +28,7 @@ enyo.kind({
     },
     startEditing: function(sender, event) {
         this.editing = true;
+        this.$.notificationsButton.hide();
         this.$.doneButton.show();
         this.addClass("editing");
         event.preventDefault();
@@ -35,6 +37,7 @@ enyo.kind({
         this.editing = false;
         this.removeClass("editing");
         this.$.doneButton.hide();
+        this.$.notificationsButton.show();
     },
     refreshChus: function() {
         this.chus = chuisy.chubox.getChus();
@@ -95,7 +98,11 @@ enyo.kind({
                     {classes: "menu-button-icon"}
                 ]},
                 {classes: "mainheader-text", content: "Chu Box"},
-                {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false}
+                {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false},
+                {kind: "onyx.Button", name: "notificationsButton", classes: "notification-button", ontap: "doShowNotifications", components: [
+                    {classes: "notification-button-icon"},
+                    {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+                ]}
             ]},
             {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", fit: true, onTransitionFinish: "updatePageIndex"}
         ]}
