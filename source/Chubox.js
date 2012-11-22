@@ -106,7 +106,7 @@ enyo.kind({
                 {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false},
                 {kind: "onyx.Button", name: "notificationsButton", classes: "notification-button", ontap: "doShowNotifications", components: [
                     {classes: "notification-button-icon"},
-                    {classes: "notification-button-badge", name: "notificationBadge", content: "0"}
+                    {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
                 ]}
             ]},
             {kind: "Panels", name: "carousel", arrangerKind: "CarouselArranger", fit: true, onTransitionFinish: "updatePageIndex"}
