@@ -2,8 +2,7 @@ enyo.kind({
     name: "ComposeChu",
     kind: "FittableRows",
     events: {
-        onBack: "",
-        onShowNotifications: ""
+        onBack: ""
     },
     userChanged: function(sender, event) {
         this.user = event.user;
@@ -58,11 +57,7 @@ enyo.kind({
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "chuisy"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
-            ]}
+            {classes: "mainheader-text", content: "chuisy"}
         ]},
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked"},

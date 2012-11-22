@@ -15,6 +15,7 @@ enyo.kind({
             this.meta = response.meta;
             this.items = response.objects;
             this.refresh();
+            enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count});
         }), {limit: this.meta.limit});
     },
     nextPage: function() {
@@ -77,13 +78,18 @@ enyo.kind({
             this.load();
         }
     },
+    notificationsUpdated: function(sender, event) {
+        this.$.notificationBadge.setContent(event.unread_count);
+        this.$.notificationBadge.setShowing(event.unread_count);
+        return true;
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
             {classes: "mainheader-text", content: "Notifications"},
             {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
                 {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", fit: true, components: [
@@ -93,6 +99,6 @@ enyo.kind({
             ]},
             {name: "loadingNextPage", content: "Loading...", classes: "notifications-nextpage"}
         ]},
-        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online"}
+        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onNotificationsUpdated: "notificationsUpdated"}
     ]
 });

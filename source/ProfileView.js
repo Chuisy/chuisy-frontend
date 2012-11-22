@@ -114,6 +114,11 @@ enyo.kind({
         }
         return true;
     },
+    notificationsUpdated: function(sender, event) {
+        this.$.notificationBadge.setContent(event.unread_count);
+        this.$.notificationBadge.setShowing(event.unread_count);
+        return true;
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
@@ -123,7 +128,7 @@ enyo.kind({
             {classes: "mainheader-text", content: "Profile"},
             {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
                 {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
         {classes: "provileview-info", components: [
@@ -162,6 +167,6 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
+        {kind: "enyo.Signals", onUserChanged: "authUserChanged", onNotificationsUpdated: "notificationsUpdated"}
     ]
 });

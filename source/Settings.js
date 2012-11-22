@@ -51,6 +51,11 @@ enyo.kind({
     signOut: function() {
         chuisy.signOut();
     },
+    notificationsUpdated: function(sender, event) {
+        this.$.notificationBadge.setContent(event.unread_count);
+        this.$.notificationBadge.setShowing(event.unread_count);
+        return true;
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
@@ -59,7 +64,7 @@ enyo.kind({
             {classes: "mainheader-text", content: "Settings"},
             {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
                 {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "noficationBadge", content: "3"}
+                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
         {classes: "main-content", fit: true, components: [
@@ -80,6 +85,7 @@ enyo.kind({
             ]},
             {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
             {kind: "onyx.Button", content: "Logout", ontap: "signOut"}
-        ]}
+        ]},
+        {kind: "Signals", onNotificationsUpdated: "notificationsUpdated"}
     ]
 });

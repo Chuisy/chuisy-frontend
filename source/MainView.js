@@ -186,7 +186,7 @@ enyo.kind({
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
-                {kind: "ComposeChu", onBack: "back", onShowNotifications: "showNotifications"}
+                {kind: "ComposeChu", onBack: "back"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}
