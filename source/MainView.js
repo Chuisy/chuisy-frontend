@@ -20,8 +20,13 @@ enyo.kind({
     },
     userChanged: function(sender, event) {
         this.user = event.user;
-        this.$.menuAvatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
-        this.$.menuName.setContent(event.user.first_name + " " + event.user.last_name);
+        if (this.user) {
+            this.$.menuAvatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
+            this.$.menuName.setContent(event.user.first_name + " " + event.user.last_name);
+        } else {
+            this.$.menuAvatar.applyStyle("background-image", "url(assets/images/avatar_placeholder.png");
+            this.$.menuName.setContent("");
+        }
     },
     showView: function(name) {
         this.$.primaryPanels.setIndex(this.views[name]);
