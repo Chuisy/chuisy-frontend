@@ -49,6 +49,7 @@ enyo.kind({
                 this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>commented</strong> on a <strong>chu</strong> of yours.");
                 break;
         }
+        this.$.notification.addRemoveClass("unread", !item.read);
 
         var isLastItem = event.index == this.items.length-1;
         if (isLastItem && !this.allPagesLoaded()) {
@@ -63,6 +64,15 @@ enyo.kind({
     notificationTapped: function(sender, event) {
         var not = this.items[event.index];
         this.doNotificationSelected({notification: not});
+        if (!not.read) {
+            not.read = true;
+            params = enyo.clone(not);
+            delete params.user;
+            params.actor = params.actor.resource_uri;
+            chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
+                this.load();
+            }));
+        }
     },
     signedIn: function() {
         if (App.isOnline()) {
@@ -93,7 +103,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", fit: true, components: [
-            {classes: "notifications-notification", ontap: "notificationTapped", components: [
+            {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
