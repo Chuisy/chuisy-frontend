@@ -92,7 +92,7 @@ enyo.kind({
         }
     },
     toggleFollow: function(sender, event) {
-        var user = this.showedUser;
+        var user = this.user;
         var button = this.$.followButton;
 
         button.setDisabled(true);

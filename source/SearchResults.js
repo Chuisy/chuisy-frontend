@@ -40,8 +40,7 @@ enyo.kind({
     },
     setupUser: function(sender, event) {
         var user = this.users[event.index];
-        event.item.$.userListItem.setUser(this.user);
-        event.item.$.userListItem.setShowedUser(user);
+        event.item.$.userListItem.setUser(user);
         return true;
     },
     setupChu: function(sender, event) {
