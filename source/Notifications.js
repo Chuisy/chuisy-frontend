@@ -48,6 +48,10 @@ enyo.kind({
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
                 this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>commented</strong> on a <strong>chu</strong> of yours.");
                 break;
+            case "follow":
+                this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
+                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> is now <strong>following</strong> you.");
+                break;
         }
         this.$.notification.addRemoveClass("unread", !item.read);
 
