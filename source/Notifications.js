@@ -78,19 +78,32 @@ enyo.kind({
             }));
         }
     },
+    startPolling: function() {
+        this.stopPolling();
+        this.pollInterval = setInterval(enyo.bind(this, this.load), 60000);
+    },
+    stopPolling: function() {
+        if (this.pollInterval) {
+            clearInterval(this.pollInterval);
+        }
+    },
     signedIn: function() {
         if (App.isOnline()) {
-            this.load();
+            this.startPolling();
         }
     },
     signedOut: function() {
         this.items = [];
         this.refresh();
+        this.stopPolling();
     },
     online: function() {
         if (chuisy.getSignInStatus().signedIn) {
-            this.load();
+            this.startPolling();
         }
+    },
+    offline: function() {
+        this.stopPolling();
     },
     notificationsUpdated: function(sender, event) {
         this.$.notificationBadge.setContent(event.unread_count);
@@ -113,6 +126,6 @@ enyo.kind({
             ]},
             {name: "loadingNextPage", content: "Loading...", classes: "notifications-nextpage"}
         ]},
-        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onNotificationsUpdated: "notificationsUpdated"}
+        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onNotificationsUpdated: "notificationsUpdated"}
     ]
 });
