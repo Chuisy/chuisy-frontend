@@ -16,6 +16,7 @@ enyo.kind({
             this.items = response.objects;
             this.refresh();
             enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count});
+            window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unread_count, function() {});
         }), {limit: this.meta.limit});
     },
     nextPage: function() {
@@ -89,6 +90,7 @@ enyo.kind({
     },
     signedIn: function() {
         if (App.isOnline()) {
+            this.load();
             this.startPolling();
         }
     },
@@ -99,6 +101,7 @@ enyo.kind({
     },
     online: function() {
         if (chuisy.getSignInStatus().signedIn) {
+            this.load();
             this.startPolling();
         }
     },
@@ -108,6 +111,10 @@ enyo.kind({
     notificationsUpdated: function(sender, event) {
         this.$.notificationBadge.setContent(event.unread_count);
         this.$.notificationBadge.setShowing(event.unread_count);
+        return true;
+    },
+    pushNotification: function() {
+        this.load();
         return true;
     },
     components: [
@@ -126,6 +133,6 @@ enyo.kind({
             ]},
             {name: "loadingNextPage", content: "Loading...", classes: "notifications-nextpage"}
         ]},
-        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onNotificationsUpdated: "notificationsUpdated"}
+        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onNotificationsUpdated: "notificationsUpdated", onPushNotification: "pushNotification"}
     ]
 });

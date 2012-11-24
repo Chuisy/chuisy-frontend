@@ -149,6 +149,10 @@ enyo.kind({
         this.$.likeButton.setDisabled(true);
         this.$.commentInput.setDisabled(true);
     },
+    pushNotification: function() {
+        this.loadComments();
+        this.loadLikes();
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
@@ -181,6 +185,6 @@ enyo.kind({
                 {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
             ]}
         ]},
-        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline"}
+        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]
 });

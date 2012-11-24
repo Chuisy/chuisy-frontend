@@ -54,7 +54,39 @@ enyo.kind({
         enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
+
         this.recoverStateFromUri();
+        if (App.isMobile()) {
+            this.initPushNotifications();
+        }
+    },
+    initPushNotifications: function() {
+        var pushNotification = window.plugins.pushNotification;
+
+        this.checkPendingNotifications();
+        document.addEventListener('onPushNotification', enyo.bind(this, function(event) {
+            // this.log(JSON.stringify(event.notification));
+            pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
+            enyo.Signals.send("onPushNotification", event);
+        }));
+    },
+    registerDevice: function() {
+        window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
+            // this.log(JSON.stringify(status));
+            if (status.enabled && status.deviceToken) {
+                chuisy.device.add({token: status.deviceToken}, enyo.bind(this, function(sender, response) {
+                }));
+            }
+        }));
+    },
+    checkPendingNotifications: function() {
+        window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
+            this.log(JSON.stringify(pending));
+            var notification = pending.notifications[0];
+            if (notification) {
+                App.navigateTo(notification.uri);
+            }
+        }));
     },
     initFacebookWeb: function() {
         window.fbAsyncInit = enyo.bind(this, function() {
@@ -89,12 +121,23 @@ enyo.kind({
         if (chuisy.getSignInStatus().signedIn) {
             chuisy.loadUserDetails();
         }
+        if (chuisy.getSignInStatus().signedIn) {
+            this.registerDevice();
+        }
         return true;
     },
     offline: function() {
         this.log("offline");
         chuisy.setOnline(false);
         return true;
+    },
+    resume: function() {
+        this.checkPendingNotifications();
+    },
+    signedIn: function() {
+        if (App.isOnline()) {
+            this.registerDevice();
+        }
     },
     hashChanged: function() {
         if (!window.ignoreHashChange) {
@@ -232,6 +275,6 @@ enyo.kind({
                 {kind: "onyx.Button", content: "Cancel", ontap: "facebookCancel"}
             ]}
         ]},
-        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onRequestSignIn: "requestSignIn"}
+        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn"}
     ]
 });
