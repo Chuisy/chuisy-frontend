@@ -32,10 +32,19 @@ enyo.kind({
             this.init();
         }
     },
+    rendered: function() {
+        this.inherited(arguments);
+        if (navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
+    },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
     },
     deviceReady: function() {
+        if (this.hasNode()) {
+            navigator.splashscreen.hide();
+        }
         if (!this.initialized) {
             this.init();
             this.initialized = true;
