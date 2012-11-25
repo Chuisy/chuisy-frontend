@@ -88,6 +88,7 @@ enyo.kind({
     },
     online: function() {
         this.$.errorBox.hide();
+        this.loadFeed();
         return true;
     },
     offline: function() {
@@ -105,7 +106,7 @@ enyo.kind({
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
-        {kind: "Signals", onUserChanged: "userChanged", online: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed", onNotificationsUpdated: "notificationsUpdated"},
+        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed", onNotificationsUpdated: "notificationsUpdated"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
