@@ -15,8 +15,8 @@ enyo.kind({
             window.location.hash = "!/" + uri;
         },
         isOnline: function() {
-            if (navigator.network && navigator.network.connection) {
-                var networkState = navigator.network.connection.type;
+            if (navigator.connection) {
+                var networkState = navigator.connection.type;
                 return networkState != Connection.UNKNOWN && networkState != Connection.NONE;
             } else {
                 return true;
