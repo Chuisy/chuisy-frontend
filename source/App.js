@@ -79,7 +79,7 @@ enyo.kind({
     },
     checkPendingNotifications: function() {
         window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
-            this.log(JSON.stringify(pending));
+            // this.log(JSON.stringify(pending));
             var notification = pending.notifications[0];
             if (notification) {
                 App.navigateTo(notification.uri);
