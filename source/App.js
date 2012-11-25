@@ -232,29 +232,37 @@ enyo.kind({
     },
     facebookSignIn: function() {
         // Get facebook access token
-        this.loginWithFacebook(enyo.bind(this, function(response) {
-            this.log(JSON.stringify(response));
-            if (response.status == "connected") {
-                chuisy.signIn({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function() {
-                    if (this.signInSuccessCallback) {
-                        this.signInSuccessCallback();
-                        this.signInSuccessCallback = null;
-                        this.signInFailureCallback = null;
-                    }
-                    this.$.panels.setIndex(0);
-                }), enyo.bind(this, function() {
-                    alert("Authentication failed!");
-                }));
-            } else {
-                alert("Facebook signin failed!");
-            }
+        this.loginWithFacebook(enyo.bind(this, function(accessToken) {
+            chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                if (this.signInSuccessCallback) {
+                    this.signInSuccessCallback();
+                    this.signInSuccessCallback = null;
+                    this.signInFailureCallback = null;
+                }
+                this.$.panels.setIndex(0);
+            }), enyo.bind(this, function() {
+                alert("Authentication failed!");
+            }));
         }));
     },
     loginWithFacebook: function(callback) {
         if (window.plugins && window.plugins.facebookConnect) {
-            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, callback);
+            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, function(result) {
+                console.log(JSON.stringify(result));
+                if(result.cancelled || result.error) {
+                    this.log("Facebook signin failed:" + result.message);
+                    return;
+                }
+                callback(result.accessToken);
+            });
         } else if (FB) {
-            FB.login(callback, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+            FB.login(function() {
+                if (response.status == "connected") {
+                    callback(response.authResponse.accessToken);
+                } else {
+                    console.log("Facebook signin failed!");
+                }
+            }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
         } else {
             this.error("No facebook sdk found!");
         }
