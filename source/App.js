@@ -42,9 +42,7 @@ enyo.kind({
         }
     },
     init: function() {
-        if (App.isMobile()) {
-            this.initFacebookMobile();
-        } else {
+        if (!App.isMobile()) {
             this.initFacebookWeb();
         }
 
@@ -111,9 +109,6 @@ enyo.kind({
             js.src = "http://connect.facebook.net/en_US/all.js";
             ref.parentNode.insertBefore(js, ref);
         }(document));
-    },
-    initFacebookMobile: function() {
-        FB.init({appId: 180626725291316, nativeInterface: CDV.FB, useCachedDialogs: false});
     },
     online: function() {
         this.log("online");
@@ -237,7 +232,8 @@ enyo.kind({
     },
     facebookSignIn: function() {
         // Get facebook access token
-        FB.login(enyo.bind(this, function(response) {
+        this.loginWithFacebook(enyo.bind(this, function(response) {
+            this.log(JSON.stringify(response));
             if (response.status == "connected") {
                 chuisy.signIn({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function() {
                     if (this.signInSuccessCallback) {
@@ -252,7 +248,16 @@ enyo.kind({
             } else {
                 alert("Facebook signin failed!");
             }
-        }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+        }));
+    },
+    loginWithFacebook: function(callback) {
+        if (window.plugins && window.plugins.facebookConnect) {
+            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, callback);
+        } else if (FB) {
+            FB.login(callback, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+        } else {
+            this.error("No facebook sdk found!");
+        }
     },
     facebookCancel: function() {
         if (this.signInFailureCallback) {
