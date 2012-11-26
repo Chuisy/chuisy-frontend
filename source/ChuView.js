@@ -14,6 +14,10 @@ enyo.kind({
         "EUR": "€",
         "GBP": "£"
     },
+    created: function() {
+        this.inherited(arguments);
+        this.chuChanged();
+    },
     chuChanged: function() {
         if (this.chu) {
             this.$.image.setSrc(this.chu.localImage || this.chu.image);
@@ -35,7 +39,7 @@ enyo.kind({
             this.refreshLikes();
             this.refreshComments();
 
-            if (App.isOnline()) {
+            if (typeof(App) == "undefined" || App.isOnline()) {
                 this.loadLikes();
                 this.loadComments();
             }
