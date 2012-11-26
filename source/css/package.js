@@ -17,5 +17,6 @@ enyo.depends(
 	"SearchInput.css",
 	"ChuFeedItem.css",
 	"ChuGrid.css",
-	"Notifications.css"
+	"Notifications.css",
+	"ChuWebView.css"
 );

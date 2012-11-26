@@ -1,0 +1,81 @@
+.chuwebview {
+	text-align: center;
+}
+
+.chuwebview-body {
+	margin: 0 auto;
+	padding: 20px;
+	width: 100%;
+	box-sizing: border-box;
+	max-width: 600px;
+	text-align: left;
+}
+
+.chuwebview-image {
+	width: 100%;
+	padding: 5px;
+	background-color: White;
+}
+
+.chuwebview-likes-count,
+.chuwebview-comments-count {
+	display: inline-block;
+	float: right;
+	padding: 3px 0;
+}
+
+.chuwebview-likes-icon {
+	width: 24px;
+	height: 24px;
+	background: url(../../assets/images/heart_16x16.png) no-repeat center center;
+	display: inline-block;
+	vertical-align: top;
+	float: right;
+}
+
+.chuwebview-comments-icon {
+	width: 24px;
+	height: 24px;
+	background: url(../../assets/images/comment_16x16.png) no-repeat center center;
+	display: inline-block;
+	vertical-align: top;
+	float: right;
+}
+
+.chuwebview-like-button {
+	width: 100%;
+	height: 50px;
+	max-width: 300px;
+	background-color: #eee;
+	background-image: none;
+	display: block;
+	margin: 0 auto;
+}
+
+.chuwebview-like-button.active,
+.chuwebview-like-button:active:hover:not([disabled]) {
+	background-image: none;
+	background-color: #C30F26;
+	border-top: none;
+}
+
+.chuwebview-like-button-icon {
+	width: 24px;
+	height: 24px;
+	background: url(../../assets/images/heart_16x16.png) no-repeat center center;
+}
+
+.chuwebview-like-button.active > .chuwebview-like-button-icon,
+.chuwebview-like-button:active:hover:not([disabled]) > .chuwebview-like-button-icon {
+	background-image: url(../../assets/images/heart_light_16x16.png);
+}
+
+.chuwebview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 10px;
+}
+
+.chuwebview-comments-repeater {
+	width: 100%;
+}
