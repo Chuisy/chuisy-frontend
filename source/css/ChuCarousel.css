@@ -1,17 +1,17 @@
-.chugrid {
+.chucarousel {
 	/*text-align: center;*/
 	/*padding: 20px;*/
 	position: relative;
 }
 
-.chugrid-thumbs {
+.chucarousel-thumbs {
 	position: absolute;
 	bottom: 5px;
 	width: 100%;
 	z-index: 100;
 }
 
-.chugrid-chu {
+.chucarousel-chu {
 	padding: 5px;
 	width: 100px;
 	height: 100px;
@@ -26,7 +26,7 @@
 	posotion: relative;
 }
 
-.chugrid-chu-image {
+.chucarousel-chu-image {
 	width: 100%;
 	height: 100%;
 	background: url() no-repeat center center;
@@ -38,6 +38,6 @@
 	background-color: Gray;
 }
 
-.chugrid-chu.selected {
+.chucarousel-chu.selected {
 	background-color: orange;
 }

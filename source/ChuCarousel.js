@@ -1,6 +1,6 @@
 enyo.kind({
-    name: "ChuGrid",
-    classes: "chugrid",
+    name: "ChuCarousel",
+    classes: "chucarousel",
     published: {
         filters: [],
         count: 0,
@@ -87,8 +87,8 @@ enyo.kind({
         var absChuIndex = pageIndex * this.chusPerPage + chuIndex;
         if (absChuIndex < this.count) {
             var page = this.$.carousel.getClientControls()[pageIndex];
-            page.createComponent({classes: "chugrid-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
-                {classes: "chugrid-chu-image"}
+            page.createComponent({classes: "chucarousel-chu", pageIndex: pageIndex, chuIndex: chuIndex, ontap: "chuTap", owner: this, components: [
+                {classes: "chucarousel-chu-image"}
             ]});
         }
     },
