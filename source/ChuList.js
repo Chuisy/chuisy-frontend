@@ -7,16 +7,24 @@ enyo.kind({
     events: {
         onChuSelected: ""
     },
+    handlers: {
+        onresize: "resized"
+    },
     chuWidth: 100,
     meta: {
         offset: 0,
         limit: 60
     },
+    items: [],
     rendered: function() {
         this.inherited(arguments);
         this.buildCells();
         this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
         this.load();
+    },
+    resized: function() {
+        this.buildCells();
+        this.refresh();
     },
     buildCells: function() {
         if (!this.hasNode()) {
@@ -25,6 +33,7 @@ enyo.kind({
 
         this.cellCount = Math.floor(this.getBounds().width / this.chuWidth);
 
+        this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
             this.$.listClient.createComponent({classes: "chulist-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "chulist-chu-image", name: "chuImage" + i}
@@ -85,7 +94,7 @@ enyo.kind({
         this.doChuSelected({chu: this.items[index]});
     },
     components: [
-        {kind: "List", classes: "enyo-fill", name: "list", onSetupItem: "setupItem", components: [
+        {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chulist-row"},
             {name: "loadingNextPage", content: "Loading...", classes: "chulist-nextpage"}
         ]}

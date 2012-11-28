@@ -8,24 +8,31 @@ enyo.kind({
         onShowNotifications: ""
     },
     handlers: {
-        onhold: "startEditing"
+        onhold: "startEditing",
+        onresize: "resized"
     },
     chuWidth: 100,
     meta: {
         offset: 0,
         limit: 60
     },
+    items: [],
     rendered: function() {
         this.inherited(arguments);
         this.buildCells();
     },
+    resized: function() {
+        this.buildCells();
+        this.refresh();
+    },
     buildCells: function() {
-        if (!this.hasNode()) {
+        if (!this.hasNode() || !this.getBounds().width || !this.getBounds().height) {
             return;
         }
 
         this.cellCount = Math.floor(this.getBounds().width / this.chuWidth);
 
+        this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
             this.$.listClient.createComponent({classes: "chubox-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "chubox-chu-image", name: "chuImage" + i},
