@@ -97,6 +97,7 @@ enyo.kind({
     },
     initFacebookWeb: function() {
         window.fbAsyncInit = enyo.bind(this, function() {
+            console.log("facebook sdk loaded.");
             // init the FB JS SDK
             FB.init({
                 appId      : '180626725291316', // App ID from the App Dashboard
@@ -106,18 +107,14 @@ enyo.kind({
             });
         });
 
-        // Load the SDK's source Asynchronously
-        this.log("Loading facebook sdk...");
-        window.FB = null;
-        (function(d){
+        (function(d, debug){
+            console.log("loading facebook sdk...");
             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
             if (d.getElementById(id)) {return;}
-            js = d.createElement('script');
-            js.id = id;
-            js.async = true;
-            js.src = "http://connect.facebook.net/en_US/all.js";
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "http://connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
             ref.parentNode.insertBefore(js, ref);
-        }(document));
+        }(document, false));
     },
     online: function() {
         this.log("online");
@@ -125,7 +122,7 @@ enyo.kind({
         if (chuisy.getSignInStatus().signedIn) {
             chuisy.loadUserDetails();
         }
-        if (chuisy.getSignInStatus().signedIn) {
+        if (App.isMobile() && chuisy.getSignInStatus().signedIn) {
             this.registerDevice();
         }
         return true;
