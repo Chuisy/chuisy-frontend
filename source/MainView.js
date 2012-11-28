@@ -40,7 +40,7 @@ enyo.kind({
     },
     openChubox: function(user) {
         this.showView("chubox");
-        this.$.chubox.refreshChus();
+        this.$.chubox.refresh();
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chubox/");
@@ -181,7 +181,7 @@ enyo.kind({
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
-                {kind: "Chubox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
+                {kind: "ChuBox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},

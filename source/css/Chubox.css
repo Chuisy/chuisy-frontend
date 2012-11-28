@@ -13,17 +13,17 @@
 .chubox-delete-button {
 	position: absolute;
 	left: -10px;
-	top: -10px;
+	top: -7px;
 	display: none;
-	background-color: White;
-	border-radius: 100px;
-	border: solid 1px;
-	width: 25px;
-	height: 25px;
+	width: 36px;
+	height: 36px;
+	background-size: 36px 72px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
 }
 
-.chubox-delete-button:active {
-	background-color: Gray;
+.chubox-delete-button:active:hover:not([disabled]) {
+	background-position: 0 -36px;
 }
 
 .chubox.editing .chubox-delete-button {
@@ -31,16 +31,17 @@
 }
 
 .chubox-chu {
-	position: relative;
-	padding: 5px;
-	width: 100px;
-	height: 100px;
-	margin: 0 2px 0 2px;
+	padding: 3px;
+	width: 98px;
+	height: 98px;
+	margin: 3px;
 	box-sizing: border-box;
-	border: #ccc solid 1px;
+	/*border: #ccc solid 1px;*/
+	box-shadow: 1px 2px 3px #666;
+	/*background-image: url(../../assets/images/lightpaperfibers.png);*/
 	background-color: White;
 	display: inline-block;
-	border-radius: 2px;
+	position: relative;
 }
 
 .chubox-chu-image {
@@ -48,11 +49,19 @@
 	height: 100%;
 	background: url() no-repeat center center;
 	background-size: cover;
-	border: solid 1px #555;
+	/*border: solid 1px #555;*/
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	background-color: Gray;
+}
+
+.chubox-row {
+	margin-bottom: -6px;
+}
+
+.chubox-list {
+	padding-top: 5px;
 }
 
 .chubox-chu.selected {

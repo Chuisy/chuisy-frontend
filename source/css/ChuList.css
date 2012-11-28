@@ -3,13 +3,13 @@
 }
 
 .chulist-chu {
-	padding: 2px;
+	padding: 3px;
 	width: 98px;
 	height: 98px;
 	margin: 3px;
 	box-sizing: border-box;
 	/*border: #ccc solid 1px;*/
-	box-shadow: 1px 2px 4px #666;
+	box-shadow: 1px 2px 3px #666;
 	/*background-image: url(../../assets/images/lightpaperfibers.png);*/
 	background-color: White;
 	display: inline-block;
@@ -26,4 +26,8 @@
 	margin: 0;
 	padding: 0;
 	background-color: Gray;
+}
+
+.chulist-row {
+	margin-bottom: -6px;
 }
