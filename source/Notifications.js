@@ -16,7 +16,9 @@ enyo.kind({
             this.items = response.objects;
             this.refresh();
             enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count});
-            window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unread_count, function() {});
+            if (App.isMobile()) {
+                window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unread_count, function() {});
+            }
         }), {limit: this.meta.limit});
     },
     nextPage: function() {
