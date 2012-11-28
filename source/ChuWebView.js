@@ -10,6 +10,7 @@ enyo.kind({
         "EUR": "€",
         "GBP": "£"
     },
+    kind: "Scroller",
     create: function() {
         this.inherited(arguments);
         chuisy.init();
@@ -18,7 +19,7 @@ enyo.kind({
     },
     loadFacebookSdk: function() {
         window.fbAsyncInit = enyo.bind(this, function() {
-            console.log("sdk loaded...");
+            console.log("sdk loaded.");
             // init the FB JS SDK
             FB.init({
                 appId      : '180626725291316', // App ID from the App Dashboard
@@ -26,8 +27,6 @@ enyo.kind({
                 cookie     : true, // set sessions cookies to allow your server to access the session?
                 xfbml      : true  // parse XFBML tags on this page?
             });
-
-            this.loginWithFacebook();
         });
 
         (function(d, debug){
@@ -41,8 +40,8 @@ enyo.kind({
     },
     loginWithFacebook: function() {
         // Get facebook access token
-        FB.login(enyo.bind(this, function(accessToken) {
-            chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+        FB.login(enyo.bind(this, function(response) {
+            chuisy.signIn({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function() {
                 if (this.signInSuccessCallback) {
                     this.signInSuccessCallback();
                     this.signInSuccessCallback = null;
@@ -93,15 +92,19 @@ enyo.kind({
         this.addRemoveClass("liked", this.liked);
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
+    requestSignIn: function(callbacks) {
+        this.signInSuccessCallback = callbacks.success;
+        this.signInFailureCallback = callbacks.failure;
+        this.$.signInDialog.show();
+    },
     likeButtonTapped: function() {
         if (chuisy.getSignInStatus().signedIn) {
             this.toggleLike();
         } else {
-            enyo.Signals.send("onRequestSignIn", {
+            this.requestSignIn({
                 success: enyo.bind(this, this.toggleLike)
             });
         }
-        this.setLiked(!this.liked);
     },
     toggleLike: function(sender, event) {
         this.$.likeButton.setDisabled(true);
@@ -153,6 +156,8 @@ enyo.kind({
         var comment = this.comments[event.index];
         this.$.commentText.setContent(comment.text);
         this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
+        this.$.commentFullName.setContent(comment.user.first_name + " " + comment.user.last_name);
+        this.$.commentTime.setContent(chuisy.timeToText(comment.time));
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -163,7 +168,7 @@ enyo.kind({
         if (chuisy.getSignInStatus().signedIn) {
             this.postComment();
         } else {
-            enyo.Signals.send("onRequestSignIn", {
+            this.requestSignIn({
                 success: enyo.bind(this, this.postComment)
             });
         }
@@ -200,15 +205,22 @@ enyo.kind({
             {kind: "onyx.Button", name: "likeButton", ontap: "likeButtonTapped", classes: "chuwebview-like-button", components: [
                 {classes: "chuwebview-like-button-icon"}
             ]},
-            {kind: "onyx.InputDecorator", classes: "chuwebview-commentinput-decorator", components: [
+            {kind: "onyx.InputDecorator", classes: "chuwebview-commentinput-decorator", alwaysLooksFocused: true, components: [
                 {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
             ]},
             {kind: "FlyweightRepeater", classes: "chuwebview-comments-repeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                 {kind: "onyx.Item", classes: "chuwebview-comment", components: [
-                    {kind: "Image", name: "commentAvatar", classes: "miniavatar chuwebview-comment-avatar"},
+                    {components: [
+                        {kind: "Image", name: "commentAvatar", classes: "miniavatar chuwebview-comment-avatar"},
+                        {classes: "chuwebview-comment-fullname", name: "commentFullName"},
+                        {classes: "chuwebview-comment-time", name: "commentTime"}
+                    ]},
                     {name: "commentText", classes: "chuwebview-comment-text"}
                 ]}
             ]}
+        ]},
+        {kind: "onyx.Popup", name: "signInDialog", floating: true, centered: true, components: [
+            {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "loginWithFacebook"}
         ]},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]
