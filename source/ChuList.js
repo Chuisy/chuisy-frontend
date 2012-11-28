@@ -80,9 +80,13 @@ enyo.kind({
     allPagesLoaded: function() {
         return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
+    chuTap: function(sender, event) {
+        var index = event.index * this.cellCount + sender.cellIndex;
+        this.doChuSelected({chu: this.items[index]});
+    },
     components: [
         {kind: "List", classes: "enyo-fill", name: "list", onSetupItem: "setupItem", components: [
-            {name: "listClient", style: "margin-bottom: -6px;"},
+            {name: "listClient", classes: "chulist-row"},
             {name: "loadingNextPage", content: "Loading...", classes: "chulist-nextpage"}
         ]}
     ]
