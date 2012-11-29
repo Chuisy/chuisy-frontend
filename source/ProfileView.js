@@ -26,6 +26,7 @@ enyo.kind({
             this.$.userName.setContent(user.username);
             this.$.bio.setContent(user.profile.bio);
             this.$.chuList.setFilters([["user", user.id]]);
+            this.$.chuList.load();
             this.loadFriends(user);
             this.loadFollowers(user);
             this.$.followButton.addRemoveClass("active", user.following);
