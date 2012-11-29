@@ -45,7 +45,7 @@ enyo.kind({
             var chu = this.items[index];
 
             if (chu) {
-                var image = chu.thumbnails && chu.thumbnails["100x100"] ? chu.thumbnails["100x100"] : chu.image;
+                var image = chu.localImage || (chu.thumbnails ? chu.thumbnails["100x100"] : chu.image) || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
             } else {
