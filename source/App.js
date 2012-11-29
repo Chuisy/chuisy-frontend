@@ -253,13 +253,13 @@ enyo.kind({
     },
     loginWithFacebook: function(callback) {
         if (window.plugins && window.plugins.facebookConnect) {
-            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, function(result) {
+            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, enyo.bind(this, function(result) {
                 if(result.cancelled || result.error) {
                     this.log("Facebook signin failed:" + result.message);
                     return;
                 }
                 callback(result.accessToken);
-            });
+            }));
         } else if (FB) {
             FB.login(function() {
                 if (response.status == "connected") {
