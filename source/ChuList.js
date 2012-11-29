@@ -18,13 +18,15 @@ enyo.kind({
     items: [],
     rendered: function() {
         this.inherited(arguments);
-        this.buildCells();
-        this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
-        this.load();
+        this.setupList();
     },
     resized: function() {
-        this.buildCells();
+        this.setupList();
         this.refresh();
+    },
+    setupList: function() {
+        this.buildCells();
+        this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
     },
     buildCells: function() {
         if (!this.hasNode()) {
