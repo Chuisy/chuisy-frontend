@@ -121,7 +121,7 @@ enyo.kind({
                     {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
                 ]}
             ]},
-            {kind: "List", fit: true, classes: "enyo-fill chubox-list", name: "list", onSetupItem: "setupItem", components: [
+            {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
                 {name: "listClient", classes: "chubox-row"}
             ]}
         ]},

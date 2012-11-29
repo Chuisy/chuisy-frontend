@@ -3,13 +3,6 @@
 	text-align: center;
 }
 
-.chubox-thumbs {
-	position: absolute;
-	bottom: 5px;
-	width: 100%;
-	z-index: 100;
-}
-
 .chubox-delete-button {
 	position: absolute;
 	left: -10px;
