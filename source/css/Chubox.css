@@ -54,7 +54,7 @@
 }
 
 .chubox-list {
-	margin: 5px 0;
+	/*margin: 5px 0;*/
 }
 
 .chubox-chu.selected {
@@ -67,6 +67,7 @@
 	top: 100px;
 	width: 100px;
 	height: 50px;
+	z-index: 1000;
 }
 
 .chubox-contextmenu-left {

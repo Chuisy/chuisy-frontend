@@ -40,7 +40,7 @@ enyo.kind({
     },
     openChubox: function(user) {
         this.showView("chubox");
-        this.$.chubox.refresh();
+        // this.$.chubox.refresh();
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chubox/");
