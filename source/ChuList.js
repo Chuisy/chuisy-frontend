@@ -10,7 +10,7 @@ enyo.kind({
     handlers: {
         onresize: "resized"
     },
-    chuWidth: 100,
+    chuWidth: 105,
     meta: {
         offset: 0,
         limit: 60

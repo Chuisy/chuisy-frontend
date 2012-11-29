@@ -8,10 +8,9 @@ enyo.kind({
         onShowNotifications: ""
     },
     handlers: {
-        onhold: "startEditing",
         onresize: "resized"
     },
-    chuWidth: 100,
+    chuWidth: 105,
     meta: {
         offset: 0,
         limit: 60
@@ -34,7 +33,7 @@ enyo.kind({
 
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
-            this.$.listClient.createComponent({classes: "chubox-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
+            this.$.listClient.createComponent({classes: "chubox-chu", cellIndex: i, ontap: "chuTap", onhold: "hold", name: "chu" + i, owner: this, components: [
                 {classes: "chubox-chu-image", name: "chuImage" + i},
                 {classes: "chubox-delete-button", ontap: "chuRemove", cellIndex: i}
             ]});
@@ -67,7 +66,6 @@ enyo.kind({
         this.$.doneButton.show();
         this.$.postButton.hide();
         this.addClass("editing");
-        event.preventDefault();
     },
     finishEditing: function() {
         this.editing = false;
@@ -93,6 +91,23 @@ enyo.kind({
         this.$.notificationBadge.setShowing(event.unread_count);
         return true;
     },
+    hold: function(sender, event) {
+        this.startEditing();
+        this.openContextMenu(sender, event);
+    },
+    openContextMenu: function(sender, event) {
+        this.$.contextMenu.show();
+        this.$.contextMenu.removeClass("unfolded");
+        this.$.contextMenu.addClass("unfolded");
+        var bounds = this.$.contextMenu.getBounds();
+        // sender.hasNode();
+        // var targetBounds = sender.getBounds();
+        // sender.applyStyle("background-color", "orange");
+        var x = event.clientX - bounds.width/2;
+        var y = event.clientY - bounds.height/2;
+        this.$.contextMenu.applyStyle("top", y + "px");
+        this.$.contextMenu.applyStyle("left", x + "px");
+    },
     components: [
         {kind: "FittableRows", classes: "enyo-fill", components: [
             {classes: "mainheader", components: [
@@ -111,7 +126,10 @@ enyo.kind({
             ]}
         ]},
         {kind: "Signals", onChuboxUpdated: "refresh", onNotificationsUpdated: "notificationsUpdated"},
-        {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"}
-
+        {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
+        {name: "contextMenu", classes: "chubox-contextmenu", components: [
+            {classes: "chubox-contextmenu-left"},
+            {classes: "chubox-contextmenu-right"}
+        ]}
     ]
 });
