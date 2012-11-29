@@ -40,13 +40,7 @@ enyo.kind({
     },
     facebookSignIn: function() {
         // Get facebook access token
-        FB.login(enyo.bind(this, function(response) {
-            if (response.status == "connected") {
-                chuisy.signIn({fb_access_token: response.authResponse.accessToken});
-            } else {
-                alert("Facebook signin failed!");
-            }
-        }), {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+        enyo.Signals.send("onRequestSignIn", {});
     },
     signOut: function() {
         chuisy.signOut();
