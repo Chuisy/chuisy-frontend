@@ -1,5 +1,6 @@
 enyo.kind({
     name: "ChuBox",
+    kind: "FittableRows",
     classes: "chubox",
     events: {
         onChuSelected: "",
@@ -8,7 +9,7 @@ enyo.kind({
         onShowNotifications: ""
     },
     handlers: {
-        onresize: "resized"
+        onpostresize: "postResize"
     },
     chuWidth: 105,
     meta: {
@@ -20,7 +21,7 @@ enyo.kind({
         this.inherited(arguments);
         this.buildCells();
     },
-    resized: function() {
+    postResize: function() {
         this.buildCells();
         this.refresh();
     },
@@ -109,27 +110,25 @@ enyo.kind({
         this.$.contextMenu.applyStyle("left", x + "px");
     },
     components: [
-        {kind: "FittableRows", classes: "enyo-fill", components: [
-            {classes: "mainheader", components: [
-                {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
-                    {classes: "menu-button-icon"}
-                ]},
-                {classes: "mainheader-text", content: "Chu Box"},
-                {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false},
-                {kind: "onyx.Button", name: "notificationsButton", classes: "notification-button", ontap: "doShowNotifications", components: [
-                    {classes: "notification-button-icon"},
-                    {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-                ]}
-            ]},
-            {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
-                {name: "listClient", classes: "chubox-row"}
-            ]}
-        ]},
         {kind: "Signals", onChuboxUpdated: "refresh", onNotificationsUpdated: "notificationsUpdated"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "contextMenu", classes: "chubox-contextmenu", components: [
             {classes: "chubox-contextmenu-left"},
             {classes: "chubox-contextmenu-right"}
+        ]},
+        {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
+                {classes: "menu-button-icon"}
+            ]},
+            {classes: "mainheader-text", content: "Chu Box"},
+            {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false},
+            {kind: "onyx.Button", name: "notificationsButton", classes: "notification-button", ontap: "doShowNotifications", components: [
+                {classes: "notification-button-icon"},
+                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
+            ]}
+        ]},
+        {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
+            {name: "listClient", classes: "chubox-row"}
         ]}
     ]
 });
