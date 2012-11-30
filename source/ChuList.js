@@ -8,7 +8,7 @@ enyo.kind({
         onChuSelected: ""
     },
     handlers: {
-        onresize: "resized"
+        onpostresize: "postResize"
     },
     chuWidth: 105,
     meta: {
@@ -20,7 +20,7 @@ enyo.kind({
         this.inherited(arguments);
         this.setupList();
     },
-    resized: function() {
+    postResize: function() {
         this.setupList();
         this.refresh();
     },
