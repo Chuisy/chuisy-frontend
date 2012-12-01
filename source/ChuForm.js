@@ -9,6 +9,12 @@ enyo.kind({
     events: {
         onSubmit: ""
     },
+    handlers: {
+        ondrag: "drag",
+        ondragstart: "dragStart",
+        ondragfinish: "dragFinish"
+    },
+    price: 0,
     clear: function() {
         this.$.visibilityPicker.setValue(true);
         this.$.categoryPicker.getClientControls()[0].setActive(true);
@@ -58,6 +64,22 @@ enyo.kind({
             friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
             localImage: this.image
         };
+    },
+    dragStart: function() {
+        if (this.finishDragTimeout) {
+            clearTimeout(this.finishDragTimeout);
+            this.finishDragTimeout = null;
+        }
+        this.$.price.addClass("highlighted");
+    },
+    dragFinish: function() {
+        this.finishDragTimeout = setTimeout(enyo.bind(this, function() {
+            this.$.price.removeClass("highlighted");
+        }), 2000);
+    },
+    drag: function(sender, event) {
+        this.price = Math.max(0, this.price + event.dx / 100);
+        this.$.price.setContent(Math.floor(this.price) + " €");
     },
     components: [
         {classes: "mainheader", components: [

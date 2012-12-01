@@ -48,4 +48,14 @@
 	font-size: 25pt;
 	color: White;
 	text-shadow: 0 0 5px #000;
+	-webkit-transition-property: bottom, width, -webkit-transform;
+	-webkit-transition-duration: 1s;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.chuform-price.highlighted {
+	-webkit-transform: scale(2);
+	width: 100%;
+	bottom: 300px;
 }
