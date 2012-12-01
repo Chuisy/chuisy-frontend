@@ -3,8 +3,7 @@ enyo.kind({
     classes: "chuform",
     kind: "FittableRows",
     published: {
-        image: "",
-        location: null
+        image: ""
     },
     events: {
         onSubmit: ""
@@ -12,26 +11,19 @@ enyo.kind({
     handlers: {
         ondrag: "drag",
         ondragstart: "dragStart",
-        ondragfinish: "dragFinish"
+        ondragfinish: "dragFinish",
+        ontap: "tap"
     },
     price: 0,
+    category: "head",
     clear: function() {
         this.$.visibilityPicker.setValue(true);
-        this.$.categoryPicker.getClientControls()[0].setActive(true);
         this.setImage("");
-        this.setLocation(null);
         this.price = 0;
         this.$.price.setContent(this.price + " €");
     },
     imageChanged: function() {
         this.$.imageContainer.applyStyle("background-image", "url(" + this.image + ")");
-    },
-    locationChanged: function() {
-        if (this.location) {
-            this.$.locationText.setContent(this.location.place.name + ", " + this.location.place.address);
-        } else {
-            this.$.locationText.setContent("");
-        }
     },
     // scroll: function(sender, event) {
     //     var scrollPosition = sender.getStrategy().$.scrollMath.y;
@@ -53,16 +45,10 @@ enyo.kind({
                 price: this.price,
                 price_currency: "EUR",
                 category: {
-                    name: this.$.categoryPicker.getActive().value
+                    name: this.category
                 }
             },
-            visibility: this.$.visibilityPicker.getValue() ? "private" : "public",
-            share_facebook: this.facebook,
-            share_twitter: this.twitter,
-            share_pinterest: this.pinterest,
-            location: this.location,
-            friends: this.toUriList(this.$.friendsSelector.getSelectedItems()),
-            localImage: this.image
+            visibility: this.$.visibilityPicker.getValue() ? "private" : "public"
         };
     },
     dragStart: function() {
@@ -81,6 +67,45 @@ enyo.kind({
         this.price = Math.max(0, this.price + event.dx / 100);
         this.$.price.setContent(Math.floor(this.price) + " €");
     },
+    tap: function(sender, event) {
+        if (!event.originator.isDescendantOf(this.$.categoryPicker) && this.$.categoryPicker.hasClass("open")) {
+            this.closeCategoryPicker();
+            // this.log("dismiss!");
+            return true;
+        }
+    },
+    toggleCategoryPicker: function() {
+        if (this.$.categoryPicker.hasClass("open")) {
+            this.closeCategoryPicker();
+        } else {
+            this.openCategoryPicker();
+        }
+    },
+    openCategoryPicker: function() {
+        this.$.categoryPicker.addClass("open");
+        var categoryIcons = this.$.categoryPicker.getClientControls();
+
+        for (var i=0; i<categoryIcons.length; i++) {
+            categoryIcons[i].applyStyle("bottom", 60*i + "px");
+            categoryIcons[i].applyStyle("right", (2*i*i) + "px");
+        }
+    },
+    closeCategoryPicker: function() {
+        this.$.categoryPicker.removeClass("open");
+        var categoryIcons = this.$.categoryPicker.getClientControls();
+
+        for (var i=0; i<categoryIcons.length; i++) {
+            categoryIcons[i].applyStyle("bottom", "0");
+            categoryIcons[i].applyStyle("right", "0");
+        }
+    },
+    selectCategory: function(sender, event) {
+        this.category = sender.value;
+        var categoryIcons = this.$.categoryPicker.getClientControls();
+        for (var i=0; i<categoryIcons.length; i++) {
+            categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
+        }
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
@@ -89,10 +114,12 @@ enyo.kind({
         ]},
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [
             {classes: "chuform-price", name: "price", content: "0 €"},
-            {kind: "onyx.RadioGroup", name: "categoryPicker", classes: "chuform-category-picker", components: [
-                {content: "Shoes", value: "Shoes"},
-                {content: "Shirt", value: "Shirt"},
-                {content: "Jacket", value: "Jacket"}
+            {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
+                {classes: "chuform-category-icon head selected", value: "head", ontap: "selectCategory"},
+                {classes: "chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
+                {classes: "chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
+                {classes: "chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
+                {classes: "chuform-category-icon feet", value: "feet", ontap: "selectCategory"}
             ]}
         ]}
     ]
