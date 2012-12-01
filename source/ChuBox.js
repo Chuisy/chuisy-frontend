@@ -100,7 +100,7 @@ enyo.kind({
     },
     hold: function(sender, event) {
         this.startEditing();
-        this.openContextMenu(sender, event);
+        // this.openContextMenu(sender, event);
     },
     openContextMenu: function(sender, event) {
         this.$.contextMenu.show();

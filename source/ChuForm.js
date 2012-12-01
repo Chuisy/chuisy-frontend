@@ -43,7 +43,7 @@ enyo.kind({
     getData: function() {
         return {
             product: {
-                price: this.price,
+                price: Math.floor(this.price),
                 price_currency: "EUR",
                 category: {
                     name: this.category
