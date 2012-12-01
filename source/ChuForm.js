@@ -1,6 +1,7 @@
 enyo.kind({
     name: "ChuForm",
     classes: "chuform",
+    kind: "FittableRows",
     published: {
         image: "",
         location: null
@@ -8,29 +9,16 @@ enyo.kind({
     events: {
         onSubmit: ""
     },
-    userChanged: function(sender, event) {
-        if (!this.user || this.user.id != event.user.id) {
-            this.user = event.user;
-            this.loadFriends();
-        }
-    },
     clear: function() {
-        this.facebook = false;
-        this.$.facebookButton.removeClass("active");
-        this.twitter = false;
-        this.$.twitterButton.removeClass("active");
-        this.pinterest = false;
-        this.$.pinterestButton.removeClass("active");
-        this.visibility = "public";
+        this.$.visibilityPicker.setValue(true);
         this.$.categoryPicker.getClientControls()[0].setActive(true);
         this.setImage("");
         this.setLocation(null);
-
-//          this.$.scroller.getStrategy().$.scrollMath.kDragDamping = 0.1;
-//          this.$.scroller.getStrategy().$.scrollMath.kSpringDamping = 0.2;
+        this.price = 0;
+        this.$.price.setContent(this.price + " €");
     },
     imageChanged: function() {
-        this.applyStyle("background-image", "url(" + this.image + ")");
+        this.$.imageContainer.applyStyle("background-image", "url(" + this.image + ")");
     },
     locationChanged: function() {
         if (this.location) {
@@ -46,27 +34,6 @@ enyo.kind({
     //       this.oldScrollPosition = scrollPosition;
     //       }
     // },
-    togglePlatform: function(sender, event) {
-        var p = sender.platform;
-        this[p] = !this[p];
-        this.$[p + "Button"].addRemoveClass("active", this[p]);
-    },
-    loadCategories: function() {
-        chuisy.category.list([], enyo.bind(this, function(sender, response) {
-            for (var i=0; i<response.objects.length; i++) {
-                this.$.categoryPicker.createComponent({
-                    content: response.objects[i].name,
-                    value: response.objects[i].resource_uri
-                });
-            }
-            this.$.categoryPicker.render();
-        }));
-    },
-    loadFriends: function() {
-        chuisy.friends({}, enyo.bind(this, function(sender, response) {
-            this.$.friendsSelector.setItems(response.objects);
-        }));
-    },
     toUriList: function(list) {
         var temp = [];
         for (var i=0; i<list.length; i++) {
@@ -77,13 +44,13 @@ enyo.kind({
     getData: function() {
         return {
             product: {
-                price: this.getPrice(),
+                price: this.price,
                 price_currency: "EUR",
                 category: {
                     name: this.$.categoryPicker.getActive().value
                 }
             },
-            visibility: this.visibility,
+            visibility: this.$.visibilityPicker.getValue() ? "private" : "public",
             share_facebook: this.facebook,
             share_twitter: this.twitter,
             share_pinterest: this.pinterest,
@@ -92,72 +59,19 @@ enyo.kind({
             localImage: this.image
         };
     },
-    getPrice: function() {
-        var price = Math.pow(this.$.priceSlider.getValue(), 1.5);
-        price = Math.round(price);
-        return price;
-    },
-    priceChange: function(sender, event) {
-        var knobPosition = this.$.priceSlider.$.knob.getBounds();
-        this.$.priceLabel.applyStyle("left", (knobPosition.left + 20) + "px");
-        this.$.priceLabel.setContent(this.getPrice() + " €");
-    },
-    visibilityChanged: function(sender, event) {
-        if (event.originator.getActive()) {
-            var value = event.originator.value;
-
-            this.visibility = value;
-
-            if (value == "friends") {
-                this.openSecondarySlider();
-            } else {
-                this.closeSecondarySlider();
-            }
-        }
-    },
-    openSecondarySlider: function() {
-        this.$.slider.animateToMin();
-    },
-    closeSecondarySlider: function() {
-        this.$.slider.animateToMax();
-    },
     components: [
-        {kind: "FittableRows", classes: "enyo-fill", components: [
-            {classes: "chuform-spacer", fit: true},
-            // {name: "price", classes: "chubox"},
-            {classes: "chuform-content", components: [
-                {kind: "onyx.Item", name: "locationText", classes: "chuform-location-text"},
-                {kind: "onyx.Item", components: [
-                    {kind: "onyx.Slider", name: "priceSlider", onChanging: "priceChange", onChange: "priceChange"},
-                    {classes: "chuform-price-label", name: "priceLabel"}
-                ]},
-                {kind: "onyx.Item", components: [
-                    {kind: "onyx.RadioGroup", name: "categoryPicker", components: [
-                        {content: "Shoes", value: "Shoes"},
-                        {content: "Shirt", value: "Shirt"},
-                        {content: "Jacket", value: "Jacket"}
-                    ]}
-                ]},
-                {kind: "onyx.Item", components: [
-                    {kind: "onyx.Button", name: "facebookButton", content: "f", platform: "facebook", ontap: "togglePlatform"},
-                    {kind: "onyx.Button", name: "twitterButton", content: "t", platform: "twitter", ontap: "togglePlatform"},
-                    {kind: "onyx.Button", name: "pinterestButton", content: "p", platform: "pinterest", ontap: "togglePlatform"},
-                    {kind: "onyx.RadioGroup", onActivate: "visibilityChanged", style: "float: right;", components: [
-                        {content: "public", active: true, value: "public"},
-                        {content: "friends", value: "friends"},
-                        {content: "private", value: "private"}
-                    ]}
-                ]},
-                {kind: "onyx.Item", style: "text-align: right", components: [
-                    {kind: "onyx.Button", name: "postButton", classes: "chuform-post-button", content: "Post", ontap: "doSubmit"}
-                ]}
-            ]}
+        {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {kind: "onyx.ToggleButton", onContent: "private", offContent: "public", name: "visibilityPicker", classes: "chuform-visibility-picker"},
+            {kind: "onyx.Button", ontap: "doSubmit", classes: "done-button", content: "done", name: "doneButton"}
         ]},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, preventDragPropagation: true, classes: "secondaryslider", name: "slider", components: [
-            {classes: "enyo-fill", components: [
-                {kind: "PeopleSelector", name: "friendsSelector", onChange: "friendsChanged"}
+        {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [
+            {classes: "chuform-price", name: "price", content: "0 €"},
+            {kind: "onyx.RadioGroup", name: "categoryPicker", classes: "chuform-category-picker", components: [
+                {content: "Shoes", value: "Shoes"},
+                {content: "Shirt", value: "Shirt"},
+                {content: "Jacket", value: "Jacket"}
             ]}
-        ]},
-        {kind: "Signals", onUserChanged: "userChanged"}
+        ]}
     ]
 });

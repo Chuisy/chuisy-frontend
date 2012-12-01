@@ -1,38 +1,51 @@
-.chuform {
+.chuform-imagecontainer {
 	background: none no-repeat center top;
-	background-size: contain;
+	background-size: cover;
 	background-color: Gray;
+	background-image: url(http://media.chuisy.com/media/chubox/Tron-Legacy-iphone-wallpaper-2.jpg);
 }
 
-.chuform-spacer {
-	/*height: 320px;*/
+.chuform-visibility-picker {
+	float: right;
 }
 
-.chuform-content {
-	background-color: white;
-	position: relative;
+.chuform-category-picker {
+	display: none;
+	vertical-align: top;
 }
 
-.chuform-location-text {
-	text-align: right;
-	width: 100%;
+.chuform-visibility-picker {
+	height: auto;
+	line-height: 28px;
 	position: absolute;
-	top: -30px;
-	color: white;
+	right: 70px;
+	top: 8px;
+	border-radius: 100px;
 }
 
-.chuform-picker .onyx-button {
-	width: 100%;
+.chuform-visibility-picker > .onyx-toggle-button-knob {
+	height: 26px;
+	width: 26px;
+	border-radius: 100px;
 }
 
-.chuform .onyx-item {
-	box-sizing: border-box;
-	padding: 5px;
-	min-height: 40px;
+.chuform-visibility-picker > .onyx-toggle-content {
+	font-size: 9pt;
 }
 
-.chuform-post-button {}
+.chuform-visibility-picker > .onyx-toggle-content.on {
+	padding-left: 10px;
+}
 
-.chuform-price-label {
+.chuform-visibility-picker > .onyx-toggle-content.off {
+	padding-right: 10px;
+}
+
+.chuform-price {
 	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	font-size: 25pt;
+	color: White;
+	text-shadow: 0 0 5px #000;
 }
