@@ -6,7 +6,8 @@ enyo.kind({
         image: ""
     },
     events: {
-        onSubmit: ""
+        onSubmit: "",
+        onBack: ""
     },
     handlers: {
         ondrag: "drag",
@@ -48,7 +49,8 @@ enyo.kind({
                     name: this.category
                 }
             },
-            visibility: this.$.visibilityPicker.getValue() ? "private" : "public"
+            visibility: this.$.visibilityPicker.getValue() ? "private" : "public",
+            localImage: this.image
         };
     },
     dragStart: function() {

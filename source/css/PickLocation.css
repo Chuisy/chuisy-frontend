@@ -1,3 +1,13 @@
 .picklocation-map {
 	height: 150px;
 }
+
+.picklocation-placeslist {
+	box-shadow: 0 -1px 10px #111;
+}
+
+.picklocation-placeitem {
+	border-bottom: solid 1px #ccc;;
+	border-top: solid 1px #eee;
+	padding: 10px;
+}

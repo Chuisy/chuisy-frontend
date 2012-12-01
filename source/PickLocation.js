@@ -72,10 +72,17 @@ enyo.kind({
         };
         this.doLocationPicked({location: this.location});
     },
+    skip: function() {
+        this.doLocationPicked({location: this.location});
+    },
     components: [
+        {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
+        ]},
         {kind: "Map", classes: "picklocation-map"},
-        {kind: "List", fit: true, name: "placesList", onSetupItem: "setupItem", components: [
-            {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true}
+        {kind: "List", fit: true, name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
+            {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-placeitem"}
         ]}
     ]
 });
