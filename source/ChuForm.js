@@ -68,6 +68,7 @@ enyo.kind({
     drag: function(sender, event) {
         this.price = Math.max(0, this.price + event.dx / 100);
         this.$.price.setContent(Math.floor(this.price) + " €");
+        return true;
     },
     tap: function(sender, event) {
         if (!event.originator.isDescendantOf(this.$.categoryPicker) && this.$.categoryPicker.hasClass("open")) {

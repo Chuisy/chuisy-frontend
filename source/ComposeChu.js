@@ -37,6 +37,7 @@ enyo.kind({
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);
+        return true;
     },
     components: [
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
