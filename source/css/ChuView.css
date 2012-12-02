@@ -1,60 +1,140 @@
 .chuview {
 }
 
-.chuview-productimage {
-	width: 100%;
+.chuview-content {
+	position: relative;
 }
 
-.chuview-username {
-	display: inline-block;
-	vertical-align: top;
-	font-size: 13pt;
-	padding: 9px 5px;
-	max-width: 200px;
+.chuview-imageview {
+	position: absolute;
+	/*z-index: -10;*/
+	top: 0;
+	left: 0;
+}
+
+.chuview-spacer {
+	height: 300px;
+	position: relative;
+}
+
+.chuview-category-icon {
+	position: absolute;
+	background-size: cover;
+	width: 24px;
+	height: 24px;
+	left: 10px;
+	top: 10px;
 }
 
 .chuview-price {
-	
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	font-size: 12pt;
+	color: White;
+	text-shadow: 0 0 5px #000;
 }
 
-.chuview-likerimage {
-	height: 32px;
-	width: 32px;
-	margin: 5px 2px;
+.chuview-category-icon,
+.chuview-price {
+	-webkit-transition: opacity 0.5s;
+}
+
+.chuview.scrolled-up .chuview-category-icon,
+.chuview.scrolled-up .chuview-price {
+	opacity: 0;
 }
 
 .chuview-location {
-
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+	font-size: 12pt;
+	color: White;
+	text-shadow: 0 0 5px #000;
+	max-width: 200px;
 }
 
-.chuview-comments-scroller {
-	max-height: 200px;
+.chuview-like-button {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	width: 64px;
+	height: 64px;
+	background-size: contain;
+	background-image: url(../../assets/images/like_button.png);
+	-webkit-transform: scale(0.6);
+	opacity: 0.5;
+	-webkit-transition-property: -webkit-transform, opacity;
+	-webkit-transition-duration: 0.5s;
+	-webkit-transform-origin: 100% 100%;
+	color: white;
+	font-size: 18pt;
+	text-align: center;
+	line-height: 70px;
 }
 
-.chuview-comment {
-	padding: 5px;
-	border-bottom: dashed 1px #ccc;
+.chuview-like-button.active {
+	-webkit-transform: scale(0.8);
+	opacity: 1;
+}
+
+.chuview-controls {
+	-webkit-transition: opacity 0.5s;
+}
+
+.chuview.fullscreen .chuview-controls {
+	opacity: 0;
+}
+
+.chuview-comments {
+	background-color: White;
 }
 
 .chuview-comment-avatar {
 	width: 30px;
 }
 
-.chuview-comment-text {
+.chuview-comment {
+	padding: 8px;
+	border-bottom: solid 1px #ccc;;
+	border-top: solid 1px #eee;
+}
+
+.chuview-comment-fullname {
 	display: inline-block;
-	padding: 0 10px;
 	vertical-align: top;
+	padding: 5px;
+}
+
+.chuview-comment-time {
+	float: right;
+	color: #555;
+	font-size: 10pt;
+}
+
+.chuview-comment-text {
 }
 
 .chuview-commentinput-decorator {
 	width: 100%;
 	box-sizing: border-box;
+	border-radius: 0;
 }
 
 .chuview-commentinput-decorator > .enyo-input {
 	width: 100%;
 }
 
-.chuview.owned .chuview-like-button {
-	display: none;
+.chuview-infobar {
+	background-color: Gray;
+	padding: 5px;
+}
+
+.chuview-fullname {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 13pt;
+	max-width: 200px;
+	padding: 5px;
 }

@@ -3,7 +3,8 @@ enyo.kind({
     kind: "FittableRows",
     classes: "picklocation",
     events: {
-        onLocationPicked: ""
+        onLocationPicked: "",
+        onBack: ""
     },
     rendered: function() {
         this.inherited(arguments);
