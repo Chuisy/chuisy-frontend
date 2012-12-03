@@ -1,12 +1,13 @@
 .chufeeditem {
 	box-sizing: border-box;
 	/*border: #ccc solid 1px;*/
-	background-color: White;
 	/*margin: 10px;*/
-	box-shadow: 0 0 4px #666;
-	padding: 8px;
-	height: 346px;
+	height: 336px;
 	margin: 8px;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 4px;
 }
 
 .chufeeditem.onyx-highlight {
@@ -43,7 +44,7 @@
 	background-color: White;
 	box-sizing: border-box;
 	/*border: solid 1px #ddd;*/
-	margin-bottom: 8px;
+	margin-bottom: 4px;
 }
 
 .chufeeditem-likes-comments {

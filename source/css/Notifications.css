@@ -2,7 +2,11 @@
 }
 
 .notifications-notification {
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
 	padding: 10px;
+	margin: 5px;
 	overflow: hidden;
 }
 

@@ -47,8 +47,6 @@
 	background-image: url(../../assets/images/search.png);
 }
 
-
-
 .mainmenu-item-text {
 	font-size: 12pt;
 	display: inline-block;
@@ -85,8 +83,8 @@
 }
 
 .mainslider {
-	background-image: url(../../assets/images/roughcloth@2x.png);
-	background-size: 320px 320px;
+	background-image: url(../../assets/images/soft_wallpaper_light@2x.png);
+	background-size: 666px 666px;
 	box-shadow: -2px 0 10px #000;
 	border-radius: 5px;
 }
