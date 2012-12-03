@@ -87,24 +87,29 @@
 	opacity: 0;
 }
 
-.chuview-comments {
-	background-color: White;
+.chuview-content {
+	/*background-color: White;*/
+	padding: 0 5px;
 }
 
 .chuview-comment-avatar {
-	width: 30px;
+	width: 26px;
+	height: 26px;
 }
 
 .chuview-comment {
-	padding: 8px;
-	border-bottom: solid 1px #ccc;;
-	border-top: solid 1px #eee;
+	margin: 5px 0;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 4px;
 }
 
 .chuview-comment-fullname {
 	display: inline-block;
 	vertical-align: top;
-	padding: 5px;
+	padding: 4px 10px;
+	max-width: 200px;
 }
 
 .chuview-comment-time {
@@ -114,27 +119,76 @@
 }
 
 .chuview-comment-text {
+	padding: 5px;
 }
 
 .chuview-commentinput-decorator {
+	/*margin-bottom: 5px;*/
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	border-radius: 0;
+	height: 40px;
+	-webkit-transition: height 0.2s;
+	border: none;
+}
+
+.chuview-commentinput-decorator.onyx-focused {
+	box-shadow: 0 1px 1px #888;
+	height: 80px;
 }
 
 .chuview-commentinput-decorator > .enyo-input {
 	width: 100%;
 }
 
+.chuview-commentinput-slider {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+}
+
 .chuview-infobar {
-	background-color: Gray;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
 	padding: 5px;
+	margin-bottom: 5px;
+	height: 26px;
+}
+
+.chuview-avatar {
+	width: 26px;
+	height: 26px;
 }
 
 .chuview-fullname {
 	display: inline-block;
 	vertical-align: top;
-	font-size: 13pt;
+	font-size: 12pt;
 	max-width: 200px;
-	padding: 5px;
+	padding: 4px 10px;
+}
+
+.chuview-cancel-fullscreen-button {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	display: none;
+	width: 36px;
+	height: 36px;
+	background-size: 36px 72px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
+	z-index: 1001;
+}
+
+.chuview-cancel-fullscreen-button:active:hover:not([disabled]) {
+	background-position: 0 -36px;
+}
+
+.chuview.fullscreen .chuview-cancel-fullscreen-button {
+	display: block;
 }

@@ -200,6 +200,7 @@ enyo.kind({
         //     this.$.contentSlideable.animateToMax();
         // }
         this.addRemoveClass("scrolled-up", this.$.contentScroller.getScrollTop() > 200);
+        this.$.imageView.setScrollTop(100 + this.$.contentScroller.getScrollTop()/10);
         // this.log(this.$.contentScroller.getScrollTop());
     },
     hideControls: function() {
@@ -213,8 +214,11 @@ enyo.kind({
         this.removeClass("fullscreen");
     },
     components: [
-        {kind: "ImageView", classes: "chuview-imageview enyo-fill", ontap: "showControls"},
+        {kind: "ImageView", classes: "chuview-imageview enyo-fill", scale: "height"},
+        {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
+            {kind: "Slideable", classes: "chuview-commentinput-slider", unit: "%", min: 0, max: 100, value: 100, components: [
+            ]},
             {classes: "mainheader", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
                 {classes: "mainheader-text", content: "chuisy", name: "headerText"}
@@ -222,30 +226,29 @@ enyo.kind({
             {fit: true, style: "position: relative;", components: [
                 {classes: "chuview-category-icon", name: "categoryIcon"},
                 {classes: "chuview-price", name: "price"},
-                {kind: "Scroller", name: "contentScroller", touchOverscroll: false, classes: "enyo-fill", components: [
+                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
                     {classes: "chuview-spacer", ontap: "hideControls", components: [
                         {classes: "chuview-location", name: "location"},
                         {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"}
                     ]},
-                    {classes: "chuview-infobar", components: [
-                        {kind: "Image", classes: "miniavatar chuview-avatar", name: "avatar"},
-                        {classes: "chuview-fullname", name: "fullName"}
-                    ]},
-                    {classes: "chuview-comments", components: [
-                        {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
+                    {classes: "chuview-content", components: [
+                        {classes: "chuview-infobar", components: [
+                            {kind: "Image", classes: "chuview-avatar", name: "avatar"},
+                            {classes: "chuview-fullname", name: "fullName"}
+                        ]},
+                        {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
                             {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
                         ]},
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                             {kind: "onyx.Item", classes: "chuview-comment", components: [
                                 {components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "miniavatar chuview-comment-avatar"},
+                                    {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar"},
                                     {classes: "chuview-comment-fullname", name: "commentFullName"},
                                     {classes: "chuview-comment-time", name: "commentTime"}
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
                             ]}
-                        ]},
-                        {style: "height: 100px"}
+                        ]}
                     ]}
                 ]}
             ]}
