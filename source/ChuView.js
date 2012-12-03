@@ -234,7 +234,7 @@ enyo.kind({
                     {classes: "chuview-content", components: [
                         {classes: "chuview-infobar", components: [
                             {kind: "Image", classes: "chuview-avatar", name: "avatar"},
-                            {classes: "chuview-fullname", name: "fullName"}
+                            {classes: "chuview-fullname ellipsis", name: "fullName"}
                         ]},
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
                             {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}

@@ -4,6 +4,13 @@
 	vertical-align: top;
 }
 
+.profileview-info {
+	height: 150px;
+	background: url() no-repeat center center;
+	background-size: cover;
+	position: relative;
+}
+
 .profileview-profileinfo {
 	display: inline-block;
 	vertical-align: top;
@@ -11,15 +18,14 @@
 }
 
 .profileview-fullname {
-	padding: 5px;
 	font-size: 15pt;
-}
-
-.profileview-username {
-	padding: 5px;
-	font-size: 13pt;
-	font-weight: bold;
+	color: White;
+	text-shadow: 0 0 5px #000;
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
 	max-width: 200px;
+	text-align: right;
 }
 
 .profileview-bio {
@@ -30,7 +36,7 @@
 .profileview-menu {
 	width: 100%;
 	box-sizing: border-box;
-	height: 50px;
+	height: 45px;
 }
 
 .profileview-menu-button {
@@ -38,13 +44,47 @@
 	height: 100%;
 	box-sizing: border-box;
 	padding: 0;
+	border-radius: 0 !important;
+	background-image: none;
+	background-color: White;
+	border-top: none !important;
+}
+
+.profileview-menu-button.active {
+	box-shadow: none;
+	background-color: #C30F26;
+	background-image: none;
+	color: white;
 }
 
 .profileview-menu-button-caption {
+	display: block;
 	font-size: 10pt;
-	vertical-align: top;
+	margin: 0 auto;
+}
+
+.profileview-menu-button-count {
+	display: block;
+	margin: 0 auto;
+	font-size: 12pt;
+}
+
+.profileview-follow-button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 .profileview.owned .follow-button {
 	display: none;
+}
+
+.profileview-settings-button {
+	width: 36px;
+	height: 36px;
+	background-size: 36px 36px;
+	background-image: url(../../assets/images/settings.png);
+	position: absolute;
+	right: 5px;
+	top: 5px;
 }

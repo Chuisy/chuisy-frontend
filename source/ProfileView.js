@@ -10,7 +10,8 @@ enyo.kind({
         onShowProfile: "",
         onToggleMenu: "",
         onBack: "",
-        onShowNotifications: ""
+        onShowNotifications: "",
+        onShowSettings: ""
     },
     authUserChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
@@ -21,10 +22,12 @@ enyo.kind({
     userChanged: function() {
         var user = this.user == "me" ? this.authUser : this.user;
         if (user) {
-            this.$.avatar.setSrc(user.profile.avatar);
+            this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
-            this.$.userName.setContent(user.username);
             this.$.bio.setContent(user.profile.bio);
+            this.$.chuboxCount.setContent(user.chu_count);
+            this.$.followerCount.setContent(user.follower_count);
+            this.$.friendCount.setContent(user.following_count);
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.loadFriends(user);
@@ -131,18 +134,15 @@ enyo.kind({
                 {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
-        {classes: "provileview-info", components: [
-            {kind: "Image", classes: "profileview-avatar", name: "avatar"},
-            {classes: "profileview-profileinfo", components: [
-                {classes: "profileview-fullname", name: "fullName"},
-                {classes: "profileview-username ellipsis", name: "userName"},
-                {classes: "profileview-bio", name: "bio"}
-            ]},
-            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "follow-button"}
+        {classes: "profileview-info", name: "info", components: [
+            {classes: "profileview-fullname", name: "fullName"},
+            {classes: "profileview-bio", name: "bio", showing: false},
+            {classes: "profileview-settings-button", ontap: "doShowSettings"},
+            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
             {classes: "profileview-menu-button", value: 0, name: "chuboxMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: "Chu Box"},
+                {classes: "profileview-menu-button-caption", content: "Chus"},
                 {classes: "profileview-menu-button-count", name: "chuboxCount"}
             ]},
             {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [

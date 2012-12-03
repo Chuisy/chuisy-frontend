@@ -10,7 +10,7 @@ enyo.kind({
 	},
 	userChanged: function() {
 		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail);
-		this.$.username.setContent(this.user.username);
+		this.$.fullName.setContent(this.user.first_name + " " + this.user.last_name);
 		this.$.followButton.addRemoveClass("active", this.user.following);
         var authUser = chuisy.getSignInStatus().user;
         this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
@@ -50,8 +50,8 @@ enyo.kind({
         return true;
     },
 	components: [
-        {kind: "Image", classes: "miniavatar", name: "avatar"},
-        {classes: "userlistitem-username ellipsis", name: "username"},
+        {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
+        {classes: "userlistitem-fullname ellipsis", name: "fullName"},
         {kind: "onyx.Button", content: "follow", ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });
