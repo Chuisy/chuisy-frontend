@@ -6,7 +6,7 @@ enyo.depends(
 	"FormField.css",
 	"Feed.css",
 	"MainView.css",
-	"PeopleSelector.css",
+	"PeoplePicker.css",
 	"ProfileView.css",
 	"ComposeChu.css",
 	"PickLocation.css",

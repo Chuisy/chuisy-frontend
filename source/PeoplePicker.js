@@ -1,6 +1,6 @@
 enyo.kind({
-    name: "PeopleSelector",
-    classes: "peopleselector",
+    name: "PeoplePicker",
+    classes: "peoplepicker",
     kind: "FittableRows",
     published: {
         items: []
@@ -83,15 +83,15 @@ enyo.kind({
             {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: "Type to filter..."}
         ]},
         {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
-            {kind: "Image", name: "avatar", classes: "peopleselector-avatar", ontap: "itemTap"}
+            {kind: "Image", name: "avatar", classes: "peoplepicker-avatar", ontap: "itemTap"}
         ]}
     ]
 });
 
 
 // enyo.kind({
-//  name: "PeopleSelector",
-//  classes: "peopleselector",
+//  name: "peoplepicker",
+//  classes: "peoplepicker",
 //  create: function() {
 //      this.inherited(arguments);
 //      this.selectedItems = {};
@@ -211,18 +211,18 @@ enyo.kind({
 //         this.$.listItem.setContent(item.username);
 //     },
 //     components: [
-//         {kind: "FlyweightRepeater", name: "selectedList", classes: "peopleselector-selected-list", onSetupItem: "setupItem", components: [
-//             {classes: "peopleselector-selected-item", components: [
-//                 {classes: "peopleselector-selected-item-label", name: "label"},
-//                 {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "peopleselector-removebutton", ontap: "removeItemTapped"}
+//         {kind: "FlyweightRepeater", name: "selectedList", classes: "peoplepicker-selected-list", onSetupItem: "setupItem", components: [
+//             {classes: "peoplepicker-selected-item", components: [
+//                 {classes: "peoplepicker-selected-item-label", name: "label"},
+//                 {kind: "onyx.IconButton", src: "assets/images/x.png", classes: "peoplepicker-removebutton", ontap: "removeItemTapped"}
 //             ]}
 //         ]},
 //         {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", components: [
 //             {kind: "onyx.Input", name: "searchInput", onkeyup: "keyupHandler", onkeydown: "keydownHandler", placeholder: "Start typing to add people..."},
-//             {kind: "enyo.Popup", style: "width: 200px; max-height: 200px;", classes: "peopleselector-popup onyx-menu onyx-picker", components: [
+//             {kind: "enyo.Popup", style: "width: 200px; max-height: 200px;", classes: "peoplepicker-popup onyx-menu onyx-picker", components: [
 //                 {kind: "Scroller", style: "max-height: inherit;", components: [
 //                     {kind: "FlyweightRepeater", name: "list", onSetupItem: "popupSetupItem", components: [
-//                         {kind: "onyx.Item", tapHighlight: true, ontap: "itemClick", name: "listItem", classes: "peopleselector-listitem onyx-menu-item"}
+//                         {kind: "onyx.Item", tapHighlight: true, ontap: "itemClick", name: "listItem", classes: "peoplepicker-listitem onyx-menu-item"}
 //                     ]}
 //                 ]}
 //             ]}
