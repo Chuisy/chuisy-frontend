@@ -23,6 +23,7 @@ enyo.kind({
                 success: enyo.bind(this, this.toggleFollow)
             });
         }
+        return true;
     },
     toggleFollow: function(sender, event) {
         var user = this.user;
