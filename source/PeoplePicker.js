@@ -22,6 +22,7 @@ enyo.kind({
         for (var i=0; i<items.length; i++) {
             this.selectedItems[items[i].id] = items[i];
         }
+        this.refreshList();
     },
     getSelectedItems: function() {
         var items = [];
