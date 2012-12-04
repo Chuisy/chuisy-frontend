@@ -11,17 +11,28 @@ enyo.kind({
     events: {
         onDone: ""
     },
-    create: function() {
-        this.inherited(arguments);
-        chuisy.user.list([], enyo.bind(this, function(sender, response) {
-            this.$.peoplePicker.setItems(response.objects);
-        }));
-    },
+    friends: [],
     chuChanged: function() {
         this.log(this.chu);
         this.$.visibilityPicker.setValue(this.chu.visibility == "private" ? true : false);
         this.visibilityChanged();
         this.$.peoplePicker.setSelectedItems(this.chu.friends);
+    },
+    loadFriends: function(offset, limit) {
+        chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
+            this.friends = this.friends.concat(response.objects);
+            this.$.peoplePicker.setItems(this.friends);
+            if (response.meta.next) {
+                this.loadFriends(response.meta.offset + limit, limit);
+            }
+        }));
+    },
+    userChanged: function(sender, event) {
+        if (!this.user || this.user.id != event.user.id) {
+            this.friends = [];
+            this.loadFriends(0, 20);
+        }
+        this.user = event.user;
     },
     visibilityChanged: function(sender, event) {
         this.$.panels.setIndex(this.$.visibilityPicker.getValue() ? 1 : 0);
@@ -82,13 +93,14 @@ enyo.kind({
             {classes: "shareview-share-button", content: "sms", ontap: "sms"},
             {classes: "shareview-share-button", content: "email", ontap: "email"}
         ]},
-        {kind: "Panels", arrangerKind: "CarouselArranger", fit: true, layoutKind: "FittableRowsLayout", components: [
+        {kind: "Panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, layoutKind: "FittableRowsLayout", components: [
             {classes: "shareview-share-button-group enyo-fill", components: [
                 {classes: "shareview-share-button", content: "f"},
                 {classes: "shareview-share-button", content: "t", ontap: "twitter"},
                 {classes: "shareview-share-button", content: "p", ontap: "pinterest"}
             ]},
             {kind: "PeoplePicker", classes: "enyo-fill"}
-        ]}
+        ]},
+        {kind: "Signals", onUserChanged: "userChanged"}
     ]
 });
