@@ -9,7 +9,8 @@ enyo.kind({
         profileView: 3,
         settings: 4,
         notifications: 5,
-        composeChu: 6
+        composeChu: 6,
+        share: 7
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -144,6 +145,10 @@ enyo.kind({
     notificationSelected: function(sender, event) {
         App.navigateTo(event.notification.uri);
     },
+    shareChu: function(sender, event) {
+        this.$.shareView.setChu(event.chu);
+        this.showView("share");
+    },
     components: [
         {classes: "mainmenu", components: [
             {kind: "Panels", name: "menuPanels", draggable: false, animate: false, classes: "enyo-fill", components: [
@@ -182,11 +187,12 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
                 {kind: "ChuBox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
-                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications"},
+                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
-                {kind: "ComposeChu", onBack: "back"}
+                {kind: "ComposeChu", onBack: "back"},
+                {kind: "ShareView", onDone: "done"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}

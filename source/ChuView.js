@@ -6,7 +6,8 @@ enyo.kind({
         liked: false
     },
     events: {
-        onBack: ""
+        onBack: "",
+        onShare: ""
     },
     currencies: {
         "USD": "$",
@@ -212,6 +213,9 @@ enyo.kind({
     showControls: function() {
         this.$.imageView.applyStyle("z-index", "0");
         this.removeClass("fullscreen");
+    },
+    share: function() {
+        this.doShare({chu: this.chu});
     },
     components: [
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", scale: "height"},

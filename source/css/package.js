@@ -18,5 +18,6 @@ enyo.depends(
 	"ChuFeedItem.css",
 	"ChuList.css",
 	"Notifications.css",
-	"ChuWebView.css"
+	"ChuWebView.css",
+	"ShareView.css"
 );
