@@ -26,14 +26,21 @@ enyo.kind({
     },
     websiteChanged: function() {
         this.user.profile.website = this.$.website.getValue();
-        this.updateUser();
+        this.updateProfile();
     },
     bioChanged: function() {
         this.user.profile.bio = this.$.bio.getValue();
-        this.updateUser();
+        this.updateProfile();
     },
     updateUser: function() {
-        chuisy.user.put(this.user.id, this.user, enyo.bind(this, function(sender, response) {
+        var params = enyo.clone(this.user);
+        params.profile = params.profile.resource_uri;
+        chuisy.user.put(params.id, params, enyo.bind(this, function(sender, response) {
+            this.log(response);
+        }));
+    },
+    updateProfile: function() {
+        chuisy.profile.put(this.user.profile.id, this.user.profile, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
     },
