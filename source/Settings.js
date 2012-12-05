@@ -1,7 +1,7 @@
 enyo.kind({
     name: "Settings",
     kind: "FittableRows",
-    classes: "Settings",
+    classes: "settings",
     published: {
         user: null
     },
@@ -9,13 +9,12 @@ enyo.kind({
         onToggleMenu: "",
         onShowNotifications: ""
     },
-    userChanged: function() {
-        if (this.user) {
-            this.$.firstName.setValue(this.user.first_name);
-            this.$.lastName.setValue(this.user.last_name);
-            this.$.website.setValue(this.user.profile.website);
-            this.$.bio.setValue(this.user.profile.bio);
-        }
+    userChanged: function(sender, event) {
+        this.user = event.user;
+        this.$.firstName.setValue(this.user.first_name);
+        this.$.lastName.setValue(this.user.last_name);
+        this.$.website.setValue(this.user.profile.website);
+        this.$.bio.setValue(this.user.profile.bio);
     },
     firstNameChanged: function() {
         this.user.first_name = this.$.firstName.getValue();
@@ -50,6 +49,9 @@ enyo.kind({
         this.$.notificationBadge.setShowing(event.unread_count);
         return true;
     },
+    updateFacebookConnectItem: function() {
+        this.$.facebookConnectItem.addRemoveClass("connected", chuisy.getSignInStatus().signedIn);
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
@@ -61,25 +63,45 @@ enyo.kind({
                 {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
-        {classes: "main-content", fit: true, components: [
-            {kind: "onyx.Groupbox", components: [
-                {kind: "onyx.GroupboxHeader", content: "Account Settings"},
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "firstName", placeholder: "First Name", onchange: "firstNameChanged"}
+        {kind: "Scroller", fit: true, horizontal: "hidden", components: [
+            {classes: "settings-content", components: [
+                {classes: "settings-section-header", content: "Profile"},
+                {kind: "onyx.Groupbox", components: [
+                    {kind: "onyx.InputDecorator", components: [
+                        {kind: "onyx.Input", name: "firstName", placeholder: "First Name", onchange: "firstNameChanged"}
+                    ]},
+                    {kind: "onyx.InputDecorator", components: [
+                        {kind: "onyx.Input", name: "lastName", placeholder: "Last Name", onchange: "lastNameChanged"}
+                    ]},
+                    {kind: "onyx.InputDecorator", components: [
+                        {kind: "onyx.Input", name: "website", placeholder: "Website", onchange: "websiteChanged"}
+                    ]},
+                    {kind: "onyx.InputDecorator", components: [
+                        {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
+                    ]}
                 ]},
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "lastName", placeholder: "Last Name", onchange: "lastNameChanged"}
+                {classes: "settings-section-header", content: "Accounts"},
+                {kind: "onyx.Groupbox", components: [
+                    {classes: "settings-connect-item", name: "facebookConnectItem", components: [
+                        {content: "Facebook", classes: "settings-connect-text"},
+                        {kind: "onyx.Button", classes: "settings-connect-button", content: "Connect", ontap: "facebookSignIn"},
+                        {kind: "onyx.Button", classes: "settings-connect-disconnect", content: "Disconnect", ontap: "signOut"}
+                    ]}
                 ]},
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "website", placeholder: "Website", onchange: "websiteChanged"}
-                ]},
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
+                {classes: "settings-section-header", content: "Notifications"},
+                {kind: "onyx.Groupbox", components: [
+                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                        {content: "Likes", classes: "settings-notifications-text"}
+                    ]},
+                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                        {content: "Comments", classes: "settings-notifications-text"}
+                    ]},
+                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                        {content: "Follows", classes: "settings-notifications-text"}
+                    ]}
                 ]}
-            ]},
-            {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
-            {kind: "onyx.Button", content: "Logout", ontap: "signOut"}
+            ]}
         ]},
-        {kind: "Signals", onNotificationsUpdated: "notificationsUpdated"}
+        {kind: "Signals", onNotificationsUpdated: "notificationsUpdated", onUserChanged: "userChanged", onSignInSuccess: "updateFacebookConnectItem", onSignOut: "updateFacebookConnectItem"}
     ]
 });

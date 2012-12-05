@@ -265,3 +265,25 @@ button.pageheader-radiobutton.active {
 	background-position: 0 -36px;
 }
 
+.onyx-groupbox {
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+}
+
+.onyx-groupbox > * {
+	border: none;
+}
+
+.onyx-groupbox > *:not(:last-child) {
+	border-bottom: solid 1px #ddd;
+}
+
+.onyx-input-decorator {
+	padding: 0;
+}
+
+.onyx-input-decorator > input,
+.onyx-input-decorator > textarea {
+	padding: 10px;
+}
