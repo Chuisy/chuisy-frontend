@@ -14,12 +14,10 @@ enyo.kind({
         "EUR": "€",
         "GBP": "£"
     },
-    created: function() {
-        this.inherited(arguments);
-        this.chuChanged();
-    },
     chuChanged: function() {
         if (this.chu) {
+            this.waiting = false;
+
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
@@ -233,7 +231,8 @@ enyo.kind({
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
                     {classes: "chuview-spacer", ontap: "hideControls", components: [
                         {classes: "chuview-location", name: "location"},
-                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"}
+                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"},
+                        {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share"}
                     ]},
                     {classes: "chuview-content", components: [
                         {classes: "chuview-infobar", components: [

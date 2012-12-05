@@ -87,4 +87,9 @@
 	position: absolute;
 	right: 5px;
 	top: 5px;
+	display: none;
+}
+
+.profileview.owned .profileview-settings-button {
+	display: block;
 }

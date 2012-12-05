@@ -74,6 +74,21 @@
 	line-height: 70px;
 }
 
+.chuview.owned .chuview-like-button {
+	display: none;
+}
+
+.chuview-share-button {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	display: none;
+}
+
+.chuview.owned .chuview-share-button {
+	display: block;
+}
+
 .chuview-like-button.active {
 	-webkit-transform: scale(0.8);
 	opacity: 1;

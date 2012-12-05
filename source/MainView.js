@@ -192,7 +192,7 @@ enyo.kind({
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
                 {kind: "ComposeChu", onBack: "back"},
-                {kind: "ShareView", onDone: "done"}
+                {kind: "ShareView", onDone: "back"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}
