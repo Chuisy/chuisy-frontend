@@ -78,13 +78,17 @@ enyo.kind({
         }));
     },
     registerDevice: function() {
-        window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
-            // this.log(JSON.stringify(status));
-            if (status.enabled && status.deviceToken) {
-                chuisy.device.add({token: status.deviceToken}, enyo.bind(this, function(sender, response) {
-                }));
-            }
-        }));
+        try {
+            window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
+                // this.log(JSON.stringify(status));
+                if (status.enabled && status.deviceToken) {
+                    chuisy.device.add({token: status.deviceToken}, enyo.bind(this, function(sender, response) {
+                    }));
+                }
+            }));
+        } catch (e) {
+            console.error("Could not register device! Error: " + e.message);
+        }
     },
     checkPendingNotifications: function() {
         window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
