@@ -22,7 +22,7 @@ enyo.depends(
 	"ChuForm.js",
 	"Thumbs.js",
 	"UserListItem.js",
-	"SearchResults.js",
+	"Discover.js",
 	"SearchInput.js",
 	"ChuFeedItem.js",
 	"ChuList.js",

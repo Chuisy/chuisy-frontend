@@ -111,30 +111,6 @@ enyo.kind({
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
     },
-    openSearch: function() {
-        this.$.menuPanels.setIndex(1);
-    },
-    searchInputChange: function() {
-        var query = this.$.searchInput.getValue();
-
-        this.latestQuery = query;
-        this.$.searchResults.setUsers("loading");
-        chuisy.user.search(query, enyo.bind(this, function(sender, response) {
-            if (response.meta.query == this.latestQuery) {
-                this.$.searchResults.setUsers(response.objects);            }
-        }));
-        this.$.searchResults.setChus("loading");
-        chuisy.chu.search(query, enyo.bind(this, function(sender, response) {
-            if (response.meta.query == this.latestQuery) {
-                this.$.searchResults.setChus(response.objects);
-            }
-        }));
-        this.$.menuPanels.setIndex(1);
-    },
-    searchInputCancel: function() {
-        this.$.menuPanels.setIndex(0);
-        this.latestQuery = null;
-    },
 //     sliderAnimateFinish: function() {
 // //        this.$.searchInput.setDisabled(!this.isSliderOpen());
 //         if (!this.isSliderOpen()) {
@@ -158,35 +134,29 @@ enyo.kind({
     },
     components: [
         {classes: "mainmenu", components: [
-            {kind: "Panels", name: "menuPanels", draggable: false, animate: false, classes: "enyo-fill", components: [
-                {components: [
-                    {classes: "mainmenu-avatar", name: "menuAvatar", components: [
-                        {classes: "mainmenu-name", name: "menuName"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
-                        {classes: "mainmenu-item-icon feed"},
-                        {classes: "mainmenu-item-text", content: "Feed"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
-                        {classes: "mainmenu-item-icon chubox"},
-                        {classes: "mainmenu-item-text", content: "Chu Box"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "profileMenuItemTapped", name: "profileMenuItem", components: [
-                        {classes: "mainmenu-item-icon profile"},
-                        {classes: "mainmenu-item-text", content: "Profile"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
-                        {classes: "mainmenu-item-icon settings"},
-                        {classes: "mainmenu-item-text", content: "Settings"}
-                    ]},
-                    {classes: "mainmenu-item", ontap: "openSearch", name: "searchMenuItem", components: [
-                        {classes: "mainmenu-item-icon search"},
-                        {classes: "mainmenu-item-text", content: "Search"}
-                    ]}
+            {components: [
+                {classes: "mainmenu-avatar", name: "menuAvatar", components: [
+                    {classes: "mainmenu-name", name: "menuName"}
                 ]},
-                {kind: "FittableRows", components: [
-                    {kind: "SearchInput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
-                    {kind: "SearchResults", onUserSelected: "showProfile", onChuSelected: "chuSelected", fit: true}
+                {classes: "mainmenu-item", ontap: "openFeed", name: "feedMenuItem", components: [
+                    {classes: "mainmenu-item-icon feed"},
+                    {classes: "mainmenu-item-text", content: "Feed"}
+                ]},
+                {classes: "mainmenu-item", ontap: "openChubox", name: "chuboxMenuItem", components: [
+                    {classes: "mainmenu-item-icon chubox"},
+                    {classes: "mainmenu-item-text", content: "Chu Box"}
+                ]},
+                {classes: "mainmenu-item", ontap: "profileMenuItemTapped", name: "profileMenuItem", components: [
+                    {classes: "mainmenu-item-icon profile"},
+                    {classes: "mainmenu-item-text", content: "Profile"}
+                ]},
+                {classes: "mainmenu-item", ontap: "openSettings", name: "settingsMenuItem", components: [
+                    {classes: "mainmenu-item-icon settings"},
+                    {classes: "mainmenu-item-text", content: "Settings"}
+                ]},
+                {classes: "mainmenu-item", ontap: "openSearch", name: "searchMenuItem", components: [
+                    {classes: "mainmenu-item-icon search"},
+                    {classes: "mainmenu-item-text", content: "Search"}
                 ]}
             ]}
         ]},

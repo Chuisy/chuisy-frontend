@@ -1,0 +1,72 @@
+.searchinput.discover-searchinput {
+	border-radius: 0;
+	margin: 0;
+}
+
+.discover-resultchu {
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 4px;
+	margin: 5px;
+}
+
+.discover-resultchu-image {
+	width: 100%;
+	height: 100px;
+	background: url() no-repeat center center;
+	background-size: cover;
+	position: relative;
+}
+
+.discover-resultchu-avatar {
+	margin: 4px;
+	width: 32px;
+	height: 32px;
+	border-radius: 2px;
+	border: solid 2px White;
+}
+
+.discover-result-panel {
+	position: relative;
+}
+
+.discover-no-results {
+	height: 50px;
+	font-size: 15pt;
+	text-align: center;
+}
+
+.discover-tabs {
+	height: 45px;
+}
+
+.discover-tabs > * {
+	width: 50%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 0;
+	border-radius: 0 !important;
+	background-image: none;
+	background-color: White;
+	border-top: none !important;
+}
+
+.discover-tabs > *.active {
+	box-shadow: none;
+	background-color: #C30F26;
+	background-image: none;
+	color: white;
+}
+
+.discover-tab-caption {
+	display: block;
+	font-size: 10pt;
+	margin: 0 auto;
+}
+
+.discover-tab-count {
+	display: block;
+	margin: 0 auto;
+	font-size: 12pt;
+}

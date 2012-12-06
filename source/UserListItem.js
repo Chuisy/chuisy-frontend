@@ -9,7 +9,7 @@ enyo.kind({
 		onFollowingChanged: ""
 	},
 	userChanged: function() {
-		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail);
+		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail || "");
 		this.$.fullName.setContent(this.user.first_name + " " + this.user.last_name);
 		this.$.followButton.addRemoveClass("active", this.user.following);
         var authUser = chuisy.getSignInStatus().user;

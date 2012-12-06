@@ -40,7 +40,7 @@ enyo.kind({
 			this.cancel();
 		}
 	},
-	cancel: function(sender, event) {
+	cancel: function() {
 		this.$.input.setValue("");
 		this.removeClass("active");
 		this.doCancel();
