@@ -173,6 +173,10 @@ enyo.kind({
                 // settings/
                 // Settings it is.
                 this.$.mainView.openSettings();
+            } else if (match[1].match(/^discover\/$/)) {
+                // discover/
+                // Lets discover some stuff!
+                this.$.mainView.openDiscover();
             } else if (match[1].match(/^me\/$/)) {
                 // chubox/
                 // User wants to see his Chu Box? Our pleasure!

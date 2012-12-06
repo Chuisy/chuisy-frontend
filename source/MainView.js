@@ -5,12 +5,13 @@ enyo.kind({
     views: {
         feed: 0,
         chubox: 1,
-        chuView: 2,
-        profileView: 3,
-        settings: 4,
-        notifications: 5,
-        composeChu: 6,
-        share: 7
+        profile: 2,
+        settings: 3,
+        discover: 4,
+        chuView: 5,
+        notifications: 6,
+        composeChu: 7,
+        share: 8
     },
     isNarrow: function() {
         return this.getBounds().width < this.narrowWidth;
@@ -56,7 +57,7 @@ enyo.kind({
     },
     openProfileView: function(user) {
         this.$.profileView.setUser(user);
-        this.showView("profileView");
+        this.showView("profile");
 
         this.$.mainSlider.animateToMin();
 
@@ -132,6 +133,13 @@ enyo.kind({
         this.$.shareView.setChu(event.chu);
         this.showView("share");
     },
+    openDiscover: function() {
+        this.showView("discover");
+
+        this.$.mainSlider.animateToMin();
+
+        App.updateHistory("discover/");
+    },
     components: [
         {classes: "mainmenu", components: [
             {components: [
@@ -154,7 +162,7 @@ enyo.kind({
                     {classes: "mainmenu-item-icon settings"},
                     {classes: "mainmenu-item-text", content: "Settings"}
                 ]},
-                {classes: "mainmenu-item", ontap: "openSearch", name: "searchMenuItem", components: [
+                {classes: "mainmenu-item", ontap: "openDiscover", name: "searchMenuItem", components: [
                     {classes: "mainmenu-item-icon search"},
                     {classes: "mainmenu-item-text", content: "Search"}
                 ]}
@@ -164,9 +172,10 @@ enyo.kind({
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
                 {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
                 {kind: "ChuBox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
-                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
+                {kind: "Discover", onUserSelected: "showProfile", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
+                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
                 {kind: "ComposeChu", onBack: "back"},
                 {kind: "ShareView", onDone: "back"}
