@@ -76,12 +76,13 @@ enyo.kind({
     showOwnProfile: function() {
         this.openProfileView("me");
     },
-    openSettings: function() {
+    openSettings: function(sender, event) {
         this.showView("settings");
 
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("settings/");
+        event.preventDefault();
     },
     composeChu: function() {
         this.$.composeChu.initialize();
@@ -97,7 +98,7 @@ enyo.kind({
     back: function() {
         history.back();
     },
-    toggleMenu: function() {
+    toggleMenu: function(sender, event) {
           this.$.mainSlider.toggleMinMax();
           event.preventDefault();
     },
