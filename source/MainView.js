@@ -82,7 +82,10 @@ enyo.kind({
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("settings/");
-        event.preventDefault();
+
+        if (event) {
+            event.preventDefault();
+        }
     },
     composeChu: function() {
         this.$.composeChu.initialize();
@@ -98,9 +101,12 @@ enyo.kind({
     back: function() {
         history.back();
     },
-    toggleMenu: function(sender, event) {
-          this.$.mainSlider.toggleMinMax();
-          event.preventDefault();
+    toggleMenu: function() {
+        this.$.mainSlider.toggleMinMax();
+
+        if (event) {
+            event.preventDefault();
+        }
     },
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
