@@ -86,6 +86,7 @@ enyo.kind({
             var index = event.index * this.cellCount + sender.cellIndex;
             this.doChuSelected({chu: this.items[index]});
         }
+        event.preventDefault();
     },
     chuRemove: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;

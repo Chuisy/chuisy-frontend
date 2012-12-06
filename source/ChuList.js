@@ -94,6 +94,7 @@ enyo.kind({
     chuTap: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         this.doChuSelected({chu: this.items[index]});
+        event.preventDefault();
     },
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [

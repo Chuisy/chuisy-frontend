@@ -39,9 +39,11 @@ enyo.kind({
     },
     userTap: function(sender, event) {
         this.doUserSelected({user: this.users[event.index]});
+        event.preventDefault();
     },
     chuTap: function(sender, event) {
         this.doChuSelected({chu: this.chus[event.index]});
+        event.preventDefault();
     },
     radioGroupActivate: function(sender, event) {
         if (event.originator.getActive()) {

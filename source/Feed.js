@@ -85,6 +85,7 @@ enyo.kind({
     },
     chuTapped: function(sender, event) {
         this.doChuSelected({chu: this.chus[event.index]});
+        event.preventDefault();
     },
     online: function() {
         this.$.errorBox.hide();

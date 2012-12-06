@@ -66,6 +66,7 @@ enyo.kind({
     friendTapped: function(sender, event) {
         var user = this.friends[event.index].followee;
         this.doShowProfile({user: user});
+        event.preventDefault();
     },
     loadFollowers: function(user) {
         chuisy.followingrelation.list([["followee", user.id]], enyo.bind(this, function(sender, response) {
@@ -84,6 +85,7 @@ enyo.kind({
     followerTapped: function(sender, event) {
         var user = this.followers[event.index].user;
         this.doShowProfile({user: user});
+        event.preventDefault();
     },
     followButtonTapped: function() {
         if (chuisy.getSignInStatus().signedIn) {
