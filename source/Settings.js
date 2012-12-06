@@ -117,13 +117,13 @@ enyo.kind({
                 ]},
                 {classes: "settings-section-header", content: "Notifications"},
                 {kind: "onyx.Groupbox", components: [
-                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                    {classes: "settings-notifications-item", components: [
                         {content: "Likes", classes: "settings-notifications-text"}
                     ]},
-                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                    {classes: "settings-notifications-item", components: [
                         {content: "Comments", classes: "settings-notifications-text"}
                     ]},
-                    {classes: "settings-notifications-item", name: "facebookConnectItem", components: [
+                    {classes: "settings-notifications-item", components: [
                         {content: "Follows", classes: "settings-notifications-text"}
                     ]}
                 ]}
