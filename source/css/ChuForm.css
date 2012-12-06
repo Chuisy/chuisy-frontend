@@ -5,11 +5,7 @@
 	/*background-image: url(http://media.chuisy.com/media/chubox/Tron-Legacy-iphone-wallpaper-2.jpg);*/
 }
 
-.chuform-visibility-picker {
-	float: right;
-}
-
-.chuform-visibility-picker {
+/*.chuform-visibility-picker {
 	height: auto;
 	line-height: 28px;
 	position: absolute;
@@ -35,7 +31,7 @@
 .chuform-visibility-picker > .onyx-toggle-content.off {
 	padding-right: 10px;
 }
-
+*/
 .chuform-price {
 	position: absolute;
 	bottom: 10px;

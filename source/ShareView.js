@@ -13,9 +13,7 @@ enyo.kind({
     },
     friends: [],
     chuChanged: function() {
-        this.log(this.chu);
-        this.$.visibilityPicker.setValue(this.chu.visibility == "private" ? true : false);
-        this.visibilityChanged();
+        this.$[this.chu.visibility + "Button"].setActive(true);
         this.$.peoplePicker.setSelectedItems(this.chu.friends);
     },
     loadFriends: function(offset, limit) {
@@ -34,8 +32,13 @@ enyo.kind({
         }
         this.user = event.user;
     },
+    setVisibility: function(sender, event) {
+        sender.setActive(true);
+    },
     visibilityChanged: function(sender, event) {
-        this.$.panels.setIndex(this.$.visibilityPicker.getValue() ? 1 : 0);
+        if (event.originator.getActive()) {
+            this.$.panels.setIndex(this.$.visibilityPicker.getActive().value == "private" ? 1 : 0);
+        }
     },
     getMessage: function() {
         return "Check out this cool product" + (this.chu.location && this.chu.location.place ? " I found at " + this.chu.location.place.name : "") + "!";
@@ -85,7 +88,10 @@ enyo.kind({
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.ToggleButton", onContent: "private", offContent: "public", name: "visibilityPicker", classes: "chuform-visibility-picker", onChange: "visibilityChanged"},
+            {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", onActivate: "visibilityChanged", components: [
+                {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "setVisibility", value: "private"},
+                {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "setVisibility", value: "public"}
+            ]},
             {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton"}
         ]},
         {classes: "shareview-text", content: "Sharing is caring!"},

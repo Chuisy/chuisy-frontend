@@ -18,7 +18,7 @@ enyo.kind({
     price: 0,
     category: "head",
     clear: function() {
-        this.$.visibilityPicker.setValue(true);
+        this.$.privateButton.setActive(true);
         this.setImage("");
         this.price = 0;
         this.$.price.setContent(this.price + " €");
@@ -49,7 +49,7 @@ enyo.kind({
                     name: this.category
                 }
             },
-            visibility: this.$.visibilityPicker.getValue() ? "private" : "public",
+            visibility: this.$.visibilityPicker.getActive().value,
             localImage: this.image
         };
     },
@@ -109,10 +109,16 @@ enyo.kind({
             categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
         }
     },
+    visibilityChanged: function(sender, event) {
+        sender.setActive(true);
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-            {kind: "onyx.ToggleButton", onContent: "private", offContent: "public", name: "visibilityPicker", classes: "chuform-visibility-picker"},
+            {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
+                {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
+                {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
+            ]},
             {kind: "onyx.Button", ontap: "doSubmit", classes: "done-button", content: "done", name: "doneButton"}
         ]},
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [
