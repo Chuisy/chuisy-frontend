@@ -286,4 +286,5 @@ button.pageheader-radiobutton.active {
 .onyx-input-decorator > input,
 .onyx-input-decorator > textarea {
 	padding: 10px;
+	box-sizing: border-box;
 }

@@ -87,7 +87,7 @@ enyo.kind({
                 {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
-        {kind: "Scroller", fit: true, horizontal: "hidden", components: [
+        {kind: "Scroller", fit: true, components: [
             {classes: "settings-content", components: [
                 {classes: "settings-section-header", content: "Profile"},
                 {kind: "onyx.Groupbox", components: [
