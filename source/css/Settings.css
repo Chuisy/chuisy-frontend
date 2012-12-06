@@ -54,3 +54,14 @@
 	padding: 10px;
 	box-sizing: border-box;
 }
+
+.settings-avatar {
+	height: 100px;
+	background: url() no-repeat center center;
+	background-size: cover;
+	position: relative;
+}
+
+.settings-change-avatar {
+	float: right;
+}

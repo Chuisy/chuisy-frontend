@@ -15,6 +15,7 @@ enyo.kind({
         this.$.lastName.setValue(this.user.last_name);
         this.$.website.setValue(this.user.profile.website);
         this.$.bio.setValue(this.user.profile.bio);
+        this.$.avatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
     },
     firstNameChanged: function() {
         this.user.first_name = this.$.firstName.getValue();
@@ -40,7 +41,9 @@ enyo.kind({
         }));
     },
     updateProfile: function() {
-        chuisy.profile.put(this.user.profile.id, this.user.profile, enyo.bind(this, function(sender, response) {
+        var params = enyo.clone(this.user.profile);
+        params.image = params.image.replace(/http:\/\/media.chuisy.com\/media\//, "");
+        chuisy.profile.put(params.id, params, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
     },
@@ -59,6 +62,20 @@ enyo.kind({
     updateFacebookConnectItem: function() {
         this.$.facebookConnectItem.addRemoveClass("connected", chuisy.getSignInStatus().signedIn);
     },
+    changeAvatar: function() {
+        try {
+            navigator.camera.cleanup();
+            navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
+                this.warn("Getting image failed!");
+            }), {targetWidth: 500, sourceType: Camera.PictureSourceType.PHOTOLIBRARY, correctOrientation: true});
+        } catch (e) {
+            this.warn("No camera available!");
+        }
+    },
+    gotImage: function(uri) {
+        this.$.avatar.applyStyle("background-image", "url(" + uri + ")");
+        chuisy.uploadAvatar(uri);
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
@@ -74,6 +91,9 @@ enyo.kind({
             {classes: "settings-content", components: [
                 {classes: "settings-section-header", content: "Profile"},
                 {kind: "onyx.Groupbox", components: [
+                    {name: "avatar", classes: "settings-avatar", components: [
+                        {kind: "onyx.Button", classes: "settings-change-avatar", content: "change", ontap: "changeAvatar"}
+                    ]},
                     {kind: "onyx.InputDecorator", components: [
                         {kind: "onyx.Input", name: "firstName", placeholder: "First Name", onchange: "firstNameChanged"}
                     ]},
