@@ -21,7 +21,7 @@ enyo.kind({
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
-            this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category + ".png)");
+            this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
             this.$.location.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name + ", " + this.chu.location.place.address : "");
             this.$.headerText.setContent("#" + this.chu.id);
