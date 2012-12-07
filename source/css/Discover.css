@@ -27,6 +27,12 @@
 	border: solid 2px White;
 }
 
+.discover-resultchu-category {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
 .discover-result-panel {
 	position: relative;
 }

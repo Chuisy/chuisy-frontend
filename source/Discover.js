@@ -140,7 +140,7 @@ enyo.kind({
                     {kind: "onyx.Item", name: "resultChu", classes: "discover-resultchu", ontap: "chuTap", components: [
                         {classes: "discover-resultchu-image", name: "resultChuImage", components: [
                             {kind: "Image", classes: "discover-resultchu-avatar", name: "chuAvatar"},
-                            {classes: "discover-resultchu-category", name: "categoryIcon"}
+                            {classes: "category-icon discover-resultchu-category", name: "categoryIcon"}
                         ]}
                     ]},
                     {name: "chuNextPage", content: "Loading...", classes: "discover-nextpage"}
