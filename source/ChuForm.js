@@ -124,11 +124,11 @@ enyo.kind({
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [
             {classes: "chuform-price", name: "price", content: "0 €"},
             {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
-                {classes: "chuform-category-icon head selected", value: "head", ontap: "selectCategory"},
-                {classes: "chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
-                {classes: "chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
-                {classes: "chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
-                {classes: "chuform-category-icon feet", value: "feet", ontap: "selectCategory"}
+                {classes: "category-icon chuform-category-icon feet", value: "feet", ontap: "selectCategory"},
+                {classes: "category-icon chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
+                {classes: "category-icon chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
+                {classes: "category-icon chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
+                {classes: "category-icon chuform-category-icon head selected", value: "head", ontap: "selectCategory"}
             ]}
         ]}
     ]

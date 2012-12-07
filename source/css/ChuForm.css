@@ -62,9 +62,6 @@
 
 .chuform-category-icon {
 	opacity: 0;
-	width: 36px;
-	height: 36px;
-	background-size: cover;
 	position: absolute;
 	-webkit-transition-property: bottom, right, opacity;
 	-webkit-transition-duration: 0.3s;
@@ -73,24 +70,4 @@
 .chuform-category-icon.selected,
 .chuform-category-picker.open > .chuform-category-icon {
 	opacity: 1;
-}
-
-.chuform-category-icon.head {
-	background-image: url(../../assets/images/chubox.png);
-}
-
-.chuform-category-icon.accessoires {
-	background-image: url(../../assets/images/profile.png);
-}
-
-.chuform-category-icon.torso {
-	background-image: url(../../assets/images/settings.png);
-}
-
-.chuform-category-icon.legs {
-	background-image: url(../../assets/images/search.png);
-}
-
-.chuform-category-icon.feet {
-	background-image: url(../../assets/images/home.png);
 }

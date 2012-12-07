@@ -63,7 +63,7 @@ enyo.kind({
         window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.chu.share_url);
     },
     done: function() {
-        this.chu.visibility = this.$.visibilityPicker.getValue() ? "private" : "public";
+        this.chu.visibility = this.$.visibilityPicker.getActive().value;
         var friends = this.$.peoplePicker.getSelectedItems();
         var friendUris = [];
         for (var i=0; i<friends.length; i++) {
@@ -79,10 +79,7 @@ enyo.kind({
         // params.product = params.product.resource_uri;
         // delete params.resource_uri;
 
-        this.log(params);
-
         chuisy.chu.put(params.id, params, enyo.bind(this, function(sender, response) {
-            this.log(response);
         }));
         this.doDone();
     },

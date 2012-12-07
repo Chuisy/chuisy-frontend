@@ -19,12 +19,13 @@ enyo.kind({
             this.waiting = false;
 
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
-            this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnailv || "");
+            this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "");
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
             this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
             this.$.location.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name + ", " + this.chu.location.place.address : "");
             this.$.headerText.setContent("#" + this.chu.id);
+            this.$.time.setContent(chuisy.timeToText(this.chu.time));
 
             if (this.chu.liked) {
                 this.setLiked(true);
@@ -32,8 +33,6 @@ enyo.kind({
             } else {
                 this.setLiked(false);
             }
-
-            // this.$.likeButton.setContent(this.chu.likes_count);
 
             this.likes = [];
             this.comments = [];
@@ -94,13 +93,13 @@ enyo.kind({
             this.setLiked(!this.liked);
             this.waiting = true;
             if (!this.liked) {
-                this.$.likeButton.setContent(this.likes.length - 1);
+                this.$.likesCount.setContent(this.likes.length - 1);
                 chuisy.like.remove(this.likeId, enyo.bind(this, function(sender, response) {
                     this.loadLikes();
                     this.waiting = false;
                 }));
             } else {
-                this.$.likeButton.setContent(this.likes.length + 1);
+                this.$.likesCount.setContent(this.likes.length + 1);
                 var params = {
                     chu: this.chu.resource_uri
                 };
@@ -120,7 +119,8 @@ enyo.kind({
         }));
     },
     refreshLikes: function() {
-        this.$.likeButton.setContent(this.likes.length);
+        this.$.likesCount.setContent(this.likes.length);
+        // this.$.likeButton.setContent(this.likes.length);
         // this.$.likerRepeater.setCount(Math.min(this.likes.length, 10));
     },
     setupLiker: function(sender, event) {
@@ -134,6 +134,7 @@ enyo.kind({
         }));
     },
     refreshComments: function() {
+        this.$.commentsCount.setContent(this.comments.length);
         this.$.commentsRepeater.setCount(this.comments.length);
         this.$.commentsRepeater.render();
     },
@@ -226,7 +227,7 @@ enyo.kind({
                 {classes: "mainheader-text", content: "chuisy", name: "headerText"}
             ]},
             {fit: true, style: "position: relative;", components: [
-                {classes: "chuview-category-icon", name: "categoryIcon"},
+                {classes: "chuview-category-icon category-icon", name: "categoryIcon"},
                 {classes: "chuview-price", name: "price"},
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
                     {classes: "chuview-spacer", ontap: "hideControls", components: [
@@ -236,8 +237,20 @@ enyo.kind({
                     ]},
                     {classes: "chuview-content", components: [
                         {classes: "chuview-infobar", components: [
-                            {kind: "Image", classes: "chuview-avatar", name: "avatar"},
-                            {classes: "chuview-fullname ellipsis", name: "fullName"}
+                            {classes: "chuview-fullname ellipsis", name: "fullName"},
+                            {classes: "chuview-likes-comments", components: [
+                                {classes: "chuview-likes", components: [
+                                    {classes: "chuview-likes-count", name: "likesCount"},
+                                    {classes: "chuview-likes-icon"}
+                                ]},
+                                {classes: "chuview-comments", components: [
+                                    {classes: "chuview-comments-count", name: "commentsCount"},
+                                    {classes: "chuview-comments-icon"}
+                                ]}
+                            ]},
+                            {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
+                            {classes: "chuview-fullname ellipsis", name: "username", ontap: "showUser"},
+                            {classes: "chuview-time", name: "time"}
                         ]},
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
                             {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
@@ -245,9 +258,9 @@ enyo.kind({
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                             {kind: "onyx.Item", classes: "chuview-comment", components: [
                                 {components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar"},
-                                    {classes: "chuview-comment-fullname", name: "commentFullName"},
-                                    {classes: "chuview-comment-time", name: "commentTime"}
+                                    {kind: "Image", name: "commentAvatar", classes: "chuview-avatar"},
+                                    {classes: "chuview-fullname", name: "commentFullName"},
+                                    {classes: "chuview-time chuview-comment-time", name: "commentTime"}
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
                             ]}

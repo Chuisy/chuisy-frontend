@@ -19,9 +19,6 @@
 
 .chuview-category-icon {
 	position: absolute;
-	background-size: cover;
-	width: 24px;
-	height: 24px;
 	left: 10px;
 	top: 10px;
 }
@@ -107,11 +104,6 @@
 	padding: 0 5px;
 }
 
-.chuview-comment-avatar {
-	width: 26px;
-	height: 26px;
-}
-
 .chuview-comment {
 	margin: 5px 0;
 	background-color: White;
@@ -120,21 +112,13 @@
 	padding: 4px;
 }
 
-.chuview-comment-fullname {
-	display: inline-block;
-	vertical-align: top;
-	padding: 4px 10px;
-	max-width: 200px;
-}
-
 .chuview-comment-time {
 	float: right;
-	color: #555;
-	font-size: 10pt;
 }
 
 .chuview-comment-text {
 	padding: 5px;
+	font-size: 11pt;
 }
 
 .chuview-commentinput-decorator {
@@ -170,20 +154,7 @@
 	box-shadow: 0 1px 1px #888;
 	padding: 5px;
 	margin-bottom: 5px;
-	height: 26px;
-}
-
-.chuview-avatar {
-	width: 26px;
-	height: 26px;
-}
-
-.chuview-fullname {
-	display: inline-block;
-	vertical-align: top;
-	font-size: 12pt;
-	max-width: 200px;
-	padding: 4px 10px;
+	overflow: hidden;
 }
 
 .chuview-cancel-fullscreen-button {
@@ -205,4 +176,58 @@
 
 .chuview.fullscreen .chuview-cancel-fullscreen-button {
 	display: block;
+}
+
+.chuview-avatar {
+	margin-left: 1px;
+	margin-right: 10px;
+	width: 35px;
+	height: 35px;
+	float: left;
+}
+
+.chuview-fullname {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11pt;
+	padding: 0 0;
+	max-width: 150px;
+	width: auto;
+}
+
+.chuview-time {
+	color: #555;
+	font-size: 10pt;
+	padding: 0 10px;
+}
+
+.chuview-likes-comments {
+	float: right;
+}
+
+.chuview-likes-count,
+.chuview-comments-count {
+	color: #555;
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 2px;
+}
+
+.chuview-likes-icon {
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/likes.png);
+	background-size: 16px 16px;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.chuview-comments-icon {
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/comments.png);
+	background-size: 16px 16px;
+	vertical-align: top;
+	display: inline-block;
 }

@@ -22,7 +22,7 @@
 	float: left;
 }
 
-.chufeeditem-username {
+.chufeeditem-fullname {
 	display: block;
 	vertical-align: top;
 	font-size: 11pt;
@@ -45,6 +45,13 @@
 	box-sizing: border-box;
 	/*border: solid 1px #ddd;*/
 	margin-bottom: 4px;
+	position: relative;
+}
+
+.chufeeditem-category-icon {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 .chufeeditem-likes-comments {

@@ -248,9 +248,9 @@ button.pageheader-radiobutton.active {
 }
 
 .post-chu-button {
-	width: 48px;
-	height: 48px;
-	background-size: 48px 96px;
+	width: 36px;
+	height: 36px;
+	background-size: 36px 72px;
 	vertical-align: top;
 	display: inline-block;
 	background-image: url(../../assets/images/post_chu_button.png);
@@ -262,7 +262,7 @@ button.pageheader-radiobutton.active {
 }
 
 .post-chu-button:active:hover:not([disabled]) {
-	background-position: 0 -48px;
+	background-position: 0 -36px;
 }
 
 .onyx-groupbox {
@@ -321,4 +321,30 @@ button.pageheader-radiobutton.active {
 
 .visibility-picker > * {
 	margin: 0 2px;
+}
+
+.category-icon {
+	background-size: cover;
+	width: 36px;
+	height: 36px;
+}
+
+.category-icon.head {
+	background-image: url(../../assets/images/category_head.png);
+}
+
+.category-icon.accessoires {
+	background-image: url(../../assets/images/category_accessoires.png);
+}
+
+.category-icon.torso {
+	background-image: url(../../assets/images/category_torso.png);
+}
+
+.category-icon.legs {
+	background-image: url(../../assets/images/category_legs.png);
+}
+
+.category-icon.feet {
+	background-image: url(../../assets/images/category_feet.png);
 }
