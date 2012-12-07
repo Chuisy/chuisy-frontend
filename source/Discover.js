@@ -59,8 +59,8 @@ enyo.kind({
     },
     searchInputCancel: function() {
         this.latestQuery = null;
-        this.refreshResults("user", {objects: [], total_count: ""});
-        this.refreshResults("chu", {objects: [], total_count: ""});
+        this.refreshResults("user", {objects: [], meta: {total_count: ""}});
+        this.refreshResults("chu", {objects: [], meta: {total_count: ""}});
     },
     search: function(resource, query) {
         this.refreshResults(resource, "loading");
