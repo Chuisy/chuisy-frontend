@@ -56,19 +56,14 @@
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
-	width: 64px;
-	height: 64px;
-	background-size: contain;
-	background-image: url(../../assets/images/like_button.png);
-	-webkit-transform: scale(0.6);
-	opacity: 0.5;
-	-webkit-transition-property: -webkit-transform, opacity;
+	width: 48px;
+	height: 48px;
+	background: url(../../assets/images/like_button.png) no-repeat 0 0;
+	background-size: 48px 96px;
+	-webkit-transform: scale(0.9);
+	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 0.5s;
-	-webkit-transform-origin: 100% 100%;
-	color: white;
-	font-size: 18pt;
-	text-align: center;
-	line-height: 70px;
+	-webkit-transform-origin: 50% 50%;
 }
 
 .chuview.owned .chuview-like-button {
@@ -87,8 +82,8 @@
 }
 
 .chuview-like-button.active {
-	-webkit-transform: scale(0.8);
-	opacity: 1;
+	-webkit-transform: scale(1);
+	background-position: 0 -48px;
 }
 
 .chuview-controls {
