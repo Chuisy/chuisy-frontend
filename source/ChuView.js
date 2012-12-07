@@ -21,7 +21,7 @@ enyo.kind({
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "");
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
-            this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
+            this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
             this.$.location.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name + ", " + this.chu.location.place.address : "");
             this.$.headerText.setContent("#" + this.chu.id);
@@ -227,29 +227,26 @@ enyo.kind({
                 {classes: "mainheader-text", content: "chuisy", name: "headerText"}
             ]},
             {fit: true, style: "position: relative;", components: [
-                {classes: "chuview-category-icon category-icon", name: "categoryIcon"},
-                {classes: "chuview-price", name: "price"},
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
                     {classes: "chuview-spacer", ontap: "hideControls", components: [
-                        {classes: "chuview-location", name: "location"},
-                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"},
                         {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share"}
                     ]},
+                    {classes: "chuview-likebar", name: "likeButton", ontap: "likeButtonTapped"},
                     {classes: "chuview-content", components: [
                         {classes: "chuview-infobar", components: [
-                            {classes: "chuview-fullname ellipsis", name: "fullName"},
+                            {classes: "chuview-category-icon", name: "categoryIcon"},
+                            {classes: "chuview-price", name: "price"},
                             {classes: "chuview-likes-comments", components: [
-                                {classes: "chuview-likes", components: [
-                                    {classes: "chuview-likes-count", name: "likesCount"},
-                                    {classes: "chuview-likes-icon"}
-                                ]},
-                                {classes: "chuview-comments", components: [
-                                    {classes: "chuview-comments-count", name: "commentsCount"},
-                                    {classes: "chuview-comments-icon"}
-                                ]}
-                            ]},
+                                {classes: "chuview-likes-count", name: "likesCount"},
+                                {classes: "chuview-likes-icon"},
+                                {classes: "chuview-comments-count", name: "commentsCount"},
+                                {classes: "chuview-comments-icon"}
+                            ]}
+                        ]},
+                        {classes: "chuview-infobar", components: [
+                            {classes: "chuview-location", name: "location"},
                             {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
-                            {classes: "chuview-fullname ellipsis", name: "username", ontap: "showUser"},
+                            {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                             {classes: "chuview-time", name: "time"}
                         ]},
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
