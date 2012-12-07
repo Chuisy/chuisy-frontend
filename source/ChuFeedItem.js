@@ -11,10 +11,11 @@ enyo.kind({
 		if (this.chu) {
 			this.$.image.applyStyle("background-image", "url(" + (this.chu.thumbnails["300x300"] || this.chu.image || "assets/images/chu_placeholder.png") + ")");
 			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || this.chu.user.profile.avatar || "assets/images/avatar_placeholder.png");
-			this.$.username.setContent(this.chu.user.username);
+			this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
 			this.$.time.setContent(chuisy.timeToText(this.chu.time));
 			this.$.likesCount.setContent(this.chu.likes_count);
 			this.$.commentsCount.setContent(this.chu.comments_count);
+			this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
 		}
 	},
 	showUser: function() {
@@ -22,7 +23,9 @@ enyo.kind({
 		return true;
 	},
 	components: [
-		{name: "image", classes: "chufeeditem-image"},
+		{name: "image", classes: "chufeeditem-image", components: [
+			{name: "categoryIcon", classes: "category-icon chufeeditem-category-icon"}
+		]},
 		{classes: "chufeeditem-likes-comments", components: [
 			{classes: "chufeeditem-likes", components: [
 				{classes: "chufeeditem-likes-count", name: "likesCount"},
@@ -34,7 +37,7 @@ enyo.kind({
 			]}
 		]},
 		{kind: "Image", classes: "chufeeditem-avatar", name: "avatar", ontap: "showUser"},
-		{classes: "chufeeditem-username ellipsis", name: "username", ontap: "showUser"},
+		{classes: "chufeeditem-fullname ellipsis", name: "fullName", ontap: "showUser"},
 		{classes: "chufeeditem-time", name: "time"}
 	]
 });
