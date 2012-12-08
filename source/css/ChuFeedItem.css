@@ -48,30 +48,25 @@
 	position: relative;
 }
 
-.chufeeditem-category-icon {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-}
-
 .chufeeditem-likes-comments {
 	float: right;
+	margin-top: 20px;
 }
 
 .chufeeditem-likes-count,
 .chufeeditem-comments-count {
 	color: #555;
-	font-size: 10pt;
+	font-size: 11pt;
 	display: inline-block;
 	vertical-align: top;
-	padding: 0 2px;
+	padding: 0 4px;
 }
 
 .chufeeditem-likes-icon {
 	width: 16px;
 	height: 16px;
-	background-image: url(../../assets/images/likes.png);
-	background-size: 16px 16px;
+	background-image: url(../../assets/images/likes_32x32.png);
+	background-size: cover;
 	vertical-align: top;
 	display: inline-block;
 }
@@ -79,8 +74,8 @@
 .chufeeditem-comments-icon {
 	width: 16px;
 	height: 16px;
-	background-image: url(../../assets/images/comments.png);
-	background-size: 16px 16px;
+	background-image: url(../../assets/images/comments_32x32.png);
+	background-size: cover;
 	vertical-align: top;
 	display: inline-block;
 }

@@ -24,16 +24,12 @@ enyo.kind({
 	},
 	components: [
 		{name: "image", classes: "chufeeditem-image"},
-		{classes: "chufeeditem-likes-comments", components: [
-			{classes: "chufeeditem-likes", components: [
-				{classes: "chufeeditem-likes-count", name: "likesCount"},
-				{classes: "chufeeditem-likes-icon"}
-			]},
-			{classes: "chufeeditem-comments", components: [
-				{classes: "chufeeditem-comments-count", name: "commentsCount"},
-				{classes: "chufeeditem-comments-icon"}
-			]}
-		]},
+        {classes: "chufeeditem-likes-comments", components: [
+            {classes: "chufeeditem-likes-count", name: "likesCount"},
+            {classes: "chufeeditem-likes-icon"},
+            {classes: "chufeeditem-comments-count", name: "commentsCount"},
+            {classes: "chufeeditem-comments-icon"}
+        ]},
 		{kind: "Image", classes: "chufeeditem-avatar", name: "avatar", ontap: "showUser"},
 		{classes: "chufeeditem-fullname ellipsis", name: "fullName", ontap: "showUser"},
 		{classes: "chufeeditem-time", name: "time"}
