@@ -17,6 +17,16 @@
 	position: relative;
 }
 
+.chuview .chuview-share-button {
+	display: none;
+	position: absolute;
+	padding: 0px 10px;
+	height: 30px;
+	top: 7px;
+	right: 5px;
+	box-sizing: border-box;
+}
+
 .chuview.owned .chuview-share-button {
 	display: block;
 }
@@ -33,8 +43,7 @@
 	background-image: url(../../assets/images/soft_wallpaper_light@2x.png);
 	background-size: 666px 666px;
 	/*background-color: White;*/
-	padding: 0 5px;
-	height: 1000px;
+	padding: 5px;
 }
 
 .chuview-comment {
@@ -96,11 +105,7 @@
 }
 
 .chuview-infobar {
-	/*background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	padding: 5px;
-*/	padding: 5px 0;
+	padding-bottom: 5px;
 	overflow: hidden;
 }
 

@@ -27,6 +27,8 @@ enyo.kind({
             this.$.headerText.setContent("#" + this.chu.id);
             this.$.time.setContent(chuisy.timeToText(this.chu.time));
 
+            this.addRemoveClass("owned", this.isOwned());
+
             if (this.chu.liked) {
                 this.setLiked(true);
                 this.likeId = this.chu.liked;
@@ -43,27 +45,6 @@ enyo.kind({
                 this.loadLikes();
                 this.loadComments();
             }
-            
-            this.addRemoveClass("owned", this.isOwned());
-
-            // this.$.imageView.setScale("height");
-            // this.$.scrollTopAnimator.play({
-            //     startValue: 0,
-            //     endValue: 100,
-            //     duration: 10000
-            // });
-            // this.$.scrollLeftAnimator.play({
-            //     startValue: 0,
-            //     endValue: 100,
-            //     duration: 10000
-            // });
-            // this.$.imageView.setScrollTop(100);
-            // this.$.imageView.setScrollLeft(100);
-            // this.$.scaleAnimator.play({
-            //     startValue: 1,
-            //     endValue: 1.1,
-            //     duration: 5000
-            // });
         }
     },
     userChanged: function(sender, event) {
@@ -71,6 +52,7 @@ enyo.kind({
         this.addRemoveClass("owned", this.isOwned());
     },
     isOwned: function() {
+        this.log(this.user, this.chu);
         return this.user && this.chu && this.user.id == this.chu.user.id;
     },
     likedChanged: function() {
@@ -224,13 +206,12 @@ enyo.kind({
             ]},
             {classes: "mainheader", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-                {classes: "mainheader-text", content: "chuisy", name: "headerText"}
+                {classes: "mainheader-text", content: "chuisy", name: "headerText"},
+                {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share", content: "share"}
             ]},
             {fit: true, style: "position: relative;", components: [
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
-                    {classes: "chuview-spacer", ontap: "hideControls", components: [
-                        {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share"}
-                    ]},
+                    {classes: "chuview-spacer", ontap: "hideControls"},
                     {classes: "chuview-likebar", name: "likeButton", ontap: "likeButtonTapped"},
                     {classes: "chuview-content", components: [
                         {classes: "chuview-infobar", components: [
@@ -266,9 +247,6 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"},
-        {kind: "Animator", name: "scaleAnimator", onStep: "scaleStep", easingFunction: enyo.easing.linear},
-        {kind: "Animator", name: "scrollTopAnimator", onStep: "scrollTopStep", easingFunction: enyo.easing.linear},
-        {kind: "Animator", name: "scrollLeftAnimator", onStep: "scrollLeftStep", easingFunction: enyo.easing.linear}
+        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]
 });
