@@ -3,7 +3,7 @@ enyo.kind({
     classes: "feed",
     kind: "FittableRows",
     events: {
-        onChuSelected: "",
+        onShowChu: "",
         onToggleMenu: "",
         onComposeChu: "",
         onShowProfile: "",
@@ -84,7 +84,7 @@ enyo.kind({
         return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
     chuTapped: function(sender, event) {
-        this.doChuSelected({chu: this.chus[event.index]});
+        this.doShowChu({chu: this.chus[event.index]});
         event.preventDefault();
     },
     online: function() {
