@@ -88,7 +88,7 @@ enyo.kind({
 
         App.updateHistory("chu/new/");
     },
-    chuSelected: function(sender, event) {
+    showChu: function(sender, event) {
         this.openChuView(event.chu);
     },
     back: function() {
@@ -166,11 +166,11 @@ enyo.kind({
         ]},
         {kind: "Slideable", name: "mainSlider", classes: "mainslider enyo-fill", unit: "px", min: 0, max: 270, overMoving: false, onAnimateFinish: "sliderAnimateFinish", components: [
             {kind: "Panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", name: "primaryPanels", components: [
-                {kind: "Feed", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
-                {kind: "ChuBox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
-                {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
+                {kind: "Feed", onShowChu: "showChu", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowProfile: "showProfile", onShowNotifications: "showNotifications"},
+                {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
+                {kind: "ProfileView", onShowChu: "showChu", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
-                {kind: "Discover", onShowProfile: "showProfile", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
+                {kind: "Discover", onShowProfile: "showProfile", onShowChu: "showChu", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu", onShowProfile: "showProfile"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
                 {kind: "ComposeChu", onBack: "back", onChuPosted: "chuPosted"},

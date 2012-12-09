@@ -5,7 +5,7 @@ enyo.kind({
         filters: []
     },
     events: {
-        onChuSelected: ""
+        onShowChu: ""
     },
     handlers: {
         onpostresize: "postResize"
@@ -93,7 +93,7 @@ enyo.kind({
     },
     chuTap: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
-        this.doChuSelected({chu: this.items[index]});
+        this.doShowChu({chu: this.items[index]});
         event.preventDefault();
     },
     components: [

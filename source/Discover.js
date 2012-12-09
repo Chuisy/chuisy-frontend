@@ -4,7 +4,7 @@ enyo.kind({
     kind: "FittableRows",
     events: {
         onShowProfile: "",
-        onChuSelected: "",
+        onShowChu: "",
         onToggleMenu: "",
         onShowNotifications: ""
     },
@@ -42,7 +42,7 @@ enyo.kind({
         event.preventDefault();
     },
     chuTap: function(sender, event) {
-        this.doChuSelected({chu: this.chus[event.index]});
+        this.doShowChu({chu: this.chus[event.index]});
         event.preventDefault();
     },
     radioGroupActivate: function(sender, event) {

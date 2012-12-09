@@ -3,7 +3,7 @@ enyo.kind({
     kind: "FittableRows",
     classes: "chubox",
     events: {
-        onChuSelected: "",
+        onShowChu: "",
         onToggleMenu: "",
         onComposeChu: "",
         onShowNotifications: ""
@@ -84,7 +84,7 @@ enyo.kind({
     chuTap: function(sender, event) {
         if (!this.editing) {
             var index = event.index * this.cellCount + sender.cellIndex;
-            this.doChuSelected({chu: this.items[index]});
+            this.doShowChu({chu: this.items[index]});
         }
         event.preventDefault();
     },

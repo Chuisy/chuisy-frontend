@@ -6,7 +6,7 @@ enyo.kind({
         user: null
     },
     events: {
-        onChuSelected: "",
+        onShowChu: "",
         onShowProfile: "",
         onToggleMenu: "",
         onBack: "",
@@ -44,8 +44,8 @@ enyo.kind({
             this.$.panels.setIndex(event.originator.value);
         }
     },
-    chuSelected: function(sender, event) {
-        this.doChuSelected(event);
+    showChu: function(sender, event) {
+        this.doShowChu(event);
         return true;
     },
     loadFriends: function(user) {
@@ -156,7 +156,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-            {kind: "ChuList", classes: "enyo-fill", onItemSelected: "chuboxItemSelected"},
+            {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu"},
             {kind: "Scroller", classes: "enyo-fill", components: [
                 {kind: "Repeater", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
                     {kind: "UserListItem", name: "friendItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"}
