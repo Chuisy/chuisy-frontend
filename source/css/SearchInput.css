@@ -9,12 +9,13 @@
 }
 
 .searchinput-icon {
-	width: 16px;
-	height: 16px;
+	width: 24px;
+	height: 24px;
 	background: url(../../assets/images/searchinput-search.png) no-repeat center center;
+	background-size: cover;
 	position: absolute;
 	right: 10px;
-	top: 10px;
+	top: 7px;
 }
 
 .searchinput.active .searchinput-icon {
