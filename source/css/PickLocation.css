@@ -6,7 +6,7 @@
 }
 
 .picklocation-placeslist {
-	box-shadow: 0 -1px 10px #111;
+	/*box-shadow: 0 -1px 10px #111;*/
 }
 
 .picklocation-placeitem {
@@ -15,4 +15,36 @@
 	box-shadow: 0 1px 1px #888;
 	padding: 10px;
 	margin: 5px;
+}
+
+.picklocation-message {
+	width: 100%;
+	text-align: center;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.picklocation-resulttext {
+	width: 100%;
+	text-align: center;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.picklocation .onyx-input-decorator {
+	margin-bottom: 5px;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	width: 100%;
+	box-sizing: border-box;
+	border: none;
+}
+
+.picklocation .onyx-input-decorator.onyx-focused {
+	box-shadow: 0 1px 1px #888;
+}
+
+.picklocation .onyx-input-decorator > .enyo-input {
+	width: 100%;
 }

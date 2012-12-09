@@ -23,7 +23,7 @@ enyo.kind({
     gotImage: function(uri) {
         this.$.chuForm.clear();
         this.$.chuForm.setImage(uri);
-        this.$.pickLocation.getGeoLocation();
+        this.$.pickLocation.initialize();
     },
     locationPicked: function (sender, event) {
         this.location = event.location;
