@@ -22,10 +22,10 @@
 	color: White;
 	text-shadow: 0 0 5px #000;
 	position: absolute;
-	right: 5px;
+	left: 5px;
 	bottom: 5px;
 	max-width: 200px;
-	text-align: right;
+	text-align: left;
 }
 
 .profileview-bio {
@@ -71,7 +71,7 @@
 
 .profileview-follow-button {
 	position: absolute;
-	top: 5px;
+	bottom: 5px;
 	right: 5px;
 }
 
@@ -86,7 +86,7 @@
 	background-image: url(../../assets/images/settings.png);
 	position: absolute;
 	right: 5px;
-	top: 5px;
+	bottom: 5px;
 	display: none;
 }
 
