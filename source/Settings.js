@@ -11,11 +11,14 @@ enyo.kind({
     },
     userChanged: function(sender, event) {
         this.user = event.user;
-        this.$.firstName.setValue(this.user.first_name);
-        this.$.lastName.setValue(this.user.last_name);
-        this.$.website.setValue(this.user.profile.website);
-        this.$.bio.setValue(this.user.profile.bio);
-        this.$.avatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
+
+        if (this.user) {
+            this.$.firstName.setValue(this.user.first_name);
+            this.$.lastName.setValue(this.user.last_name);
+            this.$.website.setValue(this.user.profile.website);
+            // this.$.bio.setValue(this.user.profile.bio);
+            this.$.avatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
+        }
     },
     firstNameChanged: function() {
         this.user.first_name = this.$.firstName.getValue();

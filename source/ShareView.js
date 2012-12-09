@@ -26,7 +26,7 @@ enyo.kind({
         }));
     },
     userChanged: function(sender, event) {
-        if (!this.user || this.user.id != event.user.id) {
+        if (event.user && !this.user || event.user && this.user.id != event.user.id) {
             this.friends = [];
             this.loadFriends(0, 20);
         }
