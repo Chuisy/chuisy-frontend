@@ -1,10 +1,15 @@
+/**
+	_ChuFeedItem_ is used as an element in the chu feed.
+*/
 enyo.kind({
 	name: "ChuFeedItem",
 	classes: "chufeeditem",
 	published: {
+		//* Chu to display
 		chu: null
 	},
 	events: {
+		//* The chus avatar or name was tapped
 		onUserTapped: ""
 	},
 	chuChanged: function() {
