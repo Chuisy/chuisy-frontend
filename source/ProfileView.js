@@ -24,7 +24,6 @@ enyo.kind({
         if (user) {
             this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
-            this.$.bio.setContent(user.profile.bio);
             this.$.chuboxCount.setContent(user.chu_count);
             this.$.followerCount.setContent(user.follower_count);
             this.$.friendCount.setContent(user.following_count);
@@ -32,7 +31,7 @@ enyo.kind({
             this.$.chuList.load();
             this.loadFriends(user);
             this.loadFollowers(user);
-            this.$.followButton.addRemoveClass("active", user.following);
+            this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
             this.$.chuboxMenuButton.setActive(true);
             this.$.panels.setIndex(0);
             this.addRemoveClass("owned", this.authUser && this.authUser.id == user.id);
@@ -101,6 +100,7 @@ enyo.kind({
         var button = this.$.followButton;
 
         button.setDisabled(true);
+        button.setContent(user.following ? "follow" : "unfollow");
         if (user.following) {
             chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
                 user.following = false;
@@ -138,7 +138,6 @@ enyo.kind({
         ]},
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},
-            {classes: "profileview-bio", name: "bio", showing: false},
             {classes: "profileview-settings-button", ontap: "doShowSettings"},
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
         ]},
