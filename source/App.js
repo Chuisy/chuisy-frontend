@@ -1,12 +1,17 @@
+/**
+    _App_ is the root UI component for the Chuisy app. The app can be run both in a browser window
+    and on a mobile device using Phonegap/Cordova. For use with Phonegap, the _deviceReady_ handler
+    is the entry point. Otherwise, the app is initialized after creation.
+*/
 enyo.kind({
     name: "App",
     fit: true,
     classes: "app",
-    narrowWidth: 800,
-    published: {
-        user: null
-    },
     statics: {
+        /**
+            Checks if app is online. Only works properly with Phonegap.
+            Otherwise always returns true.
+        */
         isOnline: function() {
             if (navigator.connection) {
                 var networkState = navigator.connection.type;
@@ -15,35 +20,43 @@ enyo.kind({
                 return true;
             }
         },
+        /**
+            Checks if app is running in a mobile browser
+        */
         isMobile: function() {
             return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
         }
     },
     create: function() {
         this.inherited(arguments);
+
+        // If app is running with Cordova, init will be called after the deviceready event
         if (!App.isMobile()) {
             this.init();
         }
     },
     rendered: function() {
         this.inherited(arguments);
+
+        // Hide splash screen if Cordova has been loaded yet
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
         }
     },
-    isNarrow: function() {
-        return this.getBounds().width < this.narrowWidth;
-    },
     deviceReady: function() {
+        // Hide splash screen if the App has been rendered yet
         if (this.hasNode()) {
             navigator.splashscreen.hide();
         }
+        // Check if the app has been intitialized yet. Necessary since deviceready event
+        // seems to be fired multiple times
         if (!this.initialized) {
             this.init();
             this.initialized = true;
         }
     },
     init: function() {
+        // Gotta load the facebook js sdk unless we are running with Cordova
         if (!App.isMobile()) {
             this.initFacebookWeb();
         }
@@ -63,6 +76,9 @@ enyo.kind({
             this.initPushNotifications();
         }
     },
+    /**
+        Checks any pending notifications and adds event listener for new push notifications
+    */
     initPushNotifications: function() {
         var pushNotification = window.plugins.pushNotification;
 
@@ -73,6 +89,9 @@ enyo.kind({
             enyo.Signals.send("onPushNotification", event);
         }));
     },
+    /**
+        Registers device with apns and add it to the users account
+    */
     registerDevice: function() {
         try {
             window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
@@ -86,15 +105,20 @@ enyo.kind({
             console.error("Could not register device! Error: " + e.message);
         }
     },
+    /**
+        Checks if the app was launched by tapping on a notifications. If so, open the corresponding view
+    */
     checkPendingNotifications: function() {
         window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
-            // this.log(JSON.stringify(pending));
             var notification = pending.notifications[0];
             if (notification) {
                 this.navigateTo(notification.uri);
             }
         }));
     },
+    /**
+        Loads and initializes js Facebook sdk
+    */
     initFacebookWeb: function() {
         window.fbAsyncInit = enyo.bind(this, function() {
             console.log("facebook sdk loaded.");
@@ -140,12 +164,15 @@ enyo.kind({
             this.registerDevice();
         }
     },
-    hashChanged: function() {
-        if (!window.ignoreHashChange) {
-            this.recoverStateFromUri();
-        }
-        window.ignoreHashChange = false;
-    },
+    // hashChanged: function() {
+    //     if (!window.ignoreHashChange) {
+    //         this.recoverStateFromUri();
+    //     }
+    //     window.ignoreHashChange = false;
+    // },
+    /**
+        Gets hash fragment from url and open the appropriate content if possible
+    */
     recoverStateFromUri: function() {
         var match, hash = window.location.hash;
         if ((match = hash.match(/^#!\/(.+)/))) {
@@ -155,7 +182,7 @@ enyo.kind({
         }
     },
     /**
-        Scans uri for certain patterns and recovers the corresponding application state
+        Scans _uri_ for certain patterns and opens corresponding content if possible
     */
     navigateTo: function(uri) {
         if ((match2 = uri.match(/^auth\/(.+)/))) {
@@ -220,18 +247,27 @@ enyo.kind({
             this.$.mainView.openFeed();
         }
     },
+    /**
+        Adds current context to navigation history.
+    */
     updateHistory: function(sender, event) {
         this.history.push(event.uri);
         window.location.hash = "!/" + event.uri;
     },
+    /**
+        Removes the latest context from the history and opens the previous one
+    */
     back: function() {
         if (this.history.length > 1) {
             this.history.pop();
             this.navigateTo(this.history[this.history.length-1]);
-            // This view is already in the history so...
+            // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
     },
+    /**
+        Gets a facebook access token and exchanges it for Chuisy api authentication credentials
+    */
     facebookSignIn: function() {
         // Get facebook access token
         this.loginWithFacebook(enyo.bind(this, function(accessToken) {
@@ -247,6 +283,9 @@ enyo.kind({
             }));
         }));
     },
+    /**
+        Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
+    */
     loginWithFacebook: function(callback) {
         if (window.plugins && window.plugins.facebookConnect) {
             window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, enyo.bind(this, function(result) {
