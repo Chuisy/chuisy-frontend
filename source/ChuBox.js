@@ -1,21 +1,31 @@
+/**
+    View of the users Chu Box
+*/
 enyo.kind({
     name: "ChuBox",
     kind: "FittableRows",
     classes: "chubox",
     events: {
+        //* Gets fired when a chu is selected by tapping in it
         onShowChu: "",
+        //* The user has tapped on the menu button
         onToggleMenu: "",
+        //* The user has tapped the create chu button
         onComposeChu: "",
+        //* The user has tapped the notification button
         onShowNotifications: ""
     },
     handlers: {
         onpostresize: "postResize"
     },
+    // Estimated width of a single chu
     chuWidth: 105,
+    // Meta object for requests
     meta: {
         offset: 0,
         limit: 60
     },
+    // Items in the chu box
     items: [],
     rendered: function() {
         this.inherited(arguments);
@@ -29,8 +39,12 @@ enyo.kind({
         this.buildCells();
         this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
     },
+    /**
+        Build the cells for the List. The wider the screen the more cells have to be created
+    */
     buildCells: function() {
         if (!this.hasNode() || !this.getBounds().width || !this.getBounds().height) {
+            // Can't calculate bounds yet
             return;
         }
 
@@ -50,6 +64,7 @@ enyo.kind({
             var chu = this.items[index];
 
             if (chu) {
+                // Use local images over remote ones, thumbnails over full images
                 var image = chu.localThumbnail || chu.localImage ||
                     (chu.thumbnails ? chu.thumbnails["100x100"] : chu.image) ||
                     "assets/images/chu_placeholder.png";
@@ -62,11 +77,17 @@ enyo.kind({
 
         return true;
     },
+    /**
+        Get items from sdk and update List
+    */
     refresh: function() {
         this.items = chuisy.chubox.getChus();
         this.$.list.setCount(Math.ceil(this.items.length / this.cellCount));
         this.$.list.refresh();
     },
+    /**
+        Start edit mode in which the user can delete chus
+    */
     startEditing: function(sender, event) {
         this.editing = true;
         this.$.notificationsButton.hide();
@@ -74,6 +95,9 @@ enyo.kind({
         this.$.postButton.hide();
         this.addClass("editing");
     },
+    /**
+        Finish edit mode
+    */
     finishEditing: function() {
         this.editing = false;
         this.removeClass("editing");
@@ -86,8 +110,13 @@ enyo.kind({
             var index = event.index * this.cellCount + sender.cellIndex;
             this.doShowChu({chu: this.items[index]});
         }
+        // Call this to prevent event propagating to an input element and focussing it
+        // Happens on iOS sometimes
         event.preventDefault();
     },
+    /**
+        Event handler. Remove chu associated with the event.
+    */
     chuRemove: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = this.items[index];
@@ -123,6 +152,7 @@ enyo.kind({
             {classes: "chubox-contextmenu-left"},
             {classes: "chubox-contextmenu-right"}
         ]},
+        // HEADER
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
                 {classes: "menu-button-icon"}
@@ -134,6 +164,7 @@ enyo.kind({
                 {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
             ]}
         ]},
+        // LIST
         {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chubox-row"}
         ]}
