@@ -91,7 +91,7 @@ enyo.kind({
             // this.log(JSON.stringify(pending));
             var notification = pending.notifications[0];
             if (notification) {
-                App.navigateTo(notification.uri);
+                this.navigateTo(notification.uri);
             }
         }));
     },
