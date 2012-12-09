@@ -7,13 +7,6 @@ enyo.kind({
         user: null
     },
     statics: {
-        updateHistory: function(uri) {
-            window.ignoreHashChange = true;
-            window.location.hash = "!/" + uri;
-        },
-        navigateTo: function(uri) {
-            window.location.hash = "!/" + uri;
-        },
         isOnline: function() {
             if (navigator.connection) {
                 var networkState = navigator.connection.type;
@@ -55,14 +48,17 @@ enyo.kind({
             this.initFacebookWeb();
         }
 
-        window.onhashchange = enyo.bind(this, this.hashChanged);
+        // window.onhashchange = enyo.bind(this, this.hashChanged);
         chuisy.init();
 
         enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
+        this.history = [];
+
         this.recoverStateFromUri();
+
         if (App.isMobile()) {
             this.initPushNotifications();
         }
@@ -150,98 +146,90 @@ enyo.kind({
         }
         window.ignoreHashChange = false;
     },
+    recoverStateFromUri: function() {
+        var match, hash = window.location.hash;
+        if ((match = hash.match(/^#!\/(.+)/))) {
+            this.navigateTo(match[1]);
+        } else {
+            this.navigateTo("feed/");
+        }
+    },
     /**
         Scans uri for certain patterns and recovers the corresponding application state
     */
-    recoverStateFromUri: function() {
-        var match, match2, match3, hash = window.location.hash;
-        if ((match = hash.match(/^#!\/(.+)/))) {
-            // #!/...
-            // Seems like there is an app state encoded in the uri. Let's see what we can find...
-            if ((match2 = match[1].match(/^auth\/(.+)/))) {
-                // auth/{base64-encoded auth credentials}
-                // The user has been redirected from the backend with authentication credentials. Let's sign him in.
-                chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
-                chuisy.savePersistentObject("authCredentials", chuisy.authCredentials);
-                this.signedIn();
-                App.updateHistory("");
-            } else if (match[1].match(/^feed\/$/)) {
-                // chufeed/
-                // The chu feed it is! Let't open it.
-                this.$.mainView.openFeed();
-            } else if (match[1].match(/^settings\/$/)) {
-                // settings/
-                // Settings it is.
-                this.$.mainView.openSettings();
-            } else if (match[1].match(/^discover\/$/)) {
-                // discover/
-                // Lets discover some stuff!
-                this.$.mainView.openDiscover();
-            } else if (match[1].match(/^me\/$/)) {
-                // chubox/
-                // User wants to see his Chu Box? Our pleasure!
-                this.$.mainView.showOwnProfile();
-            } else if (match[1].match(/^chubox\/$/)) {
-                // chubox/
-                // User wants to see his Chu Box? Our pleasure!
-                this.$.mainView.openChubox();
-            } else if (match[1].match(/^notifications\/$/)) {
-                // chubox/
-                // Whats new? Let's check out the notifications
-                this.$.mainView.showNotifications();
-            } else if ((match2 = match[1].match(/^chu\/(.+)$/))) {
-                // chu/..
-                if (match2[1].match(/new\/$/)) {
-                    // chu/new/
-                    // Always glad to see new Chus. Let's open an empty chu view.
-                    this.$.mainView.composeChu();
-                } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
-                    // chu/{chu id}
-                    // We have a URI pointing to a specific Chu. Let's open it.
-                    chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
-                        this.$.mainView.openChuView(response);
-                    }));
-                }
-            // } else if ((match2 = match[1].match(/^item\/(.+)$/))) {
-            //     // chu/..
-            //     if (match2[1].match(/new\/$/)) {
-            //         // item/new/
-            //         // Add a new item to the chu box? Let's do it
-            //         this.$.mainView.composeChuboxItem();
-            //     } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
-            //         // item/{item id}
-            //         // A specific Chubox Item. Let's open the ChuboxItemView without a Chu
-            //         chuisy.chuboxitem.detail(match3[1], enyo.bind(this, function(sender, response) {
-            //             this.$.mainView.openChuboxItemView(response);
-            //         }));
-            //     }
-            } else if ((match2 = match[1].match(/^user\/(\d+)\/$/))) {
-                // {user id}/
-                // This is the URI to a users profile
-                chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-                    this.$.mainView.openProfileView(response);
-                }));
-            } else if ((match2 = match[1].match(/^user\/(\d+)\/chubox\/$/))) {
-                // {user id}/
-                // This is the URI to a users profile
-                chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-                    this.$.mainView.openChubox(response);
-                }));
-            } else if ((match2 = match[1].match(/^([^\/]+)\/$/))) {
-                // {username}/
-                // Might be a username. Lets try finding a user that matches.
-
-                // This doesn't work presently as the 'username' get parameter is being used for authentication
-                // chuisy.user.list(["username", match2[1]], enyo.bind(this, function(sender, response) {
-                //     this.log(response);
-                // }));
-            } else {
-                this.log("Uri hash provided but no known pattern found!");
-                // TODO: Show 404 Page
-                this.$.mainView.openFeed();
-            }
-        } else {
+    navigateTo: function(uri) {
+        if ((match2 = uri.match(/^auth\/(.+)/))) {
+            // auth/{base64-encoded auth credentials}
+            // The user has been redirected from the backend with authentication credentials. Let's sign him in.
+            chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
+            chuisy.savePersistentObject("authCredentials", chuisy.authCredentials);
+            this.signedIn();
+            App.updateHistory("");
+        } else if (uri.match(/^feed\/$/)) {
+            // chufeed/
+            // The chu feed it is! Let't open it.
             this.$.mainView.openFeed();
+        } else if (uri.match(/^settings\/$/)) {
+            // settings/
+            // Settings it is.
+            this.$.mainView.openSettings();
+        } else if (uri.match(/^discover\/$/)) {
+            // discover/
+            // Lets discover some stuff!
+            this.$.mainView.openDiscover();
+        } else if (uri.match(/^me\/$/)) {
+            // chubox/
+            // User wants to see his Chu Box? Our pleasure!
+            this.$.mainView.showOwnProfile();
+        } else if (uri.match(/^chubox\/$/)) {
+            // chubox/
+            // User wants to see his Chu Box? Our pleasure!
+            this.$.mainView.openChubox();
+        } else if (uri.match(/^notifications\/$/)) {
+            // chubox/
+            // Whats new? Let's check out the notifications
+            this.$.mainView.showNotifications();
+        } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
+            // chu/..
+            if (match2[1].match(/new\/$/)) {
+                // chu/new/
+                // Always glad to see new Chus. Let's open an empty chu view.
+                this.$.mainView.composeChu();
+            } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
+                // chu/{chu id}
+                // We have a URI pointing to a specific Chu. Let's open it.
+                chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
+                    this.$.mainView.openChuView(response);
+                }));
+            }
+        } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
+            // {user id}/
+            // This is the URI to a users profile
+            chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+                this.$.mainView.openProfileView(response);
+            }));
+        } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
+            // {user id}/
+            // This is the URI to a users profile
+            chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+                this.$.mainView.openChubox(response);
+            }));
+        } else {
+            this.log("Uri hash provided but no known pattern found!");
+            // TODO: Show 404 Page
+            this.$.mainView.openFeed();
+        }
+    },
+    updateHistory: function(sender, event) {
+        this.history.push(event.uri);
+        window.location.hash = "!/" + event.uri;
+    },
+    back: function() {
+        if (this.history.length > 1) {
+            this.history.pop();
+            this.navigateTo(this.history[this.history.length-1]);
+            // This view is already in the history so...
+            this.history.pop();
         }
     },
     facebookSignIn: function() {
@@ -293,9 +281,12 @@ enyo.kind({
         this.signInFailureCallback = event.failure;
         this.$.panels.setIndex(1);
     },
+    mainViewNavigateTo: function(sender, event) {
+        this.navigateTo(event.uri);
+    },
     components: [
         {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
-            {kind: "MainView", classes: "enyo-fill"},
+            {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
             {classes: "enyo-fill", components: [
                 {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
                 {kind: "onyx.Button", content: "Cancel", ontap: "facebookCancel"}

@@ -1,7 +1,11 @@
 enyo.kind({
     name: "MainView",
     classes: "mainview",
-    narrowWidth: 800,
+    events: {
+        onUpdateHistory: "",
+        onBack: "",
+        onNavigateTo: ""
+    },
     views: {
         feed: 0,
         chubox: 1,
@@ -31,13 +35,13 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("feed/");
+        this.doUpdateHistory({uri: "feed/"});
     },
     openChubox: function() {
         this.showView("chubox");
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chubox/");
+        this.doUpdateHistory({uri: "chubox/"});
     },
     openChuView: function(chu) {
         this.showView("chuView");
@@ -45,7 +49,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chu/" + chu.id + "/");
+        this.doUpdateHistory({uri: "chu/" + chu.id + "/"});
     },
     openProfileView: function(user) {
         this.$.profileView.setUser(user);
@@ -53,7 +57,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory(user == "me" ? "me/": ("user/" + user.id + "/"));
+        this.doUpdateHistory({uri: user == "me" ? "me/" : ("user/" + user.id + "/")});
     },
     profileMenuItemTapped: function() {
         this.$.mainSlider.animateToMin();
@@ -74,7 +78,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("settings/");
+        this.doUpdateHistory({uri: "settings/"});
 
         if (event) {
             event.preventDefault();
@@ -86,13 +90,14 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("chu/new/");
+        this.doUpdateHistory({uri: "chu/new/"});
     },
     showChu: function(sender, event) {
         this.openChuView(event.chu);
     },
     back: function() {
-        history.back();
+        this.doBack();
+        return true;
     },
     toggleMenu: function() {
         this.$.mainSlider.toggleMinMax();
@@ -107,13 +112,13 @@ enyo.kind({
     showNotifications: function() {
         this.showView("notifications");
 
-        App.updateHistory("notifications/");
+        this.doUpdateHistory({uri: "notifications/"});
     },
     isSliderOpen: function() {
         return this.$.mainSlider.getValue() == this.$.mainSlider.getMax();
     },
     notificationSelected: function(sender, event) {
-        App.navigateTo(event.notification.uri);
+        this.doNavigateTo({uri: event.notification.uri});
     },
     shareChu: function(sender, event) {
         this.$.shareView.setChu(event.chu);
@@ -124,7 +129,7 @@ enyo.kind({
 
         this.$.mainSlider.animateToMin();
 
-        App.updateHistory("discover/");
+        this.doUpdateHistory({uri: "discover/"});
     },
     onChuPosted: function(sender, event) {
         if (chuisy.getSignInStatus().signedIn) {
