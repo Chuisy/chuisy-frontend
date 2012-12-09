@@ -2,7 +2,8 @@ enyo.kind({
     name: "ComposeChu",
     kind: "FittableRows",
     events: {
-        onBack: ""
+        onBack: "",
+        onChuPosted: ""
     },
     initialize: function() {
         this.$.panels.setIndex(0);
@@ -33,7 +34,7 @@ enyo.kind({
         var chu = this.$.chuForm.getData();
         chu.location = this.location;
         chuisy.chubox.add(chu);
-        this.doBack();
+        this.doChuPosted({chu: chu});
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);

@@ -112,12 +112,6 @@ enyo.kind({
     showProfile: function(sender, event) {
         this.openProfileView(event.user);
     },
-//     sliderAnimateFinish: function() {
-// //        this.$.searchInput.setDisabled(!this.isSliderOpen());
-//         if (!this.isSliderOpen()) {
-//             this.$.searchInput.blur();
-//         }
-//     },
     showNotifications: function() {
         this.showView("notifications");
 
@@ -139,6 +133,16 @@ enyo.kind({
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("discover/");
+    },
+    onChuPosted: function(sender, event) {
+        if (chuisy.getSignInStatus().signedIn) {
+            this.shareChu(event);
+        } else {
+            this.openChuView(event);
+        }
+    },
+    shareViewDone: function(sender, event) {
+        this.openChuView({chu: sender.getChu()});
     },
     components: [
         {classes: "mainmenu", components: [
@@ -177,8 +181,8 @@ enyo.kind({
                 {kind: "Discover", onUserSelected: "showProfile", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
-                {kind: "ComposeChu", onBack: "back"},
-                {kind: "ShareView", onDone: "back"}
+                {kind: "ComposeChu", onBack: "back", onChuPosted: "chuPosted"},
+                {kind: "ShareView", onDone: "shareViewDone"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}
