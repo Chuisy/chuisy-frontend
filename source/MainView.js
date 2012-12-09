@@ -13,13 +13,6 @@ enyo.kind({
         composeChu: 7,
         share: 8
     },
-    isNarrow: function() {
-        return this.getBounds().width < this.narrowWidth;
-    },
-    create: function() {
-        this.inherited(arguments);
-        this.$.primaryPanels.getAnimator().setDuration(1000);
-    },
     userChanged: function(sender, event) {
         this.user = event.user;
         if (this.user) {
@@ -40,9 +33,8 @@ enyo.kind({
 
         App.updateHistory("feed/");
     },
-    openChubox: function(user) {
+    openChubox: function() {
         this.showView("chubox");
-        // this.$.chubox.refresh();
         this.$.mainSlider.animateToMin();
 
         App.updateHistory("chubox/");
@@ -178,8 +170,8 @@ enyo.kind({
                 {kind: "ChuBox", name: "chubox", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onComposeChu: "composeChu", onShowNotifications: "showNotifications"},
                 {kind: "ProfileView", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
-                {kind: "Discover", onUserSelected: "showProfile", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
-                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu"},
+                {kind: "Discover", onShowProfile: "showProfile", onChuSelected: "chuSelected", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
+                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu", onShowProfile: "showProfile"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
                 {kind: "ComposeChu", onBack: "back", onChuPosted: "chuPosted"},
                 {kind: "ShareView", onDone: "shareViewDone"}

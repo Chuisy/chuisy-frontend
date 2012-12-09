@@ -3,7 +3,7 @@ enyo.kind({
     classes: "discover",
     kind: "FittableRows",
     events: {
-        onUserSelected: "",
+        onShowProfile: "",
         onChuSelected: "",
         onToggleMenu: "",
         onShowNotifications: ""
@@ -38,7 +38,7 @@ enyo.kind({
         return true;
     },
     userTap: function(sender, event) {
-        this.doUserSelected({user: this.users[event.index]});
+        this.doShowProfile({user: this.users[event.index]});
         event.preventDefault();
     },
     chuTap: function(sender, event) {

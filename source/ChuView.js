@@ -7,7 +7,8 @@ enyo.kind({
     },
     events: {
         onBack: "",
-        onShare: ""
+        onShare: "",
+        onShowProfile: ""
     },
     handlers: {
         ontap: "tapHandler"
@@ -212,6 +213,9 @@ enyo.kind({
         if (!event.originator.isDescendantOf(this.$.commentInput)) {
             this.$.commentInput.hasNode().blur();
         }
+    },
+    showUser: function() {
+        this.doShowProfile({user: this.chu.user});
     },
     components: [
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll"},
