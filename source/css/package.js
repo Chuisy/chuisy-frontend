@@ -1,7 +1,7 @@
 enyo.depends(
 	"fonts.css",
 	"App.css",
-	"ChuBox.css",
+	"Chubox.css",
 	"ChuView.css",
 	"FormField.css",
 	"Feed.css",
