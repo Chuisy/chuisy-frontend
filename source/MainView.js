@@ -48,8 +48,8 @@ enyo.kind({
         App.updateHistory("chubox/");
     },
     openChuView: function(chu) {
-        this.$.chuView.setChu(chu);
         this.showView("chuView");
+        this.$.chuView.setChu(chu);
 
         this.$.mainSlider.animateToMin();
 

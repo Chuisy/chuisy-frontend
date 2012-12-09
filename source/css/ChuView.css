@@ -1,10 +1,6 @@
 .chuview {
 }
 
-.chuview-content {
-	position: relative;
-}
-
 .chuview-imageview {
 	position: absolute;
 	z-index: -10;
@@ -13,7 +9,7 @@
 }
 
 .chuview-spacer {
-	height: 280px;
+	height: 250px;
 	position: relative;
 }
 
@@ -40,9 +36,9 @@
 }
 
 .chuview-content {
-	background-image: url(../../assets/images/soft_wallpaper_light@2x.png);
-	background-size: 666px 666px;
-	/*background-color: White;*/
+	/*background-image: url(../../assets/images/soft_wallpaper_light@2x.png);*/
+	/*background-size: 666px 666px;*/
+	background-color: #eee;
 	padding: 5px;
 }
 
@@ -159,6 +155,8 @@
 	float: right;
 	max-width: 100px;
 	text-align: right;
+	max-height: 35px;
+	overflow: hidden;
 }
 
 .chuview-likes-comments {

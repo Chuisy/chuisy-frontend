@@ -9,11 +9,15 @@ enyo.kind({
         onBack: "",
         onShare: ""
     },
+    handlers: {
+        ontap: "tapHandler"
+    },
     currencies: {
         "USD": "$",
         "EUR": "€",
         "GBP": "£"
     },
+    bufferHeight: 100,
     chuChanged: function() {
         if (this.chu) {
             this.waiting = false;
@@ -45,14 +49,29 @@ enyo.kind({
                 this.loadLikes();
                 this.loadComments();
             }
+
+            if (this.hasNode()) {
+                this.arrangeImage();
+            }
         }
+    },
+    arrangeImage: function() {
+        var bufferHeight = this.bufferHeight;
+        var imageHeight = 1024;
+        var imageWidth = 768;
+        var screenHeight = this.$.imageView.getBounds().height;
+        var screenWidth = this.$.imageView.getBounds().width;
+        var scale = (screenHeight + 2 * bufferHeight) / imageHeight;
+        this.$.imageView.setScale(scale);
+        var scrollLeft = (this.$.imageView.getScrollBounds().width - this.$.imageView.getBounds().width) / 2;
+        this.$.imageView.setScrollLeft(scrollLeft);
+        this.scroll();
     },
     userChanged: function(sender, event) {
         this.user = event.user;
         this.addRemoveClass("owned", this.isOwned());
     },
     isOwned: function() {
-        this.log(this.user, this.chu);
         return this.user && this.chu && this.user.id == this.chu.user.id;
     },
     likedChanged: function() {
@@ -151,6 +170,8 @@ enyo.kind({
             this.loadComments();
         }));
         this.$.commentInput.setValue("");
+        this.$.commentInput.hasNode().blur();
+        this.$.contentScroller.scrollIntoView(this.$.commentInput, true);
     },
     online: function() {
         // this.$.likeButton.setDisabled(false);
@@ -168,38 +189,32 @@ enyo.kind({
         this.loadComments();
         this.loadLikes();
     },
-    scaleStep: function() {
-        this.$.imageView.setScale(this.$.scaleAnimator.value);
-    },
-    scrollTopStep: function() {
-        this.$.imageView.setScrollTop(this.$.scrollTopAnimator.value);
-    },
-    scrollLeftStep: function() {
-        this.$.imageView.setScrollLeft(this.$.scrollLeftAnimator.value);
-    },
     scroll: function() {
-        // if (this.$.contentScroller.getScrollTop() < -100) {
-        //     this.$.contentSlideable.animateToMax();
-        // }
-        this.addRemoveClass("scrolled-up", this.$.contentScroller.getScrollTop() > 200);
-        this.$.imageView.setScrollTop(100 + this.$.contentScroller.getScrollTop()/10);
-        // this.log(this.$.contentScroller.getScrollTop());
+        var scrollTop = this.bufferHeight + this.$.contentScroller.getScrollTop()/10;
+        this.$.imageView.setScrollTop(scrollTop);
     },
     hideControls: function() {
         this.addClass("fullscreen");
         setTimeout(enyo.bind(this, function() {
             this.$.imageView.applyStyle("z-index", "1000");
         }), 500);
+        this.$.imageView.smartZoom();
     },
     showControls: function() {
         this.$.imageView.applyStyle("z-index", "0");
         this.removeClass("fullscreen");
+        this.arrangeImage();
     },
     share: function() {
         this.doShare({chu: this.chu});
     },
+    tapHandler: function(sender, event) {
+        if (!event.originator.isDescendantOf(this.$.commentInput)) {
+            this.$.commentInput.hasNode().blur();
+        }
+    },
     components: [
-        {kind: "ImageView", classes: "chuview-imageview enyo-fill", scale: "height"},
+        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll"},
         {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             {kind: "Slideable", classes: "chuview-commentinput-slider", unit: "%", min: 0, max: 100, value: 100, components: [
@@ -210,7 +225,7 @@ enyo.kind({
                 {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share", content: "share"}
             ]},
             {fit: true, style: "position: relative;", components: [
-                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", components: [
+                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", onScroll: "scroll", components: [
                     {classes: "chuview-spacer", ontap: "hideControls"},
                     {classes: "chuview-likebar", name: "likeButton", ontap: "likeButtonTapped"},
                     {classes: "chuview-content", components: [

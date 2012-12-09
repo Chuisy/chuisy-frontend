@@ -14,7 +14,7 @@ enyo.kind({
             navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
                 this.warn("Getting image failed!");
                 this.doBack();
-            }), {targetWidth: 1024, correctOrientation: true});
+            }), {targetWidth: 768, targetHeight: 1024, correctOrientation: true});
         } catch (e) {
             this.warn("No camera available!");
             this.gotImage("");
