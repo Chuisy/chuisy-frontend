@@ -15,12 +15,10 @@
 .userlistitem-fullname {
 	display: inline-block;
 	vertical-align: top;
-	max-width: 180px;
+	max-width: 150px;
 	padding: 5px 10px;
 }
 
 .userlistitem-follow-button {
-	font-size: 11pt;
-	padding: 5px;
 	float: right;
 }
