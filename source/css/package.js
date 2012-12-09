@@ -3,7 +3,6 @@ enyo.depends(
 	"App.css",
 	"Chubox.css",
 	"ChuView.css",
-	"FormField.css",
 	"Feed.css",
 	"MainView.css",
 	"PeoplePicker.css",
