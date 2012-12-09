@@ -29,10 +29,10 @@ enyo.kind({
         this.user.profile.website = this.$.website.getValue();
         this.updateProfile();
     },
-    bioChanged: function() {
-        this.user.profile.bio = this.$.bio.getValue();
-        this.updateProfile();
-    },
+    // bioChanged: function() {
+    //     this.user.profile.bio = this.$.bio.getValue();
+    //     this.updateProfile();
+    // },
     updateUser: function() {
         var params = enyo.clone(this.user);
         params.profile = params.profile.resource_uri;
@@ -102,10 +102,10 @@ enyo.kind({
                     ]},
                     {kind: "onyx.InputDecorator", components: [
                         {kind: "onyx.Input", name: "website", placeholder: "Website", onchange: "websiteChanged"}
-                    ]},
-                    {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
                     ]}
+                    // {kind: "onyx.InputDecorator", components: [
+                    //     {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
+                    // ]}
                 ]},
                 {classes: "settings-section-header", content: "Accounts"},
                 {kind: "onyx.Groupbox", components: [
