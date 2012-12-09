@@ -11,7 +11,7 @@ enyo.kind({
 	userChanged: function() {
 		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail || "");
 		this.$.fullName.setContent(this.user.first_name + " " + this.user.last_name);
-		this.$.followButton.addRemoveClass("active", this.user.following);
+		this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
         var authUser = chuisy.getSignInStatus().user;
         this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
 	},
@@ -30,11 +30,11 @@ enyo.kind({
         var button = this.$.followButton;
 
         button.setDisabled(true);
+        button.setContent(user.following ? "follow" : "unfollow");
         if (user.following) {
             chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
                 user.following = false;
                 button.setDisabled(false);
-                button.removeClass("active");
                 this.doFollowingChanged({following: false});
             }));
         } else {
@@ -44,7 +44,6 @@ enyo.kind({
             chuisy.followingrelation.create(params, enyo.bind(this, function(sender, response) {
                 user.following = response.id;
                 button.setDisabled(false);
-                button.addClass("active");
                 this.doFollowingChanged({following: true});
             }));
         }
