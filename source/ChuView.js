@@ -155,10 +155,13 @@ enyo.kind({
     /**
         Load comments for this chu
     */
-    loadComments: function() {
+    loadComments: function(callback) {
         chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
             this.comments = response.objects;
             this.refreshComments();
+            if (callback) {
+                callback();
+            }
         }));
     },
     refreshComments: function() {
@@ -199,14 +202,17 @@ enyo.kind({
             chu: this.chu.resource_uri
         };
         chuisy.chucomment.create(params, enyo.bind(this, function(sender, response) {
-            this.loadComments();
+            this.loadComments(enyo.bind(this, function() {
+                // Scroll the comment input up. Align with top of screen if possible
+                // this.$.commentsRepeater.prepareRow(0);
+                // this.$.contentScroller.scrollIntoView(this.$.comment);
+                // this.$.commentsRepeater.lockRow();
+            }));
         }));
         this.$.commentInput.setValue("");
 
         // Remove focus from comment input
         this.$.commentInput.hasNode().blur();
-        // Scroll the comment input up. Align with top of screen if possible
-        this.$.contentScroller.scrollIntoView(this.$.commentInput, true);
     },
     online: function() {
         // this.$.likeButton.setDisabled(false);
@@ -265,6 +271,9 @@ enyo.kind({
     showUser: function() {
         this.doShowProfile({user: this.chu.user});
     },
+    postResize: function() {
+        this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
+    },
     components: [
         // IMAGEVIEW
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll"},
@@ -277,8 +286,8 @@ enyo.kind({
                 {classes: "mainheader-text", content: "chuisy", name: "headerText"},
                 {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share", content: "share"}
             ]},
-            {fit: true, style: "position: relative;", components: [
-                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, classes: "enyo-fill", onScroll: "scroll", components: [
+            {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", onpostresize: "postResize", components: [
+                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, onScroll: "scroll", components: [
                     // SPACER
                     {classes: "chuview-spacer", ontap: "hideControls"},
                     // LIKE BAR
@@ -308,7 +317,7 @@ enyo.kind({
                         ]},
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                            {kind: "onyx.Item", classes: "chuview-comment", components: [
+                            {kind: "onyx.Item", classes: "chuview-comment", name: "comment", components: [
                                 {components: [
                                     {kind: "Image", name: "commentAvatar", classes: "chuview-avatar"},
                                     {classes: "chuview-fullname", name: "commentFullName"},
@@ -316,7 +325,8 @@ enyo.kind({
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
                             ]}
-                        ]}
+                        ]},
+                        {style: "height: 500px"}
                     ]}
                 ]}
             ]}
