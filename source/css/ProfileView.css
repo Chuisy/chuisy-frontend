@@ -40,21 +40,21 @@
 }
 
 .profileview-menu-button {
-	width: 33.3%;
+	width: 33.33%;
 	height: 100%;
 	box-sizing: border-box;
 	padding: 0;
 	border-radius: 0 !important;
 	background-image: none;
-	background-color: White;
+	background-color: #eee;
 	border-top: none !important;
 }
 
 .profileview-menu-button.active {
 	box-shadow: none;
-	background-color: #C30F26;
+	background-color: white;
 	background-image: none;
-	color: white;
+	color: black;
 }
 
 .profileview-menu-button-caption {
