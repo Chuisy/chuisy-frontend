@@ -255,9 +255,9 @@ button.pageheader-radiobutton.active {
 }
 
 .post-chu-button {
-	width: 36px;
-	height: 36px;
-	background-size: 36px 72px;
+	width: 48px;
+	height: 48px;
+	background-size: 48px 96px;
 	vertical-align: top;
 	display: inline-block;
 	background-image: url(../../assets/images/post_chu_button.png);
@@ -269,7 +269,7 @@ button.pageheader-radiobutton.active {
 }
 
 .post-chu-button:active:hover:not([disabled]) {
-	background-position: 0 -36px;
+	background-position: 0 -48px;
 }
 
 .onyx-groupbox {
