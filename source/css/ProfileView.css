@@ -9,6 +9,7 @@
 	background: url() no-repeat center center;
 	background-size: cover;
 	position: relative;
+	box-shadow: inset 0 -1px 20px #333;
 }
 
 .profileview-profileinfo {
@@ -77,6 +78,7 @@
 
 .profileview.owned .follow-button {
 	display: none;
+	width: 85px;
 }
 
 .profileview-settings-button {

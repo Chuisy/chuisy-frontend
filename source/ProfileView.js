@@ -105,7 +105,6 @@ enyo.kind({
             chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
                 user.following = false;
                 button.setDisabled(false);
-                button.removeClass("active");
             }));
         } else {
             var params = {
@@ -114,7 +113,6 @@ enyo.kind({
             chuisy.followingrelation.create(params, enyo.bind(this, function(sender, response) {
                 user.following = response.id;
                 button.setDisabled(false);
-                button.addClass("active");
             }));
         }
         return true;
