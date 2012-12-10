@@ -131,11 +131,11 @@ enyo.kind({
 
         this.doUpdateHistory({uri: "discover/"});
     },
-    onChuPosted: function(sender, event) {
+    chuPosted: function(sender, event) {
         if (chuisy.getSignInStatus().signedIn) {
-            this.shareChu(event);
+            this.shareChu(sender, event);
         } else {
-            this.openChuView(event);
+            this.openChuView(event.chu);
         }
     },
     shareViewDone: function(sender, event) {

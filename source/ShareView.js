@@ -14,7 +14,7 @@ enyo.kind({
     friends: [],
     chuChanged: function() {
         this.$[this.chu.visibility + "Button"].setActive(true);
-        this.$.peoplePicker.setSelectedItems(this.chu.friends);
+        this.$.peoplePicker.setSelectedItems(this.chu.friends || []);
     },
     loadFriends: function(offset, limit) {
         chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
