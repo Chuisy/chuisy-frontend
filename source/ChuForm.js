@@ -62,7 +62,7 @@ enyo.kind({
     dragFinish: function() {
         this.finishDragTimeout = setTimeout(enyo.bind(this, function() {
             this.$.price.removeClass("highlighted");
-        }), 2000);
+        }), 500);
     },
     drag: function(sender, event) {
         this.price = Math.max(0, this.price + event.dx / 100);

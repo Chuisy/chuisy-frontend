@@ -41,7 +41,7 @@
 	color: White;
 	text-shadow: 0 0 5px #000;
 	-webkit-transition-property: bottom, width, -webkit-transform;
-	-webkit-transition-duration: 1s;
+	-webkit-transition-duration: 0.3s;
 	text-align: center;
 	white-space: nowrap;
 }
