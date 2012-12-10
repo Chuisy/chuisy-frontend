@@ -8,6 +8,9 @@ enyo.kind({
         onToggleMenu: "",
         onShowNotifications: ""
     },
+    handlers: {
+        ontap: "tapHandler"
+    },
     setupUser: function(sender, event) {
         var user = this.users[event.index];
         this.$.userListItem.setUser(user);
@@ -103,6 +106,12 @@ enyo.kind({
     allPagesLoaded: function(resource) {
         var meta = this[resource + "Meta"];
         return meta.offset + meta.limit >= meta.total_count;
+    },
+    tapHandler: function(sender, event) {
+        // Remove focus from search input if the user taps outside of it
+        if (!event.originator.isDescendantOf(this.$.commentInput)) {
+            this.$.searchInput.blur();
+        }
     },
     components: [
         {classes: "mainheader", components: [
