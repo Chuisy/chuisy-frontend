@@ -50,12 +50,12 @@
 
 .chufeeditem-likes-comments {
 	float: right;
-	margin-top: 20px;
+	margin: 10px 5px;
 }
 
 .chufeeditem-likes-count,
 .chufeeditem-comments-count {
-	color: #555;
+	color: #888;
 	font-size: 11pt;
 	display: inline-block;
 	vertical-align: top;
