@@ -5,6 +5,10 @@ body {
 	font-family: PTSansRegular;
 }
 
+* {
+	-webkit-tap-highlight-color: transparent;
+}
+
 /*::-webkit-scrollbar {
 	display: none;
 }
