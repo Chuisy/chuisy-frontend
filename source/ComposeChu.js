@@ -11,7 +11,7 @@ enyo.kind({
     },
     getImage: function(callback) {
         try {
-            navigator.camera.cleanup();
+            // navigator.camera.cleanup();
             navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
                 this.warn("Getting image failed!");
                 this.doBack();
