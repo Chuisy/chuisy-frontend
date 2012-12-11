@@ -111,6 +111,7 @@ enyo.kind({
     },
     showNotifications: function() {
         this.showView("notifications");
+        this.$.notifications.read();
 
         this.doUpdateHistory({uri: "notifications/"});
     },

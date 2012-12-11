@@ -118,8 +118,8 @@ enyo.kind({
         return true;
     },
     notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unread_count);
-        this.$.notificationBadge.setShowing(event.unread_count);
+        this.$.notificationBadge.setContent(event.unseen_count);
+        this.$.notificationBadge.setShowing(event.unseen_count);
         return true;
     },
     components: [

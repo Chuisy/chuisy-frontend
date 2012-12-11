@@ -15,10 +15,7 @@ enyo.kind({
             this.meta = response.meta;
             this.items = response.objects;
             this.refresh();
-            enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count});
-            if (App.isMobile()) {
-                window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unread_count, function() {});
-            }
+            this.notificationsUpdated();
         }), {limit: this.meta.limit});
     },
     nextPage: function() {
@@ -77,7 +74,7 @@ enyo.kind({
             delete params.user;
             params.actor = params.actor.resource_uri;
             chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
-                this.load();
+                this.refresh();
             }));
         }
     },
@@ -110,23 +107,28 @@ enyo.kind({
     offline: function() {
         this.stopPolling();
     },
-    notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unread_count);
-        this.$.notificationBadge.setShowing(event.unread_count);
-        return true;
-    },
     pushNotification: function() {
         this.load();
         return true;
     },
+    read: function() {
+        if (this.items && this.items.length) {
+            chuisy.notification.seen({latest: this.items[0].time}, enyo.bind(this, function(sender, response) {
+                this.meta.unseen_count = response.unseen;
+                this.notificationsUpdated();
+            }));
+        }
+    },
+    notificationsUpdated: function() {
+        enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count, unseen_count: this.meta.unseen_count});
+        if (App.isMobile()) {
+            window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unseen_count, function() {});
+        }
+    },
     components: [
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
-            {classes: "mainheader-text", content: "Notifications"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
+            {classes: "mainheader-text", content: "Notifications"}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", fit: true, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
@@ -135,6 +137,6 @@ enyo.kind({
             ]},
             {name: "loadingNextPage", content: "Loading...", classes: "notifications-nextpage"}
         ]},
-        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onNotificationsUpdated: "notificationsUpdated", onPushNotification: "pushNotification"}
+        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]
 });
