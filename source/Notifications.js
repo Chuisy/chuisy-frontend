@@ -42,11 +42,11 @@ enyo.kind({
         switch (item.action) {
             case "like":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
-                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>liked</strong> a <strong>chu</strong> of yours.");
+                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>liked</strong> a <strong>chu</strong> you are subscribed to.");
                 break;
             case "comment":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
-                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>commented</strong> on a <strong>chu</strong> of yours.");
+                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>commented</strong> on a <strong>chu</strong> you are subscribed to.");
                 break;
             case "follow":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
