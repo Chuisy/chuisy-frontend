@@ -116,7 +116,6 @@ body {
 .mainheader .notification-button {
 	position: absolute;
 	width: 40px;
-	height: 30px;
 	top: 7px;
 	right: 5px;
 	padding: 0;
@@ -155,6 +154,24 @@ body {
 	position: absolute;
 	top: 7px;
 	right: 5px;
+}
+
+.mainheader .share-button {
+	position: absolute;
+	width: 40px;
+	top: 7px;
+	right: 5px;
+	padding: 0;
+	overflow: visible;
+}
+
+.mainheader .share-button > .share-button-icon {
+	background: url(../../assets/images/share_light.png) no-repeat center center;
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	margin-top: -3px;
+	margin-right: -2px;
 }
 
 

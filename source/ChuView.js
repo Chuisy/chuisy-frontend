@@ -284,7 +284,9 @@ enyo.kind({
             {classes: "mainheader", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
                 {classes: "mainheader-text", content: "chuisy", name: "headerText"},
-                {kind: "onyx.Button", classes: "chuview-share-button", name: "shareButton", ontap: "share", content: "share"}
+                {kind: "onyx.Button", classes: "share-button", ontap: "share", components: [
+                    {classes: "share-button-icon"}
+                ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", onpostresize: "postResize", components: [
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, onScroll: "scroll", components: [
