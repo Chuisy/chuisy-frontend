@@ -174,7 +174,7 @@ enyo.kind({
                 {kind: "ProfileView", onShowChu: "showChu", onToggleMenu: "toggleMenu", onShowProfile: "showProfile", onBack: "back", onShowNotifications: "showNotifications"},
                 {kind: "Settings", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "Discover", onShowProfile: "showProfile", onShowChu: "showChu", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
-                {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu", onShowProfile: "showProfile"},
+                {kind: "ChuView", name: "chuView", onShowNotifications: "showNotifications", onShare: "shareChu", onShowProfile: "showProfile"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
                 {kind: "ComposeChu", onBack: "back", onDone: "composeChuDone"},
                 {kind: "ShareView", onBack: "back", onDone: "shareViewDone"}
