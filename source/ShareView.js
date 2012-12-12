@@ -9,12 +9,17 @@ enyo.kind({
     pinterestUrl: "http://pinterest.com/pin/create/button/",
     mediaUrl: "http://media.chuisy.com/media/",
     events: {
-        onDone: ""
+        onDone: "",
+        onBack: ""
     },
     friends: [],
     chuChanged: function() {
         this.$[this.chu.visibility + "Button"].setActive(true);
         this.$.peoplePicker.setSelectedItems(this.chu.friends || []);
+        this.$.smsButton.setDisabled(!this.chu.id);
+        this.$.emailButton.setDisabled(!this.chu.id);
+        this.$.twitterButton.setDisabled(!this.chu.id);
+        this.$.pinterestButton.setDisabled(!this.chu.id);
     },
     loadFriends: function(offset, limit) {
         chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
@@ -64,27 +69,14 @@ enyo.kind({
     },
     done: function() {
         this.chu.visibility = this.$.visibilityPicker.getActive().value;
-        var friends = this.$.peoplePicker.getSelectedItems();
-        var friendUris = [];
-        for (var i=0; i<friends.length; i++) {
-            friendUris.push(friends[i].resource_uri);
-        }
+        this.chu.friends = this.$.peoplePicker.getSelectedItems();
 
-        params = enyo.clone(this.chu);
-        this.chu.friends = friends;
-        params.friends = friendUris;
-        delete params.user;
-        params.image = params.image.replace(/http:\/\/media.chuisy.com\/media\//, "");
-        // params.location = params.location.resource_uri;
-        // params.product = params.product.resource_uri;
-        // delete params.resource_uri;
-
-        chuisy.chu.put(params.id, params, enyo.bind(this, function(sender, response) {
-        }));
+        chuisy.chubox.update(this.chu);
         this.doDone();
     },
     components: [
         {classes: "mainheader", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", onActivate: "visibilityChanged", components: [
                 {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "setVisibility", value: "private"},
                 {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "setVisibility", value: "public"}
@@ -93,14 +85,14 @@ enyo.kind({
         ]},
         {classes: "shareview-text", content: "Sharing is caring!"},
         {classes: "shareview-share-button-group", components: [
-            {classes: "shareview-share-button", content: "sms", ontap: "sms"},
-            {classes: "shareview-share-button", content: "email", ontap: "email"}
+            {kind: "Button", name: "smsButton", classes: "shareview-share-button", content: "sms", ontap: "sms"},
+            {kind: "Button", name: "emailButton", classes: "shareview-share-button", content: "email", ontap: "email"}
         ]},
         {kind: "Panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, layoutKind: "FittableRowsLayout", components: [
             {classes: "shareview-share-button-group enyo-fill", components: [
-                {classes: "shareview-share-button", content: "f"},
-                {classes: "shareview-share-button", content: "t", ontap: "twitter"},
-                {classes: "shareview-share-button", content: "p", ontap: "pinterest"}
+                {kind: "Button", name: "facebookButton", classes: "shareview-share-button", content: "f"},
+                {kind: "Button", name: "twitterButton", classes: "shareview-share-button", content: "t", ontap: "twitter"},
+                {kind: "Button", name: "pinterestButton", classes: "shareview-share-button", content: "p", ontap: "pinterest"}
             ]},
             {kind: "PeoplePicker", classes: "enyo-fill"}
         ]},

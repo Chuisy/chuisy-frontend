@@ -8,11 +8,13 @@ enyo.kind({
     kind: "FittableRows",
     published: {
         //* The path to the captured image
-        image: ""
+        image: "",
+        price: 0,
+        category: "head"
     },
     events: {
         //* Submit button has been tapped
-        onSubmit: "",
+        onDone: "",
         //* Back button has been tapped
         onBack: ""
     },
@@ -28,29 +30,25 @@ enyo.kind({
         Clear content from previous chu
     */
     clear: function() {
-        this.$.privateButton.setActive(true);
+        // this.$.privateButton.setActive(true);
         this.setImage("");
-        this.price = 0;
-        this.$.price.setContent(this.price + " €");
+        this.setPrice(0);
+        this.setCategory("head");
     },
     imageChanged: function() {
         this.$.imageContainer.applyStyle("background-image", "url(" + this.image + ")");
     },
-    /**
-        Get the selected / generated data
-    */
-    getData: function() {
-        return {
-            product: {
-                price: Math.floor(this.price),
-                price_currency: "EUR",
-                category: {
-                    name: this.category
-                }
-            },
-            visibility: this.$.visibilityPicker.getActive().value,
-            localImage: this.image
-        };
+    categoryChanged: function() {
+        var categoryIcons = this.$.categoryPicker.getClientControls();
+        for (var i=0; i<categoryIcons.length; i++) {
+            categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
+        }
+    },
+    priceChanged: function() {
+        this.$.price.setContent(this.price + " €");
+    },
+    getPrice: function() {
+        return Math.floor(this.price);
     },
     dragStart: function() {
         if (this.finishDragTimeout) {
@@ -113,24 +111,20 @@ enyo.kind({
         Select a category from the category picker
     */
     selectCategory: function(sender, event) {
-        this.category = sender.value;
-        var categoryIcons = this.$.categoryPicker.getClientControls();
-        for (var i=0; i<categoryIcons.length; i++) {
-            categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
-        }
+        this.setCategory(sender.value);
     },
-    visibilityChanged: function(sender, event) {
-        sender.setActive(true);
-    },
+    // visibilityChanged: function(sender, event) {
+    //     sender.setActive(true);
+    // },
     components: [
         // HEADER
         {classes: "mainheader", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-            {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
-                {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
-                {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
-            ]},
-            {kind: "onyx.Button", ontap: "doSubmit", classes: "done-button", content: "done", name: "doneButton"}
+            // {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
+            //     {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
+            //     {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
+            // ]},
+            {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: "next", name: "doneButton"}
         ]},
         // IMAGE WITH CONTROLS
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [

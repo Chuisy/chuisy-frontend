@@ -132,12 +132,12 @@ enyo.kind({
 
         this.doUpdateHistory({uri: "discover/"});
     },
-    chuPosted: function(sender, event) {
-        this.openFeed();
-        this.$.feed.loadFeed();
-    },
     shareViewDone: function(sender, event) {
         this.openChuView({chu: sender.getChu()});
+    },
+    composeChuDone: function(sender, event) {
+        this.openFeed();
+        this.$.feed.loadFeed();
     },
     components: [
         {classes: "mainmenu", components: [
@@ -176,8 +176,8 @@ enyo.kind({
                 {kind: "Discover", onShowProfile: "showProfile", onShowChu: "showChu", onToggleMenu: "toggleMenu", onShowNotifications: "showNotifications"},
                 {kind: "ChuView", name: "chuView", onBack: "back", onShowNotifications: "showNotifications", onShare: "shareChu", onShowProfile: "showProfile"},
                 {kind: "Notifications", onBack: "back", onNotificationSelected: "notificationSelected"},
-                {kind: "ComposeChu", onBack: "back", onChuPosted: "chuPosted"},
-                {kind: "ShareView", onDone: "shareViewDone"}
+                {kind: "ComposeChu", onBack: "back", onDone: "composeChuDone"},
+                {kind: "ShareView", onBack: "back", onDone: "shareViewDone"}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "userChanged"}
