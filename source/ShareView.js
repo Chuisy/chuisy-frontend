@@ -15,7 +15,7 @@ enyo.kind({
     friends: [],
     chuChanged: function() {
         this.$[this.chu.visibility + "Button"].setActive(true);
-        this.facebook = this.chu.share_facebook;
+        this.facebook = this.chu.fb_og;
         this.friends = [];
         this.loadFriends(0, 20);
         this.$.smsButton.setDisabled(this.chu.id === undefined);
@@ -73,7 +73,7 @@ enyo.kind({
     done: function() {
         this.chu.visibility = this.$.visibilityPicker.getActive().value;
         this.chu.friends = this.$.peoplePicker.getSelectedItems();
-        this.chu.share_facebook = this.facebook;
+        this.chu.fb_og = this.facebook;
 
         chuisy.chubox.update(this.chu);
         this.doDone();

@@ -13,7 +13,7 @@
 	position: relative;
 }
 
-.chuview .chuview-share-button {
+.chuview .share-button {
 	display: none;
 	position: absolute;
 	padding: 0px 10px;
@@ -23,7 +23,7 @@
 	box-sizing: border-box;
 }
 
-.chuview.owned .chuview-share-button {
+.chuview.owned .share-button {
 	display: block;
 }
 
