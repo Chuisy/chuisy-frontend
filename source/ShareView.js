@@ -15,11 +15,11 @@ enyo.kind({
     friends: [],
     chuChanged: function() {
         this.$[this.chu.visibility + "Button"].setActive(true);
+        this.$.smsButton.setDisabled(this.chu.id === undefined);
+        this.$.emailButton.setDisabled(this.chu.id === undefined);
+        this.$.twitterButton.setDisabled(this.chu.id === undefined);
+        this.$.pinterestButton.setDisabled(this.chu.id === undefined);
         this.$.peoplePicker.setSelectedItems(this.chu.friends || []);
-        this.$.smsButton.setDisabled(!this.chu.id);
-        this.$.emailButton.setDisabled(!this.chu.id);
-        this.$.twitterButton.setDisabled(!this.chu.id);
-        this.$.pinterestButton.setDisabled(!this.chu.id);
     },
     loadFriends: function(offset, limit) {
         chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
@@ -94,7 +94,7 @@ enyo.kind({
                 {kind: "Button", name: "twitterButton", classes: "shareview-share-button", content: "t", ontap: "twitter"},
                 {kind: "Button", name: "pinterestButton", classes: "shareview-share-button", content: "p", ontap: "pinterest"}
             ]},
-            {kind: "PeoplePicker", classes: "enyo-fill"}
+            {kind: "PeoplePicker", name: "peoplePicker", classes: "enyo-fill"}
         ]},
         {kind: "Signals", onUserChanged: "userChanged"}
     ]
