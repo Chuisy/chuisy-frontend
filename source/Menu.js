@@ -2,7 +2,7 @@ enyo.kind({
 	name: "Menu",
 	kind: "Group",
 	defaultKind: "GroupItem",
-	classes: "menu",
+	classes: "menu header",
 	events: {
 		onChange: ""
 	},

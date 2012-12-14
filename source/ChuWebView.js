@@ -184,8 +184,8 @@ enyo.kind({
         this.$.commentInput.setValue("");
     },
     components: [
-        {classes: "mainheader", components: [
-            {classes: "mainheader-logo"}
+        {classes: "header", components: [
+            {classes: "header-logo"}
         ]},
         {classes: "chuwebview-body", components: [
             {kind: "Image", name: "image", classes: "chuwebview-image"},

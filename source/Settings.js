@@ -6,8 +6,7 @@ enyo.kind({
         user: null
     },
     events: {
-        onToggleMenu: "",
-        onShowNotifications: ""
+        onBack: ""
     },
     userChanged: function(sender, event) {
         this.user = event.user;
@@ -80,15 +79,8 @@ enyo.kind({
         chuisy.uploadAvatar(uri);
     },
     components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
-                {classes: "menu-button-icon"}
-            ]},
-            {classes: "mainheader-text", content: "Settings"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
+        {classes: "header", components: [
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"}
         ]},
         {kind: "Scroller", fit: true, components: [
             {classes: "settings-content", components: [

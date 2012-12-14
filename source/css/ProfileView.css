@@ -89,12 +89,16 @@
 .profileview-settings-button {
 	width: 36px;
 	height: 36px;
-	background-size: 36px 36px;
-	background-image: url(../../assets/images/settings.png);
+	background-size: 36px 72px;
+	background-image: url(../../assets/images/settings_button.png);
 	position: absolute;
 	right: 5px;
 	bottom: 5px;
 	display: none;
+}
+
+.profileview-settings-button:active:hover:not([disabled]) {
+	background-position: 0 -36px;
 }
 
 .profileview.owned .profileview-settings-button {

@@ -161,9 +161,9 @@ enyo.kind({
         this.doItemSelected(event);
     },
     components: [
-        {classes: "mainheader", components: [
+        {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "chuisy", name: "headerText"},
+            {classes: "header-text", content: "chuisy", name: "headerText"},
             {kind: "onyx.Button", classes: "chuview-comments-button", ontap: "showComments", name: "commentsButton", components: [
                 {kind: "Image", src: "assets/images/comment_light.png"}
             ]}

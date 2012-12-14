@@ -84,7 +84,7 @@ enyo.kind({
         this.$.facebookButton.addRemoveClass("active", this.facebook);
     },
     components: [
-        {classes: "mainheader", components: [
+        {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", onActivate: "visibilityChanged", components: [
                 {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "setVisibility", value: "private"},

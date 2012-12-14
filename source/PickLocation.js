@@ -116,7 +116,7 @@ enyo.kind({
         }
     },
     components: [
-        {classes: "mainheader", components: [
+        {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"}
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},

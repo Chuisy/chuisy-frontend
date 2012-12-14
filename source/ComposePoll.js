@@ -131,9 +131,9 @@ enyo.kind({
         this.$[p + "Button"].addRemoveClass("active", this[p]);
     },
     components: [
-        {classes: "mainheader", components: [
+        {classes: "header", components: [
             {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
-            {classes: "mainheader-text", content: "chuisy"}
+            {classes: "header-text", content: "chuisy"}
         ]},
         {style: "position: relative;", fit: true, components: [
             {kind: "FittableRows", classes: "enyo-fill", components: [

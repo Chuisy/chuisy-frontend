@@ -281,9 +281,9 @@ enyo.kind({
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
-            {classes: "mainheader", components: [
+            {classes: "header", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-                {classes: "mainheader-text", content: "chuisy", name: "headerText"},
+                {classes: "header-text", content: "chuisy", name: "headerText"},
                 {kind: "onyx.Button", classes: "share-button", ontap: "share", components: [
                     {classes: "share-button-icon"}
                 ]}

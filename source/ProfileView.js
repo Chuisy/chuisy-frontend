@@ -8,7 +8,7 @@ enyo.kind({
     events: {
         onShowChu: "",
         onShowProfile: "",
-        onShowSettings: ""
+        onOpenSettings: ""
     },
     authUserChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
@@ -120,7 +120,7 @@ enyo.kind({
     components: [
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},
-            {classes: "profileview-settings-button", ontap: "doShowSettings"},
+            {classes: "profileview-settings-button", ontap: "doOpenSettings"},
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [

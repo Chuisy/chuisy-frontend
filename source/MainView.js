@@ -16,10 +16,16 @@ enyo.kind({
         notifications: 5
     },
     openChuView: function(chu) {
-        this.showView("chuView");
+        this.$.superPanels.setIndex(2);
         this.$.chuView.setChu(chu);
 
         this.doUpdateHistory({uri: "chu/" + chu.id + "/"});
+    },
+    openProfileView: function(user) {
+        this.$.profileView.setUser(user);
+        this.$.superPanels.setIndex(5);
+
+        this.doUpdateHistory({uri: "user/" + user.id + "/"});
     },
     composeChu: function() {
         this.$.composeChu.initialize();
@@ -53,7 +59,11 @@ enyo.kind({
     },
     shareChu: function(sender, event) {
         this.$.shareView.setChu(event.chu);
-        this.showView("share");
+
+        this.$.superPanels.setIndex(3);
+    },
+    openSettings: function() {
+        this.$.superPanels.setIndex(4);
     },
     shareViewDone: function(sender, event) {
         this.openChuView({chu: sender.getChu()});
@@ -66,6 +76,7 @@ enyo.kind({
         this.openView(event.value);
     },
     openView: function(view) {
+        this.$.superPanels.setIndex(0);
         this.$.mainPanels.setIndex(this.views[view]);
 
         this.doUpdateHistory({uri: view + "/"});
@@ -86,16 +97,22 @@ enyo.kind({
                 {kind: "Panels", fit: true, arrangerKind: "CardArranger", animate: false, draggable: false, name: "mainPanels", components: [
                     {kind: "Feed", onShowChu: "showChu", onComposeChu: "composeChu", onShowProfile: "showProfile"},
                     {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onComposeChu: "composeChu"},
-                    {kind: "ProfileView", onShowChu: "showChu", onShowProfile: "showProfile", user: "me"},
+                    {kind: "ProfileView", name: "myProfileView", onShowChu: "showChu", onShowProfile: "showProfile", user: "me", onOpenSettings: "openSettings"},
                     {kind: "Discover", onShowProfile: "showProfile", onShowChu: "showChu"},
                     {content: "GIFTS"},
                     {kind: "Notifications", onNotificationSelected: "notificationSelected"}
                 ]}
             ]},
-            {kind: "Settings"},
             {kind: "ComposeChu", onBack: "back", onDone: "composeChuDone"},
-            {kind: "ChuView", name: "chuView", onShare: "shareChu", onShowProfile: "showProfile"},
-            {kind: "ShareView", onBack: "shareViewDone", onDone: "shareViewDone"}
+            {kind: "ChuView", name: "chuView", onShare: "shareChu", onShowProfile: "showProfile", onBack: "back"},
+            {kind: "ShareView", onBack: "shareViewDone", onDone: "shareViewDone"},
+            {kind: "Settings", onBack: "back"},
+            {kind: "FittableRows", components: [
+                {classes: "header", components: [
+                    {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
+                ]},
+                {kind: "ProfileView", name: "profileView", fit: true}
+            ]}
         ]}
     ]
 });

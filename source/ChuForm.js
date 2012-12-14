@@ -118,7 +118,7 @@ enyo.kind({
     // },
     components: [
         // HEADER
-        {classes: "mainheader", components: [
+        {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             // {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
             //     {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
