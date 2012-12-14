@@ -78,16 +78,13 @@ enyo.kind({
         chuisy.chubox.update(this.chu);
         this.doDone();
     },
-    back: function() {
-        this.doDone();
-    },
     toggleFacebook: function() {
         this.facebook = !this.facebook;
         this.$.facebookButton.addRemoveClass("active", this.facebook);
     },
     components: [
         {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"},
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
             {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", onActivate: "visibilityChanged", components: [
                 {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "setVisibility", value: "private"},
                 {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "setVisibility", value: "public"}
