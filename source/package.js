@@ -26,5 +26,6 @@ enyo.depends(
 	"ChuList.js",
 	"Notifications.js",
 	"ChuWebView.js",
-	"ShareView.js"
+	"ShareView.js",
+	"Menu.js"
 );

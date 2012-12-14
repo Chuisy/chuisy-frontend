@@ -19,5 +19,6 @@ enyo.depends(
 	"Notifications.css",
 	"ChuWebView.css",
 	"ShareView.css",
-	"Settings.css"
+	"Settings.css",
+	"Menu.css"
 );

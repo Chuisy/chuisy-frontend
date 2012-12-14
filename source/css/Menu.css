@@ -1,0 +1,53 @@
+.menu {
+	height: 44px;
+	background: url(../../assets/images/menu-bar.png) repeat-x;
+	background-size: 320px 44px;
+	text-align: center;
+	box-shadow: 0 1px 5px #222;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 99;
+}
+
+.menu-item {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url() no-repeat center center;
+	background-size: 40px 80px;
+	background-position: 0 0;
+	margin: 2px 6px;
+}
+
+.menu-item.active {
+	background-position: 0 -40px;
+}
+
+.menu-item.feed {
+	background-image: url(../../assets/images/feed.png);
+}
+
+.menu-item.profile {
+	background-image: url(../../assets/images/profile.png);
+}
+
+.menu-item.chubox {
+	background-image: url(../../assets/images/chubox.png);
+}
+
+.menu-item.gifts {
+	background-image: url(../../assets/images/gifts.png);
+}
+
+.menu-item.discover {
+	background-image: url(../../assets/images/discover.png);
+}
+
+.menu-item.notifications {
+	background-image: url(../../assets/images/notifications.png);
+	background-size: 40px 120px;
+}
+
+.menu.new-notifications .menu-item.notifications:not(.active) {
+	background-position: 0 -80px;
+}
