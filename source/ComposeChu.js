@@ -7,7 +7,9 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        navigator.camera.cleanup();
+        if (navigator.camera) {
+            navigator.camera.cleanup();
+        }
     },
     initialize: function() {
         this.chu = null;

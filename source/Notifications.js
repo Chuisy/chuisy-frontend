@@ -1,9 +1,8 @@
 enyo.kind({
     name: "Notifications",
-    kind: "FittableRows",
+    classes: "notifications",
     events: {
-        onNotificationSelected: "",
-        onBack: ""
+        onNotificationSelected: ""
     },
     meta: {
         limit: 20,
@@ -126,11 +125,7 @@ enyo.kind({
         }
     },
     components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
-            {classes: "mainheader-text", content: "Notifications"}
-        ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", fit: true, components: [
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}

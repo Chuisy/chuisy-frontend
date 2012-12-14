@@ -152,18 +152,6 @@ enyo.kind({
             {classes: "chubox-contextmenu-left"},
             {classes: "chubox-contextmenu-right"}
         ]},
-        // HEADER
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
-                {classes: "menu-button-icon"}
-            ]},
-            {classes: "mainheader-text", content: "Chu Box"},
-            {kind: "onyx.Button", ontap: "finishEditing", classes: "done-button", content: "done", name: "doneButton", showing: false},
-            {kind: "onyx.Button", name: "notificationsButton", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
-        ]},
         // LIST
         {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chubox-row"}

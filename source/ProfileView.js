@@ -8,9 +8,6 @@ enyo.kind({
     events: {
         onShowChu: "",
         onShowProfile: "",
-        onToggleMenu: "",
-        onBack: "",
-        onShowNotifications: "",
         onShowSettings: ""
     },
     authUserChanged: function(sender, event) {
@@ -36,8 +33,6 @@ enyo.kind({
             this.$.panels.setIndex(0);
             this.addRemoveClass("owned", this.authUser && this.authUser.id == user.id);
         }
-        this.$.menuButton.setShowing(this.user == "me");
-        this.$.backButton.setShowing(this.user != "me");
     },
     menuItemSelected: function(sender, event) {
         if (event.originator.getActive()) {
@@ -123,17 +118,6 @@ enyo.kind({
         return true;
     },
     components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", name: "menuButton", components: [
-                {classes: "menu-button-icon"}
-            ]},
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back", name: "backButton"},
-            {classes: "mainheader-text", content: "Profile"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
-        ]},
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},
             {classes: "profileview-settings-button", ontap: "doShowSettings"},

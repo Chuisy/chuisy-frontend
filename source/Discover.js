@@ -114,16 +114,6 @@ enyo.kind({
         }
     },
     components: [
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
-                {classes: "menu-button-icon"}
-            ]},
-            {classes: "mainheader-text", content: "Discover"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
-        ]},
         {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
         {kind: "onyx.RadioGroup", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
             {index: 0, active: true, components: [

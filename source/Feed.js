@@ -4,10 +4,8 @@ enyo.kind({
     kind: "FittableRows",
     events: {
         onShowChu: "",
-        onToggleMenu: "",
         onComposeChu: "",
-        onShowProfile: "",
-        onShowNotifications: ""
+        onShowProfile: ""
     },
     meta: {
         limit: 20,
@@ -106,19 +104,8 @@ enyo.kind({
     },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
-        {kind: "Slideable", overMoving: false, unit: "px", min: -330, max: 0, classes: "secondarypanels shadow-left"},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed", onNotificationsUpdated: "notificationsUpdated"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
-        {classes: "mainheader", components: [
-            {kind: "onyx.Button", ontap: "doToggleMenu", classes: "menu-button", components: [
-                {classes: "menu-button-icon"}
-            ]},
-            {classes: "mainheader-logo"},
-            {kind: "onyx.Button", classes: "notification-button", ontap: "doShowNotifications", components: [
-                {classes: "notification-button-icon"},
-                {classes: "notification-button-badge", name: "notificationBadge", content: "0", showing: false}
-            ]}
-        ]},
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}
         ]},

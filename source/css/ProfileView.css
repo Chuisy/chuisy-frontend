@@ -1,3 +1,8 @@
+.profileview {
+	background-image: url(../../assets/images/soft_wallpaper_light@2x.png);
+	background-size: 666px 666px;
+}
+
 .profileview-avatar {
 	width: 80px;
 	margin: 10px;

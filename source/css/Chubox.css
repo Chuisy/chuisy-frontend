@@ -1,6 +1,8 @@
 .chubox {
 	position: relative;
 	text-align: center;
+	background-image: url(../../assets/images/soft_wallpaper_light@2x.png);
+	background-size: 666px 666px;
 }
 
 .chubox-delete-button {

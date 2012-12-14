@@ -41,16 +41,6 @@ body {
 	/*border: solid 1px;*/
 }
 
-.secondaryslider {
-	width: 320px;
-	position: absolute;
-	right: -330px;
-	top: 0;
-	height: 100%;
-	background-color: White;
-	box-shadow: -2px 0 10px #555;
-}
-
 .mainheader {
 	height: 44px;
 	padding: 4px;

@@ -195,27 +195,23 @@ enyo.kind({
         } else if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.$.mainView.openFeed();
-        } else if (uri.match(/^settings\/$/)) {
-            // settings/
-            // Settings it is.
-            this.$.mainView.openSettings();
+            this.$.mainView.openView("feed");
         } else if (uri.match(/^discover\/$/)) {
             // discover/
             // Lets discover some stuff!
-            this.$.mainView.openDiscover();
-        } else if (uri.match(/^me\/$/)) {
+            this.$.mainView.openView("discover");
+        } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.$.mainView.showOwnProfile();
+            this.$.mainView.openView("profile");
         } else if (uri.match(/^chubox\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.$.mainView.openChubox();
+            this.$.mainView.openView("chubox");
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
-            this.$.mainView.showNotifications();
+            this.$.mainView.openView("notifications");
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
@@ -244,7 +240,7 @@ enyo.kind({
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.$.mainView.openFeed();
+            this.$.mainView.openView("feed");
         }
     },
     /**
