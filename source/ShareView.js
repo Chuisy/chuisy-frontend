@@ -16,6 +16,7 @@ enyo.kind({
     chuChanged: function() {
         this.$[this.chu.visibility + "Button"].setActive(true);
         this.facebook = this.chu.fb_og;
+        this.$.facebookButton.addRemoveClass("active", this.facebook);
         this.friends = [];
         this.loadFriends(0, 20);
         this.$.smsButton.setDisabled(this.chu.id === undefined);
