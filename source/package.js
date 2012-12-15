@@ -27,5 +27,6 @@ enyo.depends(
 	"Notifications.js",
 	"ChuWebView.js",
 	"ShareView.js",
-	"Menu.js"
+	"Menu.js",
+	"FacebookSignIn.js"
 );

@@ -368,3 +368,10 @@ button.pageheader-radiobutton.active {
 	margin-top: -1px;
 	box-shadow: inset 0 -1px 10px #333;
 }
+
+.signin-slider {
+	box-shadow: -2px 0 10px #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+}

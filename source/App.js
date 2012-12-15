@@ -27,6 +27,7 @@ enyo.kind({
             return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
         }
     },
+    history: [],
     create: function() {
         this.inherited(arguments);
 
@@ -261,71 +262,27 @@ enyo.kind({
             this.history.pop();
         }
     },
-    /**
-        Gets a facebook access token and exchanges it for Chuisy api authentication credentials
-    */
-    facebookSignIn: function() {
-        // Get facebook access token
-        this.loginWithFacebook(enyo.bind(this, function(accessToken) {
-            chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
-                if (this.signInSuccessCallback) {
-                    this.signInSuccessCallback();
-                    this.signInSuccessCallback = null;
-                    this.signInFailureCallback = null;
-                }
-                this.$.panels.setIndex(0);
-            }), enyo.bind(this, function() {
-                alert("Authentication failed!");
-            }));
-        }));
-    },
-    /**
-        Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
-    */
-    loginWithFacebook: function(callback) {
-        if (window.plugins && window.plugins.facebookConnect) {
-            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, enyo.bind(this, function(result) {
-                if(result.cancelled || result.error) {
-                    this.log("Facebook signin failed:" + result.message);
-                    return;
-                }
-                callback(result.accessToken);
-            }));
-        } else if (FB) {
-            FB.login(function() {
-                if (response.status == "connected") {
-                    callback(response.authResponse.accessToken);
-                } else {
-                    console.log("Facebook signin failed!");
-                }
-            }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
-        } else {
-            this.error("No facebook sdk found!");
-        }
-    },
-    facebookCancel: function() {
-        if (this.signInFailureCallback) {
-            this.signInFailureCallback();
-            this.signInSuccessCallback = null;
-            this.signInFailureCallback = null;
-        }
-        this.$.panels.setIndex(0);
-    },
     requestSignIn: function(sender, event) {
-        this.signInSuccessCallback = event.success;
-        this.signInFailureCallback = event.failure;
-        this.$.panels.setIndex(1);
+        this.$.facebookSignIn.setSuccessCallback(event.success);
+        this.$.facebookSignIn.setFailureCallback(event.failure);
+        this.$.signInSlider.animateToMin();
+    },
+    facebookSignInDone: function() {
+        this.$.signInSlider.animateToMax();
     },
     mainViewNavigateTo: function(sender, event) {
         this.navigateTo(event.uri);
     },
+    signInSliderAnimateFinish: function(sender, event) {
+        if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
+            this.$.facebookSignIn.cancel();
+        }
+    },
     components: [
-        {kind: "Panels", draggable: false, arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
-            {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
-            {classes: "enyo-fill", components: [
-                {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "facebookSignIn"},
-                {kind: "onyx.Button", content: "Cancel", ontap: "facebookCancel"}
-            ]}
+        {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
+        {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
+            unit: "%", max: 100, min: 0, value: 100, onAnimateFinish: "signInSliderAnimateFinish", components: [
+            {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn"}
     ]
