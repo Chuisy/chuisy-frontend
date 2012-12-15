@@ -9,6 +9,7 @@ enyo.kind({
 	selectItem: function(sender, event) {
 		sender.setActive(true);
 		this.doChange({value: sender.value});
+		event.preventDefault();
 	},
 	notificationsUpdated: function(sender, event) {
 		this.addRemoveClass("new-notifications", event.unseen_count);

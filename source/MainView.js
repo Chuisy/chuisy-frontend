@@ -29,9 +29,7 @@ enyo.kind({
     },
     composeChu: function() {
         this.$.composeChu.initialize();
-        this.showView("composeChu");
-
-        this.$.mainSlider.animateToMin();
+        this.$.superPanels.setIndex(1);
 
         this.doUpdateHistory({uri: "chu/new/"});
     },
@@ -91,7 +89,7 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "Panels", name: "superPanels", arrangerKind: "CardArranger", animate: false, classes: "enyo-fill", components: [
+        {kind: "Panels", name: "superPanels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", components: [
             {kind: "FittableRows", components: [
                 {kind: "Menu", onChange: "menuChanged"},
                 {kind: "Panels", fit: true, arrangerKind: "CardArranger", animate: false, draggable: false, name: "mainPanels", components: [
@@ -111,7 +109,7 @@ enyo.kind({
                 {classes: "header", components: [
                     {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
                 ]},
-                {kind: "ProfileView", name: "profileView", fit: true}
+                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowProfile: "showProfile"}
             ]}
         ]}
     ]
