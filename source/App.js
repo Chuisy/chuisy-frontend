@@ -281,7 +281,7 @@ enyo.kind({
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
         {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
-            unit: "%", max: 100, min: 0, value: 100, onAnimateFinish: "signInSliderAnimateFinish", components: [
+            unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
             {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn"}

@@ -59,7 +59,12 @@ enyo.kind({
         this.doDone();
     },
     components: [
-        {kind: "onyx.Button", content: "Sign In With Facebook", ontap: "signIn"},
-        {kind: "onyx.Button", content: "Cancel", ontap: "cancel"}
+        {classes: "facebooksignin-placeholder"},
+        {classes: "facebooksignin-text", content: "Connect with your Facebook account to share products with your friends, interact with other people on Chuisy and claim gifts from our local retail partners!"},
+        {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+            {classes: "facebook-button-icon"},
+            {content: "Sign In With Facebook"}
+        ]},
+        {kind: "onyx.Button", content: "Cancel", ontap: "cancel", classes: "facebooksignin-cancel-button"}
     ]
 });

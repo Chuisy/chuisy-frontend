@@ -1,4 +1,47 @@
 .facebooksignin {
 	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
 	background-size: 100px 100px;
+	text-align: center;
+	padding-top: 50px;
+}
+
+.facebooksignin-placeholder {
+	width: 128px;
+	height: 128px;
+	margin: 0 auto;
+	background: url(../../assets/images/facebook_connect.png);
+	background-size: cover;
+}
+
+.facebooksignin-text {
+	padding: 40px 40px;
+	text-align: center;
+	color: #555;
+	font-size: 10pt;
+}
+
+.facebook-button {
+	background-color: #3b5998;
+	padding: 10px;
+	color: white;
+	height: auto;
+	display: block;
+	margin: 0 auto;
+	width: 230px;
+}
+
+.facebook-button-icon {
+	width: 20px;
+	height: 20px;
+	background-size: 20px 40px;
+	display: inline-block;
+	background-image: url(../../assets/images/facebook_button.png);
+	background-position: 0 -20px;
+	margin: -2px 5px 0 0;
+}
+
+.facebooksignin-cancel-button {
+	display: block;
+	margin: 5px auto;
+	width: 230px;
 }
