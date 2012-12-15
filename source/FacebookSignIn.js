@@ -31,7 +31,7 @@ enyo.kind({
     */
     loginWithFacebook: function(callback) {
         if (window.plugins && window.plugins.facebookConnect) {
-            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website"], appId: "180626725291316"}, enyo.bind(this, function(result) {
+            window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website", "publish_actions"], appId: "180626725291316"}, enyo.bind(this, function(result) {
                 if(result.cancelled || result.error) {
                     this.log("Facebook signin failed:" + result.message);
                     return;
@@ -45,7 +45,7 @@ enyo.kind({
                 } else {
                     console.log("Facebook signin failed!");
                 }
-            }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+            }, {scope: "user_birthday,user_location,user_about_me,user_website,email,publish_actions"});
         } else {
             this.error("No facebook sdk found!");
         }
