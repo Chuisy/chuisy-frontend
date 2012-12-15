@@ -109,7 +109,7 @@ enyo.kind({
                 {classes: "header", components: [
                     {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
                 ]},
-                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowProfile: "showProfile"}
+                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowProfile: "showProfile", onOpenSettings: "openSettings"}
             ]}
         ]}
     ]
