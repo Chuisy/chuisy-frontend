@@ -15,6 +15,7 @@ enyo.kind({
         this.chu = null;
         this.$.panels.setIndex(0);
         this.$.pickLocation.initialize();
+        this.$.chuForm.clear();
         this.getImage();
     },
     getImage: function(callback) {
@@ -30,7 +31,6 @@ enyo.kind({
     },
     gotImage: function(uri) {
         this.image = uri;
-        this.$.chuForm.clear();
         this.$.chuForm.setImage(this.image);
         // this.$.pickLocation.initialize();
     },
@@ -52,14 +52,17 @@ enyo.kind({
         };
         this.chu.location = this.location;
 
+        this.$.chuForm.setDoneButtonDisabled(true);
         if (!chuisy.chubox.contains(this.chu)) {
             chuisy.chubox.add(this.chu, enyo.bind(this, function() {
                 this.$.shareView.setChu(this.chu);
                 this.$.panels.setIndex(2);
+                this.$.chuForm.setDoneButtonDisabled(false);
             }));
         } else {
             chuisy.chubox.update(this.chu);
             this.$.panels.setIndex(2);
+            this.$.chuForm.setDoneButtonDisabled(false);
         }
         return true;
     },

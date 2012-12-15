@@ -116,6 +116,9 @@ enyo.kind({
     // visibilityChanged: function(sender, event) {
     //     sender.setActive(true);
     // },
+    setDoneButtonDisabled: function(disabled) {
+        this.$.doneButton.setDisabled(disabled);
+    },
     components: [
         // HEADER
         {classes: "header", components: [
