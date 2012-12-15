@@ -90,8 +90,7 @@ enyo.kind({
     */
     startEditing: function(sender, event) {
         this.editing = true;
-        this.$.notificationsButton.hide();
-        this.$.doneButton.show();
+        // this.$.doneButton.show();
         this.$.postButton.hide();
         this.addClass("editing");
     },
@@ -101,15 +100,14 @@ enyo.kind({
     finishEditing: function() {
         this.editing = false;
         this.removeClass("editing");
-        this.$.doneButton.hide();
         this.$.postButton.show();
-        this.$.notificationsButton.show();
     },
     chuTap: function(sender, event) {
-        if (!this.editing) {
+        if (!this.held) {
             var index = event.index * this.cellCount + sender.cellIndex;
             this.doShowChu({chu: this.items[index]});
         }
+        this.held = false;
         // Call this to prevent event propagating to an input element and focussing it
         // Happens on iOS sometimes
         event.preventDefault();
@@ -129,7 +127,12 @@ enyo.kind({
         return true;
     },
     hold: function(sender, event) {
-        this.startEditing();
+        this.held = true;
+        if (this.editing) {
+            this.finishEditing();
+        } else {
+            this.startEditing();
+        }
         // this.openContextMenu(sender, event);
     },
     openContextMenu: function(sender, event) {
