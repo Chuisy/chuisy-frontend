@@ -61,6 +61,7 @@
 	background-image: none;
 	background-color: #eee;
 	border-top: none !important;
+	vertical-align: top;
 }
 
 .discover-tabs > *.active {
