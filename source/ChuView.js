@@ -234,7 +234,9 @@ enyo.kind({
     scroll: function() {
         // Apply parallax effect to image view
         var scrollTop = this.bufferHeight + this.$.contentScroller.getScrollTop()/10;
-        this.$.imageView.setScrollTop(scrollTop);
+        if (scrollTop > 0 && scrollTop < 2 * this.bufferHeight) {
+            this.$.imageView.setScrollTop(scrollTop);
+        }
     },
     /**
         Hides the controls including the menu bar and zooms out to show full image
