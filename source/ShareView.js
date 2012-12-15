@@ -52,24 +52,31 @@ enyo.kind({
     getMessage: function() {
         return "Check out this cool product" + (this.chu.location && this.chu.location.place ? " I found at " + this.chu.location.place.name : "") + "!";
     },
+    getShareUrl: function() {
+        var url = this.chu.url;
+        if (this.$.visibilityPicker.getActive().value == "private") {
+            url += "?s=" + this.chu.secret;
+        }
+        return url;
+    },
     twitter: function() {
         var text = this.getMessage();
-        var url = this.chu.share_url;
+        var url = this.getShareUrl();
         window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
     },
     pinterest: function() {
-        var url = this.chu.share_url;
+        var url = this.getShareUrl();
         var media = this.chu.image;
         window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
     },
     sms: function() {
         var message = this.getMessage();
-        window.plugins.smsComposer.showSMSComposer(null, message + " " + this.chu.share_url);
+        window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
     },
     email: function() {
         var subject = "Hi there!";
         var message = this.getMessage();
-        window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.chu.share_url);
+        window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
     },
     done: function() {
         this.chu.visibility = this.$.visibilityPicker.getActive().value;
