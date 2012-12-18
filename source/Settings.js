@@ -12,11 +12,18 @@ enyo.kind({
         this.user = event.user;
 
         if (this.user) {
+            this.log(this.user);
             this.$.firstName.setValue(this.user.first_name);
             this.$.lastName.setValue(this.user.last_name);
             this.$.website.setValue(this.user.profile.website);
             // this.$.bio.setValue(this.user.profile.bio);
             this.$.avatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
+            this.$.pushLikeIcon.addRemoveClass("active", this.user.profile.push_like);
+            this.$.emailLikeIcon.addRemoveClass("active", this.user.profile.email_like);
+            this.$.pushCommentIcon.addRemoveClass("active", this.user.profile.push_comment);
+            this.$.emailCommentIcon.addRemoveClass("active", this.user.profile.email_comment);
+            this.$.pushFollowIcon.addRemoveClass("active", this.user.profile.push_follow);
+            this.$.emailFollowIcon.addRemoveClass("active", this.user.profile.email_follow);
         }
     },
     firstNameChanged: function() {
@@ -44,7 +51,7 @@ enyo.kind({
     },
     updateProfile: function() {
         var params = enyo.clone(this.user.profile);
-        params.image = params.image.replace(/http:\/\/media.chuisy.com\/media\//, "");
+        params.avatar = params.avatar.replace(/http:\/\/media.chuisy.com\/media\//, "");
         chuisy.profile.put(params.id, params, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
@@ -77,6 +84,12 @@ enyo.kind({
     gotImage: function(uri) {
         this.$.avatar.applyStyle("background-image", "url(" + uri + ")");
         chuisy.uploadAvatar(uri);
+    },
+    toggleNotification: function(sender, event) {
+        var prop = sender.prop;
+        this.user.profile[prop] = !this.user.profile[prop];
+        sender.addRemoveClass("active", this.user.profile[prop]);
+        this.updateProfile();
     },
     components: [
         {classes: "header", components: [
@@ -113,13 +126,18 @@ enyo.kind({
                 {classes: "settings-section-header", content: "Notifications"},
                 {kind: "onyx.Groupbox", components: [
                     {classes: "settings-notifications-item", components: [
-                        {content: "Likes", classes: "settings-notifications-text"}
+                        {content: "Likes", classes: "settings-notifications-text"},
+                        {classes: "settings-notification-icon push", name: "pushLikeIcon", prop: "push_like", ontap: "toggleNotification"},
+                        {classes: "settings-notification-icon email", name: "emailLikeIcon", prop: "email_like", ontap: "toggleNotification"}                   ]},
+                    {classes: "settings-notifications-item", components: [
+                        {content: "Comments", classes: "settings-notifications-text"},
+                        {classes: "settings-notification-icon push", name: "pushCommentIcon", prop: "push_comment", ontap: "toggleNotification"},
+                        {classes: "settings-notification-icon email", name: "emailCommentIcon", prop: "email_comment", ontap: "toggleNotification"}
                     ]},
                     {classes: "settings-notifications-item", components: [
-                        {content: "Comments", classes: "settings-notifications-text"}
-                    ]},
-                    {classes: "settings-notifications-item", components: [
-                        {content: "Follows", classes: "settings-notifications-text"}
+                        {content: "Follows", classes: "settings-notifications-text"},
+                        {classes: "settings-notification-icon push", name: "pushFollowIcon", prop: "push_follow", ontap: "toggleNotification"},
+                        {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}
                 ]}
             ]}
