@@ -375,3 +375,11 @@ button.pageheader-radiobutton.active {
 	top: 0;
 	left: 0;
 }
+
+.loading-next-page {
+	padding: 10px;
+	margin: 8px;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+}

@@ -130,7 +130,7 @@ enyo.kind({
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {name: "loadingNextPage", content: "Loading...", classes: "notifications-nextpage"}
+            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
         ]},
         {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]

@@ -113,7 +113,7 @@ enyo.kind({
             pullingMessage: "", pulledMessage: "", loadingMessage: "", pullingIconClass: "", pulledIconClass: "", loadingIconClass: "",
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "loadingNextPage", content: "Loading...", classes: "feed-nextpage"}
+            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
         ]}
     ]
 });
