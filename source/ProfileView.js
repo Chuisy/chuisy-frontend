@@ -10,14 +10,27 @@ enyo.kind({
         onShowProfile: "",
         onOpenSettings: ""
     },
+    friendsMeta: {
+        limit: 20,
+        offset: 0,
+        total_count: 0
+    },
+    followersMeta: {
+        limit: 20,
+        offset: 0,
+        total_count: 0
+    },
     authUserChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
             this.authUser = event.user;
             this.userChanged();
         }
     },
+    getShowedUser: function() {
+        return this.user == "me" ? this.authUser : this.user;
+    },
     userChanged: function() {
-        var user = this.user == "me" ? this.authUser : this.user;
+        var user = this.getShowedUser();
         if (user) {
             this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
@@ -26,8 +39,8 @@ enyo.kind({
             this.$.friendCount.setContent(user.following_count);
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
-            this.loadFriends(user);
-            this.loadFollowers(user);
+            this.load("friends");
+            this.load("followers");
             this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
             this.$.chuboxMenuButton.setActive(true);
             this.$.panels.setIndex(0);
@@ -43,38 +56,46 @@ enyo.kind({
         this.doShowChu(event);
         return true;
     },
-    loadFriends: function(user) {
-        chuisy.followingrelation.list([["user", user.id]], enyo.bind(this, function(sender, response) {
-            this.friends = response.objects;
-            this.refreshFriends();
-        }));
+    load: function(which) {
+        var user = this.getShowedUser();
+        var filterProp = which == "followers" ? "followee" : "user";
+        chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
+            this[which + "Meta"] = response.meta;
+            this[which] = response.objects;
+            this.refresh(which);
+        }), {limit: this[which + "Meta"].limit});
     },
-    refreshFriends: function() {
-        this.$.friendList.setCount(this.friends.length);
-        this.$.friendList.build();
+    nextPage: function(which) {
+        user = this.getShowedUser();
+        var filterProp = which == "followers" ? "followee" : "user";
+        chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
+            this[which + "Meta"] = response.meta;
+            this[which] = this[which].concat(response.objects);
+            this.refresh(which);
+        }), {limit: this[which + "Meta"].limit, offset: this[which + "Meta"].offset + this[which + "Meta"].limit});
     },
-    setupFriend: function(sender, event) {
-        var relation = this.friends[event.index];
-        event.item.$.friendItem.setUser(relation.followee);
+    refresh: function(which) {
+        this.$[which + "List"].setCount(this[which].length);
+        this.$[which + "List"].render();
+    },
+    setupItem: function(sender, event) {
+        var which = sender.which;
+        var relation = this[which][event.index];
+        var prop = which == "followers" ? "user" : "followee";
+        event.item.$[which + "Item"].setUser(relation[prop]);
+
+        var isLastItem = event.index == this[which].length-1;
+        if (isLastItem && !this.allPagesLoaded(which)) {
+            event.item.$[which + "NextPage"].show();
+            this.nextPage(which);
+        } else {
+            event.item.$[which + "NextPage"].hide();
+        }
     },
     friendTapped: function(sender, event) {
         var user = this.friends[event.index].followee;
         this.doShowProfile({user: user});
         event.preventDefault();
-    },
-    loadFollowers: function(user) {
-        chuisy.followingrelation.list([["followee", user.id]], enyo.bind(this, function(sender, response) {
-            this.followers = response.objects;
-            this.refreshFollowers();
-        }));
-    },
-    refreshFollowers: function() {
-        this.$.followerList.setCount(this.followers.length);
-        this.$.followerList.build();
-    },
-    setupFollower: function(sender, event) {
-        var relation = this.followers[event.index];
-        event.item.$.followerItem.setUser(relation.user);
     },
     followerTapped: function(sender, event) {
         var user = this.followers[event.index].user;
@@ -117,6 +138,10 @@ enyo.kind({
         this.$.notificationBadge.setShowing(event.unseen_count);
         return true;
     },
+    allPagesLoaded: function(which) {
+        var meta = this[which + "Meta"];
+        return meta.offset + meta.limit >= meta.total_count;
+    },
     components: [
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},
@@ -140,13 +165,15 @@ enyo.kind({
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
             {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu"},
             {kind: "Scroller", classes: "enyo-fill", components: [
-                {kind: "Repeater", name: "friendList", onSetupItem: "setupFriend", classes: "enyo-fill", components: [
-                    {kind: "UserListItem", name: "friendItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"}
+                {kind: "Repeater", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", components: [
+                    {kind: "UserListItem", name: "friendsItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"},
+                    {name: "friendsNextPage", classes: "loading-next-page"}
                 ]}
             ]},
             {kind: "Scroller", classes: "enyo-fill", components: [
-                {kind: "Repeater", name: "followerList", onSetupItem: "setupFollower", classes: "enyo-fill", components: [
-                    {kind: "UserListItem", name: "followerItem", ontap: "followerTapped", onFollowingChanged: "followingChanged"}
+                {kind: "Repeater", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", components: [
+                    {kind: "UserListItem", name: "followersItem", ontap: "followerTapped", onFollowingChanged: "followingChanged"},
+                    {name: "followersNextPage", classes: "loading-next-page"}
                 ]}
             ]}
         ]},
