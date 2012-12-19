@@ -1,3 +1,5 @@
+/* GENERAL */
+
 body {
 	/*background-image: url(../../assets/images/light_noise_diagonal.png);*/
 	padding: 0;
@@ -6,51 +8,70 @@ body {
 }
 
 * {
+	/* Prevent annoying gray flash on mobile safari */
 	-webkit-tap-highlight-color: transparent;
 }
 
-/*::-webkit-scrollbar {
-	display: none;
-}
-*/
-/*::-webkit-scrollbar {
-	background-color: transparent;
-	width: 10px;
+/* Concentating too long cont... */
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-::-webkit-scrollbar-thumb:vertical {
-	background-color: #bbb;
-	border-radius: 5px;
-}*/
-
-.bg-light {
-	background-image: url(../../assets/images/light_noise_diagonal.png);
-	background-color: #eee;
+/* Center element vertically and horizontally */
+.absolute-center {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: 100;
 }
 
-.app {
-	/*text-align: center;*/
-}
-
-.apppanels {
-	height: 100%;
-	width: 100%;
-	max-width: 1024px;
-	margin: 0 auto;
-	box-sizing: border-box;
-	/*border: solid 1px;*/
-}
-
-.header {
-	height: 44px;
-	background: url(../../assets/images/menu-bar.png) repeat-x;
-	background-size: 320px 44px;
+/* Small box for error messages */
+.error-box {
 	text-align: center;
-	box-shadow: 0 1px 5px #222;
-	box-sizing: border-box;
-	position: relative;
-	z-index: 99;
+	padding: 10px;
+	background-color: #C30F26;
 }
+
+.error-text {
+	display: inline-block;
+	color: #FFFFFF;
+}
+
+/* Button for posting chus */
+.post-chu-button {
+	width: 48px;
+	height: 48px;
+	background-size: 48px 96px;
+	vertical-align: top;
+	display: inline-block;
+	background-image: url(../../assets/images/post_chu_button.png);
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+	z-index: 100;
+	background-position: 0 0;
+}
+
+.post-chu-button:active:hover:not([disabled]) {
+	background-position: 0 -48px;
+}
+
+/* Indicator for when the next page in a list is loaded */
+.loading-next-page {
+	padding: 10px;
+	margin: 8px;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+}
+
+
+/* BUTTONS */
 
 .onyx-button {
 	padding: 0px 10px;
@@ -65,11 +86,37 @@ body {
 	border-top: 1px solid rgba(15, 15, 15, 0.2);
 }
 
-/*.onyx-button.active {
-	background-image: none;
-	border-top: 1px solid rgba(15, 15, 15, 0.2);
-	background-color: #C30F26;
-}*/
+
+/* HEADER */
+
+.header {
+	height: 44px;
+	background: url(../../assets/images/menu-bar.png) repeat-x;
+	background-size: 320px 44px;
+	text-align: center;
+	box-shadow: 0 1px 5px #222;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 99;
+}
+
+.header-text {
+	color: White;
+	font-size: 14pt;
+	font-family: PTSansCaptionRegular;
+	text-align: center;
+	width: 100%;
+	padding: 6px;
+	box-sizing: border-box;
+}
+
+.header-logo {
+	margin: 6px auto;
+	background: url(../../assets/images/logo@2x.png) no-repeat center center;
+	background-size: contain;
+	width: 62px;
+	height: 27px;
+}
 
 .header .onyx-button {
 	color: White;
@@ -154,123 +201,7 @@ body {
 }
 
 
-.header-text {
-	color: White;
-	font-size: 14pt;
-	font-family: PTSansCaptionRegular;
-	text-align: center;
-	width: 100%;
-	padding: 6px;
-	box-sizing: border-box;
-}
-
-.header-logo {
-	margin: 6px auto;
-	background: url(../../assets/images/logo@2x.png) no-repeat center center;
-	background-size: contain;
-	width: 62px;
-	height: 27px;
-}
-
-.ellipsis {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.pageheader {
-	padding: 20px;
-	font-size: 23pt;
-	text-align: left;
-}
-
-.pageheader > .back-button {
-	margin-right: 10px;
-}
-
-.label {
-	padding: 10px;
-	font-size: 13pt;
-}
-
-.shadow-left {
-	box-shadow: -5px 0px 10px #555;
-}
-
-.pageheader {
-	padding: 10px;
-	border-bottom: solid 1px #888;
-	font-size: 12pt;
-}
-
-.pageheader-radiobuttongroup {
-	float: right;
-}
-
-button.pageheader-radiobutton {
-	color: inherit;
-	background: none;
-	border: none;
-	padding: 0 5px;
-}
-
-button.pageheader-radiobutton.active {
-	border: solid 1px;
-	border-radius: 5px;
-}
-
-.main-content {
-	width: 100%;
-	max-width: 800px;
-	margin: 0 auto;
-}
-
-.miniavatar {
-	width: 23px;
-	padding: 2px;
-	border-radius: 2px;
-	background-color: #fff;
-	border: solid 1px #ccc;
-}
-
-.absolute-center {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
-	z-index: 100;
-}
-
-.error-box {
-	text-align: center;
-	padding: 10px;
-	background-color: #C30F26;
-}
-
-.error-text {
-	display: inline-block;
-	color: #FFFFFF;
-}
-
-.post-chu-button {
-	width: 48px;
-	height: 48px;
-	background-size: 48px 96px;
-	vertical-align: top;
-	display: inline-block;
-	background-image: url(../../assets/images/post_chu_button.png);
-	position: absolute;
-	left: 10px;
-	bottom: 10px;
-	z-index: 100;
-	background-position: 0 0;
-}
-
-.post-chu-button:active:hover:not([disabled]) {
-	background-position: 0 -48px;
-}
+/* GROUPBOX */
 
 .onyx-groupbox {
 	background-color: White;
@@ -286,18 +217,21 @@ button.pageheader-radiobutton.active {
 	border-bottom: solid 1px #ddd;
 }
 
-/*.onyx-input-decorator {
-	padding: 0;
-}
-
-.onyx-input-decorator > input,
-.onyx-input-decorator > textarea {
-	padding: 10px;
-	box-sizing: border-box;
-}*/
-
 .onyx-input-decorator.onyx-focused {
 	box-shadow: inset 0 1px 2px #ddd;
+}
+
+
+/* VISIBILITY PICKER */
+
+.visibility-picker {
+	position: absolute;
+	top: 8px;
+	right: 70px;
+}
+
+.visibility-picker > * {
+	margin: 0 2px;
 }
 
 .private-button {
@@ -324,15 +258,8 @@ button.pageheader-radiobutton.active {
 	background-position: 0 -28px;
 }
 
-.visibility-picker {
-	position: absolute;
-	top: 8px;
-	right: 70px;
-}
 
-.visibility-picker > * {
-	margin: 0 2px;
-}
+/* CATEGORY ICONS */
 
 .category-icon {
 	background-size: cover;
@@ -360,6 +287,9 @@ button.pageheader-radiobutton.active {
 	background-image: url(../../assets/images/category_feet.png);
 }
 
+
+/* PULLER */
+
 .enyo-puller {
 	height: 68px;
 	background: url(../../assets/images/pulldown.png) no-repeat center center;
@@ -375,12 +305,4 @@ button.pageheader-radiobutton.active {
 	position: absolute;
 	top: 0;
 	left: 0;
-}
-
-.loading-next-page {
-	padding: 10px;
-	margin: 8px;
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
 }
