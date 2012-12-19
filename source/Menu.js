@@ -1,14 +1,19 @@
+/**
+	_Menu_ is a menu bar for selecting among a couple of views
+*/
 enyo.kind({
 	name: "Menu",
 	kind: "Group",
 	defaultKind: "GroupItem",
 	classes: "menu header",
 	events: {
+		// View has been selected
 		onChange: ""
 	},
 	selectItem: function(sender, event) {
 		sender.setActive(true);
 		this.doChange({value: sender.value});
+		// Prevent event from propagating to views lying below the respective element (bug in mobile safari)
 		event.preventDefault();
 	},
 	notificationsUpdated: function(sender, event) {

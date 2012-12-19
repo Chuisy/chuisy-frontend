@@ -1,18 +1,18 @@
+/**
+    _Settings_ is a view for changing the users account settings
+*/
 enyo.kind({
     name: "Settings",
     kind: "FittableRows",
     classes: "settings",
-    published: {
-        user: null
-    },
     events: {
+        // User has tapped the back button
         onBack: ""
     },
     userChanged: function(sender, event) {
         this.user = event.user;
 
         if (this.user) {
-            this.log(this.user);
             this.$.firstName.setValue(this.user.first_name);
             this.$.lastName.setValue(this.user.last_name);
             this.$.website.setValue(this.user.profile.website);
@@ -42,8 +42,12 @@ enyo.kind({
     //     this.user.profile.bio = this.$.bio.getValue();
     //     this.updateProfile();
     // },
+    /**
+        Sends changes to user object to the API
+    */
     updateUser: function() {
         var params = enyo.clone(this.user);
+        // Switch the profile object for its resource_uri to avoid problems with the api
         params.profile = params.profile.resource_uri;
         chuisy.user.put(params.id, params, enyo.bind(this, function(sender, response) {
             this.log(response);
@@ -51,6 +55,7 @@ enyo.kind({
     },
     updateProfile: function() {
         var params = enyo.clone(this.user.profile);
+        // Turn to relative url to avoid problems with api
         params.avatar = params.avatar.replace(/http:\/\/media.chuisy.com\/media\//, "");
         chuisy.profile.put(params.id, params, enyo.bind(this, function(sender, response) {
             this.log(response);
@@ -60,6 +65,9 @@ enyo.kind({
         // Get facebook access token
         enyo.Signals.send("onRequestSignIn", {});
     },
+    /**
+        Sign out. Simply calls _chuisy.signOut_
+    */
     signOut: function() {
         chuisy.signOut();
     },
@@ -71,6 +79,9 @@ enyo.kind({
     updateFacebookConnectItem: function() {
         this.$.facebookConnectItem.addRemoveClass("connected", chuisy.getSignInStatus().signedIn);
     },
+    /**
+        Open photo library to change profile picture
+    */
     changeAvatar: function() {
         try {
             navigator.camera.cleanup();
@@ -97,17 +108,22 @@ enyo.kind({
         ]},
         {kind: "Scroller", fit: true, components: [
             {classes: "settings-content", components: [
+                // PROFILE INFORMATION
                 {classes: "settings-section-header", content: "Profile"},
                 {kind: "onyx.Groupbox", components: [
+                    // AVATAR
                     {name: "avatar", classes: "settings-avatar", components: [
                         {kind: "onyx.Button", classes: "settings-change-avatar", content: "change", ontap: "changeAvatar"}
                     ]},
+                    // FIRST NAME
                     {kind: "onyx.InputDecorator", components: [
                         {kind: "onyx.Input", name: "firstName", placeholder: "First Name", onchange: "firstNameChanged"}
                     ]},
+                    // LAST NAME
                     {kind: "onyx.InputDecorator", components: [
                         {kind: "onyx.Input", name: "lastName", placeholder: "Last Name", onchange: "lastNameChanged"}
                     ]},
+                    // WEBSITE
                     {kind: "onyx.InputDecorator", components: [
                         {kind: "onyx.Input", name: "website", placeholder: "Website", onchange: "websiteChanged"}
                     ]}
@@ -115,25 +131,32 @@ enyo.kind({
                     //     {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
                     // ]}
                 ]},
+                // LINKED ACCOUNTS
                 {classes: "settings-section-header", content: "Accounts"},
                 {kind: "onyx.Groupbox", components: [
+                    // FACEBOOK
                     {classes: "settings-connect-item", name: "facebookConnectItem", components: [
                         {content: "Facebook", classes: "settings-connect-text"},
                         {kind: "onyx.Button", classes: "settings-connect-button", content: "Connect", ontap: "facebookSignIn"},
                         {kind: "onyx.Button", classes: "settings-connect-disconnect", content: "Disconnect", ontap: "signOut"}
                     ]}
                 ]},
+                // NOTIFICATION SETTINGS
                 {classes: "settings-section-header", content: "Notifications"},
                 {kind: "onyx.Groupbox", components: [
+                    // LIKES
                     {classes: "settings-notifications-item", components: [
                         {content: "Likes", classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushLikeIcon", prop: "push_like", ontap: "toggleNotification"},
-                        {classes: "settings-notification-icon email", name: "emailLikeIcon", prop: "email_like", ontap: "toggleNotification"}                   ]},
+                        {classes: "settings-notification-icon email", name: "emailLikeIcon", prop: "email_like", ontap: "toggleNotification"}
+                    ]},
+                    // COMMENTS
                     {classes: "settings-notifications-item", components: [
                         {content: "Comments", classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushCommentIcon", prop: "push_comment", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailCommentIcon", prop: "email_comment", ontap: "toggleNotification"}
                     ]},
+                    // FOLLOWS
                     {classes: "settings-notifications-item", components: [
                         {content: "Follows", classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushFollowIcon", prop: "push_follow", ontap: "toggleNotification"},

@@ -1,10 +1,16 @@
+/**
+    _Feed_ displays chus from people the user follows and other public chus.
+*/
 enyo.kind({
     name: "Feed",
     classes: "feed",
     kind: "FittableRows",
     events: {
+        // User has tapped a chu
         onShowChu: "",
+        // User has tapped the plus button
         onComposeChu: "",
+        // User has tapped the avatar or name of a user
         onShowProfile: ""
     },
     meta: {
@@ -14,10 +20,14 @@ enyo.kind({
     },
     userChanged: function(sender, event) {
         if (!this.authUser || this.authUser.id != event.user.id) {
+            // User has changed. Reload feed.
             this.authUser = event.user;
             this.loadFeed();
         }
     },
+    /**
+        Loads the chu feed.
+    */
     loadFeed: function() {
         if (!this.pulled) {
             this.$.spinner.show();
@@ -29,6 +39,9 @@ enyo.kind({
             this.$.spinner.hide();
         }));
     },
+    /**
+        Load the next page
+    */
     nextPage: function() {
         var params = {
             limit: this.meta.limit,
@@ -43,20 +56,26 @@ enyo.kind({
     feedLoaded: function() {
         this.$.feedList.setCount(this.chus.length);
         if (this.pulled) {
+            // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
             this.$.feedList.completePull();
         } else {
             this.$.feedList.reset();
         }
     },
+    /**
+        Refreshfeed based on the existing list.
+    */
     refreshFeed: function() {
         this.$.feedList.setCount(this.chus.length);
         this.$.feedList.refresh();
     },
     pullRelease: function() {
         if (App.isOnline()) {
+            // Internet access available. Reload feed!
             this.pulled = true;
             this.loadFeed();
         } else {
+            // No internet access don't reload
             this.$.feedList.completePull();
         }
     },
@@ -70,6 +89,8 @@ enyo.kind({
 
         var isLastItem = event.index == this.chus.length-1;
         if (isLastItem && !this.allPagesLoaded()) {
+            // We are at the end of the list and there seems to be more.
+            // Load next bunch of chus
             this.nextPage();
             this.$.loadingNextPage.show();
         } else {
@@ -78,6 +99,9 @@ enyo.kind({
 
         return true;
     },
+    /**
+        Checks if all items have been loaded
+    */
     allPagesLoaded: function() {
         return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
@@ -97,14 +121,9 @@ enyo.kind({
     userTapped: function(sender, event) {
         this.doShowProfile({user: this.chus[event.index].user});
     },
-    notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unseen_count);
-        this.$.notificationBadge.setShowing(event.unseen_count);
-        return true;
-    },
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
-        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed", onNotificationsUpdated: "notificationsUpdated"},
+        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: "No internet connection available!"}

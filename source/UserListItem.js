@@ -1,11 +1,16 @@
+/**
+    _UserListItem_ is a list control that displays a user. It includes a follow button for following/unfollowing a user
+*/
 enyo.kind({
 	name: "UserListItem",
 	kind: "onyx.Item",
 	classes: "userlistitem",
 	published: {
+        // The user to display
 		user: null
 	},
 	events: {
+        // Use was followed / unfollowed
 		onFollowingChanged: ""
 	},
 	userChanged: function() {
@@ -19,12 +24,16 @@ enyo.kind({
         if (chuisy.getSignInStatus().signedIn) {
             this.toggleFollow();
         } else {
+            // User is not signed in Ask him to sign in first
             enyo.Signals.send("onRequestSignIn", {
                 success: enyo.bind(this, this.toggleFollow)
             });
         }
         return true;
     },
+    /**
+        Toggle following the _user_
+    */
     toggleFollow: function(sender, event) {
         var user = this.user;
         var button = this.$.followButton;
@@ -32,12 +41,14 @@ enyo.kind({
         button.setDisabled(true);
         button.setContent(user.following ? "follow" : "unfollow");
         if (user.following) {
+            // There is a following relation with id _user.following_. Delete it
             chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
                 user.following = false;
                 button.setDisabled(false);
                 this.doFollowingChanged({following: false});
             }));
         } else {
+            // Not following this user yet. Create a following relation
             var params = {
                 followee: user.resource_uri
             };

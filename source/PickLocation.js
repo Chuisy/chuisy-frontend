@@ -1,9 +1,14 @@
+/**
+    _PickLocation_ is a kind for selecting a nearby place based on the current location
+*/
 enyo.kind({
     name: "PickLocation",
     kind: "FittableRows",
     classes: "picklocation",
     events: {
+        // User has picked a location
         onLocationPicked: "",
+        // User has tapped the back button
         onBack: ""
     },
     handlers: {
@@ -13,22 +18,20 @@ enyo.kind({
     //     this.inherited(arguments);
     //     this.$.map.initialize();
     // },
+    /**
+        Resets the place list and gets the geolocation
+    */
     initialize: function() {
         this.places = [];
         this.refreshPlacesList();
         this.getGeoLocation();
     },
+    /**
+        Gets the geolocation, save the location and start a place lookup
+    */
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
             this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            // if (App.isOnline()) {
-            //     this.$.map.show();
-            //     this.$.map.setCenter(this.location);
-            //     this.$.map.clearMarkers();
-            //     this.$.map.placeMarker(this.location.latitude, this.location.longitude);
-            // } else {
-            //     this.$.map.hide();
-            // }
             if (App.isOnline()) {
                 this.lookupPlaces();
             } else {
@@ -40,6 +43,9 @@ enyo.kind({
             this.doLocationPicked({location: null});
         }));
     },
+    /**
+        Loads a list of nearby places from the foursquare api based on the current location
+    */
     lookupPlaces: function() {
         this.$.resultText.show();
         this.$.resultText.setContent("Loading nearby places...");
@@ -62,6 +68,7 @@ enyo.kind({
         });
     },
     placesLoaded: function(sender, response) {
+        // Only show places that are less than 500m away
         this.places = response.response.venues.filter(function(item) {
             return item.location.distance < 500;
         }).sort(function(a, b) {
@@ -77,6 +84,9 @@ enyo.kind({
 
         this.refreshPlacesList();
     },
+    /**
+        Refresh the list of places
+    */
     refreshPlacesList: function() {
         this.$.placesList.setCount(this.places.length);
         this.$.placesList.render();
@@ -99,6 +109,7 @@ enyo.kind({
     },
     newPlaceKeydown: function(sender, event) {
         if (event.keyCode == 13) {
+            // User has pressed enter. Select custom location
             this.location.place = {
                 name: this.$.newPlaceInput.getValue()
             };
@@ -107,6 +118,9 @@ enyo.kind({
             event.preventDefault();
         }
     },
+    /**
+        Skip place picking
+    */
     skip: function() {
         this.doLocationPicked({location: this.location});
     },

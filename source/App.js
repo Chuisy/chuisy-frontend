@@ -262,6 +262,9 @@ enyo.kind({
             this.history.pop();
         }
     },
+    /**
+        Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
+    */
     requestSignIn: function(sender, event) {
         this.$.facebookSignIn.setSuccessCallback(event.success);
         this.$.facebookSignIn.setFailureCallback(event.failure);
@@ -275,11 +278,13 @@ enyo.kind({
     },
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
+            // User has discarded the login dialog. Call the cancel function.
             this.$.facebookSignIn.cancel();
         }
     },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
+        // FACEBOOK SIGNIN
         {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
             unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
             {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}

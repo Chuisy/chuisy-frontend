@@ -1,16 +1,26 @@
+/**
+    _ComposeChu_ is a kind for creating new Chus. It consists of a location picker, a form for selecting
+    price and category and a _ShareView_ for selecting visibility and sharing.
+*/
 enyo.kind({
     name: "ComposeChu",
     kind: "FittableRows",
     events: {
+        // The user has tapped the back button
         onBack: "",
+        // The user has gone through all stages and tapped the done button
         onDone: ""
     },
     create: function() {
         this.inherited(arguments);
         if (navigator.camera) {
+            // Clean up temporary pictures
             navigator.camera.cleanup();
         }
     },
+    /**
+        Prepares instance for creating the next chu
+    */
     initialize: function() {
         this.chu = null;
         this.$.panels.setIndex(0);
@@ -18,6 +28,9 @@ enyo.kind({
         this.$.chuForm.clear();
         this.getImage();
     },
+    /**
+        Opens the device's camera
+    */
     getImage: function(callback) {
         try {
             navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
@@ -52,14 +65,17 @@ enyo.kind({
         };
         this.chu.location = this.location;
 
+        // Disable done button to prevent double-posts
         this.$.chuForm.setDoneButtonDisabled(true);
         if (!chuisy.chubox.contains(this.chu)) {
+            // Chu hasn't been saved yet. Create it.
             chuisy.chubox.add(this.chu, enyo.bind(this, function() {
                 this.$.shareView.setChu(this.chu);
                 this.$.panels.setIndex(2);
                 this.$.chuForm.setDoneButtonDisabled(false);
             }));
         } else {
+            // Chu has already been saved. Update it!
             chuisy.chubox.update(this.chu);
             this.$.panels.setIndex(2);
             this.$.chuForm.setDoneButtonDisabled(false);
@@ -80,8 +96,11 @@ enyo.kind({
     },
     components: [
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
+            // STAGE 1: Pick location/place from list
             {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "doBack"},
+            // STAGE 2: Pick filter, price, category
             {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"},
+            // STAGE 3: Change visibility, share
             {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
         ]}
     ]

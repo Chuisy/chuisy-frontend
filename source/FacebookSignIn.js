@@ -1,3 +1,7 @@
+/**
+    _FacebookSignIn_ presents a 'Sign In With Facebook' button to the user. _successCallback_ and _failureCallback_
+    are called in the respective cases.
+*/
 enyo.kind({
     name: "FacebookSignIn",
     classes: "facebooksignin",
@@ -5,7 +9,9 @@ enyo.kind({
         onDone: ""
     },
     published: {
+        // Callback that gets called when the user has successfully signed in
         successCallback: function() {},
+        // Callback that gets called if the user taps the cancel button or something goes wrong
         failureCallback: function() {}
     },
     /**
@@ -14,6 +20,7 @@ enyo.kind({
     signIn: function() {
         // Get facebook access token
         this.loginWithFacebook(enyo.bind(this, function(accessToken) {
+            // User facebook access token to get authentication credentials from Chuisy API
             chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
                 if (this.successCallback) {
                     this.successCallback();
@@ -50,6 +57,9 @@ enyo.kind({
             this.error("No facebook sdk found!");
         }
     },
+    /**
+        Calls _failureCallback_ and fires done event
+    */
     cancel: function() {
         if (this.failureCallback) {
             this.failureCallback();

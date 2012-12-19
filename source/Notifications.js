@@ -1,14 +1,22 @@
+/**
+    _Notifications_ is a view for displaying all of the users notifications
+*/
 enyo.kind({
     name: "Notifications",
     classes: "notifications",
     events: {
+        // User has tapped a notification
         onNotificationSelected: ""
     },
+    // Meta data for loading notifications from the api
     meta: {
         limit: 20,
         offset: 0,
         total_count: 0
     },
+    /**
+        Load first batch of notifications
+    */
     load: function() {
         chuisy.notification.list([], enyo.bind(this, function(sender, response) {
             this.meta = response.meta;
@@ -17,6 +25,9 @@ enyo.kind({
             this.notificationsUpdated();
         }), {limit: this.meta.limit});
     },
+    /**
+        Loads next page of notifications
+    */
     nextPage: function() {
         var params = {
             limit: this.meta.limit,
@@ -28,10 +39,16 @@ enyo.kind({
             this.refresh();
         }), params);
     },
+    /**
+        Refreshes notification list with loaded items
+    */
     refresh: function() {
         this.$.list.setCount(this.items.length);
         this.$.list.refresh();
     },
+    /**
+        Checks if all notifications have been loaded
+    */
     allPagesLoaded: function() {
         return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
@@ -56,6 +73,7 @@ enyo.kind({
 
         var isLastItem = event.index == this.items.length-1;
         if (isLastItem && !this.allPagesLoaded()) {
+            // Last item in the list and there is more! Load next page
             this.$.loadingNextPage.show();
             this.nextPage();
         } else {
@@ -68,8 +86,10 @@ enyo.kind({
         var not = this.items[event.index];
         this.doNotificationSelected({notification: not});
         if (!not.read) {
+            // Mark notification as read
             not.read = true;
             params = enyo.clone(not);
+            // Have to delete user because otherwise api will not return 200
             delete params.user;
             params.actor = params.actor.resource_uri;
             chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
@@ -77,10 +97,16 @@ enyo.kind({
             }));
         }
     },
+    /**
+        Start polling regularly for new notifications
+    */
     startPolling: function() {
         this.stopPolling();
         this.pollInterval = setInterval(enyo.bind(this, this.load), 60000);
     },
+    /**
+        Stop polling for notifications
+    */
     stopPolling: function() {
         if (this.pollInterval) {
             clearInterval(this.pollInterval);
@@ -110,7 +136,10 @@ enyo.kind({
         this.load();
         return true;
     },
-    read: function() {
+    /**
+        Mark all notifications as seen
+    */
+    seen: function() {
         if (this.items && this.items.length) {
             chuisy.notification.seen({latest: this.items[0].time}, enyo.bind(this, function(sender, response) {
                 this.meta.unseen_count = response.unseen;
@@ -118,6 +147,9 @@ enyo.kind({
             }));
         }
     },
+    /**
+        Fires _onNotificationsUpdated_ event and set the application icon badge number
+    */
     notificationsUpdated: function() {
         enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count, unseen_count: this.meta.unseen_count});
         if (App.isMobile()) {
