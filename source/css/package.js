@@ -10,7 +10,6 @@ enyo.depends(
 	"ComposeChu.css",
 	"PickLocation.css",
 	"ChuForm.css",
-	"Thumbs.css",
 	"UserListItem.css",
 	"Discover.css",
 	"SearchInput.css",

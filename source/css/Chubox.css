@@ -56,10 +56,7 @@
 	/*margin: 5px 0;*/
 }
 
-.chubox-chu.selected {
-	background-color: orange;
-}
-
+/*
 .chubox-contextmenu {
 	position: absolute;
 	left: 100px;
@@ -101,3 +98,4 @@
 .chubox-contextmenu.unfolded > .chubox-contextmenu-right {
 	-webkit-transform: rotateY(0);
 }
+*/

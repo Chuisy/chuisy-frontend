@@ -10,6 +10,7 @@
 	padding: 4px;
 }
 
+/* Is applied when item is highlighted via onyx list tap highlighting */
 .chufeeditem.onyx-highlight {
 	background-color: #bbb;
 }
@@ -79,8 +80,3 @@
 	vertical-align: top;
 	display: inline-block;
 }
-
-/*.chufeeditem:active:hover:not([disabled]) {
-	background-color: #ddd;
-}
-*/

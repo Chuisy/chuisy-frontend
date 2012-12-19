@@ -2,36 +2,8 @@
 	background: none no-repeat center top;
 	background-size: cover;
 	background-color: Gray;
-	/*background-image: url(http://media.chuisy.com/media/chubox/Tron-Legacy-iphone-wallpaper-2.jpg);*/
 }
 
-/*.chuform-visibility-picker {
-	height: auto;
-	line-height: 28px;
-	position: absolute;
-	right: 70px;
-	top: 8px;
-	border-radius: 100px;
-}
-
-.chuform-visibility-picker > .onyx-toggle-button-knob {
-	height: 26px;
-	width: 26px;
-	border-radius: 100px;
-}
-
-.chuform-visibility-picker > .onyx-toggle-content {
-	font-size: 9pt;
-}
-
-.chuform-visibility-picker > .onyx-toggle-content.on {
-	padding-left: 10px;
-}
-
-.chuform-visibility-picker > .onyx-toggle-content.off {
-	padding-right: 10px;
-}
-*/
 .chuform-price {
 	position: absolute;
 	bottom: 10px;

@@ -1,8 +1,0 @@
-/*.signupform > .formfield {
-	display: block;
-	width: 100%;
-}
-*/
-.signupform > * {
-	margin: 5px 0;
-}
