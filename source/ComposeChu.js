@@ -94,6 +94,8 @@ enyo.kind({
         this.$.panels.setIndex(1);
         return true;
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             // STAGE 1: Pick location/place from list

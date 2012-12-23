@@ -97,6 +97,8 @@ enyo.kind({
         sender.addRemoveClass("active", this.user.profile[prop]);
         this.updateProfile();
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"}

@@ -124,6 +124,10 @@ enyo.kind({
         this.facebook = !this.facebook;
         this.$.facebookButton.addRemoveClass("active", this.facebook);
     },
+    activate: function(obj) {
+        this.setChu(obj);
+    },
+    deactivate: function() {},
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},

@@ -7,7 +7,7 @@ enyo.kind({
     },
     events: {
         onShowChu: "",
-        onShowProfile: "",
+        onShowUser: "",
         onOpenSettings: ""
     },
     friendsMeta: {
@@ -94,12 +94,12 @@ enyo.kind({
     },
     friendTapped: function(sender, event) {
         var user = this.friends[event.index].followee;
-        this.doShowProfile({user: user});
+        this.doShowUser({user: user});
         event.preventDefault();
     },
     followerTapped: function(sender, event) {
         var user = this.followers[event.index].user;
-        this.doShowProfile({user: user});
+        this.doShowUser({user: user});
         event.preventDefault();
     },
     followButtonTapped: function() {
@@ -137,6 +137,10 @@ enyo.kind({
         var meta = this[which + "Meta"];
         return meta.offset + meta.limit >= meta.total_count;
     },
+    activate: function(obj) {
+        this.setUser(obj);
+    },
+    deactivate: function() {},
     components: [
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},

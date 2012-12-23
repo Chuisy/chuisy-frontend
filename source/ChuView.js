@@ -17,7 +17,7 @@ enyo.kind({
         //* User has tapped the share button
         onShare: "",
         //* User has tapped the avatar or name of the chus author
-        onShowProfile: ""
+        onShowUser: ""
     },
     handlers: {
         ontap: "tapHandler"
@@ -271,11 +271,15 @@ enyo.kind({
         Open this chus authors profile
     */
     showUser: function() {
-        this.doShowProfile({user: this.chu.user});
+        this.doShowUser({user: this.chu.user});
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
     },
+    activate: function(obj) {
+        this.setChu(obj);
+    },
+    deactivate: function() {},
     components: [
         // IMAGEVIEW
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll"},

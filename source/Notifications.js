@@ -156,6 +156,10 @@ enyo.kind({
             window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unseen_count, function() {});
         }
     },
+    activate: function() {
+        this.seen();
+    },
+    deactivate: function() {},
     components: [
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [

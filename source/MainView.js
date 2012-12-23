@@ -15,66 +15,36 @@ enyo.kind({
     },
     // Mapping between view and panel index
     views: {
-        feed: 0,
-        chubox: 1,
-        profile: 2,
-        discover: 3,
-        gifts: 4,
-        notifications: 5
-    },
-    /**
-        Opens the chu view with a _chu_
-    */
-    openChuView: function(chu) {
-        this.$.superPanels.setIndex(2);
-        this.$.chuView.setChu(chu);
-
-        this.doUpdateHistory({uri: "chu/" + chu.id + "/"});
-    },
-    /**
-        Opens the profile view of a given _user_
-    */
-    openProfileView: function(user) {
-        this.$.profileView.setUser(user);
-        this.$.superPanels.setIndex(5);
-
-        this.doUpdateHistory({uri: "user/" + user.id + "/"});
-    },
-    /**
-        Open compose chu view
-    */
-    composeChu: function() {
-        this.$.composeChu.initialize();
-        this.$.superPanels.setIndex(1);
-
-        this.doUpdateHistory({uri: "chu/new/"});
+        feed: [0, 0],
+        chubox: [0, 1],
+        profile: [0, 2],
+        discover: [0, 3],
+        gifts: [0, 4],
+        notifications: [0, 5],
+        compose: [1, null],
+        chu: [2, null],
+        share: [3, null],
+        settings: [4, null],
+        user: [5, null]
     },
     showChu: function(sender, event) {
-        this.openChuView(event.chu);
+        this.openView("chu", event.chu);
     },
     back: function() {
         this.doBack();
         return true;
     },
-    showProfile: function(sender, event) {
-        this.openProfileView(event.user);
+    showUser: function(sender, event) {
+        this.openView("user", event.user);
     },
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.uri});
     },
     /**
-        Open share view with _event.chu_
-    */
-    shareChu: function(sender, event) {
-        this.$.shareView.setChu(event.chu);
-
-        this.$.superPanels.setIndex(3);
-    },
-    /**
         Open settings view
     */
-    openSettings: function() {
-        this.$.superPanels.setIndex(4);
+    showSettings: function() {
+        this.openView("settings");
     },
     shareViewDone: function(sender, event) {
         this.openChuView({chu: sender.getChu()});
@@ -86,19 +56,54 @@ enyo.kind({
     menuChanged: function(sender, event) {
         this.openView(event.value);
     },
+    transition: function(from, to) {
+        var fromInd = this.views[from];
+        var toInd = this.views[to];
+        var crossover = (fromInd && fromInd[0] === 0 && toInd[0] === 0) ? this.$.primaryCrossover : this.$.crossover;
+
+        crossover.applyStyle("z-index", "1000");
+        crossover.addClass("shown");
+        setTimeout(enyo.bind(this, function() {
+            crossover.removeClass("shown");
+            setTimeout(enyo.bind(this, function() {
+                crossover.applyStyle("z-index", "-1000");
+            }), 500);
+        }), 500);
+    },
     /**
         Shows panel assoziated with the key _view_ and updates the App history appropriately
     */
-    openView: function(view) {
-        this.$.superPanels.setIndex(0);
-        this.$.mainPanels.setIndex(this.views[view]);
+    openView: function(view, obj) {
+        this.transition(this.currentView, view);
+        var oldView = this.$[this.currentView];
+        var newView = this.$[view];
+        this.currentView = view;
+        setTimeout(enyo.bind(this, function() {
+            if (oldView) {
+                oldView.deactivate();
+            }
+            newView.activate(obj);
+            var indexes = this.views[view];
+            this.$.panels.setIndex(indexes[0]);
+            if (indexes[1] !== null) {
+                this.$.primaryPanels.setIndex(indexes[1]);
+            }
+        }), 400);
 
-        this.doUpdateHistory({uri: view + "/"});
-
-        if (view == "notifications") {
-            // Mark all notifications as seen when notification view is opened
-            this.$.notifications.seen();
+        switch (view) {
+            case "chu":
+                this.doUpdateHistory({uri: "chu/" + obj.id + "/"});
+                break;
+            case "user":
+                this.doUpdateHistory({uri: "user/" + obj.id + "/"});
+                break;
+            case "compose":
+                this.doUpdateHistory({uri: "chu/new/"});
+                break;
+            default:
+                this.doUpdateHistory({uri: view + "/"});
         }
+
         if (view == "profile" && !chuisy.getSignInStatus().signedIn) {
             // User wants to see his profile but is not signed in yet. Ask him to sign in.
             enyo.Signals.send("onRequestSignIn", {
@@ -107,41 +112,45 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "Panels", name: "superPanels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", components: [
+        {kind: "Panels", name: "panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", components: [
             {kind: "FittableRows", components: [
                 // MENU BAR
                 {kind: "Menu", onChange: "menuChanged"},
-                // VIEWS THAT CAN BE REACHED VIA THE MENU BAR
-                {kind: "Panels", fit: true, arrangerKind: "CardArranger", animate: false, draggable: false, name: "mainPanels", components: [
-                    // CHU FEED
-                    {kind: "Feed", onShowChu: "showChu", onComposeChu: "composeChu", onShowProfile: "showProfile"},
-                    // CHU BOX / CLOSET
-                    {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onComposeChu: "composeChu"},
-                    // OWN PROFILE VIEW
-                    {kind: "ProfileView", name: "myProfileView", onShowChu: "showChu", onShowProfile: "showProfile", user: "me", onOpenSettings: "openSettings"},
-                    // DISCOVER VIEW
-                    {kind: "Discover", onShowProfile: "showProfile", onShowChu: "showChu"},
-                    // GIFTS
-                    {content: "GIFTS"},
-                    // NOTIFICATIONS
-                    {kind: "Notifications", onNotificationSelected: "notificationSelected"}
+                {fit: true, style: "position: relative;", components: [
+                    // VIEWS THAT CAN BE REACHED VIA THE MENU BAR
+                    {kind: "Panels", classes: "enyo-fill", arrangerKind: "CardArranger", animate: false, draggable: false, name: "primaryPanels", components: [
+                        // CHU FEED
+                        {kind: "Feed", name: "feed", onShowChu: "showChu", onComposeChu: "composeChu", onShowUser: "showUser"},
+                        // CHU BOX / CLOSET
+                        {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onComposeChu: "composeChu"},
+                        // OWN PROFILE VIEW
+                        {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", user: "me", onShowSettings: "showSettings"},
+                        // DISCOVER VIEW
+                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
+                        // GIFTS
+                        {kind: "Gifts", name: "gifts"},
+                        // NOTIFICATIONS
+                        {kind: "Notifications", name: "notifications", onNotificationSelected: "notificationSelected"}
+                    ]},
+                    {name: "primaryCrossover", classes: "fade-screen"}
                 ]}
             ]},
             // CREATE NEW CHU
-            {kind: "ComposeChu", onBack: "back", onDone: "composeChuDone"},
+            {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chuView", onShare: "shareChu", onShowProfile: "showProfile", onBack: "back"},
+            {kind: "ChuView", name: "chu", onShare: "shareChu", onShowUser: "showUser", onBack: "back"},
             // SHARE CHU
-            {kind: "ShareView", onBack: "shareViewDone", onDone: "shareViewDone"},
+            {kind: "ShareView", name: "share", onBack: "shareViewDone", onDone: "shareViewDone"},
             // SETTINGS
-            {kind: "Settings", onBack: "back"},
+            {kind: "Settings", name: "settings", onBack: "back"},
             // PROFILE VIEW (for other profiles)
-            {kind: "FittableRows", components: [
+            {kind: "FittableRows", name: "user", components: [
                 {classes: "header", components: [
                     {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
                 ]},
-                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowProfile: "showProfile", onOpenSettings: "openSettings"}
+                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowUser: "showUser", onOpenSettings: "openSettings"}
             ]}
-        ]}
+        ]},
+        {name: "crossover", classes: "fade-screen"}
     ]
 });

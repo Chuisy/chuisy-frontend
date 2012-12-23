@@ -143,6 +143,8 @@ enyo.kind({
         this.$.contextMenu.applyStyle("top", y + "px");
         this.$.contextMenu.applyStyle("left", x + "px");
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
         {kind: "Signals", onChuboxUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},

@@ -7,7 +7,7 @@ enyo.kind({
     kind: "FittableRows",
     events: {
         // An avatar or username has been tapped
-        onShowProfile: "",
+        onShowUser: "",
         // A chu has been selected
         onShowChu: ""
     },
@@ -46,7 +46,7 @@ enyo.kind({
         return true;
     },
     userTap: function(sender, event) {
-        this.doShowProfile({user: this.users[event.index]});
+        this.doShowUser({user: this.users[event.index]});
         event.preventDefault();
     },
     chuTap: function(sender, event) {
@@ -133,6 +133,10 @@ enyo.kind({
             this.$.searchInput.blur();
         }
     },
+    deactivate: function() {
+        this.$.searchInput.blur();
+    },
+    activate: function() {},
     components: [
         // SEARCH INPUT
         {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},

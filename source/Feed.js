@@ -11,7 +11,7 @@ enyo.kind({
         // User has tapped the plus button
         onComposeChu: "",
         // User has tapped the avatar or name of a user
-        onShowProfile: ""
+        onShowUser: ""
     },
     meta: {
         limit: 20,
@@ -119,8 +119,10 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        this.doShowProfile({user: this.chus[event.index].user});
+        this.doShowUser({user: this.chus[event.index].user});
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
