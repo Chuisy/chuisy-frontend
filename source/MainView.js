@@ -144,11 +144,11 @@ enyo.kind({
             // SETTINGS
             {kind: "Settings", name: "settings", onBack: "back"},
             // PROFILE VIEW (for other profiles)
-            {kind: "FittableRows", name: "user", components: [
+            {kind: "FittableRows", components: [
                 {classes: "header", components: [
                     {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
                 ]},
-                {kind: "ProfileView", name: "profileView", fit: true, onShowChu: "showChu", onShowUser: "showUser", onOpenSettings: "openSettings"}
+                {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]}
         ]},
         {name: "crossover", classes: "fade-screen"}

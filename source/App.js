@@ -223,21 +223,21 @@ enyo.kind({
                 // chu/{chu id}
                 // We have a URI pointing to a specific Chu. Let's open it.
                 chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
-                    this.$.mainView.openChuView(response);
+                    this.$.mainView.openView("chu", response);
                 }));
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // {user id}/
             // This is the URI to a users profile
             chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-                this.$.mainView.openProfileView(response);
+                this.$.mainView.openView("user", response);
             }));
-        } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
-            // {user id}/
-            // This is the URI to a users profile
-            chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-                this.$.mainView.openChubox(response);
-            }));
+        // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
+        //     // {user id}/
+        //     // This is the URI to a users profile
+        //     chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+        //         this.$.mainView.openView(response);
+        //     }));
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page

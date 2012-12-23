@@ -8,7 +8,7 @@ enyo.kind({
     events: {
         onShowChu: "",
         onShowUser: "",
-        onOpenSettings: ""
+        onShowSettings: ""
     },
     friendsMeta: {
         limit: 20,
@@ -58,21 +58,25 @@ enyo.kind({
     },
     load: function(which) {
         var user = this.getShowedUser();
-        var filterProp = which == "followers" ? "followee" : "user";
-        chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
-            this[which + "Meta"] = response.meta;
-            this[which] = response.objects;
-            this.refresh(which);
-        }), {limit: this[which + "Meta"].limit});
+        if (user) {
+            var filterProp = which == "followers" ? "followee" : "user";
+            chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
+                this[which + "Meta"] = response.meta;
+                this[which] = response.objects;
+                this.refresh(which);
+            }), {limit: this[which + "Meta"].limit});
+        }
     },
     nextPage: function(which) {
         user = this.getShowedUser();
-        var filterProp = which == "followers" ? "followee" : "user";
-        chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
-            this[which + "Meta"] = response.meta;
-            this[which] = this[which].concat(response.objects);
-            this.refresh(which);
-        }), {limit: this[which + "Meta"].limit, offset: this[which + "Meta"].offset + this[which + "Meta"].limit});
+        if (user) {
+            var filterProp = which == "followers" ? "followee" : "user";
+            chuisy.followingrelation.list([[filterProp, user.id]], enyo.bind(this, function(sender, response) {
+                this[which + "Meta"] = response.meta;
+                this[which] = this[which].concat(response.objects);
+                this.refresh(which);
+            }), {limit: this[which + "Meta"].limit, offset: this[which + "Meta"].offset + this[which + "Meta"].limit});
+        }
     },
     refresh: function(which) {
         this.$[which + "List"].setCount(this[which].length);
@@ -144,7 +148,7 @@ enyo.kind({
     components: [
         {classes: "profileview-info", name: "info", components: [
             {classes: "profileview-fullname", name: "fullName"},
-            {classes: "profileview-settings-button", ontap: "doOpenSettings"},
+            {classes: "profileview-settings-button", ontap: "doShowSettings"},
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
