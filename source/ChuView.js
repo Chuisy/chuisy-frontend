@@ -20,7 +20,8 @@ enyo.kind({
         onShowUser: ""
     },
     handlers: {
-        ontap: "tapHandler"
+        ontap: "tapHandler",
+        onpostresize: "postResize"
     },
     currencies: {
         "USD": "$",
@@ -275,6 +276,7 @@ enyo.kind({
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
+        this.arrangeImage();
     },
     activate: function(obj) {
         this.setChu(obj);
@@ -282,7 +284,7 @@ enyo.kind({
     deactivate: function() {},
     components: [
         // IMAGEVIEW
-        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll"},
+        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
         {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
@@ -294,7 +296,7 @@ enyo.kind({
                     {classes: "share-button-icon"}
                 ]}
             ]},
-            {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", onpostresize: "postResize", components: [
+            {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
                 {kind: "Scroller", name: "contentScroller", touchOverscroll: true, onScroll: "scroll", components: [
                     // SPACER
                     {classes: "chuview-spacer", ontap: "hideControls"},
