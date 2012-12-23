@@ -13,7 +13,7 @@ enyo.kind({
         // Need to navigate to a specific context url
         onNavigateTo: ""
     },
-    // Mapping between view and panel index
+    // Mapping between view and panel indexes
     views: {
         feed: [0, 0],
         chubox: [0, 1],
@@ -40,9 +40,6 @@ enyo.kind({
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.uri});
     },
-    /**
-        Open settings view
-    */
     showSettings: function() {
         this.openView("settings");
     },
@@ -56,6 +53,9 @@ enyo.kind({
     menuChanged: function(sender, event) {
         this.openView(event.value);
     },
+    /**
+        Trigger transition between views _from_ and _to_
+    */
     transition: function(from, to) {
         var fromInd = this.views[from];
         var toInd = this.views[to];
