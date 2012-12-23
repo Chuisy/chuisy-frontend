@@ -22,7 +22,7 @@ enyo.kind({
         if (!this.authUser || this.authUser.id != event.user.id) {
             // User has changed. Reload feed.
             this.authUser = event.user;
-            this.loadFeed();
+            // this.loadFeed();
         }
     },
     /**
@@ -111,7 +111,7 @@ enyo.kind({
     },
     online: function() {
         this.$.errorBox.hide();
-        this.loadFeed();
+        // this.loadFeed();
         return true;
     },
     offline: function() {
