@@ -121,11 +121,6 @@ enyo.kind({
         chuisy.chubox.remove(chu);
         return true;
     },
-    notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unseen_count);
-        this.$.notificationBadge.setShowing(event.unseen_count);
-        return true;
-    },
     hold: function(sender, event) {
         this.held = true;
         if (this.editing) {
@@ -149,7 +144,7 @@ enyo.kind({
         this.$.contextMenu.applyStyle("left", x + "px");
     },
     components: [
-        {kind: "Signals", onChuboxUpdated: "refresh", onNotificationsUpdated: "notificationsUpdated"},
+        {kind: "Signals", onChuboxUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "contextMenu", classes: "chubox-contextmenu", components: [
             {classes: "chubox-contextmenu-left"},

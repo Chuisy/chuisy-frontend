@@ -71,11 +71,6 @@ enyo.kind({
     signOut: function() {
         chuisy.signOut();
     },
-    notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unseen_count);
-        this.$.notificationBadge.setShowing(event.unseen_count);
-        return true;
-    },
     updateFacebookConnectItem: function() {
         this.$.facebookConnectItem.addRemoveClass("connected", chuisy.getSignInStatus().signedIn);
     },
@@ -165,6 +160,6 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "Signals", onNotificationsUpdated: "notificationsUpdated", onUserChanged: "userChanged", onSignInSuccess: "updateFacebookConnectItem", onSignOut: "updateFacebookConnectItem"}
+        {kind: "Signals", onUserChanged: "userChanged", onSignInSuccess: "updateFacebookConnectItem", onSignOut: "updateFacebookConnectItem"}
     ]
 });

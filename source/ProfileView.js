@@ -133,11 +133,6 @@ enyo.kind({
         }
         return true;
     },
-    notificationsUpdated: function(sender, event) {
-        this.$.notificationBadge.setContent(event.unseen_count);
-        this.$.notificationBadge.setShowing(event.unseen_count);
-        return true;
-    },
     allPagesLoaded: function(which) {
         var meta = this[which + "Meta"];
         return meta.offset + meta.limit >= meta.total_count;
@@ -177,6 +172,6 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "enyo.Signals", onUserChanged: "authUserChanged", onNotificationsUpdated: "notificationsUpdated"}
+        {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
     ]
 });
