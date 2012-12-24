@@ -36,18 +36,26 @@ enyo.kind({
             this.init();
         }
     },
+    /**
+        Hides the apps splash screen with a slight delay
+    */
+    hideSplashScreen: function() {
+        setTimeout(function() {
+            navigator.splashscreen.hide();
+        }, 1000);
+    },
     rendered: function() {
         this.inherited(arguments);
 
         // Hide splash screen if Cordova has been loaded yet
         if (navigator.splashscreen) {
-            navigator.splashscreen.hide();
+            this.hideSplashScreen();
         }
     },
     deviceReady: function() {
         // Hide splash screen if the App has been rendered yet
         if (this.hasNode()) {
-            navigator.splashscreen.hide();
+            this.hideSplashScreen();
         }
         // Check if the app has been intitialized yet. Necessary since deviceready event
         // seems to be fired multiple times
