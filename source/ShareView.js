@@ -40,7 +40,7 @@ enyo.kind({
         chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
             this.friends = this.friends.concat(response.objects);
             this.$.peoplePicker.setItems(this.friends);
-            if (response.meta.next) {
+            if (response.meta && response.meta.next) {
                 // Recursively load pages until all friends are loaded
                 this.loadFriends(response.meta.offset + limit, limit);
             }
