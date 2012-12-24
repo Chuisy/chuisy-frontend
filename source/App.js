@@ -219,6 +219,12 @@ enyo.kind({
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
                 this.$.mainView.composeChu();
+            } else if ((match3 = match2[1].match(/^share\/(\d+)\/$/))) {
+                // chu/share/{chu id}
+                // Sharing is caring. And apparently this user wants to share a chu. Let' go!
+                chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
+                    this.$.mainView.openView("share", response);
+                }));
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
                 // We have a URI pointing to a specific Chu. Let's open it.

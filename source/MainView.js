@@ -37,6 +37,9 @@ enyo.kind({
     showChu: function(sender, event) {
         this.openView("chu", event.chu);
     },
+    shareChu: function(sender, event) {
+        this.openView("share", event.chu);
+    },
     showUser: function(sender, event) {
         this.openView("user", event.user);
     },
@@ -47,7 +50,7 @@ enyo.kind({
         this.doNavigateTo({uri: event.notification.uri});
     },
     shareViewDone: function(sender, event) {
-        this.openChuView({chu: sender.getChu()});
+        this.openView("chu", sender.getChu());
     },
     composeChuDone: function(sender, event) {
         this.openView("feed");
@@ -103,8 +106,12 @@ enyo.kind({
             case "compose":
                 this.doUpdateHistory({uri: "chu/new/"});
                 break;
+            case "share":
+                this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
+                break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
+                break;
         }
 
         if (view == "profile" && !chuisy.getSignInStatus().signedIn) {
