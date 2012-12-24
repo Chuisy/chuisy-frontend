@@ -27,21 +27,24 @@ enyo.kind({
         settings: [4, null],
         user: [5, null]
     },
-    showChu: function(sender, event) {
-        this.openView("chu", event.chu);
-    },
     back: function() {
         this.doBack();
         return true;
     },
+    composeChu: function(sender, event) {
+        this.openView("compose");
+    },
+    showChu: function(sender, event) {
+        this.openView("chu", event.chu);
+    },
     showUser: function(sender, event) {
         this.openView("user", event.user);
     },
-    notificationSelected: function(sender, event) {
-        this.doNavigateTo({uri: event.notification.uri});
-    },
     showSettings: function() {
         this.openView("settings");
+    },
+    notificationSelected: function(sender, event) {
+        this.doNavigateTo({uri: event.notification.uri});
     },
     shareViewDone: function(sender, event) {
         this.openChuView({chu: sender.getChu()});

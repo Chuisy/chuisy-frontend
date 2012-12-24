@@ -19,16 +19,6 @@ enyo.kind({
         }
     },
     /**
-        Prepares instance for creating the next chu
-    */
-    initialize: function() {
-        this.chu = null;
-        this.$.panels.setIndex(0);
-        this.$.pickLocation.initialize();
-        this.$.chuForm.clear();
-        this.getImage();
-    },
-    /**
         Opens the device's camera
     */
     getImage: function(callback) {
@@ -94,7 +84,13 @@ enyo.kind({
         this.$.panels.setIndex(1);
         return true;
     },
-    activate: function() {},
+    activate: function() {
+        this.chu = null;
+        this.$.panels.setIndex(0);
+        this.$.pickLocation.initialize();
+        this.$.chuForm.clear();
+        this.getImage();
+    },
     deactivate: function() {},
     components: [
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
