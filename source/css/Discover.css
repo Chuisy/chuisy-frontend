@@ -80,3 +80,10 @@
 	margin: 0 auto;
 	font-size: 12pt;
 }
+
+.discover-placeholder {
+	width: 128px;
+	height: 128px;
+	background: url(../../assets/images/discover_placeholder.png) no-repeat center center;
+	background-size: cover;
+}

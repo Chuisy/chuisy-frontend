@@ -20,5 +20,6 @@ enyo.depends(
 	"ShareView.css",
 	"Settings.css",
 	"Menu.css",
-	"FacebookSignIn.css"
+	"FacebookSignIn.css",
+	"Gifts.css"
 );

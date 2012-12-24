@@ -1,0 +1,6 @@
+.gifts-placeholder {
+	width: 128px;
+	height: 128px;
+	background: url(../../assets/images/gifts_placeholder.png) no-repeat center center;
+	background-size: cover;
+}

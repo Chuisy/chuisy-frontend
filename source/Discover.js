@@ -69,6 +69,7 @@ enyo.kind({
         this.latestQuery = null;
         this.refreshResults("user", {objects: [], meta: {total_count: ""}});
         this.refreshResults("chu", {objects: [], meta: {total_count: ""}});
+        this.$.resultPanels.setIndex(0);
     },
     /**
         Searches the _resource_ for a _query_
@@ -119,6 +120,7 @@ enyo.kind({
             this.$[resource + "NoResults"].setShowing(!this[resource + "s"].length);
         }
         this.$[resource + "List"].refresh();
+        this.$.resultPanels.setIndex(this.$.resultPanels.getIndex() || 1);
     },
     /**
         Checks if all items have been loaded for a given _resource_
@@ -129,7 +131,7 @@ enyo.kind({
     },
     tapHandler: function(sender, event) {
         // Remove focus from search input if the user taps outside of it
-        if (!event.originator.isDescendantOf(this.$.commentInput)) {
+        if (!event.originator.isDescendantOf(this.$.searchInput)) {
             this.$.searchInput.blur();
         }
     },
@@ -153,6 +155,10 @@ enyo.kind({
         ]},
         // RESULTS
         {kind: "Panels", fit: true, name: "resultPanels", draggable: false, animate: false, components: [
+            // PLACEHOLDER
+            {classes: "discover-result-panel", components: [
+                {classes: "discover-placeholder absolute-center", name: "placeholder"}
+            ]},
             // USERS
             {classes: "discover-result-panel", components: [
                 {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", rowsPerPage: 20, components: [

@@ -84,6 +84,7 @@ enyo.kind({
         this.items = chuisy.chubox.getChus();
         this.$.list.setCount(Math.ceil(this.items.length / this.cellCount));
         this.$.list.refresh();
+        this.$.placeholder.setShowing(!this.items.length);
     },
     /**
         Start edit mode in which the user can delete chus
@@ -144,7 +145,9 @@ enyo.kind({
         this.$.contextMenu.applyStyle("left", x + "px");
     },
     activate: function() {},
-    deactivate: function() {},
+    deactivate: function() {
+        this.finishEditing();
+    },
     components: [
         {kind: "Signals", onChuboxUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
@@ -152,6 +155,7 @@ enyo.kind({
             {classes: "chubox-contextmenu-left"},
             {classes: "chubox-contextmenu-right"}
         ]},
+        {classes: "chubox-placeholder absolute-center", name: "placeholder"},
         // LIST
         {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chubox-row"}
