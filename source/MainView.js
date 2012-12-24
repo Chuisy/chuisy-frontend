@@ -150,7 +150,7 @@ enyo.kind({
             // DISPLAY CHU
             {kind: "ChuView", name: "chu", onShare: "shareChu", onShowUser: "showUser", onBack: "back"},
             // SHARE CHU
-            {kind: "ShareView", name: "share", onBack: "shareViewDone", onDone: "shareViewDone"},
+            {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS
             {kind: "Settings", name: "settings", onBack: "back"},
             // PROFILE VIEW (for other profiles)
