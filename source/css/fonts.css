@@ -1,4 +1,46 @@
 @font-face {
+  font-family: 'Codystar';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Codystar Light'), local('Codystar-Light'), url(../../assets/fonts/Codystar/Codystar-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Codystar';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Codystar Light'), local('Codystar-Light'), url(../../assets/fonts/Codystar/Codystar-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Quicksand Light'), local('Quicksand-Light'), url(../../assets/fonts/Quicksand/Quicksand-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Quicksand Light'), local('Quicksand-Light'), url(../../assets/fonts/Quicksand/Quicksand-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Quicksand Light'), local('Quicksand-Light'), url(../../assets/fonts/Quicksand/Quicksand-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Homemade Apple';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Homemade Apple'), local('HomemadeApple'), url(../../assets/fonts/Homemade_Apple/HomemadeApple.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poiret One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Homemade Apple'), local('HomemadeApple'), url(../../assets/fonts/Poiret_One/PoiretOne-Regular.ttf) format('truetype');
+}
+/*@font-face {
     font-family: 'PTSansNarrowRegular';
     src: url('../../assets/fonts/PTN57F-webfont.eot');
     src: url('../../assets/fonts/PTN57F-webfont.eot?#iefix') format('embedded-opentype'),
@@ -100,4 +142,4 @@
 	src: local('☺'), url('/../../assets/fonts/Windsong-webfont.woff') format('woff'), url('/../../assets/fonts/Windsong-webfont.ttf') format('truetype'), url('/../../assets/fonts/Windsong-webfont.svg#webfontX4pGz9fc') format('svg');
 	font-weight: 400;
 	font-style: normal;
-}
+}*/

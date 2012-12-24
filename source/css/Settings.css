@@ -16,7 +16,8 @@
 .settings-section-header {
 	padding: 10px 10px 5px 10px;
 	font-size: 15pt;
-	font-variant: small-caps;
+	font-family: 'Poiret One';
+	/*font-variant: small-caps;*/
 }
 
 .settings-connect-item {

@@ -1,4 +1,15 @@
 .gifts-placeholder {
+	text-align: center;
+	padding: 100px;
+}
+
+.gifts-placeholder-text {
+	font-family: 'Homemade Apple';
+	color: #555;
+}
+
+.gifts-placeholder-image {
+	margin: 0 auto;
 	width: 128px;
 	height: 128px;
 	background: url(../../assets/images/gifts_placeholder.png) no-repeat center center;

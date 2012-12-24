@@ -291,7 +291,7 @@ enyo.kind({
             // HEADER
             {classes: "header", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
-                {classes: "header-text", content: "chuisy", name: "headerText"},
+                {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
                 {kind: "onyx.Button", classes: "share-button", ontap: "share", components: [
                     {classes: "share-button-icon"}
                 ]}
