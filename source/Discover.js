@@ -141,9 +141,6 @@ enyo.kind({
         this.$.searchInput.blur();
     },
     activate: function() {},
-    /**
-        Toggle following the _user_
-    */
     toggleFollow: function(sender, event) {
         var user = this.users[event.index];
 

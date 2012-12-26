@@ -168,7 +168,7 @@ enyo.kind({
             ]},
             // FRIENDS
             {kind: "FittableRows", classes: "enyo-fill", components: [
-                {classes: "shareview-text", content: "Your Chu is now private. By default private Chus can't be seen by anyone, but you can still share it with some special people!"},
+                {classes: "shareview-text", content: "Your Chu is now private. By default private Chus can't be seen by anyone, but you can still select some special people to share it with!"},
                 {kind: "PeoplePicker", name: "peoplePicker", fit: true}
             ]}
         ]},
