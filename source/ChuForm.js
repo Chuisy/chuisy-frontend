@@ -34,6 +34,7 @@ enyo.kind({
         this.setImage("");
         this.setPrice(0);
         this.setCategory("head");
+        this.$.doneButton.setDisabled(false);
     },
     imageChanged: function() {
         this.$.imageContainer.applyStyle("background-image", "url(" + this.image + ")");
