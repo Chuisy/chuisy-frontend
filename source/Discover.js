@@ -70,6 +70,7 @@ enyo.kind({
         this.refreshResults("user", {objects: [], meta: {total_count: ""}});
         this.refreshResults("chu", {objects: [], meta: {total_count: ""}});
         this.$.resultPanels.setIndex(0);
+        this.$.resultTabs.setActive(null);
     },
     /**
         Searches the _resource_ for a _query_
@@ -121,6 +122,7 @@ enyo.kind({
         }
         this.$[resource + "List"].refresh();
         this.$.resultPanels.setIndex(this.$.resultPanels.getIndex() || 1);
+        this.$.resultTabs.setActive(this.$.resultTabs.getActive() || this.$.userTab);
     },
     /**
         Checks if all items have been loaded for a given _resource_
@@ -139,16 +141,44 @@ enyo.kind({
         this.$.searchInput.blur();
     },
     activate: function() {},
+    /**
+        Toggle following the _user_
+    */
+    toggleFollow: function(sender, event) {
+        var user = this.users[event.index];
+
+        // button.setDisabled(true);
+        // button.setContent(user.following ? "follow" : "unfollow");
+        if (user.following) {
+            // There is a following relation with id _user.following_. Delete it
+            chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
+                // button.setDisabled(false);
+            }));
+            user.following = false;
+        } else {
+            // Not following this user yet. Create a following relation
+            var params = {
+                followee: user.resource_uri
+            };
+            chuisy.followingrelation.create(params, enyo.bind(this, function(sender, response) {
+                user.following = response.id;
+                // button.setDisabled(false);
+            }));
+            user.following = true;
+        }
+        this.$.userList.refresh();
+        return true;
+    },
     components: [
         // SEARCH INPUT
         {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
-        {kind: "onyx.RadioGroup", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
-            {index: 1, components: [
+        {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
+            {index: 1, name: "userTab", components: [
                 {classes: "discover-tab-caption", content: "Users"},
                 {classes: "discover-tab-count", name: "userCount"}
             ]},
-            {index: 2, components: [
+            {index: 2, name: "chuTab", components: [
                 {classes: "discover-tab-caption", content: "Chus"},
                 {classes: "discover-tab-count", name: "chuCount"}
             ]}
@@ -162,7 +192,7 @@ enyo.kind({
             // USERS
             {classes: "discover-result-panel", components: [
                 {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", rowsPerPage: 20, components: [
-                    {kind: "UserListItem", ontap: "userTap"},
+                    {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
                     {name: "userNextPage", content: "Loading...", classes: "loading-next-page"}
                 ]},
                 {kind: "onyx.Spinner", classes: "onyx-light discover-result-spinner absolute-center", name: "userSpinner", showing: false},

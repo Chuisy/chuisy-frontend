@@ -80,20 +80,20 @@ enyo.kind({
     },
     refresh: function(which) {
         this.$[which + "List"].setCount(this[which].length);
-        this.$[which + "List"].render();
+        this.$[which + "List"].refresh();
     },
     setupItem: function(sender, event) {
         var which = sender.which;
         var relation = this[which][event.index];
         var prop = which == "followers" ? "user" : "followee";
-        event.item.$[which + "Item"].setUser(relation[prop]);
+        this.$[which + "Item"].setUser(relation[prop]);
 
         var isLastItem = event.index == this[which].length-1;
         if (isLastItem && !this.allPagesLoaded(which)) {
-            event.item.$[which + "NextPage"].show();
+            this.$[which + "NextPage"].show();
             this.nextPage(which);
         } else {
-            event.item.$[which + "NextPage"].hide();
+            this.$[which + "NextPage"].hide();
         }
     },
     friendTapped: function(sender, event) {
@@ -137,6 +137,32 @@ enyo.kind({
         }
         return true;
     },
+    listToggleFollow: function(sender, event) {
+        var which = sender.which;
+        var user = this[which][event.index][which == "followers" ? "user" : "followee"];
+
+        // button.setDisabled(true);
+        // button.setContent(user.following ? "follow" : "unfollow");
+        if (user.following) {
+            // There is a following relation with id _user.following_. Delete it
+            chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
+                // button.setDisabled(false);
+            }));
+            user.following = false;
+        } else {
+            // Not following this user yet. Create a following relation
+            var params = {
+                followee: user.resource_uri
+            };
+            chuisy.followingrelation.create(params, enyo.bind(this, function(sender, response) {
+                user.following = response.id;
+                // button.setDisabled(false);
+            }));
+            user.following = true;
+        }
+        this.$[which + "List"].refresh();
+        return true;
+    },
     allPagesLoaded: function(which) {
         var meta = this[which + "Meta"];
         return meta.offset + meta.limit >= meta.total_count;
@@ -167,17 +193,13 @@ enyo.kind({
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
             {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu"},
-            {kind: "Scroller", classes: "enyo-fill", components: [
-                {kind: "Repeater", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", components: [
-                    {kind: "UserListItem", name: "friendsItem", ontap: "friendTapped", onFollowingChanged: "followingChanged"},
-                    {name: "friendsNextPage", classes: "loading-next-page"}
-                ]}
+            {kind: "List", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", rowsPerPage: 20, components: [
+                {kind: "UserListItem", which: "friends", name: "friendsItem", ontap: "friendTapped", onToggleFollow: "listToggleFollow"},
+                {name: "friendsNextPage", classes: "loading-next-page", content: "Loading..."}
             ]},
-            {kind: "Scroller", classes: "enyo-fill", components: [
-                {kind: "Repeater", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", components: [
-                    {kind: "UserListItem", name: "followersItem", ontap: "followerTapped", onFollowingChanged: "followingChanged"},
-                    {name: "followersNextPage", classes: "loading-next-page"}
-                ]}
+            {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
+                {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "followerTapped", onToggleFollow: "listToggleFollow"},
+                {name: "followersNextPage", classes: "loading-next-page", content: "Loading..."}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
