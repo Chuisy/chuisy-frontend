@@ -144,11 +144,11 @@ enyo.kind({
         {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
-            {index: 0, active: true, components: [
+            {index: 1, components: [
                 {classes: "discover-tab-caption", content: "Users"},
                 {classes: "discover-tab-count", name: "userCount"}
             ]},
-            {index: 1, components: [
+            {index: 2, components: [
                 {classes: "discover-tab-caption", content: "Chus"},
                 {classes: "discover-tab-count", name: "chuCount"}
             ]}
