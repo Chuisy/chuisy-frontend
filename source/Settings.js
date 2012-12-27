@@ -132,7 +132,8 @@ enyo.kind({
                 {classes: "settings-section-header", content: "Accounts"},
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
-                    {classes: "settings-connect-item", name: "facebookConnectItem", components: [
+                    {classes: "settings-connect-item facebook", name: "facebookConnectItem", components: [
+                        {classes: "settings-connect-icon"},
                         {content: "Facebook", classes: "settings-connect-text"},
                         {kind: "onyx.Button", classes: "settings-connect-button", content: "Connect", ontap: "facebookSignIn"},
                         {kind: "onyx.Button", classes: "settings-connect-disconnect", content: "Disconnect", ontap: "signOut"}

@@ -46,6 +46,30 @@
 	display: inline-block;
 }
 
+.settings-connect-item.connected.facebook > .settings-connect-disconnect {
+	display: none;
+}
+
+.settings-connect-item.facebook.connected {
+	background-color: #3b5998;
+	color: white;
+}
+
+.settings-connect-item.facebook > .settings-connect-icon {
+	width: 20px;
+	height: 20px;
+	background-size: 20px 40px;
+	display: inline-block;
+	background-image: url(../../assets/images/facebook_button.png);
+	background-position: 0 0;
+	margin: 5px 0;
+	vertical-align: top;
+}
+
+.settings-connect-item.facebook.connected > .settings-connect-icon {
+	background-position: 0 -20px;
+}
+
 .settings-notifications-item {
 	padding: 5px;
 }
