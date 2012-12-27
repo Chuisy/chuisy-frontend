@@ -27,7 +27,7 @@ enyo.kind({
         }
     },
     getShowedUser: function() {
-        return this.user == "me" ? this.authUser : this.user;
+        return this.user || this.authUser;
     },
     userChanged: function() {
         var user = this.getShowedUser();
@@ -44,7 +44,7 @@ enyo.kind({
             this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
             this.$.chuboxMenuButton.setActive(true);
             this.$.panels.setIndex(0);
-            this.addRemoveClass("owned", this.authUser && this.authUser.id == user.id);
+            this.addRemoveClass("owned", user == this.authUser);
         }
     },
     menuItemSelected: function(sender, event) {

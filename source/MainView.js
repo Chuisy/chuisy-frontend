@@ -134,7 +134,7 @@ enyo.kind({
                         // CHU BOX / CLOSET
                         {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onComposeChu: "composeChu"},
                         // OWN PROFILE VIEW
-                        {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", user: "me", onShowSettings: "showSettings"},
+                        {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
                         // DISCOVER VIEW
                         {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
                         // GIFTS
