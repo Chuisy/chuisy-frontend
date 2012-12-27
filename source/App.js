@@ -213,6 +213,10 @@ enyo.kind({
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
             this.$.mainView.openView("profile");
+        } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
+            // settings/
+            // Open settings view
+            this.$.mainView.openView("settings");
         } else if (uri.match(/^chubox\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
