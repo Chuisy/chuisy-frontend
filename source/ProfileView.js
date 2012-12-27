@@ -41,7 +41,7 @@ enyo.kind({
             this.$.chuList.load();
             this.load("friends");
             this.load("followers");
-            this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
+            this.$.followButton.setContent(user.following ? "unfollow" : "follow");
             this.$.chuboxMenuButton.setActive(true);
             this.$.panels.setIndex(0);
             this.addRemoveClass("owned", user == this.authUser);
