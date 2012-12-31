@@ -55,8 +55,6 @@ enyo.kind({
     },
     updateProfile: function() {
         var params = enyo.clone(this.user.profile);
-        // Turn to relative url to avoid problems with api
-        params.avatar = params.avatar.replace(/http:\/\/media.chuisy.com\/media\//, "");
         chuisy.profile.put(params.id, params, enyo.bind(this, function(sender, response) {
             this.log(response);
         }));
