@@ -6,6 +6,8 @@ body {
 	margin: 0;
 	font-family: Quicksand;
 	font-weight: 400;
+	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;
 }
 
 * {
@@ -346,6 +348,12 @@ body {
 
 .signin-slider {
 	box-shadow: -2px 0 10px #555;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.getstarted-slider {
 	position: absolute;
 	top: 0;
 	left: 0;

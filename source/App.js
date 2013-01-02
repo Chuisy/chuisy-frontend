@@ -25,6 +25,30 @@ enyo.kind({
         */
         isMobile: function() {
             return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
+        },
+        /**
+            Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
+        */
+        loginWithFacebook: function(callback) {
+            if (window.plugins && window.plugins.facebookConnect) {
+                window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website", "publish_actions"], appId: "180626725291316"}, function(result) {
+                    if(result.cancelled || result.error) {
+                        console.log("Facebook signin failed:" + result.message);
+                        return;
+                    }
+                    callback(result.accessToken);
+                });
+            } else if (FB) {
+                FB.login(function() {
+                    if (response.status == "connected") {
+                        callback(response.authResponse.accessToken);
+                    } else {
+                        console.log("Facebook signin failed!");
+                    }
+                }, {scope: "user_birthday,user_location,user_about_me,user_website,email,publish_actions"});
+            } else {
+                console.error("No facebook sdk found!");
+            }
         }
     },
     history: [],
@@ -79,10 +103,17 @@ enyo.kind({
 
         this.history = [];
 
-        this.recoverStateFromUri();
-
         if (App.isMobile()) {
             this.initPushNotifications();
+        }
+
+        var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
+
+        if (!firstLaunched) {
+            this.$.getStartedSlider.setValue(0);
+            localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
+        } else {
+            this.recoverStateFromUri();
         }
     },
     /**
@@ -310,8 +341,17 @@ enyo.kind({
             localStorage.setItem("chuisy.viewsShown", JSON.stringify(viewsShown));
         }
     },
+    getStartedDone: function() {
+        this.$.getStartedSlider.animateToMax();
+        this.recoverStateFromUri();
+    },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
+        // GET STARTED
+        {kind: "Slideable", classes: "enyo-fill getstarted-slider", name: "getStartedSlider", draggable: false,
+            axis: "v", unit: "%", max: 100, min: 0, value: 100, overMoving: false, components: [
+            {kind: "GetStarted", classes: "enyo-fill", onDone: "getStartedDone"}
+        ]},
         // FACEBOOK SIGNIN
         {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
             unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [

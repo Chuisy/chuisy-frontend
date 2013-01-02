@@ -29,5 +29,7 @@ enyo.depends(
 	"ShareView.js",
 	"Menu.js",
 	"FacebookSignIn.js",
-	"Gifts.js"
+	"Gifts.js",
+	"Guide.js",
+	"GetStarted.js"
 );

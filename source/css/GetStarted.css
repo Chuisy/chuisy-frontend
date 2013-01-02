@@ -1,0 +1,26 @@
+.getstarted {
+	/*padding: 50px;*/
+	box-sizing: border-box;
+}
+
+.getstarted-login {
+	padding: 120px 0;
+	background: url(../../assets/images/chuisy_splash_screen_640x1136.png) no-repeat center top;
+	background-size: 320px 568px;
+}
+
+.getstarted-login .onyx-button {
+	display: block;
+	width: 230px;
+	padding: 10px;
+	margin: 5px auto;
+	height: auto;
+}
+
+.getstarted-login-text {
+	color: white;
+	font-size: 15pt;
+	text-align: center;
+	padding: 20px 50px;
+	font-weight: 700;
+}
