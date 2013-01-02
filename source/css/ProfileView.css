@@ -51,7 +51,6 @@
 	border-radius: 0 !important;
 	background-image: none;
 	background-color: #eee;
-	border-top: none !important;
 }
 
 .profileview-menu-button.active {
@@ -59,6 +58,7 @@
 	background-color: white;
 	background-image: none;
 	color: black;
+	border-top: 1px solid rgba(15, 15, 15, 0.2);
 }
 
 .profileview-menu-button-caption {

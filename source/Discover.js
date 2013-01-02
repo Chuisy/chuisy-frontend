@@ -168,7 +168,9 @@ enyo.kind({
     },
     components: [
         // SEARCH INPUT
-        {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false},
+        {style: "padding: 5px; box-sizing: border-box;", components: [
+            {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false}
+        ]},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
             {index: 1, name: "userTab", components: [
