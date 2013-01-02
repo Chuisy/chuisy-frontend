@@ -121,7 +121,9 @@ enyo.kind({
     userTapped: function(sender, event) {
         this.doShowUser({user: this.chus[event.index].user});
     },
-    activate: function() {},
+    activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "feed"});
+    },
     deactivate: function() {},
     components: [
         {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},

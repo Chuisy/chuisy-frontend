@@ -300,6 +300,16 @@ enyo.kind({
             this.$.facebookSignIn.cancel();
         }
     },
+    showGuide: function(sender, event) {
+        var viewsShown = JSON.parse(localStorage.getItem("chuisy.viewsShown") || "{}");
+        
+        if (!viewsShown[event.view]) {
+            this.$.guide.setView(event.view);
+            this.$.guide.open();
+            viewsShown[event.view] = true;
+            localStorage.setItem("chuisy.viewsShown", JSON.stringify(viewsShown));
+        }
+    },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
         // FACEBOOK SIGNIN
@@ -307,6 +317,8 @@ enyo.kind({
             unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
             {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}
         ]},
-        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn"}
+        {kind: "Guide"},
+        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
+            onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn", onShowGuide: "showGuide"}
     ]
 });
