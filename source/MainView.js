@@ -65,7 +65,8 @@ enyo.kind({
     transition: function(from, to) {
         var fromInd = this.views[from];
         var toInd = this.views[to];
-        var crossover = (fromInd && fromInd[0] === 0 && toInd[0] === 0) ? this.$.primaryCrossover : this.$.crossover;
+        // var crossover = (fromInd && fromInd[0] === 0 && toInd[0] === 0) ? this.$.primaryCrossover : this.$.crossover;
+        var crossover = this.$.crossover;
 
         crossover.applyStyle("z-index", "1000");
         crossover.addClass("shown");
