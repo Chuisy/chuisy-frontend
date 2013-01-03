@@ -19,9 +19,6 @@ enyo.kind({
         onBack: ""
     },
     handlers: {
-        ondrag: "drag",
-        ondragstart: "dragStart",
-        ondragfinish: "dragFinish",
         ontap: "tap"
     },
     price: 0,
@@ -131,7 +128,8 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: "next", name: "doneButton"}
         ]},
         // IMAGE WITH CONTROLS
-        {name: "imageContainer", fit: true, classes: "chuform-imagecontainer", components: [
+        {name: "imageContainer", fit: true, classes: "chuform-imagecontainer",
+            ondrag: "drag", ondragstart: "dragStart", ondragfinish: "dragFinish", components: [
             // PRICE
             {classes: "chuform-price", name: "price", content: "0 €"},
             //CATEGORY
