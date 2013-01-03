@@ -169,6 +169,9 @@ enyo.kind({
     },
     activate: function(obj) {
         this.setUser(obj);
+        if (this.getShowedUser().id == this.authUser.id) {
+            enyo.Signals.send("onShowGuide", {view: "profile"});
+        }
     },
     deactivate: function() {},
     components: [

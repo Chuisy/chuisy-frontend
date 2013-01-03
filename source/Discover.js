@@ -140,7 +140,9 @@ enyo.kind({
     deactivate: function() {
         this.$.searchInput.blur();
     },
-    activate: function() {},
+    activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "discover"});
+    },
     toggleFollow: function(sender, event) {
         var user = this.users[event.index];
 

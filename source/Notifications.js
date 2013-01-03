@@ -157,6 +157,7 @@ enyo.kind({
         }
     },
     activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "notifications"});
         this.seen();
     },
     deactivate: function() {},

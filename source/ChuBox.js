@@ -144,7 +144,9 @@ enyo.kind({
         this.$.contextMenu.applyStyle("top", y + "px");
         this.$.contextMenu.applyStyle("left", x + "px");
     },
-    activate: function() {},
+    activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "chubox"});
+    },
     deactivate: function() {
         this.finishEditing();
     },

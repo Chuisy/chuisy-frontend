@@ -40,6 +40,7 @@ enyo.kind({
     locationPicked: function (sender, event) {
         this.location = event.location;
         this.$.panels.setIndex(1);
+        enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
         this.chu = this.chu || {};
@@ -60,15 +61,16 @@ enyo.kind({
         if (!chuisy.chubox.contains(this.chu)) {
             // Chu hasn't been saved yet. Create it.
             chuisy.chubox.add(this.chu, enyo.bind(this, function() {
-                this.$.shareView.setChu(this.chu);
-                this.$.panels.setIndex(2);
                 this.$.chuForm.setDoneButtonDisabled(false);
+                this.$.panels.setIndex(2);
+                this.$.shareView.activate(this.chu);
             }));
         } else {
             // Chu has already been saved. Update it!
             chuisy.chubox.update(this.chu);
-            this.$.panels.setIndex(2);
             this.$.chuForm.setDoneButtonDisabled(false);
+            this.$.panels.setIndex(2);
+            this.$.shareView.activate(this.chu);
         }
         return true;
     },

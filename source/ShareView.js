@@ -126,6 +126,7 @@ enyo.kind({
     },
     activate: function(obj) {
         this.setChu(obj);
+        enyo.Signals.send("onShowGuide", {view: "share"});
     },
     deactivate: function() {},
     components: [
