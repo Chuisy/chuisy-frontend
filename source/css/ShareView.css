@@ -29,6 +29,10 @@
 	border: none;
 }
 
+.shareview-share-button:active:hover:not([disabled]) {
+	background-color: #eee;
+}
+
 .shareview-share-button-icon {
 	width: 20px;
 	height: 20px;
