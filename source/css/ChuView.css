@@ -89,14 +89,29 @@
 .chuview-likebar {
 	width: 320px;
 	height: 48px;
-	background: url(../../assets/images/like_bar.png) no-repeat 0 0;
-	background-size: 320px 96px;
+	background: url(../../assets/images/chu_separator.png) no-repeat 0 0;
+	background-size: 320px 48px;
 	margin-bottom: -24px;
 	position: relative;
 	z-index: 10;
+	text-align: center;
 }
 
-.chuview-likebar.active {
+.chuview-like-button {
+	display: inline-block;
+	width: 48px;
+	height: 48px;
+	background: url(../../assets/images/like_button.png) no-repeat 0 0;
+	background-size: 48px 96px;
+	-webkit-transition-property: -webkit-transform;
+	-webkit-transition-duration: 0.1s;
+}
+
+.chuview-like-button:active:hover:not([disabled]) {
+	-webkit-transform: scale(1.1);
+}
+
+.chuview-like-button.active {
 	background-position: 0 -48px;
 }
 

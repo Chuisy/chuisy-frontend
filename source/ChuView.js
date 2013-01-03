@@ -302,7 +302,9 @@ enyo.kind({
                     // SPACER
                     {classes: "chuview-spacer", ontap: "hideControls"},
                     // LIKE BAR
-                    {classes: "chuview-likebar", name: "likeButton", ontap: "likeButtonTapped"},
+                    {classes: "chuview-likebar", components: [
+                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"}
+                    ]},
                     {classes: "chuview-content", components: [
                         // CATEGORY, PRICE, COMMENTS, LIKES
                         {classes: "chuview-infobar", components: [
