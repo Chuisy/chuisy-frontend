@@ -330,10 +330,11 @@ body {
 }
 
 .enyo-puller-arrow {
-	width: 17px;
-	height: 45px;
-	background: url(../../assets/images/puller_arrow.png) no-repeat center center;
+	width: 35px;
+	height: 35px;
+	background: url(../../assets/images/arrow.png) no-repeat center center;
 	background-size: cover;
+	margin-top: 5px;
 }
 
 .enyo-puller-arrow:after {
