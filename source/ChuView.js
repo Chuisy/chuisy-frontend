@@ -30,6 +30,12 @@ enyo.kind({
     },
     // Scroll buffer for parallax scrolling
     bufferHeight: 100,
+    // Meta data for loading notifications from the api
+    commentsMeta: {
+        limit: 20,
+        offset: 0,
+        total_count: 0
+    },
     chuChanged: function() {
         if (this.chu) {
             this.waiting = false;
@@ -158,17 +164,38 @@ enyo.kind({
     */
     loadComments: function(callback) {
         chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
+            this.commentsMeta = response.meta;
             this.comments = response.objects;
             this.refreshComments();
             if (callback) {
                 callback();
             }
-        }));
+        }), {limit: this.commentsMeta.limit});
+    },
+    /**
+        Loads next page of notifications
+    */
+    nextCommentsPage: function() {
+        var params = {
+            limit: this.commentsMeta.limit,
+            offset: this.commentsMeta.offset + this.commentsMeta.limit
+        };
+        chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
+            this.commentsMeta = response.meta;
+            this.comments = this.comments.concat(response.objects);
+            this.refreshComments();
+        }), params);
     },
     refreshComments: function() {
         this.$.commentsCount.setContent(this.comments.length);
         this.$.commentsRepeater.setCount(this.comments.length);
         this.$.commentsRepeater.render();
+    },
+    /**
+        Checks if all comments have been loaded
+    */
+    allPagesLoaded: function() {
+        return this.commentsMeta.offset + this.commentsMeta.limit >= this.commentsMeta.total_count;
     },
     setupComment: function(sender, event) {
         var comment = this.comments[event.index];
@@ -176,6 +203,15 @@ enyo.kind({
         this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
         this.$.commentFullName.setContent(comment.user.first_name + " " + comment.user.last_name);
         this.$.commentTime.setContent(chuisy.timeToText(comment.time));
+
+        var isLastItem = event.index == this.comments.length-1;
+        if (isLastItem && !this.allPagesLoaded()) {
+            // Last item in the list and there is more! Load next page
+            this.$.loadingNextPage.show();
+            this.nextCommentsPage();
+        } else {
+            this.$.loadingNextPage.hide();
+        }
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -341,7 +377,8 @@ enyo.kind({
                                     {classes: "chuview-time", name: "commentTime"}
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
-                            ]}
+                            ]},
+                            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
                         ]},
                         {style: "height: 500px"}
                     ]}
