@@ -274,6 +274,10 @@ enyo.kind({
     showUser: function() {
         this.doShowUser({user: this.chu.user});
     },
+    showCommentUser: function(sender, event) {
+        var user = this.comments[event.index].user;
+        this.doShowUser({user: user});
+    },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
         this.arrangeImage();
@@ -331,10 +335,10 @@ enyo.kind({
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                             {kind: "onyx.Item", classes: "chuview-comment", name: "comment", components: [
-                                {components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "chuview-avatar"},
-                                    {classes: "chuview-fullname", name: "commentFullName"},
-                                    {classes: "chuview-time chuview-comment-time", name: "commentTime"}
+                                {classes: "chuview-infobar", components: [
+                                    {kind: "Image", name: "commentAvatar", classes: "chuview-avatar", ontap: "showCommentUser"},
+                                    {classes: "chuview-fullname", name: "commentFullName", ontap: "showCommentUser"},
+                                    {classes: "chuview-time", name: "commentTime"}
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
                             ]}
