@@ -21,7 +21,7 @@ enyo.kind({
         total_count: 0
     },
     authUserChanged: function(sender, event) {
-        if (!this.authUser || this.authUser.id != event.user.id) {
+        if (!this.authUser || this.authUser != event.user) {
             this.authUser = event.user;
             this.userChanged();
         }
@@ -35,8 +35,8 @@ enyo.kind({
             this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
             this.$.chuboxCount.setContent(user.chu_count);
-            this.$.followerCount.setContent(user.follower_count);
-            this.$.friendCount.setContent(user.following_count);
+            this.$.followersCount.setContent(user.follower_count);
+            this.$.friendsCount.setContent(user.following_count);
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.load("friends");
@@ -79,6 +79,7 @@ enyo.kind({
         }
     },
     refresh: function(which) {
+        this.$[which + "Count"].setContent(this[which].length);
         this.$[which + "List"].setCount(this[which].length);
         this.$[which + "List"].refresh();
     },
@@ -187,11 +188,11 @@ enyo.kind({
             ]},
             {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: "Following"},
-                {classes: "profileview-menu-button-count", name: "friendCount"}
+                {classes: "profileview-menu-button-count", name: "friendsCount"}
             ]},
             {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: "Followers"},
-                {classes: "profileview-menu-button-count", name: "followerCount"}
+                {classes: "profileview-menu-button-count", name: "followersCount"}
             ]}
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [

@@ -110,6 +110,9 @@ enyo.kind({
             case "share":
                 this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
                 break;
+            case "profile":
+                chuisy.loadUserDetails();
+                break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
                 break;
