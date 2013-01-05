@@ -12,7 +12,8 @@ enyo.kind({
     },
     events: {
         //* A chu has been selected
-        onShowChu: ""
+        onShowChu: "",
+        onFinishedLoading: ""
     },
     handlers: {
         onpostresize: "postResize"
@@ -89,6 +90,7 @@ enyo.kind({
             this.meta = response.meta;
             this.items = response.objects;
             this.refresh();
+            this.doFinishedLoading({total_count: response.meta.total_count});
         }), {limit: this.meta.limit});
     },
     /**
@@ -122,6 +124,10 @@ enyo.kind({
         var index = event.index * this.cellCount + sender.cellIndex;
         this.doShowChu({chu: this.items[index]});
         event.preventDefault();
+    },
+    clear: function() {
+        this.items = [];
+        this.refresh();
     },
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [

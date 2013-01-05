@@ -34,9 +34,11 @@ enyo.kind({
         if (user) {
             this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
-            this.$.chuboxCount.setContent(user.chu_count);
-            this.$.followersCount.setContent(user.follower_count);
-            this.$.friendsCount.setContent(user.following_count);
+            // this.$.chuboxCount.setContent(user.chu_count);
+            // this.$.followersCount.setContent(user.follower_count);
+            // this.$.friendsCount.setContent(user.following_count);
+            this.$.chuList.clear();
+            this.$.chuboxCount.setContent('loading...');
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.load("friends");
@@ -57,6 +59,7 @@ enyo.kind({
         return true;
     },
     load: function(which) {
+        this.$[which + "Count"].setContent("loading...");
         var user = this.getShowedUser();
         if (user) {
             var filterProp = which == "followers" ? "followee" : "user";
@@ -64,6 +67,7 @@ enyo.kind({
                 this[which + "Meta"] = response.meta;
                 this[which] = response.objects;
                 this.refresh(which);
+                this.$[which + "Count"].setContent(response.meta.total_count);
             }), {limit: this[which + "Meta"].limit});
         }
     },
@@ -79,7 +83,6 @@ enyo.kind({
         }
     },
     refresh: function(which) {
-        this.$[which + "Count"].setContent(this[which].length);
         this.$[which + "List"].setCount(this[which].length);
         this.$[which + "List"].refresh();
     },
@@ -168,6 +171,9 @@ enyo.kind({
         var meta = this[which + "Meta"];
         return meta.offset + meta.limit >= meta.total_count;
     },
+    chusFinishedLoading: function(sender, event) {
+        this.$.chuboxCount.setContent(event.total_count);
+    },
     activate: function(obj) {
         this.setUser(obj);
         if (this.getShowedUser().id == this.authUser.id) {
@@ -196,7 +202,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-            {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu"},
+            {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onFinishedLoading: "chusFinishedLoading"},
             {kind: "List", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", rowsPerPage: 20, components: [
                 {kind: "UserListItem", which: "friends", name: "friendsItem", ontap: "friendTapped", onToggleFollow: "listToggleFollow"},
                 {name: "friendsNextPage", classes: "loading-next-page", content: "Loading..."}
