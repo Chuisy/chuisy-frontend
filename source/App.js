@@ -121,7 +121,6 @@ enyo.kind({
 
         if (!firstLaunched) {
             this.$.getStartedSlider.setValue(0);
-            localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
         } else {
             this.recoverStateFromUri();
         }
@@ -352,6 +351,7 @@ enyo.kind({
         }
     },
     getStartedDone: function() {
+        localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
         this.$.getStartedSlider.animateToMax();
         this.recoverStateFromUri();
     },
