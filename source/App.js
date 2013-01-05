@@ -89,9 +89,16 @@ enyo.kind({
         }
     },
     init: function() {
-        // Gotta load the facebook js sdk unless we are running with Cordova
-        if (!App.isMobile()) {
-            this.initFacebookWeb();
+        if (App.isMobile()) {
+            // init the FB JS SDK
+            FB.init({
+                appId      : '180626725291316', // App ID from the App Dashboard
+                status     : true, // check the login status upon init?
+                cookie     : false, // set sessions cookies to allow your server to access the session?
+                xfbml      : false,  // parse XFBML tags on this page?,
+                nativeInterface: CDV.FB,
+                useCachedDialogs: false
+            });
         }
 
         // window.onhashchange = enyo.bind(this, this.hashChanged);
@@ -100,16 +107,6 @@ enyo.kind({
         enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
-            
-        // // init the FB JS SDK
-        FB.init({
-            appId      : '180626725291316', // App ID from the App Dashboard
-            status     : true, // check the login status upon init?
-            cookie     : false, // set sessions cookies to allow your server to access the session?
-            xfbml      : false,  // parse XFBML tags on this page?,
-            nativeInterface: CDV.FB,
-            useCachedDialogs: false
-        });
 
         this.history = [];
 
@@ -324,8 +321,8 @@ enyo.kind({
         Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
     */
     requestSignIn: function(sender, event) {
-        this.$.facebookSignIn.setSuccessCallback(event.success);
-        this.$.facebookSignIn.setFailureCallback(event.failure);
+        this.$.facebookSignIn.setSuccessCallback(event ? event.success : null);
+        this.$.facebookSignIn.setFailureCallback(event ? event.failure : null);
         this.$.signInSlider.animateToMin();
     },
     facebookSignInDone: function() {
