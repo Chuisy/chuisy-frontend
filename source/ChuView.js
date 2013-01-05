@@ -320,10 +320,19 @@ enyo.kind({
     },
     activate: function(obj) {
         this.setChu(obj);
+        if (obj == this.chu) {
+            // this.chuChanged (for some reason) not automatically called if the set object is identical to the previous one
+            // So in that case we have to call it explicitly
+            this.chuChanged();
+        }
         enyo.Signals.send("onShowGuide", {view: "chu"});
     },
-    deactivate: function() {},
+    deactivate: function() {
+        this.$.imageView.setSrc("assets/images/chu_image_placeholder.png");
+    },
     components: [
+        // IMAGE LOADING INDICATOR
+        {classes: "chuview-image-loading", content: "Loading..."},
         // IMAGEVIEW
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
         {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
