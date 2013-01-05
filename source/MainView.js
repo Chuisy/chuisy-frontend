@@ -112,6 +112,7 @@ enyo.kind({
                 break;
             case "profile":
                 chuisy.loadUserDetails();
+                this.doUpdateHistory({uri: "profile/"});
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
