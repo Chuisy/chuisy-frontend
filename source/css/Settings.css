@@ -46,9 +46,9 @@
 	display: inline-block;
 }
 
-.settings-connect-item.connected.facebook > .settings-connect-disconnect {
+/*.settings-connect-item.connected.facebook > .settings-connect-disconnect {
 	display: none;
-}
+}*/
 
 .settings-connect-item.facebook.connected {
 	background-color: #3b5998;
