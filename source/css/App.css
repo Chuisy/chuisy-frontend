@@ -81,6 +81,7 @@ body {
 	width: 100%;
 	height: 500px;
 	background-color: white;
+	box-shadow: inset 0 1px 5px #222;
 	opacity: 0;
 	-webkit-transition-property: opacity;
 	-webkit-transition-duration: 0.5s;
