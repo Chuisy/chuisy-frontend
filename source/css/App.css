@@ -316,6 +316,27 @@ body {
 	background-image: url(../../assets/images/category_feet.png);
 }
 
+/* PLACEHOLDER */
+
+.placeholder {
+	text-align: center;
+	padding: 100px 0;
+}
+
+.placeholder-text {
+	font-family: 'Homemade Apple';
+	color: #555;
+	padding: 10px 30px;
+}
+
+.placeholder-image {
+	margin: 0 auto;
+	width: 128px;
+	height: 128px;
+	background: url() no-repeat center center;
+	background-size: cover;
+}
+
 
 /* PULLER */
 

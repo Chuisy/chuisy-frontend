@@ -25,3 +25,7 @@
 .notifications-notification-text {
 	padding: 5px;
 }
+
+.notifications .placeholder-image {
+	background-image: url(../../assets/images/notifications_placeholder.png);
+}

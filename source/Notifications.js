@@ -45,6 +45,7 @@ enyo.kind({
     refresh: function() {
         this.$.list.setCount(this.items.length);
         this.$.list.refresh();
+        this.$.placeholder.setShowing(!this.items.length);
     },
     /**
         Checks if all notifications have been loaded
@@ -162,6 +163,10 @@ enyo.kind({
     },
     deactivate: function() {},
     components: [
+        {classes: "placeholder", name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: "There aren't any affairs that require your attention right now..."}
+        ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},

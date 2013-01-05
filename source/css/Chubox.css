@@ -56,11 +56,8 @@
 	/*margin: 5px 0;*/
 }
 
-.chubox-placeholder {
-	width: 128px;
-	height: 128px;
-	background: url(../../assets/images/chubox_placeholder.png) no-repeat center center;
-	background-size: cover;
+.chubox .placeholder-image {
+	background-image: url(../../assets/images/chubox_placeholder.png);
 }
 
 /*

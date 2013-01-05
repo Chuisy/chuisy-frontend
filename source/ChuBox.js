@@ -157,7 +157,10 @@ enyo.kind({
             {classes: "chubox-contextmenu-left"},
             {classes: "chubox-contextmenu-right"}
         ]},
-        {classes: "chubox-placeholder absolute-center", name: "placeholder"},
+        {classes: "placeholder", name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: "What is this? Your closet is still empty? Go ahead and fill it!"}
+        ]},
         // LIST
         {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chubox-row"}
