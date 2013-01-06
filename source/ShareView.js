@@ -59,7 +59,17 @@ enyo.kind({
     visibilityChanged: function(sender, event) {
         if (event.originator.getActive()) {
             // Visibilty has changed. Switch between people selector and share buttons
-            this.$.panels.setIndex(this.$.visibilityPicker.getActive().value == "private" ? 1 : 0);
+            var visibility = this.$.visibilityPicker.getActive().value;
+            var text1 = "Your Chu is now <strong>" + visibility + "</strong>";
+            var text2 = "Ask your friends who are not on Chuisy what they think about this piece of fashion.";
+            if (visibility == "private") {
+                text2 += " Only they can see it!";
+            }
+            var text3 = visibility == "public" ? "A public Chu can be seen by anyone. Be chuisy and spread prettiness!"
+                : "Choose your best friends on Chuisy to share this Chu with.";
+            this.$.text1.setContent(text1);
+            this.$.text2.setContent(text2);
+            this.$.panels.setIndex(visibility == "private" ? 0 : 1);
         }
     },
     getMessage: function() {
@@ -138,7 +148,8 @@ enyo.kind({
             ]},
             {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton"}
         ]},
-        {classes: "shareview-text", content: "Sharing is caring! Want feedback from your friends? Go ahead and share!"},
+        {classes: "shareview-visibility-text", name: "text1", allowHtml: true},
+        {classes: "shareview-text", name: "text2"},
         {classes: "shareview-share-button-group", components: [
             // SMS
             {kind: "Button", name: "smsButton", classes: "shareview-share-button", ontap: "sms", components: [
@@ -150,8 +161,13 @@ enyo.kind({
             ]}
         ]},
         {kind: "Panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, layoutKind: "FittableRowsLayout", components: [
+            // FRIENDS
+            {kind: "FittableRows", classes: "enyo-fill", components: [
+                {classes: "shareview-text", content: "Choose your best friends on Chuisy to share this Chu with."},
+                {kind: "PeoplePicker", name: "peoplePicker", fit: true}
+            ]},
             {classes: "enyo-fill", components: [
-                {classes: "shareview-text", content: "Your Chu is now public. Public Chus can be seen by everyone and you can share them on your favorite social networks!"},
+                {classes: "shareview-text", content: "A public Chu can be seen by anyone. Be chuisy and spread prettiness!"},
                 {classes: "shareview-share-button-group", components: [
                     // FACEBOOK
                     {kind: "Button", name: "facebookButton", classes: "shareview-share-button", ontap: "toggleFacebook", components: [
@@ -166,11 +182,6 @@ enyo.kind({
                         {classes: "shareview-share-button-icon pinterest"}
                     ]}
                 ]}
-            ]},
-            // FRIENDS
-            {kind: "FittableRows", classes: "enyo-fill", components: [
-                {classes: "shareview-text", content: "Your Chu is now private. By default private Chus can't be seen by anyone, but you can still select some special people to share it with!"},
-                {kind: "PeoplePicker", name: "peoplePicker", fit: true}
             ]}
         ]},
         {kind: "Signals", onUserChanged: "userChanged"}

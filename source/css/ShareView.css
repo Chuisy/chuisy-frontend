@@ -12,6 +12,13 @@
 	font-size: 10pt;
 }
 
+.shareview-visibility-text {
+	font-family: 'Homemade Apple';
+	color: #555;
+	font-size: 10pt;
+	text-align: center;
+}
+
 .shareview-share-button-group {
 	text-align: center;
 	padding: 10px 0;
