@@ -21,7 +21,8 @@ enyo.kind({
             {style: "background-image: url(assets/images/guide_profile_1.png)"}
         ],
         "chu": [
-            {style: "background-image: url(assets/images/guide_chu_1.png)"}
+            {style: "background-image: url(assets/images/guide_chu_1.png)"},
+            {style: "background-image: url(assets/images/guide_chu_2.png)"}
         ],
         "compose": [
             {style: "background-image: url(assets/images/guide_compose_1.png)"}
