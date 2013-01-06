@@ -20,6 +20,7 @@ enyo.kind({
 			this.$.time.setContent(chuisy.timeToText(this.chu.time));
 			this.$.likesCount.setContent(this.chu.likes_count);
 			this.$.commentsCount.setContent(this.chu.comments_count);
+			this.$.place.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name : "");
 			// this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
 		}
 	},
@@ -35,6 +36,7 @@ enyo.kind({
             {classes: "chufeeditem-comments-count", name: "commentsCount"},
             {classes: "chufeeditem-comments-icon"}
         ]},
+        {classes: "chufeeditem-place ellipsis", name: "place"},
 		{kind: "Image", classes: "chufeeditem-avatar", name: "avatar", ontap: "showUser"},
 		{classes: "chufeeditem-fullname ellipsis", name: "fullName", ontap: "showUser"},
 		{classes: "chufeeditem-time", name: "time"}
