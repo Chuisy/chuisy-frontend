@@ -103,7 +103,7 @@ enyo.kind({
         return true;
     },
     components: [
-        {kind: "onyx.InputDecorator", style: "width: 100%; box-sizing: border-box;", components: [
+        {kind: "onyx.InputDecorator", classes: "peoplepicker-filter-input", components: [
             {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: "Type to filter..."}
         ]},
         {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
