@@ -111,19 +111,18 @@ enyo.kind({
                 this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
                 break;
             case "profile":
-                chuisy.loadUserDetails();
                 this.doUpdateHistory({uri: "profile/"});
+                if (!chuisy.getSignInStatus().signedIn) {
+                    enyo.Signals.send("onRequestSignIn", {
+                        failure: enyo.bind(this, this.back)
+                    });
+                } else {
+                    chuisy.loadUserDetails();
+                }
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
                 break;
-        }
-
-        if (view == "profile" && !chuisy.getSignInStatus().signedIn) {
-            // User wants to see his profile but is not signed in yet. Ask him to sign in.
-            enyo.Signals.send("onRequestSignIn", {
-                failure: enyo.bind(this, this.back)
-            });
         }
     },
     components: [
