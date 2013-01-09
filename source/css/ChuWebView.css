@@ -11,10 +11,27 @@
 	text-align: left;
 }
 
+.chuwebview-header-logo {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url(../../assets/images/feed.png) no-repeat center center;
+	background-size: 40px 80px;
+	background-position: 0 0;
+	margin: 2px 6px;
+}
+
 .chuwebview-image {
 	width: 100%;
 	padding: 5px;
 	background-color: White;
+}
+
+.chuwebview-avatar {
+	width: 25px;
+	height: 25px;
+	padding: 2px;
+	border-radius: 2px;
 }
 
 .chuwebview-likes-count,
@@ -25,21 +42,23 @@
 }
 
 .chuwebview-likes-icon {
-	width: 24px;
-	height: 24px;
-	background: url(../../assets/images/heart_16x16.png) no-repeat center center;
-	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/likes_32x32.png);
+	background-size: cover;
 	vertical-align: top;
 	float: right;
+	margin: 3px;
 }
 
 .chuwebview-comments-icon {
-	width: 24px;
-	height: 24px;
-	background: url(../../assets/images/comment_16x16.png) no-repeat center center;
-	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url(../../assets/images/comments_32x32.png);
+	background-size: cover;
 	vertical-align: top;
 	float: right;
+	margin: 3px;
 }
 
 .chuwebview-like-button {
@@ -95,4 +114,40 @@
 
 .chuwebview-comment-time {
 	float: right;
+}
+
+
+.chuwebview-fullname {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11pt;
+	padding: 0 0;
+	max-width: 200px;
+	width: auto;
+}
+
+.chuwebview-signin-dialog {
+	width: 320px;
+}
+
+.chuwebview-signin-text {
+	padding-bottom: 20px;
+	font-size: 13pt;
+	text-align: center;
+}
+
+.chuwebview-signin-cancel-button {
+	position: absolute;
+	right: -18px;
+	top: -18px;
+	width: 36px;
+	height: 36px;
+	background-size: 36px 72px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
+	z-index: 1001;
+}
+
+.chuwebview-signin-cancel-button:hover {
+	background-position: 0 -36px;
 }

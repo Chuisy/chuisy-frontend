@@ -382,3 +382,36 @@ body {
 	top: 0;
 	left: 0;
 }
+
+/* Popup */
+
+.onyx-popup {
+	background-color: White;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px #555;
+	padding: 20px;
+	background-image: none;
+	color: black;
+}
+
+/* Facebook button */
+
+.facebook-button {
+	background-color: #3b5998;
+	padding: 10px;
+	color: white;
+	height: auto;
+	display: block;
+	margin: 0 auto;
+	width: 230px;
+}
+
+.facebook-button-icon {
+	width: 20px;
+	height: 20px;
+	background-size: 20px 40px;
+	display: inline-block;
+	background-image: url(../../assets/images/facebook_button.png);
+	background-position: 0 -20px;
+	margin: -2px 5px 0 0;
+}

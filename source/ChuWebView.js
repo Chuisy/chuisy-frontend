@@ -38,7 +38,7 @@ enyo.kind({
             ref.parentNode.insertBefore(js, ref);
         }(document, false));
     },
-    loginWithFacebook: function() {
+    signIn: function() {
         // Get facebook access token
         FB.login(enyo.bind(this, function(response) {
             chuisy.signIn({fb_access_token: response.authResponse.accessToken}, enyo.bind(this, function() {
@@ -56,7 +56,7 @@ enyo.kind({
         if (this.chu) {
             this.$.image.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail);
-            this.$.username.setContent(this.chu.user.username);
+            this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
             this.$.locationText.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name + ", " + this.chu.location.place.address : "");
 
@@ -92,9 +92,11 @@ enyo.kind({
         this.addRemoveClass("liked", this.liked);
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
-    requestSignIn: function(callbacks) {
-        this.signInSuccessCallback = callbacks.success;
-        this.signInFailureCallback = callbacks.failure;
+    requestSignIn: function(params) {
+        this.signInSuccessCallback = params.success;
+        this.signInFailureCallback = params.failure;
+        var text = "Please connect with your Facebook account so the owner of this Chu can know who this " + params.action + " came from!";
+        this.$.signInText.setContent(text);
         this.$.signInDialog.show();
     },
     likeButtonTapped: function() {
@@ -102,7 +104,8 @@ enyo.kind({
             this.toggleLike();
         } else {
             this.requestSignIn({
-                success: enyo.bind(this, this.toggleLike)
+                success: enyo.bind(this, this.toggleLike),
+                action: "like"
             });
         }
     },
@@ -169,7 +172,8 @@ enyo.kind({
             this.postComment();
         } else {
             this.requestSignIn({
-                success: enyo.bind(this, this.postComment)
+                success: enyo.bind(this, this.postComment),
+                action: "comment"
             });
         }
     },
@@ -183,15 +187,18 @@ enyo.kind({
         }));
         this.$.commentInput.setValue("");
     },
+    hideSignInDialog: function() {
+        this.$.signInDialog.hide();
+    },
     components: [
         {classes: "header", components: [
-            {classes: "header-logo"}
+            {classes: "chuwebview-header-logo"}
         ]},
         {classes: "chuwebview-body", components: [
             {kind: "Image", name: "image", classes: "chuwebview-image"},
             {components: [
-                {kind: "Image", name: "avatar", classes: "miniavatar"},
-                {classes: "chuwebview-username ellipsis", name: "username", showing: false},
+                {kind: "Image", name: "avatar", classes: "chuwebview-avatar"},
+                {classes: "chuwebview-fullname ellipsis", name: "fullName", showing: false},
                 {classes: "chuwebview-likes-icon"},
                 {name: "likesCount", classes: "chuwebview-likes-count"},
                 {classes: "chuwebview-comments-icon"},
@@ -219,8 +226,13 @@ enyo.kind({
                 ]}
             ]}
         ]},
-        {kind: "onyx.Popup", name: "signInDialog", floating: true, centered: true, components: [
-            {kind: "onyx.Button", content: "Sign in with Facebook", ontap: "loginWithFacebook"}
+        {kind: "onyx.Popup", classes: "chuwebview-signin-dialog", name: "signInDialog", floating: true, centered: true, components: [
+            {classes: "chuwebview-signin-text", name: "signInText"},
+            {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                {classes: "facebook-button-icon"},
+                {content: "Sign In With Facebook"}
+            ]},
+            {classes: "chuwebview-signin-cancel-button", ontap: "hideSignInDialog"}
         ]},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]
