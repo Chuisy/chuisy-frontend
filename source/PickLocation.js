@@ -39,9 +39,9 @@ enyo.kind({
             }
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
-            alert("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
-                " and receive perks like gifts and discounts from local retailers, go 'Privacy > Location Services' in your" +
-                " phones settings and enable location services for Chuisy.");
+            navigator.notification.alert("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
+                " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
+                " phone's settings and enable location services for Chuisy!", function() {}, "Can't find you!", "OK");
             this.doLocationPicked({location: null});
         }));
     },

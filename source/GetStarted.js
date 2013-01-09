@@ -11,7 +11,9 @@ enyo.kind({
                 // this.$.panels.setIndex(1);
                 this.doDone();
             }), enyo.bind(this, function() {
-                alert("Authentication failed!");
+                navigator.notification.alert("Hm, that didn't work. Please try it again later!", enyo.bind(this, function() {
+                    this.doDone();
+                }, "Authentication failed", "OK"));
             }));
         }));
     },

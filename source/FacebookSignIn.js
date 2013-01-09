@@ -29,7 +29,7 @@ enyo.kind({
                 this.failureCallback = null;
                 this.doDone();
             }), enyo.bind(this, function() {
-                alert("Authentication failed!");
+                navigator.notification.alert("Hm, that didn't work. Please try again later!", function() {}, "Authentication failed", "OK");
             }));
         }));
     },
