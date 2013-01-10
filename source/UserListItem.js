@@ -21,13 +21,15 @@ enyo.kind({
         this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
 	},
     followButtonTapped: function() {
-        if (chuisy.getSignInStatus().signedIn) {
-            this.doToggleFollow();
-        } else {
-            // User is not signed in Ask him to sign in first
-            enyo.Signals.send("onRequestSignIn", {
-                success: enyo.bind(this, this.doToggleFollow)
-            });
+        if (App.checkConnection()) {
+            if (chuisy.getSignInStatus().signedIn) {
+                this.doToggleFollow();
+            } else {
+                // User is not signed in Ask him to sign in first
+                enyo.Signals.send("onRequestSignIn", {
+                    success: enyo.bind(this, this.doToggleFollow)
+                });
+            }
         }
         return true;
     },

@@ -19,19 +19,26 @@ enyo.kind({
     */
     signIn: function() {
         // Get facebook access token
-        App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-            // User facebook access token to get authentication credentials from Chuisy API
-            chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
-                if (this.successCallback) {
-                    this.successCallback();
-                }
-                this.successCallback = null;
-                this.failureCallback = null;
-                this.doDone();
-            }), enyo.bind(this, function() {
-                navigator.notification.alert("Hm, that didn't work. Please try again later!", function() {}, "Authentication failed", "OK");
+        if (App.checkConnection()) {
+            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
+                // User facebook access token to get authentication credentials from Chuisy API
+                chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                    if (this.successCallback) {
+                        this.successCallback();
+                    }
+                    this.successCallback = null;
+                    this.failureCallback = null;
+                    this.doDone();
+                }), enyo.bind(this, function() {
+                    navigator.notification.alert("Hm, that didn't work. Please try again later!", function() {}, "Authentication failed", "OK");
+                }));
             }));
-        }));
+        } else {
+            if (this.failureCallback) {
+                this.failureCallback();
+            }
+            this.doDone();
+        }
     },
     /**
         Calls _failureCallback_ and fires done event

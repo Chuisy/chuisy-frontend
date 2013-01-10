@@ -55,11 +55,15 @@ enyo.kind({
         }
     },
     showChu: function(sender, event) {
-        this.doShowChu(event);
+        if (App.checkConnection()) {
+            this.doShowChu(event);
+        }
         return true;
     },
     load: function(which) {
         this.$[which + "Count"].setContent("loading...");
+        this[which] = [];
+        this.refresh(which);
         var user = this.getShowedUser();
         if (user) {
             var filterProp = which == "followers" ? "followee" : "user";
@@ -101,22 +105,28 @@ enyo.kind({
         }
     },
     friendTapped: function(sender, event) {
-        var user = this.friends[event.index].followee;
-        this.doShowUser({user: user});
+        if (App.checkConnection()) {
+            var user = this.friends[event.index].followee;
+            this.doShowUser({user: user});
+        }
         event.preventDefault();
     },
     followerTapped: function(sender, event) {
-        var user = this.followers[event.index].user;
-        this.doShowUser({user: user});
+        if (App.checkConnection()) {
+            var user = this.followers[event.index].user;
+            this.doShowUser({user: user});
+        }
         event.preventDefault();
     },
     followButtonTapped: function() {
-        if (chuisy.getSignInStatus().signedIn) {
-            this.toggleFollow();
-        } else {
-            enyo.Signals.send("onRequestSignIn", {
-                success: enyo.bind(this, this.toggleFollow)
-            });
+        if (App.checkConnection()) {
+            if (chuisy.getSignInStatus().signedIn) {
+                this.toggleFollow();
+            } else {
+                enyo.Signals.send("onRequestSignIn", {
+                    success: enyo.bind(this, this.toggleFollow)
+                });
+            }
         }
     },
     toggleFollow: function(sender, event) {

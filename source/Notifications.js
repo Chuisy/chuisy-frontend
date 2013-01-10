@@ -85,17 +85,19 @@ enyo.kind({
     },
     notificationTapped: function(sender, event) {
         var not = this.items[event.index];
-        this.doNotificationSelected({notification: not});
-        if (!not.read) {
-            // Mark notification as read
-            not.read = true;
-            params = enyo.clone(not);
-            // Have to delete user because otherwise api will not return 200
-            delete params.user;
-            params.actor = params.actor.resource_uri;
-            chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
-                this.refresh();
-            }));
+        if (App.checkConnection()) {
+            this.doNotificationSelected({notification: not});
+            if (!not.read) {
+                // Mark notification as read
+                not.read = true;
+                params = enyo.clone(not);
+                // Have to delete user because otherwise api will not return 200
+                delete params.user;
+                params.actor = params.actor.resource_uri;
+                chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
+                    this.refresh();
+                }));
+            }
         }
     },
     /**

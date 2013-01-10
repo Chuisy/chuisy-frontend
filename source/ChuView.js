@@ -104,13 +104,15 @@ enyo.kind({
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
     likeButtonTapped: function() {
-        if (chuisy.getSignInStatus().signedIn) {
-            this.toggleLike();
-        } else {
-            // User is not signed in yet. Prompt him to do so before he can like something
-            enyo.Signals.send("onRequestSignIn", {
-                success: enyo.bind(this, this.toggleLike)
-            });
+        if (App.checkConnection()) {
+            if (chuisy.getSignInStatus().signedIn) {
+                this.toggleLike();
+            } else {
+                // User is not signed in yet. Prompt him to do so before he can like something
+                enyo.Signals.send("onRequestSignIn", {
+                    success: enyo.bind(this, this.toggleLike)
+                });
+            }
         }
         return true;
     },
@@ -221,13 +223,15 @@ enyo.kind({
         }
     },
     commentEnter: function() {
-        if (chuisy.getSignInStatus().signedIn) {
-            this.postComment();
-        } else {
-            // User is not signed in yet. Prompt him to do so before he can comment
-            enyo.Signals.send("onRequestSignIn", {
-                success: enyo.bind(this, this.postComment)
-            });
+        if (App.checkConnection()) {
+            if (chuisy.getSignInStatus().signedIn) {
+                this.postComment();
+            } else {
+                // User is not signed in yet. Prompt him to do so before he can comment
+                enyo.Signals.send("onRequestSignIn", {
+                    success: enyo.bind(this, this.postComment)
+                });
+            }
         }
     },
     /**
@@ -253,7 +257,7 @@ enyo.kind({
     },
     online: function() {
         // this.$.likeButton.setDisabled(false);
-        this.$.commentInput.setDisabled(false);
+        // this.$.commentInput.setDisabled(false);
         if (this.chu) {
             this.loadLikes();
             this.loadComments();
@@ -261,7 +265,7 @@ enyo.kind({
     },
     offline: function() {
         // this.$.likeButton.setDisabled(true);
-        this.$.commentInput.setDisabled(true);
+        // this.$.commentInput.setDisabled(true);
     },
     pushNotification: function() {
         // Received a push notification. Let's see whats new.
@@ -308,11 +312,15 @@ enyo.kind({
         Open this chus authors profile
     */
     showUser: function() {
-        this.doShowUser({user: this.chu.user});
+        if (App.checkConnection()) {
+            this.doShowUser({user: this.chu.user});
+        }
     },
     showCommentUser: function(sender, event) {
-        var user = this.comments[event.index].user;
-        this.doShowUser({user: user});
+        if (App.checkConnection()) {
+            var user = this.comments[event.index].user;
+            this.doShowUser({user: user});
+        }
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
