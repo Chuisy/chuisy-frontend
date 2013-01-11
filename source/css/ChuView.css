@@ -6,10 +6,11 @@
 	z-index: -10;
 	top: 0;
 	left: 0;
+	background-color: black;
 }
 
 .chuview-spacer {
-	height: 250px;
+	height: 150px;
 	position: relative;
 }
 

@@ -29,12 +29,18 @@ enyo.kind({
         "GBP": "£"
     },
     // Scroll buffer for parallax scrolling
-    bufferHeight: 100,
+    // bufferHeight: 100,
+    scrollerOffset: -50,
     // Meta data for loading notifications from the api
     commentsMeta: {
         limit: 20,
         offset: 0,
         total_count: 0
+    },
+    rendered: function() {
+        this.inherited(arguments);
+        this.$.contentScroller.getStrategy().$.scrollMath.kDragDamping = 0.3;
+        this.$.contentScroller.getStrategy().$.scrollMath.kSnapFriction = 0.5;
     },
     chuChanged: function() {
         if (this.chu) {
@@ -70,7 +76,9 @@ enyo.kind({
             }
 
             if (this.hasNode()) {
-                this.arrangeImage();
+                setTimeout(enyo.bind(this, function() {
+                    this.arrangeImage();
+                }), 100);
             }
         }
     },
@@ -78,16 +86,20 @@ enyo.kind({
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
     */
     arrangeImage: function() {
-        var bufferHeight = this.bufferHeight;
-        var imageHeight = 1024;
-        var imageWidth = 768;
-        var screenHeight = this.$.imageView.getBounds().height;
-        var screenWidth = this.$.imageView.getBounds().width;
-        var scale = (screenHeight + 2 * bufferHeight) / imageHeight;
-        this.$.imageView.setScale(scale);
-        var scrollLeft = (this.$.imageView.getScrollBounds().width - this.$.imageView.getBounds().width) / 2;
-        this.$.imageView.setScrollLeft(scrollLeft);
-        this.scroll();
+        // var bufferHeight = this.bufferHeight;
+        // var imageHeight = 1024;
+        // var imageWidth = 768;
+        // var screenHeight = this.$.imageView.getBounds().height;
+        // var screenWidth = this.$.imageView.getBounds().width;
+        // var scale = (screenHeight + 2 * bufferHeight) / imageHeight;
+        // this.$.imageView.setScale(scale);
+        // var scrollLeft = (this.$.imageView.getScrollBounds().width - this.$.imageView.getBounds().width) / 2;
+        // this.$.imageView.setScrollLeft(scrollLeft);
+        // this.scroll();
+        var s = this.$.imageView.getStrategy().$.scrollMath;
+        s.kSpringDamping = 1;
+        s.setScrollY(this.scrollerOffset);
+        s.start();
     },
     userChanged: function(sender, event) {
         this.user = event.user;
@@ -274,21 +286,33 @@ enyo.kind({
     },
     scroll: function() {
         // Apply parallax effect to image view
-        var scrollTop = this.bufferHeight + this.$.contentScroller.getScrollTop()/10;
-        if (scrollTop > 0 && scrollTop < 2 * this.bufferHeight) {
-            this.$.imageView.setScrollTop(scrollTop);
+        // var scrollTop = this.bufferHeight + this.$.contentScroller.getScrollTop()/10;
+        // if (scrollTop > 0 && scrollTop < 2 * this.bufferHeight) {
+            // this.$.imageView.setScrollTop(scrollTop);
+        // }
+        try {
+            var s = this.$.imageView.getStrategy().$.scrollMath;
+            s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/10);
+            s.start();
+        } catch(e) {
+            console.log(e.message);
         }
     },
     /**
         Hides the controls including the menu bar and zooms out to show full image
     */
     hideControls: function() {
+        var s = this.$.imageView.getStrategy().$.scrollMath;
+        console.log(this.standardDamping);
+        s.kSpringDamping = 0.93;
+        s.setScrollY(0);
+        s.start();
         this.addClass("fullscreen");
         // Move image view to front after controls have faded out to allow interaction
         setTimeout(enyo.bind(this, function() {
             this.$.imageView.applyStyle("z-index", "1000");
         }), 500);
-        this.$.imageView.smartZoom();
+        // this.$.imageView.smartZoom();
     },
     showControls: function() {
         // Move image view back under the other controls
@@ -342,7 +366,8 @@ enyo.kind({
         // IMAGE LOADING INDICATOR
         {classes: "chuview-image-loading", content: "Loading..."},
         // IMAGEVIEW
-        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
+        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, touchOverscroll: true,
+            onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
         {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
