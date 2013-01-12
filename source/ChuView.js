@@ -21,7 +21,8 @@ enyo.kind({
     },
     handlers: {
         ontap: "tapHandler",
-        onpostresize: "postResize"
+        onpostresize: "postResize",
+        onload: "loaded"
     },
     currencies: {
         "USD": "$",
@@ -42,11 +43,14 @@ enyo.kind({
         this.$.contentScroller.getStrategy().$.scrollMath.kDragDamping = 0.3;
         this.$.contentScroller.getStrategy().$.scrollMath.kSnapFriction = 0.5;
     },
+    loaded: function() {
+        this.arrangeImage();
+    },
     chuChanged: function() {
         if (this.chu) {
             this.waiting = false;
 
-            this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
+            // this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "");
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
             this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
@@ -73,12 +77,6 @@ enyo.kind({
             if (typeof(App) == "undefined" || App.isOnline() || this.chu.id) {
                 this.loadLikes();
                 this.loadComments();
-            }
-
-            if (this.hasNode()) {
-                setTimeout(enyo.bind(this, function() {
-                    this.arrangeImage();
-                }), 100);
             }
         }
     },
