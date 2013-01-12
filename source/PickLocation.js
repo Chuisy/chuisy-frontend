@@ -49,8 +49,9 @@ enyo.kind({
         Loads a list of nearby places from the foursquare api based on the current location
     */
     lookupPlaces: function() {
-        this.$.resultText.show();
-        this.$.resultText.setContent("Loading nearby places...");
+        this.$.spinner.show();
+        this.$.resultText.hide();
+        // this.$.resultText.setContent("Loading nearby places...");
 
         var fs_id = "0XVNZDCHBFFTGKP1YGHRAG3I154DOT0QGATA120CQ3KQFIYU";
         var fs_secret = "QPM5WVRLV0OEDLJK3NWV01F1OLDQVVMWS25PJJTFDLE02GOL";
@@ -70,6 +71,8 @@ enyo.kind({
         });
     },
     placesLoaded: function(sender, response) {
+        this.$.spinner.hide();
+
         // Only show places that are less than 500m away
         this.places = response.response.venues.filter(function(item) {
             return item.location.distance < 500;
@@ -154,11 +157,12 @@ enyo.kind({
         ]},
         // {kind: "Map", classes: "picklocation-map"},
         {kind: "Scroller", fit: true, components: [
-            {classes: "picklocation-message", content: "Where are you at right now?"},
+            {classes: "picklocation-message", content: "<strong>Spotted!</strong><br>Where are you shopping?", allowHtml: true},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-placeitem"}
             ]},
-            {name: "resultText", classes: "picklocation-resulttext"},
+            {kind: "onyx.Spinner", classes: "picklocation-spinner onyx-light"},
+            {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
                 {kind: "onyx.InputDecorator", components: [
                     {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: "Enter custom place...", onkeydown: "newPlaceKeydown", onblur: "newPlaceBlur", ontap: "inputTap"}

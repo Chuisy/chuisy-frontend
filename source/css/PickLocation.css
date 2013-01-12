@@ -20,15 +20,21 @@
 .picklocation-message {
 	width: 100%;
 	text-align: center;
-	padding: 20px;
+	padding: 30px 20px 20px 20px;
 	box-sizing: border-box;
+}
+
+.picklocation-spinner {
+	display: block;
+	margin: 0 auto 20px auto;
 }
 
 .picklocation-resulttext {
 	width: 100%;
 	text-align: center;
-	padding: 20px;
+	padding-bottom: 20px;
 	box-sizing: border-box;
+	color: red;
 }
 
 .picklocation .onyx-input-decorator {
