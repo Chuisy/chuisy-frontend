@@ -40,8 +40,11 @@ enyo.kind({
     },
     rendered: function() {
         this.inherited(arguments);
-        this.$.contentScroller.getStrategy().$.scrollMath.kDragDamping = 0.3;
-        this.$.contentScroller.getStrategy().$.scrollMath.kSnapFriction = 0.5;
+        var s = this.$.contentScroller.getStrategy().$.scrollMath;
+        if (s) {
+            s.kDragDamping = 0.3;
+            s.kSnapFriction = 0.5;
+        }
     },
     loaded: function() {
         this.arrangeImage();
@@ -50,7 +53,7 @@ enyo.kind({
         if (this.chu) {
             this.waiting = false;
 
-            // this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
+            this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "");
             this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
             this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
@@ -232,6 +235,14 @@ enyo.kind({
             event.preventDefault();
         }
     },
+    commentInputBlur: function() {
+        if (!this.blurredByTap) {
+            // The user has not dismissed the input by tapping outside it so he must have pressed
+            // the done button on the virtual keyboard. We interpret this as wanting to send it.
+            this.commentEnter();
+        }
+        this.blurredByTap = false;
+    },
     commentEnter: function() {
         if (App.checkConnection()) {
             if (chuisy.getSignInStatus().signedIn) {
@@ -327,6 +338,9 @@ enyo.kind({
     tapHandler: function(sender, event) {
         // Remove focus from comment input if the user taps outside of it
         if (!event.originator.isDescendantOf(this.$.commentInput)) {
+            // We want to distinguish between the tapping the done button on the virtual keyboard
+            // and tapping outside the input so we set this flag
+            this.blurredByTap = true;
             this.$.commentInput.hasNode().blur();
         }
     },
@@ -358,6 +372,7 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "chu"});
     },
     deactivate: function() {
+        this.blurredByTap = false;
         this.$.imageView.setSrc("assets/images/chu_image_placeholder.png");
     },
     components: [
@@ -406,7 +421,7 @@ enyo.kind({
                         ]},
                         // COMMENT INPUT
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown"}
+                            {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown", onblur: "commentInputBlur"}
                         ]},
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [

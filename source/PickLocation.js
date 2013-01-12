@@ -112,13 +112,16 @@ enyo.kind({
     newPlaceKeydown: function(sender, event) {
         if (event.keyCode == 13) {
             // User has pressed enter. Select custom location
-            this.location.place = {
-                name: this.$.newPlaceInput.getValue()
-            };
-            this.doLocationPicked({location: this.location});
-            this.$.newPlaceInput.hasNode().blur();
-            event.preventDefault();
+            this.newPlaceEnter();
         }
+    },
+    newPlaceEnter: function() {
+        this.location.place = {
+            name: this.$.newPlaceInput.getValue()
+        };
+        this.doLocationPicked({location: this.location});
+        this.$.newPlaceInput.hasNode().blur();
+        event.preventDefault();
     },
     /**
         Skip place picking
@@ -126,10 +129,23 @@ enyo.kind({
     skip: function() {
         this.doLocationPicked({location: this.location});
     },
+    inputTap: function() {
+        // Prevent tap event from propagating to _tapHandler_
+        return true;
+    },
     tapHandler: function(sender, event) {
-        if (!event.originator.isDescendantOf(this.$.newPlaceInput)) {
-            this.$.newPlaceInput.hasNode().blur();
+        // We want to distinguish between the tapping the done button on the virtual keyboard
+        // and tapping outside the input so we set this flag
+        this.blurredByTap = true;
+        this.$.newPlaceInput.hasNode().blur();
+    },
+    newPlaceBlur: function() {
+        if (!this.blurredByTap) {
+            // The user has not dismissed the input by tapping outside it so he must have pressed
+            // the done button on the virtual keyboard. We interpret this as wanting to send it.
+            this.newPlaceEnter();
         }
+        this.blurredByTap = false;
     },
     components: [
         {classes: "header", components: [
@@ -145,7 +161,7 @@ enyo.kind({
             {name: "resultText", classes: "picklocation-resulttext"},
             {style: "padding: 0 5px;", components: [
                 {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: "Enter custom place...", onkeydown: "newPlaceKeydown"}
+                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: "Enter custom place...", onkeydown: "newPlaceKeydown", onblur: "newPlaceBlur", ontap: "inputTap"}
                 ]}
             ]}
         ]}
