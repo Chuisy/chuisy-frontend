@@ -1,4 +1,5 @@
 .chuform-imagecontainer {
+	position: relative;
 	background: none no-repeat center top;
 	background-size: cover;
 	background-color: Gray;
@@ -12,20 +13,22 @@
 	line-height: 20pt;
 	color: White;
 	text-shadow: 0 0 5px #000;
-	-webkit-transition-property: bottom, width, -webkit-transform;
+	-webkit-transition-property: bottom, left, width, -webkit-transform;
 	-webkit-transition-duration: 0.3s;
 	text-align: center;
 	white-space: nowrap;
 }
 
-.chuform-price.highlighted {
+.chuform.adjusting-price .chuform-price {
 	-webkit-transform: scale(2);
 	width: 100%;
 	bottom: 300px;
+	left: 0;
 }
 
 .chuform-category-picker {
 	position: absolute;
+	z-index: 10;
 	right: 10px;
 	bottom: 10px;
 	width: 36px;
@@ -42,4 +45,33 @@
 .chuform-category-icon.selected,
 .chuform-category-picker.open > .chuform-category-icon {
 	opacity: 1;
+}
+
+.chuform-drag-indicator {
+	position: absolute;
+	width: 100%;
+	bottom: 130px;
+	text-align: center;
+	opacity: 0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.5s;
+}
+
+.chuform.adjusting-price .chuform-drag-indicator {
+	opacity: 1;
+}
+
+.chuform-drag-indicator-arrow {
+	width: 156px;
+	height: 38px;
+	background: url(../../assets/images/drag_arrow.png) no-repeat center center;
+	background-size: cover;
+	margin: 0 auto;
+}
+
+.chuform-drag-indicator-text {
+	color: White;
+	text-shadow: 0 0 5px #000;
+	font-size: 15pt;
+	padding: 10px;
 }

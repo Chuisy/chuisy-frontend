@@ -23,6 +23,81 @@ enyo.kind({
     },
     price: 0,
     category: "head",
+    //* Whether or not the scroller is actively moving
+    isScrolling: function() {
+        return this.$.scrollMath.isScrolling();
+    },
+    flick: function(inSender, e) {
+        var onAxis = Math.abs(e.xVelocity) > Math.abs(e.yVelocity) ? this.$.scrollMath.horizontal : this.$.scrollMath.vertical;
+        if (onAxis && this.dragging) {
+            this.$.scrollMath.flick(e);
+        }
+    },
+    hold: function(inSender, e) {
+        this.$.scrollMath.stop(e);
+        return true;
+    },
+    // Special synthetic DOM events served up by the Gesture system
+    dragstart: function(inSender, inEvent) {
+        // Ignore drags sent from multi-touch events
+        if(inEvent.srcEvent.touches && inEvent.srcEvent.touches.length > 1) {
+            return true;
+        }
+        this.dragging=true;
+        if (this.dragging) {
+            inEvent.preventDefault();
+            // note: needed because show/hide changes
+            // the position so sync'ing is required when
+            // dragging begins (needed because show/hide does not trigger onscroll)
+            this.syncScrollMath();
+            this.$.scrollMath.startDrag(inEvent);
+        }
+    },
+    drag: function(inSender, inEvent) {
+        if (this.dragging) {
+            inEvent.preventDefault();
+            this.$.scrollMath.drag(inEvent);
+        }
+    },
+    dragfinish: function(inSender, inEvent) {
+        if (this.dragging) {
+            inEvent.preventTap();
+            this.$.scrollMath.dragFinish();
+            this.dragging = false;
+        }
+    },
+    scrollMathScroll: function(inSender) {
+        this.price = Math.max(0, inSender.x/10);
+        this.$.price.setContent(Math.floor(this.price) + " €");
+    },
+    scrollMathStart: function() {
+        this.startAdjustPrice();
+    },
+    scrollMathStop: function() {
+        this.finishAdjustPrice();
+    },
+    syncScrollMath: function() {
+        var m = this.$.scrollMath;
+        m.setScrollX(this.price*10);
+    },
+    startAdjustPrice: function() {
+        if (this.finishDragTimeout) {
+            clearTimeout(this.finishDragTimeout);
+            this.finishDragTimeout = null;
+        }
+        this.addClass("adjusting-price");
+    },
+    finishAdjustPrice: function() {
+        this.finishDragTimeout = setTimeout(enyo.bind(this, function() {
+            this.removeClass("adjusting-price");
+        }), 500);
+    },
+    priceTapped: function() {
+        this.startAdjustPrice();
+        setTimeout(enyo.bind(this, function() {
+            this.finishAdjustPrice();
+        }), 1000);
+    },
     /**
         Clear content from previous chu
     */
@@ -47,23 +122,6 @@ enyo.kind({
     },
     getPrice: function() {
         return Math.floor(this.price);
-    },
-    dragStart: function() {
-        if (this.finishDragTimeout) {
-            clearTimeout(this.finishDragTimeout);
-            this.finishDragTimeout = null;
-        }
-        this.$.price.addClass("highlighted");
-    },
-    dragFinish: function() {
-        this.finishDragTimeout = setTimeout(enyo.bind(this, function() {
-            this.$.price.removeClass("highlighted");
-        }), 500);
-    },
-    drag: function(sender, event) {
-        this.price = Math.max(0, this.price + event.dx / 100);
-        this.$.price.setContent(Math.floor(this.price) + " €");
-        return true;
     },
     tap: function(sender, event) {
         if (!event.originator.isDescendantOf(this.$.categoryPicker) && this.$.categoryPicker.hasClass("open")) {
@@ -129,9 +187,9 @@ enyo.kind({
         ]},
         // IMAGE WITH CONTROLS
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer",
-            ondrag: "drag", ondragstart: "dragStart", ondragfinish: "dragFinish", components: [
+            onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
             // PRICE
-            {classes: "chuform-price", name: "price", content: "0 €"},
+            {classes: "chuform-price", name: "price", content: "0 €", ontap: "priceTapped"},
             //CATEGORY
             {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
                 {classes: "category-icon chuform-category-icon feet", value: "feet", ontap: "selectCategory"},
@@ -139,7 +197,13 @@ enyo.kind({
                 {classes: "category-icon chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
                 {classes: "category-icon chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
                 {classes: "category-icon chuform-category-icon head selected", value: "head", ontap: "selectCategory"}
+            ]},
+            {name: "dragIndicator", classes: "chuform-drag-indicator", components: [
+                {classes: "chuform-drag-indicator-arrow"},
+                {classes: "chuform-drag-indicator-text", content: "drag to adjust"}
             ]}
-        ]}
+        ]},
+        {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
+            leftBoundary: 100000, rightBoundary: 0, vertical: false, horizontal: true, kFrictionDamping: 0.95}
     ]
 });
