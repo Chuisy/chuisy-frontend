@@ -54,8 +54,8 @@ enyo.kind({
             this.waiting = false;
 
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
-            this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "");
-            this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
+            this.$.avatar.setSrc(this.chu.user && this.chu.user.profile.avatar_thumbnail ? this.chu.user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
+            this.$.fullName.setContent(this.chu.user ? (this.chu.user.first_name + " " + this.chu.user.last_name) : "");
             this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
             this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
             this.$.location.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name : "");
@@ -110,7 +110,7 @@ enyo.kind({
         Checks if the current user ownes this chu
     */
     isOwned: function() {
-        return this.user && this.chu && this.user.id == this.chu.user.id;
+        return this.user && this.chu && (!this.chu.user || this.user.id == this.chu.user.id);
     },
     likedChanged: function() {
         this.addRemoveClass("liked", this.liked);
