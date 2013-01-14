@@ -259,11 +259,11 @@ enyo.kind({
         Post a comment with the current input text
     */
     postComment: function() {
-        var params = {
+        var comment = {
             text: this.$.commentInput.getValue(),
             chu: this.chu.resource_uri
         };
-        chuisy.chucomment.create(params, enyo.bind(this, function(sender, response) {
+        chuisy.chucomment.create(comment, enyo.bind(this, function(sender, response) {
             this.loadComments(enyo.bind(this, function() {
                 // Scroll the comment input up. Align with top of screen if possible
                 // this.$.commentsRepeater.prepareRow(0);
@@ -271,6 +271,11 @@ enyo.kind({
                 // this.$.commentsRepeater.lockRow();
             }));
         }));
+
+        comment.user = this.user;
+        this.comments = [comment].concat(this.comments);
+        this.refreshComments();
+
         this.$.commentInput.setValue("");
 
         // Remove focus from comment input
