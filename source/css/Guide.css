@@ -10,8 +10,8 @@
 }
 
 .guide-panels > * {
-	background: url() no-repeat center center;
-	background-size: cover;
+	background: url() no-repeat 0 0;
+	background-size: 100% 100%;
 }
 
 .guide.open {

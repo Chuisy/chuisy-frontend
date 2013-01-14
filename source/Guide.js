@@ -9,33 +9,33 @@ enyo.kind({
     },
     views: {
         "feed": [
-            {style: "background-image: url(assets/images/guide_feed_0.png)"},
-            {style: "background-image: url(assets/images/guide_feed_1.png)"},
-            {style: "background-image: url(assets/images/guide_feed_2.png)"}
+            "feed_0.png",
+            "feed_1.png",
+            "feed_2.png"
         ],
         "chubox": [
-            {style: "background-image: url(assets/images/guide_chubox_0.png)"}
+            "closet_0.png"
         ],
         "profile": [
-            {style: "background-image: url(assets/images/guide_profile_0.png)"},
-            {style: "background-image: url(assets/images/guide_profile_1.png)"}
+            "profile_0.png",
+            "profile_1.png"
         ],
         "chu": [
-            {style: "background-image: url(assets/images/guide_chu_1.png)"},
-            {style: "background-image: url(assets/images/guide_chu_2.png)"}
+            "chu_1.png",
+            "chu_2.png"
         ],
         "compose": [
-            {style: "background-image: url(assets/images/guide_compose_1.png)"}
+            "compose_1.png"
         ],
         "notifications": [
-            {style: "background-image: url(assets/images/guide_notifications_0.png)"}
+            "affairs_0.png"
         ],
         "discover": [
-            {style: "background-image: url(assets/images/guide_discover_0.png)"}
+            "discover_0.png"
         ],
         "share": [
-            {style: "background-image: url(assets/images/guide_share_0.png)"},
-            {style: "background-image: url(assets/images/guide_share_1.png)"}
+            "share_0.png",
+            "share_1.png"
         ]
     },
     create: function() {
@@ -44,7 +44,10 @@ enyo.kind({
     },
     viewChanged: function() {
         this.$.panels.destroyClientControls();
-        this.$.panels.createComponents(this.views[this.view] || []);
+        var screens = this.views[this.view];
+        for (var i=0; i<screens.length; i++) {
+            this.$.panels.createComponent({style: "background-image: url(" + this.getImagesPath() + screens[i] + ")"});
+        }
         this.$.panels.render();
     },
     open: function() {
@@ -65,6 +68,10 @@ enyo.kind({
         } else {
             this.close();
         }
+    },
+    getImagesPath: function() {
+        var bounds = this.getBounds();
+        return bounds.width/bounds.height >= 2/3 ? "assets/images/guide/2to3/" : "assets/images/guide/9to16/";
     },
     components: [
         {kind: "Panels", classes: "enyo-fill guide-panels", components: [{}]}
