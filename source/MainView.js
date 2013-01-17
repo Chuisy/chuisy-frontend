@@ -16,7 +16,7 @@ enyo.kind({
     // Mapping between view and panel indexes
     views: {
         feed: [0, 0],
-        chubox: [0, 1],
+        closet: [0, 1],
         profile: [0, 2],
         discover: [0, 3],
         gifts: [0, 4],
@@ -136,7 +136,7 @@ enyo.kind({
                         // CHU FEED
                         {kind: "Feed", name: "feed", onShowChu: "showChu", onComposeChu: "composeChu", onShowUser: "showUser"},
                         // CHU BOX / CLOSET
-                        {kind: "ChuBox", name: "chubox", onShowChu: "showChu", onComposeChu: "composeChu"},
+                        {kind: "Closet", name: "closet", onShowChu: "showChu", onComposeChu: "composeChu"},
                         // OWN PROFILE VIEW
                         {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
                         // DISCOVER VIEW

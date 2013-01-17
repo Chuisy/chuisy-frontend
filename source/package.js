@@ -9,7 +9,7 @@ enyo.depends(
 	"css/",
 	"App.js",
 	"MainView.js",
-	"ChuBox.js",
+	"Closet.js",
 	"Feed.js",
 	"ChuView.js",
 	"PeoplePicker.js",

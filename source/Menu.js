@@ -22,7 +22,7 @@ enyo.kind({
 	components: [
 		{classes: "menu-item feed", value: "feed", ontap: "selectItem", active: true},
 		{classes: "menu-item profile", value: "profile", ontap: "selectItem"},
-		{classes: "menu-item chubox", value: "chubox", ontap: "selectItem"},
+		{classes: "menu-item closet", value: "closet", ontap: "selectItem"},
 		{classes: "menu-item discover", value: "discover", ontap: "selectItem"},
 		{classes: "menu-item gifts", value: "gifts", ontap: "selectItem"},
 		{classes: "menu-item notifications", value: "notifications", ontap: "selectItem"},

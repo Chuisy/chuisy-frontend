@@ -265,10 +265,14 @@ enyo.kind({
             // settings/
             // Open settings view
             this.$.mainView.openView("settings");
-        } else if (uri.match(/^chubox\/$/)) {
+        } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.$.mainView.openView("chubox");
+            this.$.mainView.openView("closet");
+        } else if (uri.match(/^gifts\/$/)) {
+            // chubox/
+            // Whats new? Let's check out the notifications
+            this.$.mainView.openView("gifts");
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications

@@ -1,9 +1,9 @@
-.chubox {
+.closet {
 	position: relative;
 	text-align: center;
 }
 
-.chubox-delete-button {
+.closet-delete-button {
 	position: absolute;
 	left: -10px;
 	top: -7px;
@@ -15,15 +15,15 @@
 	background-position: 0 0;
 }
 
-.chubox-delete-button:active:hover:not([disabled]) {
+.closet-delete-button:active:hover:not([disabled]) {
 	background-position: 0 -36px;
 }
 
-.chubox.editing .chubox-delete-button {
+.closet.editing .closet-delete-button {
 	display: block;
 }
 
-.chubox-chu {
+.closet-chu {
 	width: 98px;
 	height: 98px;
 	margin: 3px;
@@ -36,7 +36,7 @@
 	padding: 4px;
 }
 
-.chubox-chu-image {
+.closet-chu-image {
 	width: 100%;
 	height: 100%;
 	background: url() no-repeat center center;
@@ -48,20 +48,20 @@
 	background-color: Gray;
 }
 
-.chubox-row {
+.closet-row {
 	margin-bottom: -6px;
 }
 
-.chubox-list {
+.closet-list {
 	/*margin: 5px 0;*/
 }
 
-.chubox .placeholder-image {
-	background-image: url(../../assets/images/chubox_placeholder.png);
+.closet .placeholder-image {
+	background-image: url(../../assets/images/closet_placeholder.png);
 }
 
 /*
-.chubox-contextmenu {
+.closet-contextmenu {
 	position: absolute;
 	left: 100px;
 	top: 100px;
@@ -70,7 +70,7 @@
 	z-index: 1000;
 }
 
-.chubox-contextmenu-left {
+.closet-contextmenu-left {
 	background-color: red;
 	border-radius: 100px;
 	width: 50px;
@@ -84,7 +84,7 @@
 	top: 0;
 }
 
-.chubox-contextmenu-right {
+.closet-contextmenu-right {
 	background-color: blue;
 	border-radius: 100px;
 	width: 50px;
@@ -98,8 +98,8 @@
 	top: 0;
 }
 
-.chubox-contextmenu.unfolded > .chubox-contextmenu-left,
-.chubox-contextmenu.unfolded > .chubox-contextmenu-right {
+.closet-contextmenu.unfolded > .closet-contextmenu-left,
+.closet-contextmenu.unfolded > .closet-contextmenu-right {
 	-webkit-transform: rotateY(0);
 }
 */

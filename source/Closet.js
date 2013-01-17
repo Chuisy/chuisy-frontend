@@ -2,9 +2,9 @@
     View of the users Chu Box
 */
 enyo.kind({
-    name: "ChuBox",
+    name: "Closet",
     kind: "FittableRows",
-    classes: "chubox",
+    classes: "closet",
     events: {
         //* Gets fired when a chu is selected by tapping in it
         onShowChu: "",
@@ -52,9 +52,9 @@ enyo.kind({
 
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
-            this.$.listClient.createComponent({classes: "chubox-chu", cellIndex: i, ontap: "chuTap", onhold: "hold", name: "chu" + i, owner: this, components: [
-                {classes: "chubox-chu-image", name: "chuImage" + i},
-                {classes: "chubox-delete-button", ontap: "chuRemove", cellIndex: i}
+            this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", onhold: "hold", name: "chu" + i, owner: this, components: [
+                {classes: "closet-chu-image", name: "chuImage" + i},
+                {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
             ]});
         }
     },
@@ -81,7 +81,7 @@ enyo.kind({
         Get items from sdk and update List
     */
     refresh: function() {
-        this.items = chuisy.chubox.getChus();
+        this.items = chuisy.closet.getChus();
         this.$.list.setCount(Math.ceil(this.items.length / this.cellCount));
         this.$.list.refresh();
         this.$.placeholder.setShowing(!this.items.length);
@@ -119,7 +119,7 @@ enyo.kind({
     chuRemove: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = this.items[index];
-        chuisy.chubox.remove(chu);
+        chuisy.closet.remove(chu);
         return true;
     },
     hold: function(sender, event) {
@@ -145,25 +145,25 @@ enyo.kind({
         this.$.contextMenu.applyStyle("left", x + "px");
     },
     activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "chubox"});
+        enyo.Signals.send("onShowGuide", {view: "closet"});
     },
     deactivate: function() {
         this.finishEditing();
     },
     components: [
-        {kind: "Signals", onChuboxUpdated: "refresh"},
+        {kind: "Signals", onClosetUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
-        {name: "contextMenu", classes: "chubox-contextmenu", components: [
-            {classes: "chubox-contextmenu-left"},
-            {classes: "chubox-contextmenu-right"}
+        {name: "contextMenu", classes: "closet-contextmenu", components: [
+            {classes: "closet-contextmenu-left"},
+            {classes: "closet-contextmenu-right"}
         ]},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: "What is this? Your closet is still empty? Go ahead and fill it!"}
         ]},
         // LIST
-        {kind: "List", fit: true, classes: "chubox-list", name: "list", onSetupItem: "setupItem", components: [
-            {name: "listClient", classes: "chubox-row"}
+        {kind: "List", fit: true, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [
+            {name: "listClient", classes: "closet-row"}
         ]}
     ]
 });

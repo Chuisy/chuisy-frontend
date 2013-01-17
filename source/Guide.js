@@ -13,7 +13,7 @@ enyo.kind({
             "feed_1.png",
             "feed_2.png"
         ],
-        "chubox": [
+        "closet": [
             "closet_0.png"
         ],
         "profile": [
