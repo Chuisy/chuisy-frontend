@@ -1,0 +1,27 @@
+.giftview {
+}
+
+.giftview-content {
+	text-align: center;
+	padding: 10px;
+}
+
+.giftview-image {
+	width: 300px;
+	height: 300px;
+}
+
+.giftview-value {
+	text-align: center;
+	font-size: 30pt;
+	color: #aaa;
+	padding: 10px;
+}
+
+.giftview-redeem-button {
+	width: 100%;
+	font-size: 15pt;
+	height: 44px;
+	color: white;
+	background-color: rgb(65, 160, 69);
+}

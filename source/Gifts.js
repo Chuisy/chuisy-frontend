@@ -1,6 +1,9 @@
 enyo.kind({
     name: "Gifts",
     classes: "gifts",
+    events: {
+        onShowGift: ""
+    },
     // Meta data for loading notifications from the api
     meta: {
         limit: 20,
@@ -50,7 +53,9 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = this.items[event.index];
 
-        this.$.value.setContent(item.value);
+        this.$.image.setSrc(item.chu.thumbnails['100x100']);
+        this.$.value.setContent(item.value + "%");
+        this.$.text.setContent("on this product you were just admiring.");
 
         var isLastItem = event.index == this.items.length-1;
         if (isLastItem && !this.allPagesLoaded()) {
@@ -62,6 +67,10 @@ enyo.kind({
         }
 
         return true;
+    },
+    giftTapped: function(sender, event) {
+        this.doShowGift({gift: this.items[event.index]});
+        event.preventDefault();
     },
     activate: function() {
         this.load();
@@ -85,8 +94,12 @@ enyo.kind({
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: "You don't have any gifts yet..."}
         ]},
-        {kind: "List", classes: "enyo-fill", onSetupItem: "setupItem", components: [
-            {name: "value"},
+        {kind: "List", classes: "enyo-fill", onSetupItem: "setupItem", ontap: "giftTapped", components: [
+            {classes: "gifts-gift", components: [
+                {kind: "Image", classes: "gifts-gift-image", name: "image"},
+                {classes: "gifts-gift-value", name: "value"},
+                {classes: "gifts-gift-text", name: "text"}
+            ]},
             {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
         ]}
     ]

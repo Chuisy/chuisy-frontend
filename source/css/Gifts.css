@@ -1,3 +1,28 @@
 .gifts .placeholder-image {
 	background-image: url(../../assets/images/gifts_placeholder.png);
 }
+
+.gifts-gift {
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 10px;
+	margin: 5px;
+	overflow: hidden;
+}
+
+.gifts-gift-image {
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+
+.gifts-gift-value {
+	text-align: center;
+	font-size: 35pt;
+	color: #aaa;
+}
+
+.gifts-gift-text {
+	text-align: center;
+}

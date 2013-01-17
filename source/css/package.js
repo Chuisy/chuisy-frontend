@@ -23,5 +23,6 @@ enyo.depends(
 	"FacebookSignIn.css",
 	"Gifts.css",
 	"Guide.css",
-	"GetStarted.css"
+	"GetStarted.css",
+	"GiftView.css"
 );

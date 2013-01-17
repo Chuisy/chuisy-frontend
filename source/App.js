@@ -273,6 +273,20 @@ enyo.kind({
             // chubox/
             // Whats new? Let's check out the notifications
             this.$.mainView.openView("gifts");
+        } else if ((match2 = uri.match(/^gift\/(\d+)\/$/))) {
+            // {user id}/
+            // This is the URI to a users profile
+            if (App.checkConnection()) {
+                chuisy.gift.detail(match2[1], enyo.bind(this, function(sender, response) {
+                    this.$.mainView.openView("gift", response);
+                }));
+            }
+        // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
+        //     // {user id}/
+        //     // This is the URI to a users profile
+        //     chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
+        //         this.$.mainView.openView(response);
+        //     }));
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications

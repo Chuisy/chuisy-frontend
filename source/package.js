@@ -31,5 +31,6 @@ enyo.depends(
 	"FacebookSignIn.js",
 	"Gifts.js",
 	"Guide.js",
-	"GetStarted.js"
+	"GetStarted.js",
+	"GiftView.js"
 );
