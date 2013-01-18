@@ -31,28 +31,32 @@ enyo.kind({
     },
     // Scroll buffer for parallax scrolling
     // bufferHeight: 100,
-    scrollerOffset: -50,
+    scrollerOffset: -37,
     // Meta data for loading notifications from the api
     commentsMeta: {
         limit: 20,
         offset: 0,
         total_count: 0
     },
-    rendered: function() {
-        this.inherited(arguments);
-        var s = this.$.contentScroller.getStrategy().$.scrollMath;
-        if (s) {
-            s.kDragDamping = 0.3;
-            s.kSnapFriction = 0.5;
-        }
-    },
+    // rendered: function() {
+    //     this.inherited(arguments);
+    //     var s = this.$.contentScroller.getStrategy().$.scrollMath;
+    //     if (s) {
+    //         s.kDragDamping = 0.3;
+    //         s.kSnapFriction = 0.5;
+    //     }
+    // },
     loaded: function() {
+        this.$.spinner.hide();
         this.arrangeImage();
     },
     chuChanged: function() {
         if (this.chu) {
             this.waiting = false;
 
+            setTimeout(enyo.bind(this, function() {
+                this.$.spinner.show();
+            }), 10);
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
             this.$.avatar.setSrc(this.chu.user && this.chu.user.profile.avatar_thumbnail ? this.chu.user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
             this.$.fullName.setContent(this.chu.user ? (this.chu.user.first_name + " " + this.chu.user.last_name) : "");
@@ -306,8 +310,8 @@ enyo.kind({
         // }
         try {
             var s = this.$.imageView.getStrategy().$.scrollMath;
-            s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/10);
-            s.start();
+            s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5);
+            s.scroll();
         } catch(e) {
             console.log(e.message);
         }
@@ -332,7 +336,10 @@ enyo.kind({
         // Move image view back under the other controls
         this.$.imageView.applyStyle("z-index", "0");
         this.removeClass("fullscreen");
-        this.arrangeImage();
+        this.$.imageView.setScale("auto");
+        setTimeout(enyo.bind(this, function() {
+            this.arrangeImage();
+        }), 10);
     },
     /**
         Open this chus share view
@@ -382,7 +389,7 @@ enyo.kind({
     },
     components: [
         // IMAGE LOADING INDICATOR
-        {classes: "chuview-image-loading", content: "Loading..."},
+        {kind: "onyx.Spinner", classes: "chuview-spinner spinner-dark"},
         // IMAGEVIEW
         {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, touchOverscroll: true,
             onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
@@ -398,7 +405,7 @@ enyo.kind({
                 ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
-                {kind: "Scroller", name: "contentScroller", touchOverscroll: true, onScroll: "scroll", components: [
+                {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll", components: [
                     // SPACER
                     {classes: "chuview-spacer", ontap: "hideControls"},
                     // LIKE BAR

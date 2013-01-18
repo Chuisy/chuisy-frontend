@@ -10,7 +10,7 @@
 }
 
 .chuview-spacer {
-	height: 150px;
+	height: 250px;
 	position: relative;
 }
 
@@ -237,4 +237,12 @@
 	padding-top: 110px;
 	font-size: 18pt;
 	color: white;
+}
+
+.chuview-spinner {
+	position: absolute;
+	top: 150px;
+	left: 0;
+	right: 0;
+	margin: auto;
 }
