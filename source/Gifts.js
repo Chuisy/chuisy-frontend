@@ -55,7 +55,7 @@ enyo.kind({
 
         this.$.image.setSrc(item.chu.thumbnails['100x100']);
         this.$.value.setContent(item.value + "%");
-        this.$.text.setContent("on this product you were just admiring.");
+        this.$.text.setContent($L("on this product you were just admiring."));
 
         var isLastItem = event.index == this.items.length-1;
         if (isLastItem && !this.allPagesLoaded()) {
@@ -92,7 +92,7 @@ enyo.kind({
         // ]}
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: "You don't have any gifts yet..."}
+            {classes: "placeholder-text", content: $L("You don't have any gifts yet...")}
         ]},
         {kind: "List", classes: "enyo-fill", onSetupItem: "setupItem", ontap: "giftTapped", components: [
             {classes: "gifts-gift", components: [
@@ -100,7 +100,7 @@ enyo.kind({
                 {classes: "gifts-gift-value", name: "value"},
                 {classes: "gifts-gift-text", name: "text"}
             ]},
-            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
+            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]}
     ]
 });

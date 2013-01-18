@@ -130,13 +130,13 @@ enyo.kind({
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
-            {classes: "error-text", content: "No internet connection available!"}
+            {classes: "error-text", content: $L("No internet connection available!")}
         ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20, thumb: false,
             // pullingMessage: "", pulledMessage: "", loadingMessage: "", pullingIconClass: "", pulledIconClass: "", loadingIconClass: "",
             ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
+            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]}
     ]
 });

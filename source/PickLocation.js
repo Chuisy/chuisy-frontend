@@ -39,9 +39,9 @@ enyo.kind({
             }
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
-            navigator.notification.alert("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
+            navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
                 " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
-                " phone's settings and enable location services for Chuisy!", function() {}, "Can't find you!", "OK");
+                " phone's settings and enable location services for Chuisy!"), function() {}, $L("Can't find you!"), $L("OK"));
             this.doLocationPicked({location: null});
         }));
     },
@@ -84,7 +84,7 @@ enyo.kind({
             this.$.resultText.hide();
         } else {
             this.$.resultText.show();
-            this.$.resultText.setContent("No nearby places found!");
+            this.$.resultText.setContent($L("No nearby places found!"));
         }
 
         this.refreshPlacesList();
@@ -152,12 +152,12 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"}
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
         // {kind: "Map", classes: "picklocation-map"},
         {kind: "Scroller", fit: true, components: [
-            {classes: "picklocation-message", content: "<strong>Spotted!</strong><br>Where are you shopping?", allowHtml: true},
+            {classes: "picklocation-message", content: $L("<strong>Spotted!</strong><br>Where are you shopping?"), allowHtml: true},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-placeitem"}
             ]},
@@ -165,7 +165,7 @@ enyo.kind({
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
                 {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: "Enter custom place...", onkeydown: "newPlaceKeydown", onblur: "newPlaceBlur", ontap: "inputTap"}
+                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown", onblur: "newPlaceBlur", ontap: "inputTap"}
                 ]}
             ]}
         ]}

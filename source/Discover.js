@@ -194,10 +194,10 @@ enyo.kind({
             {classes: "discover-result-panel", components: [
                 {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", rowsPerPage: 20, components: [
                     {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
-                    {name: "userNextPage", content: "Loading...", classes: "loading-next-page"}
+                    {name: "userNextPage", content: $L("Loading..."), classes: "loading-next-page"}
                 ]},
                 {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center", name: "userSpinner", showing: false},
-                {name: "userNoResults", classes: "discover-no-results absolute-center", content: "No users found."}
+                {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No users found.")}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
@@ -208,10 +208,10 @@ enyo.kind({
                             {classes: "category-icon discover-resultchu-category", name: "categoryIcon"}
                         ]}
                     ]},
-                    {name: "chuNextPage", content: "Loading...", classes: "loading-next-page"}
+                    {name: "chuNextPage", content: $L("Loading..."), classes: "loading-next-page"}
                 ]},
                 {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center", name: "chuSpinner", showing: false},
-                {name: "chuNoResults", classes: "discover-no-results absolute-center", content: "No chus found."}
+                {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]}
         ]}
     ]

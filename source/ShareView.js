@@ -60,20 +60,24 @@ enyo.kind({
         if (event.originator.getActive()) {
             // Visibilty has changed. Switch between people selector and share buttons
             var visibility = this.$.visibilityPicker.getActive().value;
-            var text1 = "Your Chu is now <strong>" + visibility + "</strong>";
-            var text2 = "Ask your friends who are not on Chuisy what they think about this piece of fashion.";
+            var text1 = $L("Your Chu is now <strong>" + visibility + "</strong>!");
+            var text2 = $L("Ask your friends who are not on Chuisy what they think about this piece of fashion.");
             if (visibility == "private") {
-                text2 += " Only they can see it!";
+                text2 += $L(" Only they can see it!");
             }
-            var text3 = visibility == "public" ? "A public Chu can be seen by anyone. Be chuisy and spread prettiness!"
-                : "Choose your best friends on Chuisy to share this Chu with.";
+            var text3 = visibility == "public" ? $L("A public Chu can be seen by anyone. Be chuisy and spread prettiness!")
+                : $L("Choose your best friends on Chuisy to share this Chu with.");
             this.$.text1.setContent(text1);
             this.$.text2.setContent(text2);
             this.$.panels.setIndex(visibility == "private" ? 0 : 1);
         }
     },
     getMessage: function() {
-        return "Check out this cool product" + (this.chu.location && this.chu.location.place ? " I found at " + this.chu.location.place.name : "") + "!";
+        if (this.chu.location && this.chu.location.place) {
+            return $L("Check out this cool product I found at {{ place }}!").replace("{{ place }}", this.chu.location.place.name);
+        } else {
+            return $L("Check out this cool product!");
+        }
     },
     /**
         Get the share url for the _chu_
@@ -112,7 +116,7 @@ enyo.kind({
         Open email composer with message / link
     */
     email: function() {
-        var subject = "Hi there!";
+        var subject = $L("Hi there!");
         var message = this.getMessage();
         window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
     },
@@ -141,12 +145,12 @@ enyo.kind({
     deactivate: function() {},
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
             {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", onActivate: "visibilityChanged", components: [
                 {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "setVisibility", value: "private"},
                 {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "setVisibility", value: "public"}
             ]},
-            {kind: "onyx.Button", ontap: "done", classes: "done-button", content: "done", name: "doneButton"}
+            {kind: "onyx.Button", ontap: "done", classes: "done-button", content: $L("done"), name: "doneButton"}
         ]},
         {classes: "shareview-visibility-text", name: "text1", allowHtml: true},
         {classes: "shareview-text", name: "text2"},
@@ -163,11 +167,11 @@ enyo.kind({
         {kind: "Panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, layoutKind: "FittableRowsLayout", components: [
             // FRIENDS
             {kind: "FittableRows", classes: "enyo-fill", components: [
-                {classes: "shareview-text", content: "Choose your best friends on Chuisy to share this Chu with."},
+                {classes: "shareview-text", content: $L("Choose your best friends on Chuisy to share this Chu with.")},
                 {kind: "PeoplePicker", name: "peoplePicker", fit: true}
             ]},
             {classes: "enyo-fill", components: [
-                {classes: "shareview-text", content: "A public Chu can be seen by anyone. Be chuisy and spread prettiness!"},
+                {classes: "shareview-text", content: $L("A public Chu can be seen by anyone. Be chuisy and spread prettiness!")},
                 {classes: "shareview-share-button-group", components: [
                     // FACEBOOK
                     {kind: "Button", name: "facebookButton", classes: "shareview-share-button", ontap: "toggleFacebook", components: [

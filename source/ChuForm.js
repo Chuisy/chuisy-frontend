@@ -178,12 +178,12 @@ enyo.kind({
     components: [
         // HEADER
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
             // {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
             //     {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
             //     {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
             // ]},
-            {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: "next", name: "doneButton"}
+            {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: $L("next"), name: "doneButton"}
         ]},
         // IMAGE WITH CONTROLS
         {name: "imageContainer", fit: true, classes: "chuform-imagecontainer",
@@ -200,7 +200,7 @@ enyo.kind({
             ]},
             {name: "dragIndicator", classes: "chuform-drag-indicator", components: [
                 {classes: "chuform-drag-indicator-arrow"},
-                {classes: "chuform-drag-indicator-text", content: "drag to adjust"}
+                {classes: "chuform-drag-indicator-text", content: $L("drag to adjust")}
             ]}
         ]},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",

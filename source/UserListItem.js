@@ -16,7 +16,7 @@ enyo.kind({
 	userChanged: function() {
 		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail || "");
 		this.$.fullName.setContent(this.user.first_name + " " + this.user.last_name);
-		this.$.followButton.setContent(this.user.following ? "unfollow" : "follow");
+		this.$.followButton.setContent(this.user.following ? $L("unfollow") : $L("follow"));
         var authUser = chuisy.getSignInStatus().user;
         this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
 	},
@@ -36,6 +36,6 @@ enyo.kind({
 	components: [
         {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
         {classes: "userlistitem-fullname ellipsis", name: "fullName"},
-        {kind: "onyx.Button", content: "follow", ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
+        {kind: "onyx.Button", content: $L("follow"), ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });

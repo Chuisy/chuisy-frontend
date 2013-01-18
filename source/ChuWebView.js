@@ -95,7 +95,7 @@ enyo.kind({
     requestSignIn: function(params) {
         this.signInSuccessCallback = params.success;
         this.signInFailureCallback = params.failure;
-        var text = "Please connect with your Facebook account so the owner of this Chu can know who this " + params.action + " came from!";
+        var text = $L("Please connect with your Facebook account so the owner of this Chu can know who this " + params.action + " came from!");
         this.$.signInText.setContent(text);
         this.$.signInDialog.show();
     },
@@ -230,7 +230,7 @@ enyo.kind({
             {classes: "chuwebview-signin-text", name: "signInText"},
             {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                 {classes: "facebook-button-icon"},
-                {content: "Sign In With Facebook"}
+                {content: $L("Sign In With Facebook")}
             ]},
             {classes: "chuwebview-signin-cancel-button", ontap: "hideSignInDialog"}
         ]},

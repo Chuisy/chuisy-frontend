@@ -99,62 +99,62 @@ enyo.kind({
     deactivate: function() {},
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"}
+            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
         ]},
         {kind: "Scroller", fit: true, components: [
             {classes: "settings-content", components: [
                 // PROFILE INFORMATION
-                {classes: "settings-section-header", content: "Profile"},
+                {classes: "settings-section-header", content: $L("Profile")},
                 {kind: "onyx.Groupbox", components: [
                     // AVATAR
                     {name: "avatar", classes: "settings-avatar", components: [
-                        {kind: "onyx.Button", classes: "settings-change-avatar", content: "change", ontap: "changeAvatar"}
+                        {kind: "onyx.Button", classes: "settings-change-avatar", content: $L("Change"), ontap: "changeAvatar"}
                     ]},
                     // FIRST NAME
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "firstName", placeholder: "First Name", onchange: "firstNameChanged"}
+                        {kind: "onyx.Input", name: "firstName", placeholder: $L("First Name"), onchange: "firstNameChanged"}
                     ]},
                     // LAST NAME
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "lastName", placeholder: "Last Name", onchange: "lastNameChanged"}
+                        {kind: "onyx.Input", name: "lastName", placeholder: $L("Last Name"), onchange: "lastNameChanged"}
                     ]},
                     // WEBSITE
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "website", placeholder: "Website", onchange: "websiteChanged"}
+                        {kind: "onyx.Input", name: "website", placeholder: $L("Website"), onchange: "websiteChanged"}
                     ]}
                     // {kind: "onyx.InputDecorator", components: [
                     //     {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
                     // ]}
                 ]},
                 // LINKED ACCOUNTS
-                {classes: "settings-section-header", content: "Accounts"},
+                {classes: "settings-section-header", content: $L("Accounts")},
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
                     {classes: "settings-connect-item facebook", name: "facebookConnectItem", components: [
                         {classes: "settings-connect-icon"},
-                        {content: "Facebook", classes: "settings-connect-text"},
-                        {kind: "onyx.Button", classes: "settings-connect-button", content: "Connect", ontap: "facebookSignIn"},
-                        {kind: "onyx.Button", classes: "settings-connect-disconnect", content: "Disconnect", ontap: "signOut"}
+                        {content: $L("Facebook"), classes: "settings-connect-text"},
+                        {kind: "onyx.Button", classes: "settings-connect-button", content: $L("Connect"), ontap: "facebookSignIn"},
+                        {kind: "onyx.Button", classes: "settings-connect-disconnect", content: $L("Disconnect"), ontap: "signOut"}
                     ]}
                 ]},
                 // NOTIFICATION SETTINGS
-                {classes: "settings-section-header", content: "Notifications"},
+                {classes: "settings-section-header", content: $L("Notifications")},
                 {kind: "onyx.Groupbox", components: [
                     // LIKES
                     {classes: "settings-notifications-item", components: [
-                        {content: "Likes", classes: "settings-notifications-text"},
+                        {content: $L("Likes"), classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushLikeIcon", prop: "push_like", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailLikeIcon", prop: "email_like", ontap: "toggleNotification"}
                     ]},
                     // COMMENTS
                     {classes: "settings-notifications-item", components: [
-                        {content: "Comments", classes: "settings-notifications-text"},
+                        {content: $L("Comments"), classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushCommentIcon", prop: "push_comment", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailCommentIcon", prop: "email_comment", ontap: "toggleNotification"}
                     ]},
                     // FOLLOWS
                     {classes: "settings-notifications-item", components: [
-                        {content: "Follows", classes: "settings-notifications-text"},
+                        {content: $L("Follows"), classes: "settings-notifications-text"},
                         {classes: "settings-notification-icon push", name: "pushFollowIcon", prop: "push_follow", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}

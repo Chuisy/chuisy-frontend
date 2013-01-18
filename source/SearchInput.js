@@ -72,7 +72,7 @@ enyo.kind({
         this.$.input.hasNode().blur();
     },
     components: [
-        {kind: "onyx.Input", placeholder: "Type to search...", onkeyup: "inputKeyup"},
+        {kind: "onyx.Input", placeholder: $L("Type to search..."), onkeyup: "inputKeyup"},
         {classes: "searchinput-icon", ontap: "cancel"}
     ]
 });

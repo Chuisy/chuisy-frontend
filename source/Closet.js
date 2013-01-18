@@ -159,7 +159,7 @@ enyo.kind({
         ]},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: "What is this? Your closet is still empty? Go ahead and fill it!"}
+            {classes: "placeholder-text", content: $L("What is this? Your closet is still empty? Go ahead and fill it!")}
         ]},
         // LIST
         {kind: "List", fit: true, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [

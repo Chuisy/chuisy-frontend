@@ -167,7 +167,7 @@ enyo.kind({
             // PROFILE VIEW (for other profiles)
             {kind: "FittableRows", components: [
                 {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "back", classes: "back-button", content: "back"}
+                    {kind: "onyx.Button", ontap: "back", classes: "back-button", content: $L("back")}
                 ]},
                 {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]},

@@ -398,7 +398,7 @@ enyo.kind({
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
             {classes: "header", components: [
-                {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: "back"},
+                {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
                 {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
                 {kind: "onyx.Button", classes: "share-button", ontap: "share", components: [
                     {classes: "share-button-icon"}
@@ -433,7 +433,7 @@ enyo.kind({
                         ]},
                         // COMMENT INPUT
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: "Enter comment...", onkeydown: "commentInputKeydown", onblur: "commentInputBlur"}
+                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown", onblur: "commentInputBlur"}
                         ]},
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
@@ -445,7 +445,7 @@ enyo.kind({
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
                             ]},
-                            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
+                            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
                         ]},
                         {style: "height: 500px"}
                     ]}

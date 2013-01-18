@@ -59,15 +59,15 @@ enyo.kind({
         switch (item.action) {
             case "like":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
-                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>liked</strong> a <strong>chu</strong> you are subscribed to.");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
                 break;
             case "comment":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
-                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> has <strong>commented</strong> on a <strong>chu</strong> you are subscribed to.");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
                 break;
             case "follow":
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
-                this.$.text.setContent("<strong>" + item.actor.first_name + "</strong> is now <strong>following</strong> you.");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.actor.first_name));
                 break;
         }
         this.$.notification.addRemoveClass("unread", !item.read);
@@ -167,14 +167,14 @@ enyo.kind({
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: "There aren't any affairs that require your attention right now..."}
+            {classes: "placeholder-text", content: $L("There aren't any affairs that require your attention right now...")}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {name: "loadingNextPage", content: "Loading...", classes: "loading-next-page"}
+            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]},
         {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
     ]

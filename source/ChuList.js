@@ -132,7 +132,7 @@ enyo.kind({
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chulist-row"},
-            {name: "loadingNextPage", content: "Loading...", classes: "chulist-nextpage"}
+            {name: "loadingNextPage", content: $L("Loading..."), classes: "chulist-nextpage"}
         ]}
     ]
 });

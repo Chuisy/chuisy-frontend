@@ -6,6 +6,7 @@ enyo.depends(
 	"$lib/Base64.js",
 	"$lib/extra/phonegap",
 	"$lib/arrangers",
+	"$lib/g11n",
 	"css/",
 	"App.js",
 	"MainView.js",

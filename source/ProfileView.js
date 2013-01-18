@@ -38,7 +38,7 @@ enyo.kind({
             // this.$.followersCount.setContent(user.follower_count);
             // this.$.friendsCount.setContent(user.following_count);
             this.$.chuList.clear();
-            this.$.chuboxCount.setContent('loading...');
+            this.$.chuboxCount.setContent($L("Loading..."));
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.load("friends");
@@ -61,7 +61,7 @@ enyo.kind({
         return true;
     },
     load: function(which) {
-        this.$[which + "Count"].setContent("loading...");
+        this.$[which + "Count"].setContent($L("Loading..."));
         this[which] = [];
         this.refresh(which);
         var user = this.getShowedUser();
@@ -199,15 +199,15 @@ enyo.kind({
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
             {classes: "profileview-menu-button", value: 0, name: "chuboxMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: "Chus"},
+                {classes: "profileview-menu-button-caption", content: $L("Chus")},
                 {classes: "profileview-menu-button-count", name: "chuboxCount"}
             ]},
             {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: "Following"},
+                {classes: "profileview-menu-button-caption", content: $L("Following")},
                 {classes: "profileview-menu-button-count", name: "friendsCount"}
             ]},
             {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: "Followers"},
+                {classes: "profileview-menu-button-caption", content: $L("Followers")},
                 {classes: "profileview-menu-button-count", name: "followersCount"}
             ]}
         ]},
@@ -215,11 +215,11 @@ enyo.kind({
             {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onFinishedLoading: "chusFinishedLoading"},
             {kind: "List", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", rowsPerPage: 20, components: [
                 {kind: "UserListItem", which: "friends", name: "friendsItem", ontap: "friendTapped", onToggleFollow: "listToggleFollow"},
-                {name: "friendsNextPage", classes: "loading-next-page", content: "Loading..."}
+                {name: "friendsNextPage", classes: "loading-next-page", content: $L("Loading...")}
             ]},
             {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
                 {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "followerTapped", onToggleFollow: "listToggleFollow"},
-                {name: "followersNextPage", classes: "loading-next-page", content: "Loading..."}
+                {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
             ]}
         ]},
         {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
