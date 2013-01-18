@@ -415,3 +415,11 @@ body {
 	background-position: 0 -20px;
 	margin: -2px 5px 0 0;
 }
+
+.onyx-spinner {
+	background-image: url(../../assets/images/berry_spinner.gif);
+}
+
+.onyx-spinner.spinner-dark {
+	background-image: url(../../assets/images/berry_spinner_dark.gif);
+}

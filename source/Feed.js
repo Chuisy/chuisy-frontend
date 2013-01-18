@@ -126,7 +126,7 @@ enyo.kind({
     },
     deactivate: function() {},
     components: [
-        {kind: "onyx.Spinner", classes: "onyx-light absolute-center"},
+        {kind: "onyx.Spinner", classes: "absolute-center"},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [

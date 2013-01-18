@@ -196,7 +196,7 @@ enyo.kind({
                     {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
                     {name: "userNextPage", content: "Loading...", classes: "loading-next-page"}
                 ]},
-                {kind: "onyx.Spinner", classes: "onyx-light discover-result-spinner absolute-center", name: "userSpinner", showing: false},
+                {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center", name: "userSpinner", showing: false},
                 {name: "userNoResults", classes: "discover-no-results absolute-center", content: "No users found."}
             ]},
             // CHUS
@@ -210,7 +210,7 @@ enyo.kind({
                     ]},
                     {name: "chuNextPage", content: "Loading...", classes: "loading-next-page"}
                 ]},
-                {kind: "onyx.Spinner", classes: "onyx-light discover-result-spinner absolute-center", name: "chuSpinner", showing: false},
+                {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center", name: "chuSpinner", showing: false},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: "No chus found."}
             ]}
         ]}
