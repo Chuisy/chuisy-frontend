@@ -15,7 +15,14 @@
 	text-align: center;
 	font-size: 30pt;
 	color: #aaa;
-	padding: 10px;
+	padding: 0 10px;
+}
+
+.giftview-hint {
+	text-align: center;
+	font-size: 9pt;
+	color: #aaa;
+	padding: 3px 10px;
 }
 
 .giftview-redeem-button {
@@ -24,4 +31,29 @@
 	height: 44px;
 	color: white;
 	background-color: rgb(65, 160, 69);
+}
+
+.giftview.redeemed .giftview-redeem-button {
+	display: none;
+}
+
+.giftview-redeemed-text {
+	color: rgb(65, 160, 69);
+	font-size: 20pt;
+	display: none;
+}
+
+.giftview.redeemed .giftview-redeemed-text {
+	display: block;
+}
+
+.giftview-thanks {
+	font-family: 'Homemade Apple';
+	color: #555;
+	padding: 10px 30px;
+	font-size: 12pt;
+}
+
+.giftview .placeholder-image {
+	background-image: url(../../assets/images/gifts_placeholder.png);
 }
