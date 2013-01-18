@@ -37,14 +37,25 @@ enyo.kind({
             // this.$.chuboxCount.setContent(user.chu_count);
             // this.$.followersCount.setContent(user.follower_count);
             // this.$.friendsCount.setContent(user.following_count);
-            this.$.chuList.clear();
-            this.$.chuboxCount.setContent($L("Loading..."));
+
+            if (!this.currentUser || user.id != this.currentUser.id) {
+                this.$.chuList.clear();
+                this.$.chuCount.setContent($L("Loading..."));
+                this.$.friendsCount.setContent($L("Loading..."));
+                this.friends = [];
+                this.refresh("friends");
+                this.$.followersCount.setContent($L("Loading..."));
+                this.followers = [];
+                this.refresh("followers");
+            }
+            this.currentUser = user;
+
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.load("friends");
             this.load("followers");
             this.$.followButton.setContent(user.following ? "unfollow" : "follow");
-            this.$.chuboxMenuButton.setActive(true);
+            this.$.chusMenuButton.setActive(true);
             this.$.panels.setIndex(0);
             this.addRemoveClass("owned", user == this.authUser);
         }
@@ -61,9 +72,6 @@ enyo.kind({
         return true;
     },
     load: function(which) {
-        this.$[which + "Count"].setContent($L("Loading..."));
-        this[which] = [];
-        this.refresh(which);
         var user = this.getShowedUser();
         if (user) {
             var filterProp = which == "followers" ? "followee" : "user";
@@ -182,7 +190,7 @@ enyo.kind({
         return meta.offset + meta.limit >= meta.total_count;
     },
     chusFinishedLoading: function(sender, event) {
-        this.$.chuboxCount.setContent(event.total_count);
+        this.$.chuCount.setContent(event.total_count);
     },
     activate: function(obj) {
         this.setUser(obj);
@@ -198,9 +206,9 @@ enyo.kind({
             {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
         ]},
         {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
-            {classes: "profileview-menu-button", value: 0, name: "chuboxMenuButton", components: [
+            {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: $L("Chus")},
-                {classes: "profileview-menu-button-count", name: "chuboxCount"}
+                {classes: "profileview-menu-button-count", name: "chuCount"}
             ]},
             {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
                 {classes: "profileview-menu-button-caption", content: $L("Following")},
