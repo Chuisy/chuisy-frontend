@@ -75,19 +75,20 @@ enyo.kind({
             this.deselectItem(item);
         }
         sender.addRemoveClass("selected", this.isSelected(item));
-        this.doChange();
     },
     /**
         Select a specific _item_
     */
     selectItem: function(item) {
         this.selectedItems[item.id] = item;
+        this.doChange();
     },
     /**
         Deselect a specific _item_
     */
     deselectItem: function(item) {
         delete this.selectedItems[item.id];
+        this.doChange();
     },
     /**
         Refresh the people repeater
@@ -104,7 +105,7 @@ enyo.kind({
     },
     components: [
         {kind: "onyx.InputDecorator", classes: "peoplepicker-filter-input", components: [
-            {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: "Type to filter..."}
+            {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: $L("Type to filter...")}
         ]},
         {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
             {kind: "Image", name: "avatar", classes: "peoplepicker-avatar", ontap: "itemTap"}

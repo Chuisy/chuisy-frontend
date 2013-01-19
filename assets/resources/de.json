@@ -62,6 +62,8 @@
 	"{{ minutes }} minutes ago": "Vor {{ minutes }} Minuten",
 	"{{ hours }} hours ago": "Vor {{ hours }} Stunden",
 	"{{ days }} days ago": "Vor {{ days }} Tagen",
-	"A while back...": "Ein bischen länger her..."
+	"A while back...": "Ein bischen länger her...",
+	"Change": "Ändern",
+	"Type to filter...": "Freunde filtern..."
 }
  

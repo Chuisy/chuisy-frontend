@@ -58,16 +58,16 @@ enyo.kind({
 
         // Disable done button to prevent double-posts
         this.$.chuForm.setDoneButtonDisabled(true);
-        if (!chuisy.chubox.contains(this.chu)) {
+        if (!chuisy.closet.contains(this.chu)) {
             // Chu hasn't been saved yet. Create it.
-            chuisy.chubox.add(this.chu, enyo.bind(this, function() {
+            chuisy.closet.add(this.chu, enyo.bind(this, function() {
                 this.$.chuForm.setDoneButtonDisabled(false);
                 this.$.panels.setIndex(2);
                 this.$.shareView.activate(this.chu);
             }));
         } else {
             // Chu has already been saved. Update it!
-            chuisy.chubox.update(this.chu);
+            chuisy.closet.update(this.chu);
             this.$.chuForm.setDoneButtonDisabled(false);
             this.$.panels.setIndex(2);
             this.$.shareView.activate(this.chu);

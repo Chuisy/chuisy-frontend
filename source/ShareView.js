@@ -11,7 +11,6 @@ enyo.kind({
     },
     twitterUrl: "http://twitter.com/share/",
     pinterestUrl: "http://pinterest.com/pin/create/button/",
-    mediaUrl: "http://media.chuisy.com/media/",
     events: {
         // User has tapped the done button / Changes have been saved
         onDone: "",
@@ -128,7 +127,7 @@ enyo.kind({
         this.chu.friends = this.$.peoplePicker.getSelectedItems();
         this.chu.fb_og = this.facebook;
 
-        chuisy.chubox.update(this.chu);
+        chuisy.closet.update(this.chu);
         this.doDone();
     },
     /**
