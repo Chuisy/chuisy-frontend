@@ -21,8 +21,10 @@ enyo.kind({
         // Get facebook access token
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
+                this.$.spinner.show();
                 // User facebook access token to get authentication credentials from Chuisy API
                 chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                    this.$.spinner.hide();
                     if (this.successCallback) {
                         this.successCallback();
                     }
@@ -30,6 +32,7 @@ enyo.kind({
                     this.failureCallback = null;
                     this.doDone();
                 }), enyo.bind(this, function() {
+                    this.$.spinner.hide();
                     navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), function() {}, $L("Authentication failed"), $L("OK"));
                 }));
             }));
@@ -58,6 +61,7 @@ enyo.kind({
             {classes: "facebook-button-icon"},
             {content: $L("Sign In With Facebook")}
         ]},
-        {kind: "onyx.Button", content: $L("Cancel"), ontap: "cancel", classes: "facebooksignin-cancel-button"}
+        {kind: "onyx.Button", content: $L("Cancel"), ontap: "cancel", classes: "facebooksignin-cancel-button"},
+        {kind: "onyx.Spinner", classes: "absolute-center", showing: false}
     ]
 });
