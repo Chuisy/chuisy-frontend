@@ -46,6 +46,9 @@ enyo.kind({
     //         s.kSnapFriction = 0.5;
     //     }
     // },
+    twitterUrl: "http://twitter.com/share/",
+    pinterestUrl: "http://pinterest.com/pin/create/button/",
+    friends: [],
     loaded: function() {
         this.$.spinner.hide();
         this.arrangeImage();
@@ -85,6 +88,8 @@ enyo.kind({
                 this.loadLikes();
                 this.loadComments();
             }
+
+            this.adjustShareControls();
         }
     },
     /**
@@ -109,6 +114,8 @@ enyo.kind({
     userChanged: function(sender, event) {
         this.user = event.user;
         this.addRemoveClass("owned", this.isOwned());
+        this.friends = [];
+        this.loadFriends(0, 20);
     },
     /**
         Checks if the current user ownes this chu
@@ -303,25 +310,15 @@ enyo.kind({
         this.loadLikes();
     },
     scroll: function() {
-        // Apply parallax effect to image view
-        // var scrollTop = this.bufferHeight + this.$.contentScroller.getScrollTop()/10;
-        // if (scrollTop > 0 && scrollTop < 2 * this.bufferHeight) {
-            // this.$.imageView.setScrollTop(scrollTop);
-        // }
-        try {
-            var s = this.$.imageView.getStrategy().$.scrollMath;
-            s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5);
-            s.scroll();
-        } catch(e) {
-            console.log(e.message);
-        }
+        var s = this.$.imageView.getStrategy().$.scrollMath;
+        s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5);
+        s.scroll();
     },
     /**
         Hides the controls including the menu bar and zooms out to show full image
     */
     hideControls: function() {
         var s = this.$.imageView.getStrategy().$.scrollMath;
-        console.log(this.standardDamping);
         s.kSpringDamping = 0.93;
         s.setScrollY(0);
         s.start();
@@ -374,6 +371,110 @@ enyo.kind({
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
         this.arrangeImage();
     },
+    toggleVisibility: function() {
+        this.chu.visibility = this.chu.visibility == "public" ? "private" : "public";
+        chuisy.closet.update(this.chu);
+        this.adjustShareControls();
+    },
+    adjustShareControls: function() {
+        this.$.visibilityButton.addRemoveClass("public", this.chu.visibility == "public");
+        this.$.sharePanels.setIndex(this.chu.visibility == "public" ? 1 : 0);
+        this.$.facebookButton.addRemoveClass("active", this.chu.fb_og);
+    },
+    getMessage: function() {
+        if (this.chu.location && this.chu.location.place) {
+            return $L("Check out this cool product I found at {{ place }}!").replace("{{ place }}", this.chu.location.place.name);
+        } else {
+            return $L("Check out this cool product!");
+        }
+    },
+    /**
+        Get the share url for the _chu_
+    */
+    getShareUrl: function() {
+        var url = this.chu.url;
+        if (this.chu.visibility == "private") {
+            url += "?s=" + this.chu.secret;
+        }
+        return url;
+    },
+    /**
+        Open twitter share dialog
+    */
+    twitter: function() {
+        var text = this.getMessage();
+        var url = this.getShareUrl();
+        window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+    },
+    /**
+        Open pinterest share dialog
+    */
+    pinterest: function() {
+        var url = this.getShareUrl();
+        var media = this.chu.image;
+        window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+    },
+    /**
+        Open sms composer with message / link
+    */
+    sms: function() {
+        var message = this.getMessage();
+        window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+    },
+    /**
+        Open email composer with message / link
+    */
+    email: function() {
+        var subject = $L("Hi there!");
+        var message = this.getMessage();
+        window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+    },
+    /**
+        Toggle if chu should be shared as open graph stories
+    */
+    toggleFacebook: function() {
+        this.chu.fb_og = !this.chu.fb_og;
+        this.$.facebookButton.addRemoveClass("active", this.chu.fb_og);
+        chuisy.closet.update(this.chu);
+    },
+    /**
+        Load the users friends and populate the people picker with the results
+    */
+    loadFriends: function(offset, limit) {
+        chuisy.friends({offset: offset, limit: limit}, enyo.bind(this, function(sender, response) {
+            this.friends = this.friends.concat(response.objects);
+            this.$.peoplePicker.setItems(this.friends);
+            if (response.meta && response.meta.next) {
+                // Recursively load pages until all friends are loaded
+                this.loadFriends(response.meta.offset + limit, limit);
+            }
+        }));
+    },
+    toggleFriends: function() {
+        this.friendsSliderOpen = !this.friendsSliderOpen;
+        if (this.friendsSliderOpen) {
+            this.openFriends();
+        } else {
+            this.closeFriends();
+        }
+    },
+    openFriends: function() {
+        this.$.friendsButton.addClass("active");
+        this.$.peoplePicker.setSelectedItems(this.chu.friends || []);
+        this.$.friendsSlider.animateToMin();
+    },
+    closeFriends: function() {
+        this.$.friendsButton.removeClass("active");
+        this.$.friendsSlider.animateToMax();
+        this.chu.friends = this.$.peoplePicker.getSelectedItems();
+        if (this.friendsChanged) {
+            chuisy.closet.update(this.chu);
+            this.friendsChanged = false;
+        }
+    },
+    friendsChangedHandler: function() {
+        this.friendsChanged = true;
+    },
     activate: function(obj) {
         this.setChu(obj);
         if (obj == this.chu) {
@@ -381,11 +482,15 @@ enyo.kind({
             // So in that case we have to call it explicitly
             this.chuChanged();
         }
+        this.friendsSliderOpen = false;
+        this.$.friendsButton.removeClass("active");
+        this.$.friendsSlider.setValue(100);
         enyo.Signals.send("onShowGuide", {view: "chu"});
     },
     deactivate: function() {
         this.blurredByTap = false;
         this.$.imageView.setSrc("assets/images/chu_image_placeholder.png");
+        this.closeFriends();
     },
     components: [
         // IMAGE LOADING INDICATOR
@@ -399,8 +504,23 @@ enyo.kind({
             // HEADER
             {classes: "header", components: [
                 {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
+                {classes: "chuview-share-controls", components: [
+                    {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
+                        {classes: "enyo-fill", components: [
+                            {classes: "chuview-header-button messaging", ontap: "sms"},
+                            {classes: "chuview-header-button friends", name: "friendsButton", ontap: "toggleFriends"}
+                        ]},
+                        {classes: "enyo-fill", components: [
+                            {classes: "chuview-header-button messaging", ontap: "sms"},
+                            {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "toggleFacebook"},
+                            {classes: "chuview-header-button twitter", ontap: "twitter"},
+                            {classes: "chuview-header-button pinterest", ontap: "pinterest"}
+                        ]}
+                    ]},
+                    {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
+                ]},
                 {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
-                {kind: "onyx.Button", classes: "share-button", ontap: "share", components: [
+                {kind: "onyx.Button", classes: "share-button", ontap: "share", showing: false, components: [
                     {classes: "share-button-icon"}
                 ]}
             ]},
@@ -449,6 +569,9 @@ enyo.kind({
                         ]},
                         {style: "height: 500px"}
                     ]}
+                ]},
+                {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v", classes: "chuview-friends-slider", components: [
+                    {kind: "PeoplePicker", classes: "enyo-fill", onChange: "friendsChangedHandler"}
                 ]}
             ]}
         ]},

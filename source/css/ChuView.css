@@ -246,3 +246,90 @@
 	right: 0;
 	margin: auto;
 }
+
+.chuview-share-controls {
+	display: none;
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	height: 44px;
+}
+
+.chuview.owned .chuview-share-controls {
+	display: block;
+}
+
+.chuview-visibility {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url(../../assets/images/header_visibility.png) no-repeat center center;
+	background-size: 40px 80px;
+	background-position: center 0;
+	margin: 2px 0;
+	padding: 0 3px;
+	-webkit-transition: background-position 0.4s;
+	border-left: dotted 2px rgba(113, 0, 28, 0.6);
+}
+
+.chuview-visibility.public {
+	background-position: center -40px;
+}
+
+.chuview-header-button {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url() no-repeat center center;
+	background-size: 40px 80px;
+	background-position: 0 0;
+	margin: 2px 0;
+}
+
+.chuview-header-button:active:hover:not([disabled]):not(.facebook):not(.friends) {
+	background-position: 0 -40px;
+}
+
+.chuview-header-button.messaging {
+	background-image: url(../../assets/images/header_messaging.png);
+}
+
+.chuview-header-button.friends {
+	background-image: url(../../assets/images/header_friends.png);
+}
+
+.chuview-header-button.twitter {
+	background-image: url(../../assets/images/header_twitter.png);
+}
+
+.chuview-header-button.facebook {
+	background-image: url(../../assets/images/header_facebook.png);
+}
+
+.chuview-header-button.pinterest {
+	background-image: url(../../assets/images/header_pinterest.png);
+}
+
+.chuview-header-button.facebook.active,
+.chuview-header-button.friends.active {
+	background-position: 0 -40px;
+}
+
+.chuview-share-panels {
+	 width: 170px;
+	 height: 44px;
+	 display: inline-block;
+	 text-align: right;
+	 margin-right: 5px;
+}
+
+.chuview-friends-slider {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;
+	z-index: 100;
+}
