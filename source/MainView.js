@@ -23,10 +23,10 @@ enyo.kind({
         notifications: [0, 5],
         compose: [1, null],
         chu: [2, null],
-        share: [3, null],
-        settings: [4, null],
-        user: [5, null],
-        gift: [6, null]
+        // share: [3, null],
+        settings: [3, null],
+        user: [4, null],
+        gift: [5, null]
     },
     back: function() {
         this.doBack();
@@ -38,9 +38,9 @@ enyo.kind({
     showChu: function(sender, event) {
         this.openView("chu", event.chu);
     },
-    shareChu: function(sender, event) {
-        this.openView("share", event.chu);
-    },
+    // shareChu: function(sender, event) {
+    //     this.openView("share", event.chu);
+    // },
     showUser: function(sender, event) {
         this.openView("user", event.user);
     },
@@ -53,12 +53,13 @@ enyo.kind({
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.uri});
     },
-    shareViewDone: function(sender, event) {
-        this.openView("chu", sender.getChu());
-    },
+    // shareViewDone: function(sender, event) {
+    //     this.openView("chu", sender.getChu());
+    // },
     composeChuDone: function(sender, event) {
-        this.openView("feed");
-        this.$.feed.loadFeed();
+        // this.openView("feed");
+        // this.$.feed.loadFeed();
+        this.openView("chu", event.chu);
     },
     menuChanged: function(sender, event) {
         this.openView(event.value);
@@ -159,9 +160,9 @@ enyo.kind({
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShare: "shareChu", onShowUser: "showUser", onBack: "back"},
-            // SHARE CHU
-            {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
+            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back"},
+            // // SHARE CHU
+            // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS
             {kind: "Settings", name: "settings", onBack: "back"},
             // PROFILE VIEW (for other profiles)

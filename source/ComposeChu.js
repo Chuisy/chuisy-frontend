@@ -58,34 +58,35 @@ enyo.kind({
 
         // Disable done button to prevent double-posts
         this.$.chuForm.setDoneButtonDisabled(true);
-        if (!chuisy.closet.contains(this.chu)) {
-            // Chu hasn't been saved yet. Create it.
+        // if (!chuisy.closet.contains(this.chu)) {
+        //     // Chu hasn't been saved yet. Create it.
             chuisy.closet.add(this.chu, enyo.bind(this, function() {
                 this.$.chuForm.setDoneButtonDisabled(false);
-                this.$.panels.setIndex(2);
-                this.$.shareView.activate(this.chu);
+                this.doDone({chu: this.chu});
+                // this.$.panels.setIndex(2);
+                // this.$.shareView.activate(this.chu);
             }));
-        } else {
-            // Chu has already been saved. Update it!
-            chuisy.closet.update(this.chu);
-            this.$.chuForm.setDoneButtonDisabled(false);
-            this.$.panels.setIndex(2);
-            this.$.shareView.activate(this.chu);
-        }
+        // } else {
+        //     // Chu has already been saved. Update it!
+        //     chuisy.closet.update(this.chu);
+        //     this.$.chuForm.setDoneButtonDisabled(false);
+        //     this.$.panels.setIndex(2);
+        //     this.$.shareView.activate(this.chu);
+        // }
         return true;
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);
         return true;
     },
-    shareViewDone: function() {
-        this.doDone({chu: this.chu});
-        return true;
-    },
-    shareViewBack: function() {
-        this.$.panels.setIndex(1);
-        return true;
-    },
+    // shareViewDone: function() {
+    //     this.doDone({chu: this.chu});
+    //     return true;
+    // },
+    // shareViewBack: function() {
+    //     this.$.panels.setIndex(1);
+    //     return true;
+    // },
     activate: function() {
         this.chu = null;
         this.$.panels.setIndex(0);
@@ -99,9 +100,9 @@ enyo.kind({
             // STAGE 1: Pick location/place from list
             {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "doBack"},
             // STAGE 2: Pick filter, price, category
-            {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"},
+            {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"}
             // STAGE 3: Change visibility, share
-            {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
+            // {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
         ]}
     ]
 });
