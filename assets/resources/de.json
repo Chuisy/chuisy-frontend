@@ -64,6 +64,7 @@
 	"{{ days }} days ago": "Vor {{ days }} Tagen",
 	"A while back...": "Ein bischen länger her...",
 	"Change": "Ändern",
-	"Type to filter...": "Freunde filtern..."
+	"Type to filter...": "Freunde filtern...",
+	"Signing in...": "Anmelden..."
 }
  
