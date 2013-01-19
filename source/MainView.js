@@ -130,6 +130,7 @@ enyo.kind({
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
+                this.$.menu.selectItem(view);
                 break;
         }
     },
