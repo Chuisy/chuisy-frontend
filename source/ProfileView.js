@@ -57,7 +57,7 @@ enyo.kind({
             this.$.followButton.setContent(user.following ? "unfollow" : "follow");
             this.$.chusMenuButton.setActive(true);
             this.$.panels.setIndex(0);
-            this.addRemoveClass("owned", user == this.authUser);
+            this.addRemoveClass("owned", user.id == this.authUser.id);
         }
     },
     menuItemSelected: function(sender, event) {
