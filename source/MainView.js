@@ -120,13 +120,13 @@ enyo.kind({
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});
-                if (!chuisy.getSignInStatus().signedIn) {
-                    enyo.Signals.send("onRequestSignIn", {
-                        failure: enyo.bind(this, this.back)
-                    });
-                } else {
+                // if (!chuisy.getSignInStatus().signedIn) {
+                //     enyo.Signals.send("onRequestSignIn", {
+                //         failure: enyo.bind(this, this.back)
+                //     });
+                // } else {
                     chuisy.loadUserDetails();
-                }
+                // }
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});

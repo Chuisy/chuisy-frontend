@@ -103,3 +103,12 @@
 .profileview.owned .profileview-settings-button {
 	display: block;
 }
+
+.profileview .placeholder {
+	padding-top: 50px;
+	padding-bottom: 40px;
+}
+
+.profileview .placeholder-image {
+	background-image: url(../../assets/images/profile_placeholder.png);
+}

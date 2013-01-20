@@ -1,6 +1,6 @@
 enyo.kind({
     name: "ProfileView",
-    kind: "FittableRows",
+    // kind: "FittableRows",
     classes: "profileview",
     published: {
         user: null
@@ -32,6 +32,8 @@ enyo.kind({
     userChanged: function() {
         var user = this.getShowedUser();
         if (user) {
+            this.$.panels1.setIndex(0);
+            this.$.spinner.hide();
             this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
             this.$.fullName.setContent(user.first_name + " " + user.last_name);
             // this.$.chuboxCount.setContent(user.chu_count);
@@ -192,44 +194,82 @@ enyo.kind({
     chusFinishedLoading: function(sender, event) {
         this.$.chuCount.setContent(event.total_count);
     },
+    signIn: function() {
+        if (App.checkConnection()) {
+            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
+                this.$.spinner.show();
+                chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                    // this.$.spinner.hide();
+                    // this.$.panels1.setIndex(0);
+                }), enyo.bind(this, function() {
+                    this.$.spinner.hide();
+                    navigator.notification.alert($L("Hm, that didn't work. Please try it again later!"), enyo.bind(this, function() {
+                        this.doDone();
+                    }, $L("Authentication failed"), $L("OK")));
+                }));
+            }));
+        } else {
+            this.doDone();
+        }
+    },
     activate: function(obj) {
         this.setUser(obj);
-        if (this.getShowedUser().id == this.authUser.id) {
-            enyo.Signals.send("onShowGuide", {view: "profile"});
+        if (!this.getShowedUser() || !this.authUser || this.getShowedUser().id == this.authUser.id) {
+            if (chuisy.getSignInStatus().signedIn) {
+                this.$.panels1.setIndexDirect(0);
+                enyo.Signals.send("onShowGuide", {view: "profile"});
+            } else {
+                this.$.panels1.setIndexDirect(1);
+            }
         }
     },
     deactivate: function() {},
     components: [
-        {classes: "profileview-info", name: "info", components: [
-            {classes: "profileview-fullname", name: "fullName"},
-            {classes: "profileview-settings-button", ontap: "doShowSettings"},
-            {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
-        ]},
-        {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
-            {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: $L("Chus")},
-                {classes: "profileview-menu-button-count", name: "chuCount"}
+        {kind: "Panels", name: "panels1", classes: "enyo-fill", components: [
+            {kind: "FittableRows", components: [
+                {classes: "profileview-info", name: "info", components: [
+                    {classes: "profileview-fullname", name: "fullName"},
+                    {classes: "profileview-settings-button", ontap: "doShowSettings"},
+                    {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
+                ]},
+                {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
+                    {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
+                        {classes: "profileview-menu-button-caption", content: $L("Chus")},
+                        {classes: "profileview-menu-button-count", name: "chuCount"}
+                    ]},
+                    {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
+                        {classes: "profileview-menu-button-caption", content: $L("Following")},
+                        {classes: "profileview-menu-button-count", name: "friendsCount"}
+                    ]},
+                    {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
+                        {classes: "profileview-menu-button-caption", content: $L("Followers")},
+                        {classes: "profileview-menu-button-count", name: "followersCount"}
+                    ]}
+                ]},
+                {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
+                    {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onFinishedLoading: "chusFinishedLoading"},
+                    {kind: "List", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", rowsPerPage: 20, components: [
+                        {kind: "UserListItem", which: "friends", name: "friendsItem", ontap: "friendTapped", onToggleFollow: "listToggleFollow"},
+                        {name: "friendsNextPage", classes: "loading-next-page", content: $L("Loading...")}
+                    ]},
+                    {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
+                        {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "followerTapped", onToggleFollow: "listToggleFollow"},
+                        {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
+                    ]}
+                ]}
             ]},
-            {classes: "profileview-menu-button", value: 1, name: "friendsMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: $L("Following")},
-                {classes: "profileview-menu-button-count", name: "friendsCount"}
-            ]},
-            {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
-                {classes: "profileview-menu-button-caption", content: $L("Followers")},
-                {classes: "profileview-menu-button-count", name: "followersCount"}
+            {components: [
+                {classes: "placeholder", name: "placeholder", components: [
+                    {classes: "placeholder-image"},
+                    {classes: "placeholder-text", content: $L("This is where your profile would be if you were signed in!")}
+                ]},
+                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                    {classes: "facebook-button-icon"},
+                    {content: $L("Sign In With Facebook")}
+                ]}
             ]}
         ]},
-        {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-            {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onFinishedLoading: "chusFinishedLoading"},
-            {kind: "List", name: "friendsList", onSetupItem: "setupItem", classes: "enyo-fill", which: "friends", rowsPerPage: 20, components: [
-                {kind: "UserListItem", which: "friends", name: "friendsItem", ontap: "friendTapped", onToggleFollow: "listToggleFollow"},
-                {name: "friendsNextPage", classes: "loading-next-page", content: $L("Loading...")}
-            ]},
-            {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
-                {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "followerTapped", onToggleFollow: "listToggleFollow"},
-                {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
-            ]}
-        ]},
+        {kind: "onyx.Spinner", classes: "absolute-center", showing: false},
         {kind: "enyo.Signals", onUserChanged: "authUserChanged"}
     ]
 });
