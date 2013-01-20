@@ -390,6 +390,14 @@ enyo.kind({
             return $L("Check out this cool product!");
         }
     },
+    checkSynced: function() {
+        if (this.chu.synced) {
+            return true;
+        } else {
+            navigator.notification.alert($L("You can't share this Chu yet because it is still being uploaded. Please try again in a couple of minutes!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            return false;
+        }
+    },
     /**
         Get the share url for the _chu_
     */
@@ -404,32 +412,40 @@ enyo.kind({
         Open twitter share dialog
     */
     twitter: function() {
-        var text = this.getMessage();
-        var url = this.getShareUrl();
-        window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+        if (this.checkSynced()) {
+            var text = this.getMessage();
+            var url = this.getShareUrl();
+            window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+        }
     },
     /**
         Open pinterest share dialog
     */
     pinterest: function() {
-        var url = this.getShareUrl();
-        var media = this.chu.image;
-        window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+        if (this.checkSynced()) {
+            var url = this.getShareUrl();
+            var media = this.chu.image;
+            window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+        }
     },
     /**
         Open sms composer with message / link
     */
     sms: function() {
-        var message = this.getMessage();
-        window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+        if (this.checkSynced()) {
+            var message = this.getMessage();
+            window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+        }
     },
     /**
         Open email composer with message / link
     */
     email: function() {
-        var subject = $L("Hi there!");
-        var message = this.getMessage();
-        window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+        if (this.checkSynced()) {
+            var subject = $L("Hi there!");
+            var message = this.getMessage();
+            window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+        }
     },
     /**
         Toggle if chu should be shared as open graph stories
