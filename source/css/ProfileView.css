@@ -112,3 +112,11 @@
 .profileview .placeholder-image {
 	background-image: url(../../assets/images/profile_placeholder.png);
 }
+
+.profileview-avatar-placeholder {
+	position: absolute;
+	z-index: -1;
+	left: 0;
+	right: 0;
+	margin: 10px auto;
+}

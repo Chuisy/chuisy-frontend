@@ -34,8 +34,6 @@ enyo.kind({
         if (user) {
             this.$.panels1.setIndex(0);
             this.$.spinner.hide();
-            this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
-            this.$.fullName.setContent(user.first_name + " " + user.last_name);
             // this.$.chuboxCount.setContent(user.chu_count);
             // this.$.followersCount.setContent(user.follower_count);
             // this.$.friendsCount.setContent(user.following_count);
@@ -49,9 +47,12 @@ enyo.kind({
                 this.$.followersCount.setContent($L("Loading..."));
                 this.followers = [];
                 this.refresh("followers");
+                this.$.info.applyStyle("background-image", "url()");
             }
             this.currentUser = user;
 
+            this.$.info.applyStyle("background-image", "url(" + user.profile.avatar + ")");
+            this.$.fullName.setContent(user.first_name + " " + user.last_name);
             this.$.chuList.setFilters([["user", user.id]]);
             this.$.chuList.load();
             this.load("friends");
@@ -227,6 +228,7 @@ enyo.kind({
     components: [
         {kind: "Panels", name: "panels1", classes: "enyo-fill", components: [
             {kind: "FittableRows", components: [
+                {classes: "placeholder-image profileview-avatar-placeholder"},
                 {classes: "profileview-info", name: "info", components: [
                     {classes: "profileview-fullname", name: "fullName"},
                     {classes: "profileview-settings-button", ontap: "doShowSettings"},
