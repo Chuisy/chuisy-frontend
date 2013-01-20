@@ -69,6 +69,10 @@ enyo.kind({
                 this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
                 this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.actor.first_name));
                 break;
+            case "share":
+                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.actor.first_name));
+                break;
         }
         this.$.notification.addRemoveClass("unread", !item.read);
 

@@ -28,6 +28,7 @@
 	"<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.": "<strong>{{ name }}</strong> hat einen <strong>Chu</strong> <strong>geliked</strong>, den du beobachtest.",
 	"<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.": "<strong>{{ name }}</strong> hat auf einen <strong>Chu</strong> <strong>geantwortet</strong>, den du beobachtest.",
 	"<strong>{{ name }}</strong> is now <strong>following</strong> you.": "<strong>{{ name }}</strong> <strong>folgt</strong> dir jetzt.",
+	"<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.": "<strong>{{ name }}</strong> hat einen <strong>Chu</strong> mit dir <strong>geteilt</strong>.",
 	"There aren't any affairs that require your attention right now...": "Es gibt im Moment keine Angelegenheiten, die deine Aufmerksamkeit erfordern...",
 	"Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your phone's settings and enable location services for Chuisy!": "Chuisy konnte deinen Standort nicht ermitteln. Wenn du das volle Chuisy-Erlebnis genießen und Vorteile wie Geschenke und Rabatte von lokalen Geschäften erhalten willst, dann aktiviere Ortungsdienste für Chuisy unter \"Einstellungen > Datenschutz > Ortungsdienste\"!",
 	"Can't find you!": "Kann dich nicht finden!",
