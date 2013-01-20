@@ -58,15 +58,15 @@ enyo.kind({
 
         switch (item.action) {
             case "like":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
+                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
                 this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
                 break;
             case "comment":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
+                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
                 this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
                 break;
             case "follow":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail);
+                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
                 this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.actor.first_name));
                 break;
         }

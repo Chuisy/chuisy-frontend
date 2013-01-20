@@ -15,7 +15,7 @@ enyo.kind({
 	chuChanged: function() {
 		if (this.chu) {
 			this.$.image.applyStyle("background-image", "url(" + (this.chu.thumbnails["300x300"] || this.chu.image || "assets/images/chu_placeholder.png") + ")");
-			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || this.chu.user.profile.avatar || "assets/images/avatar_placeholder.png");
+			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
 			this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
 			this.$.time.setContent(chuisy.timeToText(this.chu.time));
 			this.$.likesCount.setContent(this.chu.likes_count);

@@ -60,7 +60,7 @@ enyo.kind({
             setTimeout(enyo.bind(this, function() {
                 this.$.spinner.show();
             }), 10);
-            this.$.imageView.setSrc(this.chu.localImage || this.chu.image);
+            this.$.imageView.setSrc(this.chu.localImage || this.chu.image || "assets/images/chu_placeholder.png");
             this.$.avatar.setSrc(this.chu.user && this.chu.user.profile.avatar_thumbnail ? this.chu.user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
             this.$.fullName.setContent(this.chu.user ? (this.chu.user.first_name + " " + this.chu.user.last_name) : "");
             this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
@@ -226,7 +226,7 @@ enyo.kind({
     setupComment: function(sender, event) {
         var comment = this.comments[event.index];
         this.$.commentText.setContent(comment.text);
-        this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail);
+        this.$.commentAvatar.setSrc(comment.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.commentFullName.setContent(comment.user.first_name + " " + comment.user.last_name);
         this.$.commentTime.setContent(chuisy.timeToText(comment.time));
 
@@ -289,7 +289,7 @@ enyo.kind({
             this.refreshComments();
 
             this.$.commentInput.setValue("");
-            
+
             // Remove focus from comment input
             this.$.commentInput.hasNode().blur();
         }

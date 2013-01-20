@@ -41,11 +41,11 @@
 .chufeeditem-image {
 	width: 100%;
 	height: 288px;
-	background: url() no-repeat center center;
+	background: url("../../assets/images/chu_placeholder.png") no-repeat center center;
 	background-size: cover;
 	background-color: White;
 	box-sizing: border-box;
-	/*border: solid 1px #ddd;*/
+	border: solid 1px #ddd;
 	margin-bottom: 4px;
 	position: relative;
 }

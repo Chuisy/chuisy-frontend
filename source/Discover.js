@@ -32,7 +32,7 @@ enyo.kind({
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
         this.$.resultChuImage.applyStyle("background-image", "url(" + (chu.thumbnails["300x100"] || chu.image || "assets/images/chu_placeholder.png") + ")");
-        this.$.chuAvatar.setSrc(chu.user.profile.avatar_thumbnail || "");
+        this.$.chuAvatar.setSrc(chu.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + chu.product.category.name + ".png)");
 
         var isLastItem = event.index == this.chus.length-1;
