@@ -270,27 +270,29 @@ enyo.kind({
         Post a comment with the current input text
     */
     postComment: function() {
-        var comment = {
-            text: this.$.commentInput.getValue(),
-            chu: this.chu.resource_uri
-        };
-        chuisy.chucomment.create(comment, enyo.bind(this, function(sender, response) {
-            this.loadComments(enyo.bind(this, function() {
-                // Scroll the comment input up. Align with top of screen if possible
-                // this.$.commentsRepeater.prepareRow(0);
-                // this.$.contentScroller.scrollIntoView(this.$.comment);
-                // this.$.commentsRepeater.lockRow();
+        if (this.$.commentInput.getValue()) {
+            var comment = {
+                text: this.$.commentInput.getValue(),
+                chu: this.chu.resource_uri
+            };
+            chuisy.chucomment.create(comment, enyo.bind(this, function(sender, response) {
+                this.loadComments(enyo.bind(this, function() {
+                    // Scroll the comment input up. Align with top of screen if possible
+                    // this.$.commentsRepeater.prepareRow(0);
+                    // this.$.contentScroller.scrollIntoView(this.$.comment);
+                    // this.$.commentsRepeater.lockRow();
+                }));
             }));
-        }));
 
-        comment.user = this.user;
-        this.comments = [comment].concat(this.comments);
-        this.refreshComments();
+            comment.user = this.user;
+            this.comments = [comment].concat(this.comments);
+            this.refreshComments();
 
-        this.$.commentInput.setValue("");
-
-        // Remove focus from comment input
-        this.$.commentInput.hasNode().blur();
+            this.$.commentInput.setValue("");
+            
+            // Remove focus from comment input
+            this.$.commentInput.hasNode().blur();
+        }
     },
     online: function() {
         // this.$.likeButton.setDisabled(false);
