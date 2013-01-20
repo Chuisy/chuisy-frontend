@@ -80,7 +80,7 @@ enyo.kind({
             navigator.camera.cleanup();
             navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
                 this.warn("Getting image failed!");
-            }), {targetWidth: 500, sourceType: Camera.PictureSourceType.PHOTOLIBRARY, correctOrientation: true});
+            }), {sourceType: Camera.PictureSourceType.PHOTOLIBRARY, targetWidth: 300, targetHeight: 300, allowEdit: true, correctOrientation: true, quality: 49});
         } catch (e) {
             this.warn("No camera available!");
         }
