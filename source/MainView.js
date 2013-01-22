@@ -59,6 +59,7 @@ enyo.kind({
     composeChuDone: function(sender, event) {
         // this.openView("feed");
         // this.$.feed.loadFeed();
+        this.doUpdateHistory({uri: "feed/"});
         this.openView("chu", event.chu);
     },
     menuChanged: function(sender, event) {
