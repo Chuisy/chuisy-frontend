@@ -226,7 +226,7 @@ enyo.kind({
     },
     deactivate: function() {},
     components: [
-        {kind: "Panels", name: "panels1", classes: "enyo-fill", components: [
+        {kind: "Panels", name: "panels1", classes: "enyo-fill", draggable: false, components: [
             {kind: "FittableRows", components: [
                 {classes: "placeholder-image profileview-avatar-placeholder"},
                 {classes: "profileview-info", name: "info", components: [
