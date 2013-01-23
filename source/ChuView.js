@@ -553,7 +553,7 @@ enyo.kind({
                     {classes: "chuview-content", components: [
                         // CATEGORY, PRICE, COMMENTS, LIKES
                         {classes: "chuview-infobar", components: [
-                            {classes: "chuview-category-icon", name: "categoryIcon"},
+                            {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                             {classes: "chuview-price", name: "price"},
                             {classes: "chuview-likes-comments", components: [
                                 {classes: "chuview-likes-count", name: "likesCount"},
