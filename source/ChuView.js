@@ -391,7 +391,7 @@ enyo.kind({
         }
     },
     checkSynced: function() {
-        if (this.chu.synced) {
+        if (this.chu.id) {
             return true;
         } else {
             navigator.notification.alert($L("You can't share this Chu yet because it is still being uploaded. Please try again in a couple of minutes!"), function() {}, $L("Hold your horses!"), $L("OK"));
