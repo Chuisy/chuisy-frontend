@@ -189,14 +189,16 @@ enyo.kind({
         Load comments for this chu
     */
     loadComments: function(callback) {
-        chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
-            this.commentsMeta = response.meta;
-            this.comments = response.objects;
-            this.refreshComments();
-            if (callback) {
-                callback();
-            }
-        }), {limit: this.commentsMeta.limit});
+        if (this.chu.id) {
+            chuisy.chucomment.list([["chu", this.chu.id]], enyo.bind(this, function(sender, response) {
+                this.commentsMeta = response.meta;
+                this.comments = response.objects;
+                this.refreshComments();
+                if (callback) {
+                    callback();
+                }
+            }), {limit: this.commentsMeta.limit});
+        }
     },
     /**
         Loads next page of notifications
