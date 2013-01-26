@@ -24,11 +24,6 @@ enyo.kind({
         onpostresize: "postResize",
         onload: "loaded"
     },
-    currencies: {
-        "USD": "$",
-        "EUR": "€",
-        "GBP": "£"
-    },
     // Scroll buffer for parallax scrolling
     // bufferHeight: 100,
     scrollerOffset: -37,
@@ -63,11 +58,13 @@ enyo.kind({
             this.$.imageView.setSrc(this.chu.localImage || this.chu.image || "assets/images/chu_placeholder.png");
             this.$.avatar.setSrc(this.chu.user && this.chu.user.profile.avatar_thumbnail ? this.chu.user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
             this.$.fullName.setContent(this.chu.user ? (this.chu.user.first_name + " " + this.chu.user.last_name) : "");
-            this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
-            this.$.price.setContent(this.currencies[this.chu.product.price_currency] + this.chu.product.price);
+            // this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + "_48x48.png)");
             this.$.location.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name : "");
             this.$.headerText.setContent("#" + this.chu.id);
             this.$.time.setContent(chuisy.timeToText(this.chu.time));
+
+            var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.price_currency});
+            this.$.price.setContent(this.chu.price ? currFmt.format(this.chu.price) : "");
 
             this.addRemoveClass("owned", this.isOwned());
 
@@ -555,7 +552,7 @@ enyo.kind({
                     {classes: "chuview-content", components: [
                         // CATEGORY, PRICE, COMMENTS, LIKES
                         {classes: "chuview-infobar", components: [
-                            {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
+                            // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                             {classes: "chuview-price", name: "price"},
                             {classes: "chuview-likes-comments", components: [
                                 {classes: "chuview-likes-count", name: "likesCount"},

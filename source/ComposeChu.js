@@ -47,13 +47,12 @@ enyo.kind({
         this.chu.visibility = this.chu.visibility || "private";
         this.chu.localImage = this.chu.localImage || this.image;
         this.chu.friends = this.chu.friends || [];
-        this.chu.product = {
-            price: Math.floor(this.$.chuForm.getPrice()),
-            price_currency: "EUR",
-            category: {
-                name: this.$.chuForm.getCategory()
-            }
-        };
+        // Number formater for providing locale-specific currency formats
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
+        // Round number to correct currency format
+        this.chu.price = Math.floor(this.$.chuForm.getPrice() * currFmt.fractionDigits);
+        // Specify the local currencies iso code (e.g. EUR)
+        this.chu.price_currency = currFmt.sign;
         this.chu.location = this.location;
 
         // Disable done button to prevent double-posts
