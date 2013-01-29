@@ -212,7 +212,12 @@
     });
 
     chuisy.models.Notification = chuisy.models.OwnedModel.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/"
+        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
+        save: function(attributes, options) {
+            attributes = attributes || {};
+            attributes.actor = this.get("actor").resource_uri;
+            chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
+        }
     });
 
     chuisy.models.Device = Backbone.Tastypie.Model.extend({
@@ -285,7 +290,6 @@
                 options = options || {};
                 options.data = options.data || {};
                 options.data.latest = this.at(0).get("time");
-                this.meta.unseen_count = 0;
                 this.each(function(el) {
                     el.seen = true;
                 });
@@ -294,13 +298,13 @@
             }
         },
         getUnseenCount: function() {
-            return this.meta && this.meta.unseen_count || this.filter(function(el) {
-                return !el.seen;
+            return this.filter(function(el) {
+                return !el.get("seen");
             }).length;
         },
         getUnreadCount: function() {
-            return this.meta && this.meta.unread_count || this.filter(function(el) {
-                return !el.read;
+            return this.filter(function(el) {
+                return !el.get("read");
             }).length;
         }
     });
