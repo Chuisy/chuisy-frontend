@@ -217,9 +217,24 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/gift/"
     });
 
-    chuisy.models.Accounts = Backbone.Tastypie.Collection.extend({
+    chuisy.models.SearchableCollection = Backbone.Tastypie.Collection.extend({
+        search: function(query, options) {
+            var url = _.result(this, "url") + "search/";
+            options = options || {};
+            options.url = url;
+            options.data = options.data || {};
+            options.data.q = query;
+
+            this.fetch(options);
+        }
+    });
+
+    chuisy.models.UserCollection = chuisy.models.SearchableCollection.extend({
         model: chuisy.models.User,
-        url: chuisy.apiRoot + chuisy.version + "/user/",
+        url: chuisy.apiRoot + chuisy.version + "/user/"
+    });
+
+    chuisy.models.Accounts = chuisy.models.UserCollection.extend({
         localStorage: new Backbone.LocalStorage("accounts"),
         setActiveUser: function(model) {
             localStorage.setItem("accounts_active", model.id);
@@ -229,7 +244,7 @@
         }
     });
 
-    chuisy.models.ChuCollection = Backbone.Tastypie.Collection.extend({
+    chuisy.models.ChuCollection = chuisy.models.SearchableCollection.extend({
         model: chuisy.models.Chu,
         url: chuisy.apiRoot + chuisy.version + "/chu/"
     });
