@@ -175,25 +175,35 @@
         }
     });
 
-    chuisy.models.Chu = Backbone.Tastypie.Model.extend({
+    chuisy.models.OwnedModel = Backbone.Tastypie.Model.extend({
+        save: function(attributes, options) {
+            options = options || {};
+            options.attrs = this.toJSON();
+            _.extend(options.attrs, attributes);
+            delete options.attrs.user;
+            Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+        }
+    });
+
+    chuisy.models.Chu = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/chu/",
         getTimeText: function() {
             return timeToText(this.get("time"));
         }
     });
 
-    chuisy.models.ChuComment = Backbone.Tastypie.Model.extend({
+    chuisy.models.ChuComment = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/chucomment/",
         getTimeText: function() {
             return timeToText(this.get("time"));
         }
     });
 
-    chuisy.models.Like = Backbone.Tastypie.Model.extend({
+    chuisy.models.Like = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/like/"
     });
 
-    chuisy.models.FollowingRelation = Backbone.Tastypie.Model.extend({
+    chuisy.models.FollowingRelation = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/followingrelation/"
     });
 
@@ -201,7 +211,7 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/place/"
     });
 
-    chuisy.models.Notification = Backbone.Tastypie.Model.extend({
+    chuisy.models.Notification = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/notification/"
     });
 
@@ -209,7 +219,7 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/device/"
     });
 
-    chuisy.models.Profile = Backbone.Tastypie.Model.extend({
+    chuisy.models.Profile = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/profile/"
     });
 
@@ -266,7 +276,39 @@
         }
     });
 
+    chuisy.models.Notifications = Backbone.Tastypie.Collection.extend({
+        model: chuisy.models.Notification,
+        url: chuisy.apiRoot + chuisy.version + "/notification/",
+        seen: function(options) {
+            if (this.length) {
+                var url = _.result(this, "url") + "seen/";
+                options = options || {};
+                options.data = options.data || {};
+                options.data.latest = this.at(0).get("time");
+                this.meta.unseen_count = 0;
+                this.each(function(el) {
+                    el.seen = true;
+                });
+                Backbone.Tastypie.addAuthentication("read", this, options);
+                Backbone.ajax(url, options);
+            }
+        },
+        getUnseenCount: function() {
+            return this.meta && this.meta.unseen_count || this.filter(function(el) {
+                return !el.seen;
+            }).length;
+        },
+        getUnreadCount: function() {
+            return this.meta && this.meta.unread_count || this.filter(function(el) {
+                return !el.read;
+            }).length;
+        }
+    });
+
+
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
+    chuisy.notifications = new chuisy.models.Notifications();
+
 })(window.$, window._, window.Backbone, window.enyo);
