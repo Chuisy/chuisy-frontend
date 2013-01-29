@@ -1,8 +1,8 @@
 (function($, _, Backbone, enyo) {
     chuisy = {
         apiRoot: "http://127.0.0.1:8000/api/",
-        // apiUrl: "http://chuisy-staging.herokuapp.com/api/",
-        // apiUrl: "http://www.chuisy.com/api/",
+        // apiRoot: "http://chuisy-staging.herokuapp.com/api/",
+        // apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
         init: function() {
@@ -172,6 +172,25 @@
                     console.error(error);
                 }
             });
+        },
+        addDevice: function(deviceToken) {
+            if (!deviceToken) {
+                console.error("No device token provided.");
+                return;
+            }
+            if (!this.isAuthenticated()) {
+                console.error("Can't add a device. User is not authenticated.");
+                return;
+            }
+
+            var options = {
+                url: chuisy.apiRoot + chuisy.version + "/device/add/",
+                data: {token: deviceToken},
+                type: "POST",
+                contentType: "application/json"
+            };
+            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.ajax(options);
         }
     });
 
@@ -286,15 +305,15 @@
         url: chuisy.apiRoot + chuisy.version + "/notification/",
         seen: function(options) {
             if (this.length) {
-                var url = _.result(this, "url") + "seen/";
                 options = options || {};
+                options.url = _.result(this, "url") + "seen/";
                 options.data = options.data || {};
                 options.data.latest = this.at(0).get("time");
                 this.each(function(el) {
                     el.seen = true;
                 });
                 Backbone.Tastypie.addAuthentication("read", this, options);
-                Backbone.ajax(url, options);
+                Backbone.ajax(options);
             }
         },
         getUnseenCount: function() {
