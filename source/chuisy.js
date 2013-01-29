@@ -128,6 +128,13 @@
     chuisy.models.User = Backbone.Tastypie.Model.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/user/",
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
+        save: function(attributes, options) {
+            attributes = attributes || {};
+            var profile = this.get("profile");
+            attributes.profile = profile.resource_uri;
+            Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+            this.set("profile", profile);
+        },
         authenticate: function(fbAccessToken, success, failure) {
             Backbone.ajax(this.authUrl, {
                 data: {fb_access_token: fbAccessToken},
@@ -235,6 +242,8 @@
         save: function(attributes, options) {
             attributes = attributes || {};
             attributes.actor = this.get("actor").resource_uri;
+            options = options || {};
+            options.wait = true;
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
         }
     });
