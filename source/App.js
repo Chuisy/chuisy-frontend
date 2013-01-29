@@ -115,8 +115,6 @@ enyo.kind({
         // window.onhashchange = enyo.bind(this, this.hashChanged);
         chuisy.init();
 
-        enyo.Signals.send("onUserChanged", {user: chuisy.getSignInStatus().user});
-
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
         this.history = [];
@@ -144,22 +142,25 @@ enyo.kind({
             // this.log(JSON.stringify(event.notification));
             pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
             enyo.Signals.send("onPushNotification", event);
+            navigator.notification.beep(1);
+            navigator.notification.vibrate(1000);
         }));
     },
     /**
         Registers device with apns and add it to the users account
     */
     registerDevice: function() {
-        try {
-            window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
-                // this.log(JSON.stringify(status));
-                if (status.enabled && status.deviceToken) {
-                    chuisy.device.add({token: status.deviceToken}, enyo.bind(this, function(sender, response) {
-                    }));
-                }
-            }));
-        } catch (e) {
-            console.error("Could not register device! Error: " + e.message);
+        var user = chuisy.accounts.getActiveUser();
+        if (user && user.isAuthenticated()) {
+            try {
+                window.plugins.pushNotification.registerDevice({alert:true, badge:true, sound:true}, enyo.bind(this, function(status) {
+                    if (status.enabled && status.deviceToken) {
+                        user.addDevice(status.deviceToken);
+                    }
+                }));
+            } catch (e) {
+                console.error("Could not register device! Error: " + e.message);
+            }
         }
     },
     /**

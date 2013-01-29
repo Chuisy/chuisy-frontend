@@ -14,14 +14,14 @@ enyo.kind({
 	},
 	chuChanged: function() {
 		if (this.chu) {
-			this.$.image.applyStyle("background-image", "url(" + (this.chu.thumbnails["300x300"] || this.chu.image || "assets/images/chu_placeholder.png") + ")");
-			this.$.avatar.setSrc(this.chu.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-			this.$.fullName.setContent(this.chu.user.first_name + " " + this.chu.user.last_name);
-			this.$.time.setContent(chuisy.timeToText(this.chu.time));
-			this.$.likesCount.setContent(this.chu.likes_count);
-			this.$.commentsCount.setContent(this.chu.comments_count);
-			this.$.place.setContent(this.chu.location && this.chu.location.place ? this.chu.location.place.name : "");
-			// this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + this.chu.product.category.name + ".png)");
+			this.$.image.applyStyle("background-image", "url(" + (this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png") + ")");
+			this.$.avatar.setSrc(this.chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+			this.$.fullName.setContent(this.chu.get("user").first_name + " " + this.chu.get("user").last_name);
+			this.$.time.setContent(this.chu.getTimeText());
+			this.$.likesCount.setContent(this.chu.get("likes_count"));
+			this.$.commentsCount.setContent(this.chu.get("comments_count"));
+			var location = this.chu.get("location");
+			this.$.place.setContent(location && location.place ? location.place.name : "");
 		}
 	},
 	showUser: function() {

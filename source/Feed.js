@@ -18,43 +18,13 @@ enyo.kind({
         offset: 0,
         total_count: 0
     },
-    userChanged: function(sender, event) {
-        if (!this.authUser || this.authUser.id != event.user.id) {
-            // User has changed. Reload feed.
-            this.authUser = event.user;
-            // this.loadFeed();
-        }
-    },
-    /**
-        Loads the chu feed.
-    */
-    loadFeed: function() {
-        if (!this.pulled) {
-            this.$.spinner.show();
-        }
-        chuisy.chu.feed({limit: 20}, enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.chus = response.objects;
-            this.feedLoaded();
-            this.$.spinner.hide();
-        }));
-    },
-    /**
-        Load the next page
-    */
-    nextPage: function() {
-        var params = {
-            limit: this.meta.limit,
-            offset: this.meta.offset + this.meta.limit
-        };
-        chuisy.chu.feed(params, enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.chus = this.chus.concat(response.objects);
-            this.refreshFeed();
-        }));
+    create: function() {
+        this.inherited(arguments);
+        chuisy.feed.on("reset update", this.feedLoaded, this);
     },
     feedLoaded: function() {
-        this.$.feedList.setCount(this.chus.length);
+        this.log("feed loaded!", chuisy.feed.models);
+        this.$.feedList.setCount(chuisy.feed.length);
         if (this.pulled) {
             // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
             this.$.feedList.completePull();
@@ -73,7 +43,7 @@ enyo.kind({
         if (App.isOnline()) {
             // Internet access available. Reload feed!
             this.pulled = true;
-            this.loadFeed();
+            chuisy.feed.fetch();
         } else {
             // No internet access don't reload
             this.$.feedList.completePull();
@@ -84,26 +54,20 @@ enyo.kind({
         this.$.feedList.reset();
     },
     setupFeedItem: function(sender, event) {
-        var item = this.chus[event.index];
+        var item = chuisy.feed.at(event.index);
         this.$.chuFeedItem.setChu(item);
 
-        var isLastItem = event.index == this.chus.length-1;
-        if (isLastItem && !this.allPagesLoaded()) {
+        var isLastItem = event.index == chuisy.feed.length-1;
+        if (isLastItem && !chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
-            this.nextPage();
+            chuisy.feed.fetchNext();
             this.$.loadingNextPage.show();
         } else {
             this.$.loadingNextPage.hide();
         }
 
         return true;
-    },
-    /**
-        Checks if all items have been loaded
-    */
-    allPagesLoaded: function() {
-        return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
     chuTapped: function(sender, event) {
         this.doShowChu({chu: this.chus[event.index]});
@@ -126,8 +90,8 @@ enyo.kind({
     },
     deactivate: function() {},
     components: [
-        {kind: "onyx.Spinner", classes: "absolute-center"},
-        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
+        // {kind: "onyx.Spinner", classes: "absolute-center"},
+        {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: $L("No internet connection available!")}

@@ -14,6 +14,7 @@
                     apiKey: user.get("api_key")
                 };
             }
+            chuisy.feed.fetch();
         },
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
