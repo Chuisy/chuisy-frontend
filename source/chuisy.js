@@ -152,10 +152,25 @@
             return this.get("username") && this.get("api_key") ? true : false;
         },
         setAvatar: function(uri) {
-            var target = encodeURI(this.url + "/upload_avatar/?username=" +
+            var target = encodeURI(_.result(this, "url") + "/upload_avatar/?username=" +
                 this.authCredentials.username + "&api_key=" + this.authCredentials.api_key);
             upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", function() {
                 this.fetch({remote: true});
+            });
+        },
+        getFriends: function(success) {
+            Backbone.ajax(_.result(this, "url") + "/friends/", {
+                dataType: "json",
+                context: this,
+                success: function(data) {
+                    var friends = new chuisy.models.UserCollection(data.objects);
+                    if (success) {
+                        success(friends);
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
             });
         }
     });
