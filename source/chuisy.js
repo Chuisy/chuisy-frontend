@@ -199,6 +199,38 @@
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
+        },
+        setFollowing: function(following) {
+            var activeUser = chuisy.accounts.getActiveUser();
+
+            if (!activeUser || !activeUser.isAuthenticated()) {
+                console.error("There has to be an active authenticated user to perform this action!");
+                return;
+            }
+            if (activeUser.id == this.id) {
+                console.error("User can't follow himself.");
+                return;
+            }
+
+            this.set("following", following);
+
+            var options = {
+                url: _.result(this, "url") + "/follow/",
+                data: {follow: following},
+                type: "POST",
+                contentType: "application/json"
+            };
+            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.ajax(options);
+        },
+        follow: function() {
+            this.setFollowing(true);
+        },
+        unfollow: function() {
+            this.setFollowing(false);
+        },
+        toggleFollow: function() {
+            this.setFollowing(!this.get("following"));
         }
     });
 
@@ -216,6 +248,34 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/chu/",
         getTimeText: function() {
             return timeToText(this.get("time"));
+        },
+        setLiked: function(liked) {
+            var activeUser = chuisy.accounts.getActiveUser();
+
+            if (!activeUser || !activeUser.isAuthenticated()) {
+                console.error("There has to be an active authenticated user to perform this action!");
+                return;
+            }
+
+            this.set("liked", liked);
+
+            var options = {
+                url: _.result(this, "url") + "/like/",
+                data: {like: liked},
+                type: "POST",
+                contentType: "application/json"
+            };
+            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.ajax(options);
+        },
+        like: function() {
+            this.setLiked(true);
+        },
+        unlike: function() {
+            this.setLiked(false);
+        },
+        toggleLike: function() {
+            this.setLiked(!this.get("liked"));
         }
     });
 
