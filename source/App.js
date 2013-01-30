@@ -277,9 +277,10 @@ enyo.kind({
             // {user id}/
             // This is the URI to a users profile
             if (App.checkConnection()) {
-                chuisy.gift.detail(match2[1], enyo.bind(this, function(sender, response) {
-                    this.$.mainView.openView("gift", response);
-                }));
+                var gift = new chuisy.models.Gift({id: match2[1]});
+                gift.fetch({success: enyo.bind(this, function() {
+                    this.$.mainView.openView("gift", gift);
+                })});
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
@@ -301,26 +302,29 @@ enyo.kind({
                 // chu/share/{chu id}
                 // Sharing is caring. And apparently this user wants to share a chu. Let' go!
                 if (App.checkConnection()) {
-                    chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
-                        this.$.mainView.openView("share", response);
-                    }));
+                    var chu = new chuisy.models.Chu({id: match3[1]});
+                    chu.fetch({success: enyo.bind(this, function() {
+                        this.$.mainView.openView("share", chu);
+                    })});
                 }
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
                 // We have a URI pointing to a specific Chu. Let's open it.
                 if (App.checkConnection()) {
-                    chuisy.chu.detail(match3[1], enyo.bind(this, function(sender, response) {
-                        this.$.mainView.openView("chu", response);
-                    }));
+                    var chu = new chuisy.models.Chu({id: match3[1]});
+                    chu.fetch({success: enyo.bind(this, function() {
+                        this.$.mainView.openView("chu", chu);
+                    })});
                 }
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // {user id}/
             // This is the URI to a users profile
             if (App.checkConnection()) {
-                chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-                    this.$.mainView.openView("user", response);
-                }));
+                var user = new chuisy.models.User({id: match2[1]});
+                user.fetch({success: enyo.bind(this, function() {
+                    this.$.mainView.openView("user", user);
+                })});
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
