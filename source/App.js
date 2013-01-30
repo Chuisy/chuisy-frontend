@@ -60,6 +60,10 @@ enyo.kind({
             // } else {
             //     console.error("No facebook sdk found!");
             // }
+        },
+        isSignedIn: function() {
+            var user = chuisy.accounts.getActiveUser();
+            return user && user.isAuthenticated();
         }
     },
     history: [],
@@ -201,12 +205,7 @@ enyo.kind({
     online: function() {
         this.log("online");
         chuisy.setOnline(true);
-        if (chuisy.getSignInStatus().signedIn) {
-            chuisy.loadUserDetails();
-        }
-        if (App.isMobile() && chuisy.getSignInStatus().signedIn) {
-            this.registerDevice();
-        }
+        this.registerDevice();
         return true;
     },
     offline: function() {
