@@ -17,6 +17,7 @@ enyo.kind({
         this.inherited(arguments);
         this.selectedItems = {};
         this.selectedItemsArray= [];
+        this.filteredItems = [];
     },
     itemsChanged: function() {
         this.filteredItems = this.items;
@@ -55,9 +56,9 @@ enyo.kind({
         if (searchString) {
             // Filter items by full name and user name
             this.filteredItems = this.items.filter(enyo.bind(this, function(item) {
-                var fullName = item.first_name + " " + item.last_name;
+                var fullName = item.get("first_name") + " " + item.get("last_name");
                 var pattern = new RegExp(searchString, "i");
-                return item.username.search(pattern) != -1 ||
+                return item.get("username").search(pattern) != -1 ||
                     fullName.search(pattern) != -1 ||
                     this.isSelected(item);
             }));
@@ -99,7 +100,7 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
-        event.item.$.avatar.setSrc(item.profile.avatar_thumbnail);
+        event.item.$.avatar.setSrc(item.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         event.item.$.avatar.addRemoveClass("selected", this.isSelected(item));
         return true;
     },
