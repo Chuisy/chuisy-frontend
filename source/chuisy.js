@@ -129,6 +129,12 @@
     chuisy.models.User = Backbone.Tastypie.Model.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/user/",
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
+        initialize: function(attributes, options) {
+            Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
+            this.friends = new chuisy.models.UserCollection([], {
+                url: _.result(this, "url") + "/friends/"
+            });
+        },
         save: function(attributes, options) {
             attributes = attributes || {};
             var profile = this.get("profile");
@@ -164,21 +170,6 @@
                 this.authCredentials.username + "&api_key=" + this.authCredentials.api_key);
             upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", function() {
                 this.fetch({remote: true});
-            });
-        },
-        getFriends: function(success) {
-            Backbone.ajax(_.result(this, "url") + "/friends/", {
-                dataType: "json",
-                context: this,
-                success: function(data) {
-                    var friends = new chuisy.models.UserCollection(data.objects);
-                    if (success) {
-                        success(friends);
-                    }
-                },
-                error: function(error) {
-                    console.error(error);
-                }
             });
         },
         addDevice: function(deviceToken) {
