@@ -10,6 +10,10 @@ enyo.kind({
 		// View has been selected
 		onChange: ""
 	},
+	create: function() {
+		this.inherited(arguments);
+		chuisy.notifications.on("reset", this.notificationsUpdated, this);
+	},
 	selectItem: function(name) {
 		if (this.$[name]) {
 			this.$[name].setActive(true);
@@ -22,7 +26,7 @@ enyo.kind({
 		event.preventDefault();
 	},
 	notificationsUpdated: function(sender, event) {
-		this.addRemoveClass("new-notifications", event.unseen_count);
+		this.addRemoveClass("new-notifications", chuisy.notifications.getUnseenCount());
 	},
 	components: [
 		{classes: "menu-item feed", value: "feed", ontap: "itemTapped", name: "feed", active: true},
@@ -30,7 +34,6 @@ enyo.kind({
 		{classes: "menu-item closet", value: "closet", ontap: "itemTapped", name: "closet"},
 		{classes: "menu-item discover", value: "discover", ontap: "itemTapped", name: "discover"},
 		{classes: "menu-item gifts", value: "gifts", ontap: "itemTapped", name: "gifts"},
-		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"},
-		{kind: "Signals", onNotificationsUpdated: "notificationsUpdated"}
+		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"}
 	]
 });
