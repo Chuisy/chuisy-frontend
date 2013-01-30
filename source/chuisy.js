@@ -137,8 +137,10 @@
         },
         save: function(attributes, options) {
             attributes = attributes || {};
-            var profile = this.get("profile");
-            attributes.profile = profile.resource_uri;
+            var profile = _.clone(this.get("profile"));
+            if (profile.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
+                attributes.profile = profile.resource_uri;
+            }
             Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
             this.set("profile", profile);
         },
