@@ -287,6 +287,7 @@
             }
 
             this.set("liked", liked);
+            this.set("likes_count", this.get("likes_count") + (liked ? 1 : -1));
 
             var options = {
                 url: _.result(this, "url") + "/like/",
