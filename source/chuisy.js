@@ -134,6 +134,12 @@
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
         initialize: function(attributes, options) {
             Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
+            this.followers = new chuisy.models.UserCollection([], {
+                url: _.result(this, "url") + "/followers/"
+            });
+            this.following = new chuisy.models.UserCollection([], {
+                url: _.result(this, "url") + "/following/"
+            });
             this.friends = new chuisy.models.UserCollection([], {
                 url: _.result(this, "url") + "/friends/"
             });

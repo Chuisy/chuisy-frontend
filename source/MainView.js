@@ -28,6 +28,17 @@ enyo.kind({
         user: [4, null],
         gift: [5, null]
     },
+    create: function() {
+        this.inherited(arguments);
+        this.updateProfile();
+        chuisy.accounts.on("add reset change", this.updateProfile, this);
+    },
+    updateProfile: function() {
+        var user = chuisy.accounts.getActiveUser();
+        if (user) {
+            this.$.profile.setUser(user);
+        }
+    },
     back: function() {
         this.doBack();
         return true;
@@ -121,7 +132,11 @@ enyo.kind({
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});
-                chuisy.accounts.getActiveUser().fetch({remote: true});
+                enyo.Signals.send("onShowGuide", {view: "profile"});
+                var user = chuisy.accounts.getActiveUser();
+                if (user) {
+                    user.fetch({remote: true});
+                }
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
