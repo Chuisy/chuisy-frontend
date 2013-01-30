@@ -123,6 +123,12 @@ enyo.kind({
 
         this.history = [];
 
+        chuisy.notifications.on("reset", function() {
+            if (App.isMobile()) {
+                window.plugins.pushNotification.setApplicationIconBadgeNumber(chuisy.notifications.meta.unseen_count, function() {});
+            }
+        });
+
         if (App.isMobile()) {
             this.initPushNotifications();
         }
@@ -144,7 +150,7 @@ enyo.kind({
         this.checkPendingNotifications();
         document.addEventListener('onPushNotification', enyo.bind(this, function(event) {
             // this.log(JSON.stringify(event.notification));
-            pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
+            // pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
             enyo.Signals.send("onPushNotification", event);
             navigator.notification.beep(1);
             navigator.notification.vibrate(1000);
