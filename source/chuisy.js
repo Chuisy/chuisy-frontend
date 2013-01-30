@@ -16,6 +16,8 @@
             }
             user.friends.fetchAll();
             chuisy.feed.fetch();
+            chuisy.notifications.fetch();
+            chuisy.notifications.startPolling(60000);
         },
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
@@ -422,11 +424,12 @@
                 options.data = options.data || {};
                 options.data.latest = this.at(0).get("time");
                 this.each(function(el) {
-                    el.seen = true;
+                    el.set("seen", true);
                 });
                 Backbone.Tastypie.addAuthentication("read", this, options);
                 Backbone.ajax(options);
             }
+            this.trigger("reset");
         },
         getUnseenCount: function() {
             return this.filter(function(el) {

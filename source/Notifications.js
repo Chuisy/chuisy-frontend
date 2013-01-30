@@ -8,79 +8,46 @@ enyo.kind({
         // User has tapped a notification
         onNotificationSelected: ""
     },
-    // Meta data for loading notifications from the api
-    meta: {
-        limit: 20,
-        offset: 0,
-        total_count: 0
-    },
-    /**
-        Load first batch of notifications
-    */
-    load: function() {
-        chuisy.notification.list([], enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.items = response.objects;
-            this.refresh();
-            this.notificationsUpdated();
-        }), {limit: this.meta.limit});
-    },
-    /**
-        Loads next page of notifications
-    */
-    nextPage: function() {
-        var params = {
-            limit: this.meta.limit,
-            offset: this.meta.offset + this.meta.limit
-        };
-        chuisy.notification.list(this.filters, enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.items = this.items.concat(response.objects);
-            this.refresh();
-        }), params);
+    create: function() {
+        this.inherited(arguments);
+        chuisy.notifications.on("reset update", this.refresh, this);
     },
     /**
         Refreshes notification list with loaded items
     */
     refresh: function() {
-        this.$.list.setCount(this.items.length);
+        this.$.list.setCount(chuisy.notifications.length);
         this.$.list.refresh();
-        this.$.placeholder.setShowing(!this.items.length);
-    },
-    /**
-        Checks if all notifications have been loaded
-    */
-    allPagesLoaded: function() {
-        return this.meta.offset + this.meta.limit >= this.meta.total_count;
+        this.$.placeholder.setShowing(!chuisy.notifications.length);
     },
     setupItem: function(sender, event) {
-        var item = this.items[event.index];
+        var item = chuisy.notifications.at(event.index);
 
-        switch (item.action) {
+        switch (item.get("action")) {
             case "like":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
+                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
                 break;
             case "comment":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.actor.first_name));
+                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
                 break;
             case "follow":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.actor.first_name));
+                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
                 break;
             case "share":
-                this.$.image.setSrc(item.actor.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.actor.first_name));
+                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
                 break;
         }
-        this.$.notification.addRemoveClass("unread", !item.read);
+        this.$.notification.addRemoveClass("unread", !item.get("read"));
 
-        var isLastItem = event.index == this.items.length-1;
-        if (isLastItem && !this.allPagesLoaded()) {
+        var isLastItem = event.index == chuisy.notifications.length-1;
+        if (isLastItem && chuisy.notifications.hasNextPage()) {
             // Last item in the list and there is more! Load next page
             this.$.loadingNextPage.show();
-            this.nextPage();
+            chuisy.notifications.fetchNext();
         } else {
             this.$.loadingNextPage.hide();
         }
@@ -88,80 +55,25 @@ enyo.kind({
         return true;
     },
     notificationTapped: function(sender, event) {
-        var not = this.items[event.index];
+        var not = chuisy.notifications.at(event.index);
         if (App.checkConnection()) {
             this.doNotificationSelected({notification: not});
-            if (!not.read) {
+            if (!not.get("read")) {
                 // Mark notification as read
-                not.read = true;
-                params = enyo.clone(not);
-                // Have to delete user because otherwise api will not return 200
-                delete params.user;
-                params.actor = params.actor.resource_uri;
-                chuisy.notification.put(not.id, params, enyo.bind(this, function(sender, response) {
-                    this.refresh();
-                }));
+                not.save({read: true});
+                this.refresh();
             }
         }
     },
-    /**
-        Start polling regularly for new notifications
-    */
-    startPolling: function() {
-        this.stopPolling();
-        this.pollInterval = setInterval(enyo.bind(this, this.load), 60000);
-    },
-    /**
-        Stop polling for notifications
-    */
-    stopPolling: function() {
-        if (this.pollInterval) {
-            clearInterval(this.pollInterval);
-        }
-    },
-    signedIn: function() {
-        if (App.isOnline()) {
-            this.load();
-            this.startPolling();
-        }
-    },
-    signedOut: function() {
-        this.items = [];
-        this.refresh();
-        this.stopPolling();
-    },
-    online: function() {
-        if (chuisy.getSignInStatus().signedIn) {
-            this.load();
-            this.startPolling();
-        }
-    },
-    offline: function() {
-        this.stopPolling();
-    },
     pushNotification: function() {
-        this.load();
+        chuisy.notifications.fetch();
         return true;
     },
     /**
         Mark all notifications as seen
     */
     seen: function() {
-        if (this.items && this.items.length) {
-            chuisy.notification.seen({latest: this.items[0].time}, enyo.bind(this, function(sender, response) {
-                this.meta.unseen_count = response.unseen;
-                this.notificationsUpdated();
-            }));
-        }
-    },
-    /**
-        Fires _onNotificationsUpdated_ event and set the application icon badge number
-    */
-    notificationsUpdated: function() {
-        enyo.Signals.send("onNotificationsUpdated", {total_count: this.meta.total_count, unread_count: this.meta.unread_count, unseen_count: this.meta.unseen_count});
-        if (App.isMobile()) {
-            window.plugins.pushNotification.setApplicationIconBadgeNumber(this.meta.unseen_count, function() {});
-        }
+        chuisy.notifications.seen();
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "notifications"});
@@ -180,6 +92,6 @@ enyo.kind({
             ]},
             {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]},
-        {kind: "Signals", onSignInSuccess: "signedIn", onSignOut: "signedOut", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
+        {onPushNotification: "pushNotification"}
     ]
 });
