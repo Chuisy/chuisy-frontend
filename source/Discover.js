@@ -14,15 +14,24 @@ enyo.kind({
     handlers: {
         ontap: "tapHandler"
     },
+    create: function() {
+        this.inherited(arguments);
+
+        this.users = new chuisy.models.UserCollection();
+        this.chus = new chuisy.models.ChuCollection();
+
+        this.users.on("reset add", _.bind(this.refresh, this, "user"));
+        this.chus.on("reset add", _.bind(this.refresh, this, "chu"));
+    },
     setupUser: function(sender, event) {
-        var user = this.users[event.index];
+        var user = this.users.at(event.index);
         this.$.userListItem.setUser(user);
 
         var isLastItem = event.index == this.users.length-1;
-        if (isLastItem && !this.allPagesLoaded("user")) {
+        if (isLastItem && this.users.hasNextPage()) {
             // Item is last item in the list but there is more! Load next page.
             this.$.userNextPage.show();
-            this.nextPage("user");
+            this.users.fetchNext();
         } else {
             this.$.userNextPage.hide();
         }
@@ -31,26 +40,25 @@ enyo.kind({
     },
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
-        this.$.resultChuImage.applyStyle("background-image", "url(" + (chu.thumbnails["300x100"] || chu.image || "assets/images/chu_placeholder.png") + ")");
-        this.$.chuAvatar.setSrc(chu.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-        this.$.categoryIcon.applyStyle("background-image", "url(assets/images/category_" + chu.product.category.name + ".png)");
+        this.$.resultChuImage.applyStyle("background-image", "url(" + (chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png") + ")");
+        this.$.chuAvatar.setSrc(chu.user.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
 
         var isLastItem = event.index == this.chus.length-1;
-        if (isLastItem && !this.allPagesLoaded("chu")) {
+        if (isLastItem && this.chus.hasNextPage()) {
             // Item is last item in the list but there is more! Load next page.
             this.$.chuNextPage.show();
-            this.nextPage("chu");
+            this.chus.fetchNext();
         } else {
             this.$.chuNextPage.hide();
         }
         return true;
     },
     userTap: function(sender, event) {
-        this.doShowUser({user: this.users[event.index]});
+        this.doShowUser({user: this.users.at(event.index)});
         event.preventDefault();
     },
     chuTap: function(sender, event) {
-        this.doShowChu({chu: this.chus[event.index]});
+        this.doShowChu({chu: this.chus.at(event.index)});
         event.preventDefault();
     },
     radioGroupActivate: function(sender, event) {
@@ -67,69 +75,39 @@ enyo.kind({
     },
     searchInputCancel: function() {
         this.latestQuery = null;
-        this.refreshResults("user", {objects: [], meta: {total_count: ""}});
-        this.refreshResults("chu", {objects: [], meta: {total_count: ""}});
+        this.users.reset();
+        this.chus.reset();
+        this.users.meta = {};
+        this.chus.meta = {};
+        this.refresh("user", null, null, true);
+        this.refresh("chu", null, null, true);
         this.$.resultPanels.setIndex(0);
         this.$.resultTabs.setActive(null);
     },
-    /**
-        Searches the _resource_ for a _query_
-    */
-    search: function(resource, query) {
-        this.refreshResults(resource, "loading");
-        chuisy[resource].search({q: query, limit: 20}, enyo.bind(this, function(sender, response) {
-            // Only update results if the response is the one from the latest query
-            if (response.meta.query == this.latestQuery) {
-                this.refreshResults(resource, response);
+    refresh: function(which, collection, options, force) {
+        if (force || options && options.data && options.data.q == this.latestQuery) {
+            var coll = this[which + "s"];
+            this.$[which + "Count"].setContent(coll.meta.total_count);
+            this.$[which + "Spinner"].hide();
+            this.$[which + "List"].setCount(coll.length);
+            this.$[which + "NoResults"].setShowing(!coll.length);
+            this.$[which + "List"].refresh();
+            if (!this.$.resultPanels.getIndex()) {
+                this.$.resultPanels.setIndex(1);
             }
-        }));
-    },
-    /**
-        Loads next page for a _resource_
-    */
-    nextPage: function(resource) {
-        var meta = this[resource + "Meta"];
-        var objects = this[resource + "s"];
-        var params = {
-            q: meta.query,
-            limit: meta.limit,
-            offset: meta.offset + meta.limit
-        };
-        chuisy[resource].search(params, enyo.bind(this, function(sender, response) {
-            response.objects = objects.concat(response.objects);
-            this.refreshResults(resource, response);
-        }));
-    },
-    /**
-        Update the results lists for _resource_ with the result data from _response_.
-    */
-    refreshResults: function(resource, response) {
-        if (response == "loading") {
-            // We are waiting for the search response. Unload list and show spinner.
-            this.$[resource + "List"].setCount(0);
-            this.$[resource + "Spinner"].show();
-            this.$[resource + "Spinner"].start();
-            this.$[resource + "NoResults"].hide();
-        } else {
-            // Got a response! Update meta data, fill the result list and hide the spinner
-            this[resource + "Meta"] = response.meta;
-            this[resource + "s"] = response.objects;
-            this.$[resource + "Count"].setContent(response.meta.total_count);
-            this.$[resource + "Spinner"].hide();
-            this.$[resource + "Spinner"].stop();
-            this.$[resource + "List"].setCount(this[resource + "s"].length);
-            this.$[resource + "NoResults"].setShowing(!this[resource + "s"].length);
         }
-        this.$[resource + "List"].refresh();
-        this.$.resultPanels.setIndex(this.$.resultPanels.getIndex() || 1);
-        this.$.resultTabs.setActive(this.$.resultTabs.getActive() || this.$.userTab);
     },
     /**
-        Checks if all items have been loaded for a given _resource_
+        Searches the _which_ for a _query_
     */
-    allPagesLoaded: function(resource) {
-        var meta = this[resource + "Meta"];
-        return meta.offset + meta.limit >= meta.total_count;
+    search: function(which, query) {
+        // We are waiting for the search response. Unload list and show spinner.
+        this.$[which + "List"].setCount(0);
+        this.$[which + "List"].refresh();
+        this.$[which + "Spinner"].show();
+        this.$[which + "NoResults"].hide();
+        this.latestQuery = query;
+        this[which + "s"].fetch({searchQuery: query});
     },
     tapHandler: function(sender, event) {
         // Remove focus from search input if the user taps outside of it
@@ -144,27 +122,8 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "discover"});
     },
     toggleFollow: function(sender, event) {
-        var user = this.users[event.index];
-
-        // button.setDisabled(true);
-        // button.setContent(user.following ? "follow" : "unfollow");
-        if (user.following) {
-            // There is a following relation with id _user.following_. Delete it
-            chuisy.followingrelation.remove(user.following, enyo.bind(this, function(sender, response) {
-                // button.setDisabled(false);
-            }));
-            user.following = false;
-        } else {
-            // Not following this user yet. Create a following relation
-            var params = {
-                followee: user.resource_uri
-            };
-            chuisy.followingrelation.create(params, enyo.bind(this, function(sender, response) {
-                user.following = response.id;
-                // button.setDisabled(false);
-            }));
-            user.following = true;
-        }
+        var user = this.users.at(event.index);
+        user.toggleFollow();
         this.$.userList.refresh();
         return true;
     },

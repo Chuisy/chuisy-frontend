@@ -48,7 +48,6 @@ enyo.kind({
         if (user) {
             this.$.peoplePicker.setItems(user.friends.models);
             this.listenTo(user.friends, "all", function() {
-                this.log("friends loaded", user.friends.models);
                 this.$.peoplePicker.setItems(user.friends.models);
             });
         }

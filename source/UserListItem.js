@@ -14,15 +14,15 @@ enyo.kind({
 		onToggleFollow: ""
 	},
 	userChanged: function() {
-		this.$.avatar.setSrc(this.user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-		this.$.fullName.setContent(this.user.first_name + " " + this.user.last_name);
-		this.$.followButton.setContent(this.user.following ? $L("unfollow") : $L("follow"));
-        var authUser = chuisy.getSignInStatus().user;
-        this.$.followButton.setShowing(!authUser || authUser.id != this.user.id);
+		this.$.avatar.setSrc(this.user.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+		this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
+		this.$.followButton.setContent(this.user.get("following") ? $L("unfollow") : $L("follow"));
+        var activeUser = chuisy.accounts.getActiveUser();
+        this.$.followButton.setShowing(!activeUser || activeUser.id != this.user.id);
 	},
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            if (chuisy.getSignInStatus().signedIn) {
+            if (App.isSignedIn()) {
                 this.doToggleFollow();
             } else {
                 // User is not signed in Ask him to sign in first

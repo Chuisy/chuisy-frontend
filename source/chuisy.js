@@ -357,14 +357,20 @@
     });
 
     chuisy.models.SearchableCollection = Backbone.Tastypie.Collection.extend({
-        search: function(query, options) {
-            var url = _.result(this, "url") + "search/";
-            options = options || {};
-            options.url = url;
-            options.data = options.data || {};
-            options.data.q = query;
+        fetch: function(options) {
+            if (options && options.searchQuery) {
+                this.searchQuery = options.searchQuery;
+            }
 
-            this.fetch(options);
+            if (this.searchQuery) {
+                var url = _.result(this, "url") + "search/";
+                options = options || {};
+                options.url = url;
+                options.data = options.data || {};
+                options.data.q = this.searchQuery;
+            }
+
+            Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
         }
     });
 
