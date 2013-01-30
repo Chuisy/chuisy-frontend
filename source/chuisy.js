@@ -14,6 +14,7 @@
                     apiKey: user.get("api_key")
                 };
             }
+            user.friends.fetchAll();
             chuisy.feed.fetch();
         },
         setOnline: function(online) {
@@ -275,6 +276,15 @@
             chuisy.models.OwnedModel.prototype.initialize.call(this, attributes, options);
             this.comments = new chuisy.models.ChuCommentCollection([], {chu: this});
         },
+        save: function(attributes, options) {
+            attributes = attributes || {};
+            var friends = attributes.friends || _.clone(this.get("friends"));
+            if (!(this.collection && this.collection.localStorage) || options && options.remote) {
+                attributes.friends = _.pluck(friends, "resource_uri");
+            }
+            chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
+            this.set("friends", friends);
+        },
         getTimeText: function() {
             return timeToText(this.get("time"));
         },
@@ -325,10 +335,12 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
         save: function(attributes, options) {
             attributes = attributes || {};
-            attributes.actor = this.get("actor").resource_uri;
-            options = options || {};
-            options.wait = true;
+            var actor = _.clone(this.get("actor"));
+            if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
+                attributes.actor = actor.resource_uri;
+            }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
+            this.set("actor", actor);
         }
     });
 
