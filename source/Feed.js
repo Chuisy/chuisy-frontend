@@ -13,17 +13,11 @@ enyo.kind({
         // User has tapped the avatar or name of a user
         onShowUser: ""
     },
-    meta: {
-        limit: 20,
-        offset: 0,
-        total_count: 0
-    },
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset update", this.feedLoaded, this);
     },
     feedLoaded: function() {
-        this.log("feed loaded!", chuisy.feed.models);
         this.$.feedList.setCount(chuisy.feed.length);
         if (this.pulled) {
             // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
@@ -36,7 +30,7 @@ enyo.kind({
         Refreshfeed based on the existing list.
     */
     refreshFeed: function() {
-        this.$.feedList.setCount(this.chus.length);
+        this.$.feedList.setCount(chuisy.feed.length);
         this.$.feedList.refresh();
     },
     pullRelease: function() {
@@ -58,7 +52,7 @@ enyo.kind({
         this.$.chuFeedItem.setChu(item);
 
         var isLastItem = event.index == chuisy.feed.length-1;
-        if (isLastItem && !chuisy.feed.hasNextPage()) {
+        if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
             chuisy.feed.fetchNext();
@@ -70,7 +64,7 @@ enyo.kind({
         return true;
     },
     chuTapped: function(sender, event) {
-        this.doShowChu({chu: this.chus[event.index]});
+        this.doShowChu({chu: chuisy.feed.at(event.index)});
         event.preventDefault();
     },
     online: function() {
@@ -83,7 +77,7 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        this.doShowUser({user: this.chus[event.index].user});
+        this.doShowUser({user: chuisy.feed.at(event.index).get("user")});
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "feed"});
