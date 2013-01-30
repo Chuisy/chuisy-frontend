@@ -237,8 +237,44 @@
         }
     });
 
+    chuisy.models.ChuComment = chuisy.models.OwnedModel.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/chucomment/",
+        getTimeText: function() {
+            return timeToText(this.get("time"));
+        }
+    });
+
+    chuisy.models.ChuCommentCollection = Backbone.Tastypie.Collection.extend({
+        model: chuisy.models.ChuComment,
+        url: chuisy.apiRoot + chuisy.version + "/chucomment/",
+        filters: function() {
+            return this.chu ? {chu: this.chu.id} : {};
+        },
+        initialize: function(models, options) {
+            Backbone.Tastypie.Collection.prototype.initialize.call(this, models, options);
+            this.chu = options.chu;
+        },
+        add: function(models, options) {
+            models = _.isArray(models) ? models : [models];
+            if (this.chu) {
+                for (var i=0, el=models[i]; i<models.length; i++) {
+                    if (el instanceof Backbone.Model) {
+                        el.set("chu", this.chu.get("resource_uri"));
+                    } else {
+                        el.chu = this.chu.get("resource_uri");
+                    }
+                }
+            }
+            Backbone.Tastypie.Collection.prototype.add.call(this, models, options);
+        }
+    });
+
     chuisy.models.Chu = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/chu/",
+        initialize: function(attributes, options) {
+            chuisy.models.OwnedModel.prototype.initialize.call(this, attributes, options);
+            this.comments = new chuisy.models.ChuCommentCollection([], {chu: this});
+        },
         getTimeText: function() {
             return timeToText(this.get("time"));
         },
@@ -269,13 +305,6 @@
         },
         toggleLike: function() {
             this.setLiked(!this.get("liked"));
-        }
-    });
-
-    chuisy.models.ChuComment = chuisy.models.OwnedModel.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/chucomment/",
-        getTimeText: function() {
-            return timeToText(this.get("time"));
         }
     });
 
