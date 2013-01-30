@@ -51,7 +51,7 @@ enyo.kind({
         this.openView("gift", event.gift);
     },
     notificationSelected: function(sender, event) {
-        this.doNavigateTo({uri: event.notification.uri});
+        this.doNavigateTo({uri: event.notification.get("uri")});
     },
     // shareViewDone: function(sender, event) {
     //     this.openView("chu", sender.getChu());
@@ -121,13 +121,7 @@ enyo.kind({
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});
-                // if (!chuisy.getSignInStatus().signedIn) {
-                //     enyo.Signals.send("onRequestSignIn", {
-                //         failure: enyo.bind(this, this.back)
-                //     });
-                // } else {
-                    chuisy.loadUserDetails();
-                // }
+                chuisy.accounts.getActiveUser().fetch({remote: true});
                 break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
