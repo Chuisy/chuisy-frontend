@@ -7,8 +7,9 @@ enyo.kind({
     name: "ChuList",
     classes: "chulist",
     published: {
-        //* Filters to apply to query
-        filters: []
+        // A _chuisy.models.ChuCollection_ object
+        chus: null,
+        chusPerPage: 60
     },
     events: {
         //* A chu has been selected
@@ -20,23 +21,27 @@ enyo.kind({
     },
     // Estimated chu width
     chuWidth: 105,
-    // Meta data for requests
-    meta: {
-        offset: 0,
-        limit: 60
+    listenTo: Backbone.Events.listenTo,
+    stopListening: Backbone.Events.stopListening,
+    chusPerPageChanged: function() {
+        this.$.list.setRowsPerPage(Math.ceil(this.chusPerPage/this.cellCount));
     },
-    items: [],
+    chusChanged: function() {
+        this.stopListening();
+        this.refresh();
+        if (this.chus) {
+            this.listenTo(this.chus, "reset add", this.refresh);
+        }
+    },
     rendered: function() {
         this.inherited(arguments);
-        this.setupList();
+        this.buildCells();
+        this.chusPerPageChanged();
+        this.chusChanged();
     },
     postResize: function() {
-        this.setupList();
-        this.refresh();
-    },
-    setupList: function() {
         this.buildCells();
-        this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
+        this.refresh();
     },
     /**
         Dynamically build cells for List. The wider the display the more cells we need
@@ -59,22 +64,22 @@ enyo.kind({
     setupItem: function(sender, event) {
         for (var i=0; i<this.cellCount; i++) {
             var index = event.index * this.cellCount + i;
-            var chu = this.items[index];
+            var chu = this.chus.at(index);
 
             if (chu) {
-                var image = chu.thumbnails && chu.thumbnails["100x100"] ? chu.thumbnails["100x100"] : chu.image;
+                var image = chu.get("thumbnails") && chu.get("thumbnails")["100x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }
 
-            var isLastItem = index == this.items.length-1;
-            if (isLastItem && !this.allPagesLoaded()) {
+            var isLastItem = index == this.chus.length-1;
+            if (isLastItem && this.chus.hasNextPage()) {
                 // We are at the end of the list and there seems to be more.
                 // Load next bunch of chus
                 this.$.loadingNextPage.show();
-                this.nextPage();
+                this.chus.fetchNext();
             } else {
                 this.$.loadingNextPage.hide();
             }
@@ -83,51 +88,17 @@ enyo.kind({
         return true;
     },
     /**
-        Loads first bunch of chus
-    */
-    load: function() {
-        chuisy.chu.list(this.filters, enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.items = response.objects;
-            this.refresh();
-            this.doFinishedLoading({total_count: response.meta.total_count});
-        }), {limit: this.meta.limit});
-    },
-    /**
-        Gets the next page of chus and append to the existing list
-    */
-    nextPage: function() {
-        var params = {
-            limit: this.meta.limit,
-            offset: this.meta.offset + this.meta.limit
-        };
-        chuisy.chu.list(this.filters, enyo.bind(this, function(sender, response) {
-            this.meta = response.meta;
-            this.items = this.items.concat(response.objects);
-            this.refresh();
-        }), params);
-    },
-    /**
         Sets list count according to number of chus and refreshs
     */
     refresh: function() {
-        this.$.list.setCount(Math.ceil(this.items.length / this.cellCount));
+        var chuCount = this.chus && this.chus.length || 0;
+        this.$.list.setCount(Math.ceil(chuCount / (this.cellCount || 1)));
         this.$.list.refresh();
-    },
-    /**
-        Checks if all chus are loaded or if there is more
-    */
-    allPagesLoaded: function() {
-        return this.meta.offset + this.meta.limit >= this.meta.total_count;
     },
     chuTap: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
-        this.doShowChu({chu: this.items[index]});
+        this.doShowChu({chu: this.chus.at(index)});
         event.preventDefault();
-    },
-    clear: function() {
-        this.items = [];
-        this.refresh();
     },
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [

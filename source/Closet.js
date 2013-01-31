@@ -21,12 +21,13 @@ enyo.kind({
     // Estimated width of a single chu
     chuWidth: 105,
     // Meta object for requests
-    meta: {
-        offset: 0,
-        limit: 60
-    },
+    chusPerPage: 60,
     // Items in the chu box
     items: [],
+    create: function() {
+        this.inherited(arguments);
+        chuisy.closet.on("reset add remove", this.refresh, this);
+    },
     rendered: function() {
         this.inherited(arguments);
         this.setupList();
@@ -37,7 +38,7 @@ enyo.kind({
     },
     setupList: function() {
         this.buildCells();
-        this.$.list.setRowsPerPage(Math.ceil(this.meta.limit/this.cellCount));
+        this.$.list.setRowsPerPage(Math.ceil(this.chusPerPage/this.cellCount));
     },
     /**
         Build the cells for the List. The wider the screen the more cells have to be created
@@ -61,13 +62,12 @@ enyo.kind({
     setupItem: function(sender, event) {
         for (var i=0; i<this.cellCount; i++) {
             var index = event.index * this.cellCount + i;
-            var chu = this.items[index];
+            var chu = chuisy.closet.at(index);
 
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
-                var image = chu.localThumbnail || chu.localImage ||
-                    (chu.thumbnails ? chu.thumbnails["100x100"] : chu.image) ||
-                    "assets/images/chu_placeholder.png";
+                var image = chu.get("localThumbnail") || chu.thumbnails && chu.thumbnails["100x100"] ||
+                    chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
             } else {
@@ -81,10 +81,9 @@ enyo.kind({
         Get items from sdk and update List
     */
     refresh: function() {
-        this.items = chuisy.closet.getChus();
-        this.$.list.setCount(Math.ceil(this.items.length / this.cellCount));
+        this.$.list.setCount(Math.ceil(chuisy.closet.length / this.cellCount));
         this.$.list.refresh();
-        this.$.placeholder.setShowing(!this.items.length);
+        this.$.placeholder.setShowing(!chuisy.closet.length);
     },
     /**
         Start edit mode in which the user can delete chus
@@ -106,7 +105,7 @@ enyo.kind({
     chuTap: function(sender, event) {
         if (!this.held) {
             var index = event.index * this.cellCount + sender.cellIndex;
-            this.doShowChu({chu: this.items[index]});
+            this.doShowChu({chu: chuisy.closet.at(index)});
         }
         this.held = false;
         // Call this to prevent event propagating to an input element and focussing it
@@ -118,8 +117,8 @@ enyo.kind({
     */
     chuRemove: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
-        var chu = this.items[index];
-        chuisy.closet.remove(chu);
+        var chu = chuisy.closet.at(index);
+        chu.destroy();
         return true;
     },
     hold: function(sender, event) {
@@ -131,19 +130,19 @@ enyo.kind({
         }
         // this.openContextMenu(sender, event);
     },
-    openContextMenu: function(sender, event) {
-        this.$.contextMenu.show();
-        this.$.contextMenu.removeClass("unfolded");
-        this.$.contextMenu.addClass("unfolded");
-        var bounds = this.$.contextMenu.getBounds();
-        // sender.hasNode();
-        // var targetBounds = sender.getBounds();
-        // sender.applyStyle("background-color", "orange");
-        var x = event.clientX - bounds.width/2;
-        var y = event.clientY - bounds.height/2;
-        this.$.contextMenu.applyStyle("top", y + "px");
-        this.$.contextMenu.applyStyle("left", x + "px");
-    },
+    // openContextMenu: function(sender, event) {
+    //     this.$.contextMenu.show();
+    //     this.$.contextMenu.removeClass("unfolded");
+    //     this.$.contextMenu.addClass("unfolded");
+    //     var bounds = this.$.contextMenu.getBounds();
+    //     // sender.hasNode();
+    //     // var targetBounds = sender.getBounds();
+    //     // sender.applyStyle("background-color", "orange");
+    //     var x = event.clientX - bounds.width/2;
+    //     var y = event.clientY - bounds.height/2;
+    //     this.$.contextMenu.applyStyle("top", y + "px");
+    //     this.$.contextMenu.applyStyle("left", x + "px");
+    // },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "closet"});
     },
