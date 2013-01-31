@@ -16,6 +16,7 @@
             }
             user.friends.fetchAll();
             chuisy.feed.fetch();
+            chuisy.closet.fetch();
             chuisy.notifications.fetch();
             chuisy.notifications.startPolling(60000);
         },
@@ -142,6 +143,11 @@
             });
             this.friends = new chuisy.models.UserCollection([], {
                 url: _.result(this, "url") + "/friends/"
+            });
+            this.chus = new chuisy.models.ChuCollection([], {
+                filters: {
+                    user: this.id
+                }
             });
         },
         save: function(attributes, options) {
