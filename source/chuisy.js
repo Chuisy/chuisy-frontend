@@ -45,8 +45,12 @@
                     remote: true,
                     success: function() {
                         user.save();
-                    }
+                    },
+                    error: failure
                 });
+                if (success) {
+                    success();
+                }
                 // enyo.Signals.send("onSignInSuccess", {user: user});
             }, function() {
                 // enyo.Signals.send("onSignInFail");
