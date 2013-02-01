@@ -45,10 +45,14 @@ enyo.kind({
     viewChanged: function() {
         this.$.panels.destroyClientControls();
         var screens = this.views[this.view];
-        for (var i=0; i<screens.length; i++) {
-            this.$.panels.createComponent({style: "background-image: url(" + this.getImagesPath() + screens[i] + ")"});
+        if (screens) {
+            for (var i=0; i<screens.length; i++) {
+                this.$.panels.createComponent({style: "background-image: url(" + this.getImagesPath() + screens[i] + ")"});
+            }
+            this.$.panels.render();
+        } else {
+            this.close();
         }
-        this.$.panels.render();
     },
     open: function() {
         this.$.panels.setIndex(0);
