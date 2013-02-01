@@ -92,7 +92,7 @@ enyo.kind({
         ]},
         {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20, thumb: false,
             // pullingMessage: "", pulledMessage: "", loadingMessage: "", pullingIconClass: "", pulledIconClass: "", loadingIconClass: "",
-            ontap: "feedItemTapped", onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
+            onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
             {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]}
