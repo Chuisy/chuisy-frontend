@@ -35,14 +35,15 @@ enyo.kind({
             if (App.isOnline()) {
                 this.lookupPlaces();
             } else {
-                this.skip();
+                this.doLocationPicked({location: null});
             }
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
             navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
                 " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
-                " phone's settings and enable location services for Chuisy!"), function() {}, $L("Can't find you!"), $L("OK"));
-            this.doLocationPicked({location: null});
+                " phone's settings and enable location services for Chuisy!"), function() {
+                this.doLocationPicked({location: null});
+            }, $L("Can't find you!"), $L("OK"));
         }));
     },
     /**
