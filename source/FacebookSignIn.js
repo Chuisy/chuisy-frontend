@@ -23,7 +23,7 @@ enyo.kind({
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
                 this.$.spinner.show();
                 // User facebook access token to get authentication credentials from Chuisy API
-                chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                chuisy.signIn(accessToken, enyo.bind(this, function() {
                     this.$.spinner.hide();
                     if (this.successCallback) {
                         this.successCallback();

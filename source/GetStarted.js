@@ -8,10 +8,8 @@ enyo.kind({
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
                 this.$.spinner.show();
-                chuisy.signIn({fb_access_token: accessToken}, enyo.bind(this, function() {
+                chuisy.signIn(accessToken, enyo.bind(this, function() {
                     this.$.spinner.hide();
-                    // Use facebook access token to get authentication credentials from Chuisy API
-                    // this.$.panels.setIndex(1);
                     this.doDone();
                 }), enyo.bind(this, function() {
                     this.$.spinner.hide();
