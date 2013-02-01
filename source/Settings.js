@@ -9,55 +9,42 @@ enyo.kind({
         // User has tapped the back button
         onBack: ""
     },
+    listenTo: Backbone.Events.listenTo,
+    stopListening: Backbone.Events.stopListening,
+    create: function() {
+        this.inherited(arguments);
+        this.userChanged();
+        this.listenTo(chuisy.accounts, "sync change:active_user", this.userChanged);
+    },
     userChanged: function(sender, event) {
-        this.user = event.user;
+        this.stopListening();
+        var user = chuisy.accounts.getActiveUser();
 
-        if (this.user) {
-            this.$.firstName.setValue(this.user.first_name);
-            this.$.lastName.setValue(this.user.last_name);
-            this.$.website.setValue(this.user.profile.website);
-            // this.$.bio.setValue(this.user.profile.bio);
-            this.$.avatar.applyStyle("background-image", "url(" + this.user.profile.avatar + ")");
-            this.$.pushLikeIcon.addRemoveClass("active", this.user.profile.push_like);
-            this.$.emailLikeIcon.addRemoveClass("active", this.user.profile.email_like);
-            this.$.pushCommentIcon.addRemoveClass("active", this.user.profile.push_comment);
-            this.$.emailCommentIcon.addRemoveClass("active", this.user.profile.email_comment);
-            this.$.pushFollowIcon.addRemoveClass("active", this.user.profile.push_follow);
-            this.$.emailFollowIcon.addRemoveClass("active", this.user.profile.email_follow);
+        if (user) {
+            this.updateView();
+            this.listenTo(user, "change", this.updateView);
         }
     },
-    firstNameChanged: function() {
-        this.user.first_name = this.$.firstName.getValue();
-        this.updateUser();
+    updateView: function() {
+        var user = chuisy.accounts.getActiveUser();
+        this.$.firstName.setValue(user.get("first_name"));
+        this.$.lastName.setValue(user.get("last_name"));
+        this.$.website.setValue(user.profile.get("website"));
+        this.$.avatar.applyStyle("background-image", "url(" + user.profile.get("avatar") + ")");
+        this.$.pushLikeIcon.addRemoveClass("active", user.profile.get("push_like"));
+        this.$.emailLikeIcon.addRemoveClass("active", user.profile.get("email_like"));
+        this.$.pushCommentIcon.addRemoveClass("active", user.profile.get("push_comment"));
+        this.$.emailCommentIcon.addRemoveClass("active", user.profile.get("email_comment"));
+        this.$.pushFollowIcon.addRemoveClass("active", user.profile.get("push_follow"));
+        this.$.emailFollowIcon.addRemoveClass("active", user.profile.get("email_follow"));
     },
-    lastNameChanged: function() {
-        this.user.last_name = this.$.lastName.getValue();
-        this.updateUser();
-    },
-    websiteChanged: function() {
-        this.user.profile.website = this.$.website.getValue();
-        this.updateProfile();
-    },
-    // bioChanged: function() {
-    //     this.user.profile.bio = this.$.bio.getValue();
-    //     this.updateProfile();
-    // },
-    /**
-        Sends changes to user object to the API
-    */
     updateUser: function() {
-        var params = enyo.clone(this.user);
-        // Switch the profile object for its resource_uri to avoid problems with the api
-        params.profile = params.profile.resource_uri;
-        chuisy.user.put(params.id, params, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
-    },
-    updateProfile: function() {
-        var params = enyo.clone(this.user.profile);
-        chuisy.profile.put(params.id, params, enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
+        var user = chuisy.accounts.getActiveUser();
+        user.profile.set("website", this.$.website.getValue());
+        user.save({
+            first_name: this.$.firstName.getValue(),
+            last_name: this.$.lastName.getValue()
+        }, {remote: true});
     },
     facebookSignIn: function() {
         // Get facebook access token
@@ -91,9 +78,9 @@ enyo.kind({
     },
     toggleNotification: function(sender, event) {
         var prop = sender.prop;
-        this.user.profile[prop] = !this.user.profile[prop];
-        sender.addRemoveClass("active", this.user.profile[prop]);
-        this.updateProfile();
+        var user = chuisy.accounts.getActiveUser();
+        user.profile.set(prop, !user.profile.get(prop));
+        this.updateUser();
     },
     activate: function() {},
     deactivate: function() {},
@@ -112,19 +99,16 @@ enyo.kind({
                     ]},
                     // FIRST NAME
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "firstName", placeholder: $L("First Name"), onchange: "firstNameChanged"}
+                        {kind: "onyx.Input", name: "firstName", placeholder: $L("First Name"), onchange: "updateUser"}
                     ]},
                     // LAST NAME
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "lastName", placeholder: $L("Last Name"), onchange: "lastNameChanged"}
+                        {kind: "onyx.Input", name: "lastName", placeholder: $L("Last Name"), onchange: "updateUser"}
                     ]},
                     // WEBSITE
                     {kind: "onyx.InputDecorator", components: [
-                        {kind: "onyx.Input", name: "website", placeholder: $L("Website"), onchange: "websiteChanged"}
+                        {kind: "onyx.Input", name: "website", placeholder: $L("Website"), onchange: "updateUser"}
                     ]}
-                    // {kind: "onyx.InputDecorator", components: [
-                    //     {kind: "onyx.TextArea", name: "bio", placeholder: "Bio", onchange: "bioChanged"}
-                    // ]}
                 ]},
                 // LINKED ACCOUNTS
                 {classes: "settings-section-header", content: $L("Accounts")},
