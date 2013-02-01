@@ -13,8 +13,8 @@
                     username: user.get("username"),
                     apiKey: user.get("api_key")
                 };
+                user.friends.fetchAll();
             }
-            user.friends.fetchAll();
             chuisy.feed.fetch();
             chuisy.closet.fetch();
             chuisy.notifications.fetch();
