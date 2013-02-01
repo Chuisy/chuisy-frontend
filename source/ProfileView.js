@@ -13,25 +13,28 @@ enyo.kind({
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     userChanged: function() {
-        if (!this.currentUser || this.user.id != this.currentUser.id) {
-            this.$.chuList.clear();
-            this.refresh("following");
-            this.refresh("followers");
-            this.$.info.applyStyle("background-image", "url()");
-        }
         this.currentUser = this.user;
-        
+
         this.$.chusMenuButton.setActive(true);
         this.$.panels.setIndex(0);
 
-        this.updateView();
+        this.$.info.applyStyle("background-image", "url()");
 
         this.stopListening();
+
+        this.updateView();
         this.listenTo(this.user, "change", this.updateView);
+
+        this.refresh("following");
         this.listenTo(this.user.followers, "reset add", _.bind(this.refresh, this, "followers"));
+        this.refresh("followers");
         this.listenTo(this.user.following, "reset add", _.bind(this.refresh, this, "following"));
+
+        this.$.chuList.setChus(this.user.chus);
+
         this.user.followers.fetch();
         this.user.following.fetch();
+        this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}});
     },
     updateView: function() {
         this.$.panels1.setIndex(0);
