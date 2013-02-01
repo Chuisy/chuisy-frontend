@@ -19,6 +19,7 @@
             chuisy.closet.fetch();
             chuisy.notifications.fetch();
             chuisy.notifications.startPolling(60000);
+            chuisy.gifts.fetch();
         },
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
@@ -459,10 +460,16 @@
         }
     });
 
+    chuisy.models.GiftsCollection = Backbone.Tastypie.Collection.extend({
+        model: chuisy.models.Gift,
+        url: chuisy.apiRoot + chuisy.version + "/gift/"
+    });
+
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
+    chuisy.gifts = new chuisy.models.GiftsCollection();
 
 })(window.$, window._, window.Backbone, window.enyo);
