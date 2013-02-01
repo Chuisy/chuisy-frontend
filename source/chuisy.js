@@ -50,6 +50,10 @@
             }, function() {
                 // enyo.Signals.send("onSignInFail");
             });
+        },
+        signOut: function() {
+            chuisy.accounts.getActiveUser().destroy();
+            chuisy.accounts.setActiveUser(null);
         }
     };
 
