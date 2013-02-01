@@ -41,7 +41,7 @@ enyo.kind({
     setupChu: function(sender, event) {
         var chu = this.chus[event.index];
         this.$.resultChuImage.applyStyle("background-image", "url(" + (chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png") + ")");
-        this.$.chuAvatar.setSrc(chu.user.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+        this.$.chuAvatar.setSrc(chu.user.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
 
         var isLastItem = event.index == this.chus.length-1;
         if (isLastItem && this.chus.hasNextPage()) {

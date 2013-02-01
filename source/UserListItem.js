@@ -14,7 +14,7 @@ enyo.kind({
 		onToggleFollow: ""
 	},
 	userChanged: function() {
-		this.$.avatar.setSrc(this.user.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+		this.$.avatar.setSrc(this.user.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
 		this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
 		this.$.followButton.setContent(this.user.get("following") ? $L("unfollow") : $L("follow"));
         var activeUser = chuisy.accounts.getActiveUser();

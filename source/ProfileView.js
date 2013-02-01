@@ -13,8 +13,6 @@ enyo.kind({
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     userChanged: function() {
-        this.currentUser = this.user;
-
         this.$.chusMenuButton.setActive(true);
         this.$.panels.setIndex(0);
 
@@ -43,7 +41,7 @@ enyo.kind({
         this.$.followersCount.setContent(this.user.get("follower_count"));
         this.$.followingCount.setContent(this.user.get("following_count"));
 
-        this.$.info.applyStyle("background-image", "url(" + this.user.get("profile").avatar + ")");
+        this.$.info.applyStyle("background-image", "url(" + this.user.profile.get("avatar") + ")");
         this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
 
         this.$.followButton.setContent(this.user.get("following") ? "unfollow" : "follow");

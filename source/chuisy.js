@@ -140,6 +140,11 @@
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
         initialize: function(attributes, options) {
             Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
+            this.profile = new chuisy.models.Profile(this.get("profile"));
+            this.unset("profile");
+            this.listenTo(this.profile, "change", function() {
+                this.trigger("change change:profile");
+            });
             this.followers = new chuisy.models.UserCollection([], {
                 url: _.result(this, "url") + "/followers/"
             });
@@ -155,14 +160,17 @@
                 }
             });
         },
-        save: function(attributes, options) {
-            attributes = attributes || {};
-            var profile = _.clone(this.get("profile"));
-            if (profile.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
-                attributes.profile = profile.resource_uri;
+        parse: function(response) {
+            if (this.profile) {
+                this.profile.set(response.profile);
+                delete response.profile;
             }
-            Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
-            this.set("profile", profile);
+            return response;
+        },
+        toJSON: function() {
+            var userJSON = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
+            userJSON.profile = this.profile.toJSON();
+            return userJSON;
         },
         authenticate: function(fbAccessToken, success, failure) {
             Backbone.ajax(this.authUrl, {
@@ -351,16 +359,16 @@
     });
 
     chuisy.models.Notification = chuisy.models.OwnedModel.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
-        save: function(attributes, options) {
-            attributes = attributes || {};
-            var actor = _.clone(this.get("actor"));
-            if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
-                attributes.actor = actor.resource_uri;
-            }
-            chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
-            this.set("actor", actor);
-        }
+        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/"
+        // save: function(attributes, options) {
+        //     attributes = attributes || {};
+        //     var actor = _.clone(this.get("actor"));
+        //     if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
+        //         attributes.actor = actor.resource_uri;
+        //     }
+        //     chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
+        //     this.set("actor", actor);
+        // }
     });
 
     chuisy.models.Device = Backbone.Tastypie.Model.extend({

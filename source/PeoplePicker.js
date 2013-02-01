@@ -100,7 +100,7 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
-        event.item.$.avatar.setSrc(item.get("profile").avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+        event.item.$.avatar.setSrc(item.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
         event.item.$.avatar.addRemoveClass("selected", this.isSelected(item));
         return true;
     },

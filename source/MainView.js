@@ -31,7 +31,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         this.updateProfile();
-        chuisy.accounts.on("change:active_user", this.updateProfile, this);
+        chuisy.accounts.on("sync change:active_user", this.updateProfile, this);
     },
     updateProfile: function() {
         var user = chuisy.accounts.getActiveUser();
