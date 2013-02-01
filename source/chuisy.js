@@ -400,8 +400,8 @@
     chuisy.models.Accounts = chuisy.models.UserCollection.extend({
         localStorage: new Backbone.LocalStorage("accounts"),
         setActiveUser: function(model) {
-            localStorage.setItem("accounts_active", model.id);
-            this.trigger("change");
+            localStorage.setItem("accounts_active", model && model.id);
+            this.trigger("change:active_user");
         },
         getActiveUser: function() {
             return this.get(localStorage.getItem("accounts_active"));
