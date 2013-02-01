@@ -7,20 +7,25 @@ enyo.kind({
     published: {
         gift: null
     },
+    listenTo: Backbone.Events.listenTo,
+    stopListening: Backbone.Events.stopListening,
     giftChanged: function() {
-        this.$.image.setSrc(this.gift.chu.thumbnails["300x300"]);
-        this.$.value.setContent(this.gift.value + "%");
-        this.addRemoveClass("redeemed", this.gift.redeemed);
+        this.stopListening();
+        this.listenTo(this.gift, "change", this.updateView());
+    },
+    updateView: function() {
+        this.$.image.setSrc(this.gift.get("chu").thumbnails["300x300"]);
+        this.$.value.setContent(this.gift.get("value") + "%");
+        this.addRemoveClass("redeemed", this.gift.get("redeemed"));
     },
     redeem: function() {
-        this.gift.redeemed = true;
-        this.addClass("redeemed");
+        this.gift.save({redeemed: true});
         this.$.panels.setIndex(1);
     },
     activate: function(gift) {
         this.$.panels.setIndexDirect(0);
         this.setGift(gift);
-        enyo.Signals.send("onShowGuide", {view: "chu"});
+        enyo.Signals.send("onShowGuide", {view: "gift"});
     },
     deactivate: function() {
         this.$.image.setSrc("");
