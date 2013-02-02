@@ -143,11 +143,13 @@
     chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
         initialize: function() {
             Backbone.Tastypie.Collection.prototype.initialize.apply(this, arguments);
-            this.listenTo(this, "create add", function(model) {
-                this.mark(model, "added", true);
+            this.listenTo(this, "create add", function(model, collection, options) {
+                if (!options || !options.remote) {
+                    this.mark(model, "added", true);
+                }
             });
-            this.listenTo(this, "change", function(model) {
-                if (model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
+            this.listenTo(this, "change", function(model, options) {
+                if ((!options || !options.remote) && model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
                     this.mark(model, "changed", true);
                 }
             });
@@ -158,14 +160,14 @@
                 this.mark(model, "added", false);
                 this.mark(model, "changed", false);
             });
-            this.listenTo(this, "sync", function(model) {
+            this.listenTo(this, "sync", function(model, response, options) {
                 if (model instanceof Backbone.Model) {
-                    model.save();
+                    model.save(null, {silent: true});
                     this.mark(model, "added", false);
                     this.mark(model, "changed", false);
                 } else if (model instanceof Backbone.Collection) {
                     model.each(function(model) {
-                        model.save();
+                        model.save(null, {silent: true});
                     });
                 }
             });
@@ -190,6 +192,17 @@
         },
         isMarked: function(model, type) {
             return model.id && _.contains(this.getList(type), model.id) ? true : false;
+        },
+        update: function(models, options) {
+            options = _.extend({add: true, merge: true, remove: true}, options);
+            if (options.parse) {
+                models = this.parse(models, options);
+                options.parse = false;
+            }
+            models = models.filter(_.bind(function(model) {
+                return !this.isMarked(model, "added") && !this.isMarked(model, "changed") && !this.isMarked(model, "destroyed");
+            }, this));
+            return Backbone.Tastypie.Collection.prototype.update.call(this, models, options);
         },
         newRecordSynced: function(model, respone, options) {
             var oldModel = new this.model({id: options.lid});
@@ -232,7 +245,7 @@
                 }
             }
 
-            // this.fetchAll({remote: true, add: true, remove: false, merge: false});
+            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
         },
         startPolling: function(interval, options) {
             this.pollInterval = setInterval(_.bind(function() {
