@@ -210,6 +210,22 @@
         }
     };
 
+    var removeFile = function(url) {
+        try {
+            window.resolveLocalFileSystemURI(url, function(entry) {
+                entry.remove(function() {
+                    console.log("File removed successfully: " + entry.fullPath);
+                }, function(error) {
+                    console.error("Failed to remove file at " + entry.fullPath + ". " + error);
+                });
+            }, function(error) {
+                console.error("Could not resolve url " + error);
+            });
+        } catch(e) {
+            console.error("Failed to remove file at " + url + ". " + e);
+        }
+    };
+
     chuisy.models = {};
 
     chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
@@ -509,6 +525,15 @@
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
             this.set("friends", friends);
+        },
+        destroy: function() {
+            if (this.get("localImage")) {
+                removeFile(this.get("localImage"));
+            }
+            if (this.get("localThumbnail")) {
+                removeFile(this.get("localThumbnail"));
+            }
+            return chuisy.models.OwnedModel.prototype.destroy.apply(this, arguments);
         },
         getTimeText: function() {
             return timeToText(this.get("time"));
