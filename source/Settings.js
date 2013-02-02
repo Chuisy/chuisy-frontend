@@ -37,6 +37,7 @@ enyo.kind({
         this.$.emailCommentIcon.addRemoveClass("active", user.profile.get("email_comment"));
         this.$.pushFollowIcon.addRemoveClass("active", user.profile.get("push_follow"));
         this.$.emailFollowIcon.addRemoveClass("active", user.profile.get("email_follow"));
+        this.updateFacebookConnectItem();
     },
     updateUser: function() {
         var user = chuisy.accounts.getActiveUser();
@@ -57,7 +58,7 @@ enyo.kind({
         chuisy.signOut();
     },
     updateFacebookConnectItem: function() {
-        this.$.facebookConnectItem.addRemoveClass("connected", chuisy.getSignInStatus().signedIn);
+        this.$.facebookConnectItem.addRemoveClass("connected", App.isSignedIn());
     },
     /**
         Open photo library to change profile picture
@@ -144,7 +145,6 @@ enyo.kind({
                     ]}
                 ]}
             ]}
-        ]},
-        {kind: "Signals", onUserChanged: "userChanged", onSignInSuccess: "updateFacebookConnectItem", onSignOut: "updateFacebookConnectItem"}
+        ]}
     ]
 });
