@@ -43,35 +43,19 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
-        this.chu = this.chu || {};
-        this.chu.visibility = this.chu.visibility || "private";
-        this.chu.localImage = this.chu.localImage || this.image;
-        this.chu.friends = this.chu.friends || [];
+        var attrs = {
+            visibility: "private"
+        };
         // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
         // Round number to correct currency format
-        this.chu.price = Math.floor(this.$.chuForm.getPrice() * currFmt.fractionDigits);
+        attrs.price = Math.floor(this.$.chuForm.getPrice() * currFmt.fractionDigits);
         // Specify the local currencies iso code (e.g. EUR)
-        this.chu.price_currency = currFmt.sign;
-        this.chu.location = this.location;
-
-        // Disable done button to prevent double-posts
-        // this.$.chuForm.setDoneButtonDisabled(true);
-        // if (!chuisy.closet.contains(this.chu)) {
-        //     // Chu hasn't been saved yet. Create it.
-        chuisy.closet.add(this.chu, enyo.bind(this, function() {
-            // this.$.chuForm.setDoneButtonDisabled(false);
-            // this.$.panels.setIndex(2);
-            // this.$.shareView.activate(this.chu);
-        }));
-        this.doDone({chu: this.chu});
-        // } else {
-        //     // Chu has already been saved. Update it!
-        //     chuisy.closet.update(this.chu);
-        //     this.$.chuForm.setDoneButtonDisabled(false);
-        //     this.$.panels.setIndex(2);
-        //     this.$.shareView.activate(this.chu);
-        // }
+        attrs.price_currency = currFmt.sign;
+        attrs.location = this.location;
+        var chu = chuisy.closet.create(attrs);
+        chu.setLocalImage(this.image);
+        this.doDone({chu: chu});
         return true;
     },
     chuFormBack: function() {
