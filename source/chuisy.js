@@ -139,6 +139,78 @@
 
     chuisy.models = {};
 
+    chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
+        initialize: function() {
+            Backbone.Tastypie.Collection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "change", function(model) {
+                this.mark(model, "changed", true);
+            });
+            this.listenTo(this, "destroy", function(model) {
+                this.mark(model, "destroyed", true);
+            });
+            this.listenTo(this, "sync", function(model) {
+                if (model instanceof Backbone.Model) {
+                    model.save();
+                    this.mark(model, "changed", false);
+                } else if (model instanceof Backbone.Collection) {
+                    model.each(function(model) {
+                        model.save();
+                    });
+                }
+            });
+            this.listenTo(this, "sync:destroy", function(model) {
+                model.save();
+                this.mark(model, "destroyed", false);
+            });
+        },
+        getList: function(name) {
+            var str = localStorage.getItem(this.localStorage.name + "_" + name);
+            return str ? str.split(",") : [];
+        },
+        setList: function(name, ids) {
+            localStorage.setItem(this.localStorage.name + "_" + name, ids.join(","));
+        },
+        mark: function(model, type, value) {
+            if (model && model.id) {
+                var ids = this.getList(type);
+                if (value) {
+                    ids.push(model.id);
+                } else {
+                    ids = _.without(ids, model.id);
+                }
+                this.setList(type, ids);
+            }
+        },
+        isMarked: function(model, type) {
+            return model.id && this.getList(type).indexOf(model.id) ? true : false;
+        },
+        syncRecords: function() {
+            this.fetch();
+            var changed = this.getList("changed");
+            var destroyed = this.getList("destroyed");
+
+            for (var i=0; i<changed.length; i++) {
+                var model = this.get(changed[i]);
+                if (model) {
+                    model.save(null, {remote: true});
+                }
+            }
+
+            for (i=0; i<destroyed.length; i++) {
+                new this.model({id: destroyed[i]}).destroy({remote: true});
+            }
+
+            for (i=0; i<this.length; i++) {
+                var model = this.at(i);
+                if (!model.id) {
+                    model.save({remote: true});
+                }
+            }
+
+            this.fetchAll({remote: true, add: true, remove: false, merge: false});
+        }
+    });
+
     chuisy.models.User = Backbone.Tastypie.Model.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/user/",
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
@@ -417,7 +489,8 @@
         url: chuisy.apiRoot + chuisy.version + "/user/"
     });
 
-    chuisy.models.Accounts = chuisy.models.UserCollection.extend({
+    chuisy.models.Accounts = chuisy.models.SyncableCollection.extend({
+        model: chuisy.models.User,
         localStorage: new Backbone.LocalStorage("accounts"),
         setActiveUser: function(model) {
             localStorage.setItem("accounts_active", model && model.id);
@@ -450,9 +523,10 @@
         }
     });
 
-    chuisy.models.Notifications = Backbone.Tastypie.Collection.extend({
+    chuisy.models.Notifications = chuisy.models.SyncableCollection.extend({
         model: chuisy.models.Notification,
         url: chuisy.apiRoot + chuisy.version + "/notification/",
+        localStorage: new Backbone.LocalStorage("notifications"),
         seen: function(options) {
             if (this.length) {
                 options = options || {};
