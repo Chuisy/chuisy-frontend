@@ -18,6 +18,7 @@
             chuisy.feed.fetch();
             chuisy.closet.fetch();
             chuisy.notifications.fetch();
+            chuisy.notifications.syncRecords();
             chuisy.notifications.startPolling(60000);
             chuisy.gifts.fetch();
         },
@@ -142,25 +143,31 @@
     chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
         initialize: function() {
             Backbone.Tastypie.Collection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "create add", function(model) {
+                this.mark(model, "added", true);
+            });
             this.listenTo(this, "change", function(model) {
-                this.mark(model, "changed", true);
+                if (model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
+                    this.mark(model, "changed", true);
+                }
             });
             this.listenTo(this, "destroy", function(model) {
-                this.mark(model, "destroyed", true);
+                if (!this.isMarked(model, "added")) {
+                    this.mark(model, "destroyed", true);
+                }
+                this.mark(model, "added", false);
+                this.mark(model, "changed", false);
             });
             this.listenTo(this, "sync", function(model) {
                 if (model instanceof Backbone.Model) {
                     model.save();
+                    this.mark(model, "added", false);
                     this.mark(model, "changed", false);
                 } else if (model instanceof Backbone.Collection) {
                     model.each(function(model) {
                         model.save();
                     });
                 }
-            });
-            this.listenTo(this, "sync:destroy", function(model) {
-                model.save();
-                this.mark(model, "destroyed", false);
             });
         },
         getList: function(name) {
@@ -173,7 +180,7 @@
         mark: function(model, type, value) {
             if (model && model.id) {
                 var ids = this.getList(type);
-                if (value) {
+                if (value && !_.contains(ids, model.id)) {
                     ids.push(model.id);
                 } else {
                     ids = _.without(ids, model.id);
@@ -182,10 +189,21 @@
             }
         },
         isMarked: function(model, type) {
-            return model.id && this.getList(type).indexOf(model.id) ? true : false;
+            return model.id && _.contains(this.getList(type), model.id) ? true : false;
+        },
+        newRecordSynced: function(model, respone, options) {
+            var oldModel = new this.model({id: options.lid});
+            this.localStorage.destroy(oldModel);
+            this.mark(oldModel, "added", false);
+        },
+        destroyedRecordSynced: function(model, response) {
+            if (response.status == 204) {
+                this.mark(model, "destroyed", false);
+            }
         },
         syncRecords: function() {
             this.fetch();
+            var added = this.getList("added");
             var changed = this.getList("changed");
             var destroyed = this.getList("destroyed");
 
@@ -197,17 +215,29 @@
             }
 
             for (i=0; i<destroyed.length; i++) {
-                new this.model({id: destroyed[i]}).destroy({remote: true});
+                var model = new this.model({id: destroyed[i]});
+                model.destroy({remote: true, wait: true, complete: _.bind(this.destroyedRecordSynced, this, model)});
             }
 
-            for (i=0; i<this.length; i++) {
-                var model = this.at(i);
-                if (!model.id) {
-                    model.save({remote: true});
+            for (i=0; i<added.length; i++) {
+                var model = this.get(added[i]);
+                if (model) {
+                    var lid = model.id;
+                    model.id = null;
+                    model.unset("id");
+                    model.once("sync", this.newRecordSynced, this);
+                    model.save(null, {remote: true, lid: lid});
+                    model.id = lid;
+                    model.set("id", lid);
                 }
             }
 
-            this.fetchAll({remote: true, add: true, remove: false, merge: false});
+            // this.fetchAll({remote: true, add: true, remove: false, merge: false});
+        },
+        startPolling: function(interval, options) {
+            this.pollInterval = setInterval(_.bind(function() {
+                this.syncRecords();
+            }, this), interval || 60000);
         }
     });
 
@@ -510,7 +540,10 @@
         url: chuisy.apiRoot + chuisy.version + "/chu/feed/"
     });
 
-    chuisy.models.Closet = chuisy.models.ChuCollection.extend({
+    chuisy.models.Closet = chuisy.models.SyncableCollection.extend({
+        model: chuisy.models.Chu,
+        url: chuisy.apiRoot + chuisy.version + "/chu/",
+        localStorage: new Backbone.LocalStorage("closet"),
         filters: function() {
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
