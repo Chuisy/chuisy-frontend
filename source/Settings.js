@@ -30,7 +30,8 @@ enyo.kind({
         this.$.firstName.setValue(user.get("first_name"));
         this.$.lastName.setValue(user.get("last_name"));
         this.$.website.setValue(user.profile.get("website"));
-        this.$.avatar.applyStyle("background-image", "url(" + user.profile.get("avatar") + ")");
+        var avatar = user.get("localAvatar") || user.profile.get("avatar");
+        this.$.avatar.applyStyle("background-image", "url(" + avatar + ")");
         this.$.pushLikeIcon.addRemoveClass("active", user.profile.get("push_like"));
         this.$.emailLikeIcon.addRemoveClass("active", user.profile.get("email_like"));
         this.$.pushCommentIcon.addRemoveClass("active", user.profile.get("push_comment"));
@@ -74,8 +75,7 @@ enyo.kind({
         }
     },
     gotImage: function(uri) {
-        this.$.avatar.applyStyle("background-image", "url(" + uri + ")");
-        chuisy.uploadAvatar(uri);
+        chuisy.accounts.getActiveUser().changeAvatar(uri);
     },
     toggleNotification: function(sender, event) {
         var prop = sender.prop;

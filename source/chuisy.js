@@ -116,7 +116,7 @@
         img.src = imgSrc;
     };
 
-    var upload = function(source, target, fileKey, fileName, mimeType, success, failure) {
+    var upload = function(source, target, fileKey, fileName, mimeType, success, failure, progress) {
         try {
             var options = new FileUploadOptions();
             options.fileKey = fileKey;
@@ -124,9 +124,16 @@
             options.mimeType = mimeType;
 
             var ft = new FileTransfer();
+            ft.onprogress = function(event) {
+                console.log("Upload progress: " + JSON.stringify(event));
+                if (progress) {
+                    progress(event);
+                }
+            };
             ft.upload(source, target, function(r) {
+                console.log("upload successfull! " + JSON.stringify(r));
                 if (success) {
-                    success();
+                    success(r.response);
                 }
             }, function(error) {
                 console.error("File upload failed! " + error);
@@ -135,22 +142,25 @@
                 }
             }, options);
         } catch (e) {
-            console.error("Could not start file upload. " + e);
+            console.error("Could not start file upload. " + e.message);
         }
     };
 
-    var download = function(source, target, success, failure) {
+    var download = function(source, targetDir, targetFileName, success, failure) {
         try {
-            var ft = new FileTransfer();
-            var uri = encodeURI(source);
+            getDir(targetDir, function(directory) {
+                var target = directory.fullPath + targetFileName;
+                var ft = new FileTransfer();
+                var uri = encodeURI(source);
 
-            ft.download(uri, target, function(entry) {
-                console.log("Download complete: " + entry.fullPath);
-                if (success) {
-                    success("file://" + entry.fullPath);
-                }
-            }, function(error) {
-                console.error("File download failed! " + error);
+                ft.download(uri, target, function(entry) {
+                    console.log("Download complete: " + entry.fullPath);
+                    if (success) {
+                        success("file://" + entry.fullPath);
+                    }
+                }, function(error) {
+                    console.error("File download failed! " + error);
+                });
             });
         } catch (e) {
             console.error("Could not start file download. " + e);
@@ -292,7 +302,7 @@
             }, this));
             return Backbone.Tastypie.Collection.prototype.update.call(this, models, options);
         },
-        newRecordSynced: function(model, respone, options) {
+        newRecordSynced: function(model, response, options) {
             var oldModel = new this.model({id: options.lid});
             this.localStorage.destroy(oldModel);
             this.mark(oldModel, "added", false);
@@ -402,18 +412,21 @@
         isAuthenticated: function() {
             return this.get("username") && this.get("api_key") ? true : false;
         },
-        changeAvatar: function(uri) {
-            this.save({local_avatar: uri});
-            this.uploadAvatar();
+        changeAvatar: function(url) {
+            moveFile(url, "avatars/", "avatar_" + new Date().getTime() + ".jpg", _.bind(function(newUrl) {
+                this.save({localAvatar: newUrl}, {nosync: true});
+                this.uploadAvatar();
+            }, this));
         },
         uploadAvatar: function() {
-            var target = encodeURI(_.result(this, "url") + "upload_avatar/?username=" +
-                this.authCredentials.username + "&api_key=" + this.authCredentials.api_key);
-            upload(this.get("local_avatar"), target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", function(response) {
+            var uri = this.get("localAvatar");
+            var target = encodeURI(_.result(this, "url") + "upload_avatar/" + Backbone.Tastypie.getAuthUrlParams());
+            upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.profile.set("avatar", response);
-                this.save();
+                this.save(null, {nosync: true});
                 this.trigger("sync:avatar");
-            });
+                this.trigger("change", this, {nosync: true});
+            }, this));
         },
         addDevice: function(deviceToken) {
             if (!deviceToken) {

@@ -40,8 +40,8 @@ enyo.kind({
         this.$.chuCount.setContent(this.user.get("chu_count"));
         this.$.followersCount.setContent(this.user.get("follower_count"));
         this.$.followingCount.setContent(this.user.get("following_count"));
-
-        this.$.info.applyStyle("background-image", "url(" + this.user.profile.get("avatar") + ")");
+        var avatar = this.user.get("localAvatar") || this.user.profile.get("avatar");
+        this.$.info.applyStyle("background-image", "url(" + avatar + ")");
         this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
 
         this.$.followButton.setContent(this.user.get("following") ? "unfollow" : "follow");
