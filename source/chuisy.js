@@ -5,6 +5,7 @@
         // apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
+        closetDir: "closet/",
         init: function() {
             chuisy.accounts.fetch();
             var user = chuisy.accounts.getActiveUser();
@@ -138,6 +139,77 @@
         }
     };
 
+    var download = function(source, target, success, failure) {
+        try {
+            var ft = new FileTransfer();
+            var uri = encodeURI(source);
+
+            ft.download(uri, target, function(entry) {
+                console.log("Download complete: " + entry.fullPath);
+                if (success) {
+                    success("file://" + entry.fullPath);
+                }
+            }, function(error) {
+                console.error("File download failed! " + error);
+            });
+        } catch (e) {
+            console.error("Could not start file download. " + e);
+        }
+    };
+
+    var getDir = function(relPath, success, failure) {
+        try {
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {
+                fileSys.root.getDirectory(relPath, {create:true, exclusive: false}, function(directory) {
+                    if (success) {
+                        success(directory);
+                    }
+                }, function(error) {
+                    console.error("Could not get directory. " + error);
+                });
+            }, function(error) {
+                console.error("Could not get file system. " + error);
+            });
+        } catch (e) {
+            console.error("Could not get directory. " + e);
+        }
+    };
+
+    var moveFile = function(source, targetDir, targetFileName, success, failure) {
+        try {
+            window.resolveLocalFileSystemURI(source, function(entry) {
+                getDir(targetDir, function(directory) {
+                    entry.copyTo(directory, targetFileName, function(entry) {
+                        if (success) {
+                            success("file://" + entry.fullPath);
+                        }
+                    }, function(error) {
+                        console.error("Could not copy file. " + error);
+                    });
+                });
+            }, function(error) {
+                console.error("Could not resolve source uri. " + error);
+            });
+        } catch (e) {
+            console.error("Could not resolve source uri. " + e);
+        }
+    };
+
+    var saveImageFromData = function(data, relTargetPath, success, failure) {
+        try {
+            var baseData = data.replace(/^data:image\/(png|jpg);base64,/, "");
+            window.plugins.imageResizer.storeImage(function(fullPath) {
+                if (success) {
+                    success("file://" + fullPath);
+                }
+            }, function(error) {
+                console.error("Could not save image. " + error);
+            }, baseData, {filename: relTargetPath});
+        } catch(e) {
+            console.error("Could not save image. " + e);
+        }
+    };
+
     chuisy.models = {};
 
     chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
@@ -149,7 +221,7 @@
                 }
             });
             this.listenTo(this, "change", function(model, options) {
-                if ((!options || !options.remote) && model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
+                if ((!options || !options.remote && !options.nosync) && model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
                     this.mark(model, "changed", true);
                 }
             });
@@ -162,12 +234,12 @@
             });
             this.listenTo(this, "sync", function(model, response, options) {
                 if (model instanceof Backbone.Model) {
-                    model.save(null, {silent: true});
+                    model.save(null, {nosync: true});
                     this.mark(model, "added", false);
                     this.mark(model, "changed", false);
                 } else if (model instanceof Backbone.Collection) {
                     model.each(function(model) {
-                        model.save(null, {silent: true});
+                        model.save(null, {nosync: true});
                     });
                 }
             });
@@ -469,6 +541,25 @@
         },
         toggleLike: function() {
             this.setLiked(!this.get("liked"));
+        },
+        setLocalImage: function(url) {
+            moveFile(url, chuisy.closetDir, new Date().getTime() + ".jpg", _.bind(function(path) {
+                this.save({"localImage": path}, {nosync: true});
+                this.makeThumbnail();
+            }, this));
+        },
+        makeThumbnail: function() {
+            var image = this.get("localImage");
+            if (!image) {
+                console.error("Can't make thumbnail because there is no local image.");
+                return;
+            }
+            createThumbnail(image, 100, 100, _.bind(function(imageData) {
+                var fileName = "thumb_" + image.substring(image.lastIndexOf("/")+1);
+                saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
+                    this.save({localThumbnail: path}, {nosync: true});
+                }, this));
+            }, this));
         }
     });
 
