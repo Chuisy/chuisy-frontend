@@ -375,8 +375,8 @@ enyo.kind({
             var friends = [];
             var friendsModels = this.$.peoplePicker.getSelectedItems();
 
-            for (var i=0, friend = friendsModels[i]; i<friendsModels.length; i++) {
-                friends.push(friend.toJSON());
+            for (var i=0; i<friendsModels.length; i++) {
+                friends.push(friendsModels[i].toJSON());
             }
 
             this.chu.save({friends: friends});

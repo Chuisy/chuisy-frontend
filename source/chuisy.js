@@ -295,7 +295,8 @@
         add: function(models, options) {
             models = _.isArray(models) ? models : [models];
             if (this.chu) {
-                for (var i=0, el=models[i]; i<models.length; i++) {
+                for (var i=0; i<models.length; i++) {
+                    var el=models[i];
                     if (el instanceof Backbone.Model) {
                         el.set("chu", this.chu.get("resource_uri"));
                     } else {
