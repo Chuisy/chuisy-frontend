@@ -150,13 +150,13 @@
                 this.trigger("change change:profile");
             });
             this.followers = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "/followers/"
+                url: _.result(this, "url") + "followers/"
             });
             this.following = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "/following/"
+                url: _.result(this, "url") + "following/"
             });
             this.friends = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "/friends/"
+                url: _.result(this, "url") + "friends/"
             });
             this.chus = new chuisy.models.ChuCollection([], {
                 filters: {
@@ -199,11 +199,17 @@
         isAuthenticated: function() {
             return this.get("username") && this.get("api_key") ? true : false;
         },
-        setAvatar: function(uri) {
-            var target = encodeURI(_.result(this, "url") + "/upload_avatar/?username=" +
+        changeAvatar: function(uri) {
+            this.save({local_avatar: uri});
+            this.uploadAvatar();
+        },
+        uploadAvatar: function() {
+            var target = encodeURI(_.result(this, "url") + "upload_avatar/?username=" +
                 this.authCredentials.username + "&api_key=" + this.authCredentials.api_key);
-            upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", function() {
-                this.fetch({remote: true});
+            upload(this.get("local_avatar"), target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", function(response) {
+                this.profile.set("avatar", response);
+                this.save();
+                this.trigger("sync:avatar");
             });
         },
         addDevice: function(deviceToken) {
@@ -240,7 +246,7 @@
             this.set("following", following);
 
             var options = {
-                url: _.result(this, "url") + "/follow/",
+                url: _.result(this, "url") + "follow/",
                 data: {follow: following},
                 type: "POST",
                 contentType: "application/json"
@@ -331,7 +337,7 @@
             this.set("likes_count", this.get("likes_count") + (liked ? 1 : -1));
 
             var options = {
-                url: _.result(this, "url") + "/like/",
+                url: _.result(this, "url") + "like/",
                 data: {like: liked},
                 type: "POST",
                 contentType: "application/json"
