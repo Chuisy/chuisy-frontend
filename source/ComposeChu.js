@@ -44,7 +44,8 @@ enyo.kind({
     },
     chuFormDone: function() {
         var attrs = {
-            visibility: "private"
+            visibility: "private",
+            user: chuisy.accounts.getActiveUser()
         };
         // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
@@ -54,8 +55,10 @@ enyo.kind({
         attrs.price_currency = currFmt.sign;
         attrs.location = this.location;
         var chu = chuisy.closet.create(attrs);
-        chu.setLocalImage(this.image);
-        this.doDone({chu: chu});
+        chu.changeImage(this.image, enyo.bind(this, function() {
+            chuisy.closet.syncRecords();
+            this.doDone({chu: chu});
+        }));
         return true;
     },
     chuFormBack: function() {

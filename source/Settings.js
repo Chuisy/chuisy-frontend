@@ -46,7 +46,7 @@ enyo.kind({
         user.save({
             first_name: this.$.firstName.getValue(),
             last_name: this.$.lastName.getValue()
-        }, {remote: true});
+        });
     },
     facebookSignIn: function() {
         // Get facebook access token

@@ -27,8 +27,8 @@
             chuisy.feed.fetch();
 
             chuisy.closet.fetch();
-            // chuisy.closet.syncRecords();
-            // chuisy.closet.startPolling(600000);
+            chuisy.closet.syncRecords();
+            chuisy.closet.startPolling(60000);
 
             chuisy.gifts.fetch();
         },
@@ -272,10 +272,6 @@
                     model.save(null, {nosync: true});
                     this.mark(model, "added", false);
                     this.mark(model, "changed", false);
-                } else if (model instanceof Backbone.Collection) {
-                    model.each(function(model) {
-                        model.save(null, {nosync: true});
-                    });
                 }
             });
         },
@@ -317,7 +313,7 @@
             this.mark(oldModel, "added", false);
         },
         destroyedRecordSynced: function(model, response) {
-            if (response.status == 204) {
+            if (response.status == 200 || response.status == 202 || response.status == 204) {
                 this.mark(model, "destroyed", false);
             }
         },
@@ -374,7 +370,7 @@
             this.profile = new chuisy.models.Profile(this.get("profile"));
             this.unset("profile");
             this.listenTo(this.profile, "change", function() {
-                this.trigger("change change:profile");
+                this.trigger("change change:profile", this);
             });
             this.followers = new chuisy.models.UserCollection([], {
                 url: _.result(this, "url") + "followers/"
@@ -544,6 +540,13 @@
         initialize: function(attributes, options) {
             chuisy.models.OwnedModel.prototype.initialize.call(this, attributes, options);
             this.comments = new chuisy.models.ChuCommentCollection([], {chu: this});
+
+            this.listenTo(this, "sync", function(model, response, request) {
+                if (request && request.xhr.status == 201 && this.get("localImage")) {
+                    this.trigger("image_changed", this);
+                    this.uploadImage();
+                }
+            });
         },
         save: function(attributes, options) {
             attributes = attributes || {};
@@ -595,10 +598,30 @@
         toggleLike: function() {
             this.setLiked(!this.get("liked"));
         },
-        setLocalImage: function(url) {
+        changeImage: function(url, callback) {
             moveFile(url, chuisy.closetDir, new Date().getTime() + ".jpg", _.bind(function(path) {
+                this.save({"localImage": url}, {nosync: true});
+                this.trigger("image_changed", this);
+                this.makeThumbnail();
+                callback(path);
+            }, this));
+        },
+        downloadImage: function() {
+            download(this.get("image"), chuisy.closetDir, function(path) {
                 this.save({"localImage": path}, {nosync: true});
                 this.makeThumbnail();
+            });
+        },
+        uploadImage: function() {
+            var uri = this.get("localImage");
+            if (!uri) {
+                console.warn("No local image to upload!");
+                return;
+            }
+            var target = encodeURI(_.result(this, "url") + "upload_image/" + Backbone.Tastypie.getAuthUrlParams());
+            upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
+                this.save({"image": response}, {nosync: true});
+                this.trigger("image_uploaded", this);
             }, this));
         },
         makeThumbnail: function() {
@@ -724,6 +747,17 @@
         model: chuisy.models.Chu,
         url: chuisy.apiRoot + chuisy.version + "/chu/",
         localStorage: new Backbone.LocalStorage("closet"),
+        initialize: function() {
+            chuisy.models.SyncableCollection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "image_changed", function(model, options) {
+                if (!this.isMarked(model, "added")) {
+                    this.mark(model, "image_changed", true);
+                }
+            });
+            this.listenTo(this, "image_uploaded", function(model, response, options) {
+                this.mark(model, "image_changed", false);
+            });
+        },
         filters: function() {
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
@@ -731,19 +765,21 @@
                     user: user.id
                 };
             } else {
-                return {};
+                return {
+                    user: 0
+                };
             }
-        },
-        downloadImage: function() {
-            download(this.get("image"), chuisy.closetDir, function(path) {
-                this.set("localImage", path);
-                this.makeThumbnail();
-            });
-        },
-        uploadImage: function() {
         },
         syncRecords: function() {
             chuisy.models.SyncableCollection.prototype.syncRecords.apply(this, arguments);
+            var image_changed = this.getList("image_changed");
+            console.log("image_changed: " + JSON.stringify(image_changed));
+            for (var i=0; i<image_changed.length; i++) {
+                var model = this.get(image_changed[i]);
+                if (model && !this.isMarked(model, "added")) {
+                    model.uploadImage();
+                }
+            }
         }
     });
 
