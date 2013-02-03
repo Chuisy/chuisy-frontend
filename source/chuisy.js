@@ -313,9 +313,7 @@
             this.mark(oldModel, "added", false);
         },
         destroyedRecordSynced: function(model, response) {
-            if (response.status == 200 || response.status == 202 || response.status == 204) {
-                this.mark(model, "destroyed", false);
-            }
+            this.mark(model, "destroyed", false);
         },
         syncRecords: function() {
             this.fetch();
