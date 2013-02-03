@@ -26,7 +26,7 @@ enyo.kind({
     items: [],
     create: function() {
         this.inherited(arguments);
-        chuisy.closet.on("reset add remove", this.refresh, this);
+        chuisy.closet.on("reset add remove change", this.refresh, this);
     },
     rendered: function() {
         this.inherited(arguments);
