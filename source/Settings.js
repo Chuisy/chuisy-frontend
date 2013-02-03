@@ -14,14 +14,14 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         this.userChanged();
-        this.listenTo(chuisy.accounts, "sync change:active_user", this.userChanged);
+        this.listenTo(chuisy.accounts, "change:active_user", this.userChanged);
     },
     userChanged: function(sender, event) {
-        this.stopListening();
         var user = chuisy.accounts.getActiveUser();
 
         if (user) {
             this.updateView();
+            this.stopListening();
             this.listenTo(user, "change", this.updateView);
         }
     },
