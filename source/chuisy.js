@@ -679,6 +679,29 @@
     chuisy.models.Accounts = chuisy.models.SyncableCollection.extend({
         model: chuisy.models.User,
         localStorage: new Backbone.LocalStorage("accounts"),
+        url: function() {
+            return chuisy.apiRoot + chuisy.version + "/user/set/" + this.pluck("id").join(";") + "/";
+        },
+        initialize: function() {
+            chuisy.models.SyncableCollection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "change:avatar", function(model, options) {
+                this.mark(model, "avatar_changed", true);
+            });
+            this.listenTo(this, "sync:avatar", function(model, response, options) {
+                this.mark(model, "avatar_changed", false);
+            });
+        },
+        syncRecords: function() {
+            chuisy.models.SyncableCollection.prototype.syncRecords.apply(this, arguments);
+            var avatar_changed = this.getList("avatar_changed");
+            console.log("avatar_changed: " + JSON.stringify(avatar_changed));
+            for (var i=0; i<avatar_changed.length; i++) {
+                var model = this.get(avatar_changed[i]);
+                if (model && !this.isMarked(model, "added")) {
+                    model.uploadAvatar();
+                }
+            }
+        },
         setActiveUser: function(model) {
             localStorage.setItem("accounts_active", model && model.id);
             this.trigger("change:active_user");
@@ -710,6 +733,17 @@
             } else {
                 return {};
             }
+        },
+        downloadImage: function() {
+            download(this.get("image"), chuisy.closetDir, function(path) {
+                this.set("localImage", path);
+                this.makeThumbnail();
+            });
+        },
+        uploadImage: function() {
+        },
+        syncRecords: function() {
+            chuisy.models.SyncableCollection.prototype.syncRecords.apply(this, arguments);
         }
     });
 
