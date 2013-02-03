@@ -8,6 +8,7 @@
         closetDir: "closet/",
         init: function() {
             chuisy.accounts.fetch();
+            chuisy.accounts.trigger("change:active_user");
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
                 Backbone.Tastypie.authCredentials = {
@@ -15,12 +16,20 @@
                     apiKey: user.get("api_key")
                 };
                 user.friends.fetchAll();
+
+                chuisy.notifications.fetch();
+                chuisy.notifications.syncRecords();
+                chuisy.notifications.startPolling(60000);
             }
+            chuisy.accounts.syncRecords();
+            chuisy.accounts.startPolling(60000);
+
             chuisy.feed.fetch();
+
             chuisy.closet.fetch();
-            chuisy.notifications.fetch();
-            chuisy.notifications.syncRecords();
-            chuisy.notifications.startPolling(60000);
+            // chuisy.closet.syncRecords();
+            // chuisy.closet.startPolling(600000);
+
             chuisy.gifts.fetch();
         },
         setOnline: function(online) {
@@ -247,7 +256,7 @@
                 }
             });
             this.listenTo(this, "change", function(model, options) {
-                if ((!options || !options.remote && !options.nosync) && model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
+                if ((!options || !options.remote && !options.nosync) && model && model.id && this.get(model.id) && this.localStorage.find(model) && !this.isMarked(model, "added")) {
                     this.mark(model, "changed", true);
                 }
             });
@@ -317,6 +326,11 @@
             var added = this.getList("added");
             var changed = this.getList("changed");
             var destroyed = this.getList("destroyed");
+
+            console.log("syncing records for collection " + this.localStorage.name + "...");
+            console.log("added: " + JSON.stringify(added));
+            console.log("changed: " + JSON.stringify(changed));
+            console.log("destroyed: " + JSON.stringify(destroyed));
 
             for (var i=0; i<changed.length; i++) {
                 var model = this.get(changed[i]);
@@ -415,6 +429,7 @@
         changeAvatar: function(url) {
             moveFile(url, "avatars/", "avatar_" + new Date().getTime() + ".jpg", _.bind(function(newUrl) {
                 this.save({localAvatar: newUrl}, {nosync: true});
+                this.trigger("change:avatar", this);
                 this.uploadAvatar();
             }, this));
         },
@@ -424,7 +439,7 @@
             upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.profile.set("avatar", response);
                 this.save(null, {nosync: true});
-                this.trigger("sync:avatar");
+                this.trigger("sync:avatar", this);
                 this.trigger("change", this, {nosync: true});
             }, this));
         },
@@ -614,16 +629,16 @@
     });
 
     chuisy.models.Notification = chuisy.models.OwnedModel.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/"
-        // save: function(attributes, options) {
-        //     attributes = attributes || {};
-        //     var actor = _.clone(this.get("actor"));
-        //     if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
-        //         attributes.actor = actor.resource_uri;
-        //     }
-        //     chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
-        //     this.set("actor", actor);
-        // }
+        urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
+        save: function(attributes, options) {
+            attributes = attributes || {};
+            var actor = _.clone(this.get("actor"));
+            if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
+                attributes.actor = actor.resource_uri;
+            }
+            chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
+            this.set("actor", actor);
+        }
     });
 
     chuisy.models.Device = Backbone.Tastypie.Model.extend({
