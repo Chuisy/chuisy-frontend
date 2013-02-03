@@ -158,7 +158,7 @@
     var download = function(source, targetDir, targetFileName, success, failure) {
         try {
             getDir(targetDir, function(directory) {
-                var target = directory.fullPath + targetFileName;
+                var target = directory.fullPath + "/" + targetFileName;
                 var ft = new FileTransfer();
                 var uri = encodeURI(source);
 
@@ -272,6 +272,10 @@
                     model.save(null, {nosync: true});
                     this.mark(model, "added", false);
                     this.mark(model, "changed", false);
+                } else if (model instanceof Backbone.Collection) {
+                    model.each(function(each) {
+                        each.save(null, {nosync: true});
+                    });
                 }
             });
         },
@@ -425,6 +429,7 @@
                 this.save({localAvatar: newUrl}, {nosync: true});
                 this.trigger("change:avatar", this);
                 this.uploadAvatar();
+                this.makeThumbnail();
             }, this));
         },
         uploadAvatar: function() {
@@ -598,17 +603,17 @@
         },
         changeImage: function(url, callback) {
             moveFile(url, chuisy.closetDir, new Date().getTime() + ".jpg", _.bind(function(path) {
-                this.save({"localImage": url}, {nosync: true});
+                this.save({"localImage": path}, {nosync: true});
                 this.trigger("image_changed", this);
                 this.makeThumbnail();
                 callback(path);
             }, this));
         },
         downloadImage: function() {
-            download(this.get("image"), chuisy.closetDir, function(path) {
+            download(this.get("image"), chuisy.closetDir, this.id + ".jpg", _.bind(function(path) {
                 this.save({"localImage": path}, {nosync: true});
                 this.makeThumbnail();
-            });
+            }, this));
         },
         uploadImage: function() {
             var uri = this.get("localImage");
@@ -754,6 +759,19 @@
             });
             this.listenTo(this, "image_uploaded", function(model, response, options) {
                 this.mark(model, "image_changed", false);
+            });
+            this.listenTo(this, "sync", function(model, response, options) {
+                if (model instanceof chuisy.models.Chu) {
+                    if (model.get("image") && !model.get("localImage")) {
+                        model.downloadImage();
+                    }
+                } else if (model instanceof chuisy.models.Closet) {
+                    model.each(function(each) {
+                        if (each.get("image") && !each.get("localImage")) {
+                            each.downloadImage();
+                        }
+                    });
+                }
             });
         },
         filters: function() {
