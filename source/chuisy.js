@@ -320,7 +320,6 @@
             this.mark(model, "destroyed", false);
         },
         syncRecords: function() {
-            this.fetch();
             var added = this.getList("added");
             var changed = this.getList("changed");
             var destroyed = this.getList("destroyed");
