@@ -44,7 +44,7 @@ enyo.kind({
     },
     chuFormDone: function() {
         var attrs = {
-            visibility: "private",
+            visibility: "public",
             user: chuisy.accounts.getActiveUser()
         };
         // Number formater for providing locale-specific currency formats
