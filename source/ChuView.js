@@ -24,15 +24,7 @@ enyo.kind({
         onpostresize: "postResize",
         onload: "loaded"
     },
-    scrollerOffset: -37,
-    // rendered: function() {
-    //     this.inherited(arguments);
-    //     var s = this.$.contentScroller.getStrategy().$.scrollMath;
-    //     if (s) {
-    //         s.kDragDamping = 0.3;
-    //         s.kSnapFriction = 0.5;
-    //     }
-    // },
+    scrollerOffset: 20,
     twitterUrl: "http://twitter.com/share/",
     pinterestUrl: "http://pinterest.com/pin/create/button/",
     friends: [],
@@ -42,6 +34,11 @@ enyo.kind({
         this.inherited(arguments);
         this.setupFriends();
         this.listenTo(chuisy.accounts, "all", this.setupFriends);
+        var s = this.$.contentScroller.getStrategy().$.scrollMath;
+        if (s) {
+            s.kDragDamping = 0.2;
+            s.kSnapFriction = 0.4;
+        }
     },
     setupFriends: function() {
         var user = chuisy.accounts.getActiveUser();
@@ -61,19 +58,18 @@ enyo.kind({
         this.refreshComments();
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
-        this.listenTo(this.chu.comments, "all", this.refreshComments);
+        this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
+        this.listenTo(this.chu.comments, "reset add remove", this.refreshComments);
         this.chu.comments.fetch();
     },
     updateView: function() {
         var user = this.chu.get("user");
         var loc = this.chu.get("location");
 
-        var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png";
-        if (image != this.$.imageView.src) {
-            setTimeout(enyo.bind(this, function() {
-                this.$.spinner.show();
-            }), 10);
-            this.$.imageView.setSrc(image);
+        var image = this.chu.get("localImage") || this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png";
+        if (image != this.$.image.src) {
+            this.$.spinner.show();
+            this.$.image.setSrc(image);
         }
 
         this.$.avatar.setSrc(user && user.profile.avatar_thumbnail ? user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
@@ -88,7 +84,7 @@ enyo.kind({
         this.addRemoveClass("owned", this.isOwned());
 
         this.setLiked(this.chu.get("liked"));
-        this.$.likesCount.setContent(this.chu.get("likes_count"));
+        this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
 
         this.adjustShareControls();
     },
@@ -96,20 +92,11 @@ enyo.kind({
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
     */
     arrangeImage: function() {
-        // var bufferHeight = this.bufferHeight;
-        // var imageHeight = 1024;
-        // var imageWidth = 768;
-        // var screenHeight = this.$.imageView.getBounds().height;
-        // var screenWidth = this.$.imageView.getBounds().width;
-        // var scale = (screenHeight + 2 * bufferHeight) / imageHeight;
-        // this.$.imageView.setScale(scale);
-        // var scrollLeft = (this.$.imageView.getScrollBounds().width - this.$.imageView.getBounds().width) / 2;
-        // this.$.imageView.setScrollLeft(scrollLeft);
-        // this.scroll();
-        var s = this.$.imageView.getStrategy().$.scrollMath;
-        s.kSpringDamping = 1;
-        s.setScrollY(this.scrollerOffset);
-        s.start();
+        // var s = this.$.imageScroller.getStrategy().$.scrollMath;
+        // s.kSpringDamping = 1;
+        // s.setScrollY(this.scrollerOffset);
+        // s.start();
+        this.$.imageScroller.setScrollTop(this.scrollerOffset);
     },
     /**
         Checks if the current user ownes this chu
@@ -219,34 +206,11 @@ enyo.kind({
         this.chu.fetch();
         this.chu.comments.fetch();
     },
-    scroll: function() {
-        var s = this.$.imageView.getStrategy().$.scrollMath;
-        s.setScrollY(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5);
-        s.scroll();
-    },
-    /**
-        Hides the controls including the menu bar and zooms out to show full image
-    */
-    hideControls: function() {
-        var s = this.$.imageView.getStrategy().$.scrollMath;
-        s.kSpringDamping = 0.93;
-        s.setScrollY(0);
-        s.start();
-        this.addClass("fullscreen");
-        // Move image view to front after controls have faded out to allow interaction
-        setTimeout(enyo.bind(this, function() {
-            this.$.imageView.applyStyle("z-index", "1000");
-        }), 500);
-        // this.$.imageView.smartZoom();
-    },
-    showControls: function() {
-        // Move image view back under the other controls
-        this.$.imageView.applyStyle("z-index", "0");
-        this.removeClass("fullscreen");
-        this.$.imageView.setScale("auto");
-        setTimeout(enyo.bind(this, function() {
-            this.arrangeImage();
-        }), 10);
+    scroll: function(sender, inEvent) {
+        // var s = this.$.imageScroller.getStrategy().$.scrollMath;
+        // s.setScrollY(Math.max(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5), -100);
+        // s.scroll();
+        this.$.imageScroller.setScrollTop(this.$.contentScroller.getScrollTop()/3.5 + this.scrollerOffset);
     },
     /**
         Open this chus share view
@@ -410,16 +374,21 @@ enyo.kind({
     },
     deactivate: function() {
         this.blurredByTap = false;
-        this.$.imageView.setSrc("assets/images/chu_image_placeholder.png");
+        this.$.image.setSrc("assets/images/chu_image_placeholder.png");
         this.closeFriends();
     },
     components: [
         // IMAGE LOADING INDICATOR
-        {kind: "onyx.Spinner", classes: "chuview-spinner spinner-dark"},
+        {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner spinner-dark"},
         // IMAGEVIEW
-        {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, touchOverscroll: true,
-            onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
-        {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
+        {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
+            {classes: "chuview-image-container", components: [
+                {kind: "Image", name: "image", classes: "chuview-image"}
+            ]}
+        ]},
+        // {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, touchOverscroll: true,
+        //     onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
+        // {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
