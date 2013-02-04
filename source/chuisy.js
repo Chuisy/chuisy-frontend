@@ -671,7 +671,12 @@
     });
 
     chuisy.models.Profile = chuisy.models.OwnedModel.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/profile/"
+        urlRoot: chuisy.apiRoot + chuisy.version + "/profile/",
+        toJSON: function() {
+            var json = chuisy.models.OwnedModel.prototype.toJSON.apply(this, arguments);
+            delete json.avatar_thumbnail;
+            return json;
+        }
     });
 
     chuisy.models.Gift = Backbone.Tastypie.Model.extend({
