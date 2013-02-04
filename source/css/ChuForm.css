@@ -1,41 +1,69 @@
-.chuform-imagecontainer {
+/*.chuform-imagecontainer {
 	position: relative;
 	background: none no-repeat center top;
 	background-size: cover;
 	background-color: Gray;
+}*/
+
+.chuform-image-wrapper {
+	position: relative;
+	width: 100%;
+	padding: 8px;
+}
+
+.chuform-image {
+	width: 100%;
+	box-sizing: border-box;
+	box-shadow: 0 1px 1px #888;
+	background-color: white;
+	padding: 4px;
+	border-radius: 2px;
 }
 
 .chuform-price {
 	position: absolute;
-	bottom: 10px;
-	left: 10px;
+	bottom: 20px;
+	left: 20px;
 	font-size: 20pt;
-	line-height: 20pt;
-	color: White;
 	text-shadow: 0 0 5px #000;
-	-webkit-transition-property: bottom, left, width, -webkit-transform;
+	color: white;
+	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 0.3s;
-	text-align: center;
-	white-space: nowrap;
+	-webkit-transform-origin: 0 100%;
+}
+
+.chuform-price-hint {
+	font-size: 8pt;
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	text-shadow: 0 0 5px #000;
+	color: white;
+	text-align: right;
+	max-width: 140px;
+	opacity: 0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.3s;
 }
 
 .chuform.adjusting-price .chuform-price {
-	-webkit-transform: scale(2);
-	width: 100%;
-	bottom: 300px;
-	left: 0;
+	-webkit-transform: scale(1.5);
 }
 
-.chuform-category-picker {
+.chuform-price-hint.showing {
+	opacity: 1;
+}
+
+/*.chuform-category-picker {
 	position: absolute;
 	z-index: 10;
 	right: 10px;
 	bottom: 10px;
 	width: 36px;
 	height: 36px;
-}
+}*/
 
-.chuform-category-icon {
+/*.chuform-category-icon {
 	opacity: 0;
 	position: absolute;
 	-webkit-transition-property: bottom, right, opacity;
@@ -45,9 +73,9 @@
 .chuform-category-icon.selected,
 .chuform-category-picker.open > .chuform-category-icon {
 	opacity: 1;
-}
+}*/
 
-.chuform-drag-indicator {
+/*.chuform-drag-indicator {
 	position: absolute;
 	width: 100%;
 	bottom: 130px;
@@ -59,6 +87,11 @@
 
 .chuform.adjusting-price .chuform-drag-indicator {
 	opacity: 1;
+}*/
+
+.chuform-drag-indicator {
+	width: 100%;
+	text-align: center;
 }
 
 .chuform-drag-indicator-arrow {

@@ -69,8 +69,7 @@ enyo.kind({
         }
     },
     scrollMathScroll: function(inSender) {
-        this.price = Math.max(0, inSender.x/10);
-        this.$.price.setContent(Math.floor(this.price) + " €");
+        this.setPrice(Math.max(0, inSender.x/10));
     },
     scrollMathStart: function() {
         this.startAdjustPrice();
@@ -88,10 +87,12 @@ enyo.kind({
             this.finishDragTimeout = null;
         }
         this.addClass("adjusting-price");
+        this.$.priceHint.addClass("showing");
     },
     finishAdjustPrice: function() {
         this.finishDragTimeout = setTimeout(enyo.bind(this, function() {
             this.removeClass("adjusting-price");
+            this.$.priceHint.removeClass("showing");
         }), 500);
     },
     priceTapped: function() {
@@ -105,13 +106,15 @@ enyo.kind({
     */
     clear: function() {
         // this.$.privateButton.setActive(true);
-        this.setImage("");
+        this.setImage("assets/images/chu_placeholder.png");
         this.setPrice(0);
+        this.$.priceHint.addClass("showing");
+        this.priceChanged();
         // this.setCategory("head");
         this.$.doneButton.setDisabled(false);
     },
     imageChanged: function() {
-        this.$.imageContainer.applyStyle("background-image", "url(" + this.image + ")");
+        this.$.image.setSrc(this.image);
     },
     // categoryChanged: function() {
     //     var categoryIcons = this.$.categoryPicker.getClientControls();
@@ -187,25 +190,20 @@ enyo.kind({
             // ]},
             {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: $L("next"), name: "doneButton"}
         ]},
-        // IMAGE WITH CONTROLS
-        {name: "imageContainer", fit: true, classes: "chuform-imagecontainer",
-            onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
-            // PRICE
-            {classes: "chuform-price", name: "price", content: "0 €", ontap: "priceTapped"},
-            //CATEGORY
-            // {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
-            //     {classes: "category-icon chuform-category-icon feet", value: "feet", ontap: "selectCategory"},
-            //     {classes: "category-icon chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
-            //     {classes: "category-icon chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
-            //     {classes: "category-icon chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
-            //     {classes: "category-icon chuform-category-icon head selected", value: "head", ontap: "selectCategory"}
-            // ]},
-            {name: "dragIndicator", classes: "chuform-drag-indicator", components: [
-                {classes: "chuform-drag-indicator-arrow"},
-                {classes: "chuform-drag-indicator-text", content: $L("drag to adjust")}
-            ]}
+        {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
+            {kind: "Image", name: "image", classes: "chuform-image"},
+            {classes: "chuform-price", name: "price", ontap: "priceTapped"},
+            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!")}
         ]},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
             leftBoundary: 100000, rightBoundary: 0, vertical: false, horizontal: true, kFrictionDamping: 0.95}
+        //CATEGORY
+        // {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
+        //     {classes: "category-icon chuform-category-icon feet", value: "feet", ontap: "selectCategory"},
+        //     {classes: "category-icon chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
+        //     {classes: "category-icon chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
+        //     {classes: "category-icon chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
+        //     {classes: "category-icon chuform-category-icon head selected", value: "head", ontap: "selectCategory"}
+        // ]},
     ]
 });
