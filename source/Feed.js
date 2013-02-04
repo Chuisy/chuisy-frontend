@@ -18,6 +18,7 @@ enyo.kind({
         chuisy.feed.on("reset update", this.feedLoaded, this);
     },
     feedLoaded: function() {
+        this.$.spinner.hide();
         this.$.feedList.setCount(chuisy.feed.length);
         if (this.pulled) {
             // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
@@ -84,7 +85,7 @@ enyo.kind({
     },
     deactivate: function() {},
     components: [
-        // {kind: "onyx.Spinner", classes: "absolute-center"},
+        {kind: "onyx.Spinner", classes: "absolute-center"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
