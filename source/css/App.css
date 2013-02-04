@@ -103,6 +103,7 @@ body {
 	background-color: white;
 	background-color: rgba(255, 255, 255, 0.5);
 	background-image: none;
+	text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.1)), to(rgba(0, 0, 0, 0.1)));*/
 }
 

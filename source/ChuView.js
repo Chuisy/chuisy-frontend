@@ -420,11 +420,14 @@ enyo.kind({
                     {classes: "chuview-spacer", ontap: "hideControls"},
                     // LIKE BAR
                     {classes: "chuview-likebar", components: [
-                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"}
+                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped", components: [
+                            {classes: "chuview-like-button-side back"},
+                            {classes: "chuview-like-button-side front"}
+                        ]}
                     ]},
                     {classes: "chuview-content", components: [
                         // CATEGORY, PRICE, COMMENTS, LIKES
-                        {classes: "chuview-infobar", components: [
+                        {classes: "chuview-comments-likes-price", components: [
                             // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                             {classes: "chuview-price", name: "price"},
                             {classes: "chuview-likes-comments", components: [

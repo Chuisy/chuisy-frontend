@@ -106,36 +106,60 @@
 
 .chuview-likebar {
 	width: 320px;
-	height: 48px;
-	background: url(../../assets/images/chu_separator.png) no-repeat 0 0;
+	height: 64px;
+	background: url(../../assets/images/chu_separator.png) no-repeat 0 center;
 	background-size: 320px 48px;
-	margin-bottom: -24px;
+	margin-bottom: -32px;
 	position: relative;
 	z-index: 10;
 	text-align: center;
+	-webkit-perspective: 200px;
 }
 
 .chuview-like-button {
+	width: 64px;
+	height: 64px;
 	display: inline-block;
-	width: 48px;
-	height: 48px;
-	background: url(../../assets/images/like_button.png) no-repeat 0 0;
-	background-size: 48px 96px;
-	-webkit-transition-property: -webkit-transform;
-	-webkit-transition-duration: 0.1s;
+	-webkit-transition: -webkit-transform 0.5s;
+	position: relative;
+	-webkit-transform-style: preserve-3d;
 }
 
-.chuview-like-button:active:hover:not([disabled]) {
-	-webkit-transform: scale(1.1);
+.chuview-like-button-side {
+	position: absolute;
+ 	-webkit-backface-visibility: hidden;
+	top: 0;
+	left: 0;
+	width: 64px;
+	height: 64px;
+	background: url(../../assets/images/like_button.png) no-repeat 0 0;
+	background-size: 64px 128px;
 }
+
+.chuview-like-button-side.front {
+	background-position: 0 0;
+}
+
+.chuview-like-button-side.back {
+	background-position: 0 -64px;
+	-webkit-transform: rotateX(180deg);
+}
+
+/*.chuview-like-button:active:hover:not([disabled]) {
+	-webkit-transform: scale(1.1);
+}*/
 
 .chuview-like-button.active {
-	background-position: 0 -48px;
+	-webkit-transform: rotateX(180deg);
 }
 
 .chuview-infobar {
 	padding-bottom: 5px;
 	overflow: hidden;
+}
+
+.chuview-comments-likes-price {
+	padding: 8px 0 8px 3px;
 }
 
 .chuview-cancel-fullscreen-button {
