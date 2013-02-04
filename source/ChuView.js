@@ -288,7 +288,6 @@ enyo.kind({
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
         this.$.sharePanels.setIndex(this.chu.get("visibility") == "public" ? 1 : 0);
-        this.$.facebookButton.addRemoveClass("active", this.chu.get("fb_og"));
     },
     getMessage: function() {
         var loc = this.chu.get("location");
@@ -315,6 +314,17 @@ enyo.kind({
             url += "?s=" + this.chu.get("secret");
         }
         return url;
+    },
+    facebook: function() {
+        var params = {
+            method: "feed",
+            display: "popup",
+            link: this.getShareUrl(),
+            picture: this.chu.get("image")
+        };
+        FB.ui(params, function(obj) {
+            console.log(obj);
+        });
     },
     /**
         Open twitter share dialog
@@ -423,7 +433,7 @@ enyo.kind({
                         ]},
                         {classes: "enyo-fill", components: [
                             {classes: "chuview-header-button messaging", ontap: "sms"},
-                            {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "toggleFacebook"},
+                            {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
                             {classes: "chuview-header-button twitter", ontap: "twitter"},
                             {classes: "chuview-header-button pinterest", ontap: "pinterest"}
                         ]}

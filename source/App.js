@@ -41,25 +41,22 @@ enyo.kind({
             Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
         */
         loginWithFacebook: function(callback) {
-            // if (window.plugins && window.plugins.facebookConnect) {
-            //     window.plugins.facebookConnect.login({permissions: ["email", "user_about_me", "user_birthday", "user_location", "user_website", "publish_actions"], appId: "180626725291316"}, function(result) {
-            //         if(result.cancelled || result.error) {
-            //             console.log("Facebook signin failed:" + result.message);
-            //             return;
-            //         }
-            //         callback(result.accessToken);
-            //     });
-            // } else if (FB) {
-                FB.login(function(response) {
-                    if (response.status == "connected") {
-                        callback(response.authResponse.accessToken);
-                    } else {
-                        console.log($L("Facebook signin failed!"));
-                    }
-                }, {scope: "user_birthday,user_location,user_about_me,user_website,email,publish_actions"});
-            // } else {
-            //     console.error("No facebook sdk found!");
-            // }
+            FB.login(function(response) {
+                if (response.status == "connected") {
+                    callback(response.authResponse.accessToken);
+                } else {
+                    console.log($L("Facebook signin failed!"));
+                }
+            }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+        },
+        fbRequestPublishPermissions: function(callback) {
+            FB.login(function(response) {
+                if (response.status == "connected") {
+                    callback(response.authResponse.accessToken);
+                } else {
+                    console.log($L("Facebook signin failed!"));
+                }
+            }, {scope: "publish_stream"});
         },
         isSignedIn: function() {
             var user = chuisy.accounts.getActiveUser();
@@ -108,9 +105,6 @@ enyo.kind({
             // init the FB JS SDK
             FB.init({
                 appId      : '180626725291316', // App ID from the App Dashboard
-                status     : true, // check the login status upon init?
-                cookie     : false, // set sessions cookies to allow your server to access the session?
-                xfbml      : false,  // parse XFBML tags on this page?,
                 nativeInterface: CDV.FB,
                 useCachedDialogs: false
             });

@@ -288,7 +288,7 @@
 	margin: 2px 0;
 }
 
-.chuview-header-button:active:hover:not([disabled]):not(.facebook):not(.friends) {
+.chuview-header-button:active:hover:not([disabled]):not(.friends) {
 	background-position: 0 -40px;
 }
 
@@ -312,7 +312,6 @@
 	background-image: url(../../assets/images/header_pinterest.png);
 }
 
-.chuview-header-button.facebook.active,
 .chuview-header-button.friends.active {
 	background-position: 0 -40px;
 }
