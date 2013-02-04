@@ -124,6 +124,7 @@ enyo.kind({
         });
 
         if (App.isMobile()) {
+            this.registerDevice();
             this.initPushNotifications();
         }
 
@@ -205,7 +206,6 @@ enyo.kind({
     online: function() {
         this.log("online");
         chuisy.setOnline(true);
-        this.registerDevice();
         return true;
     },
     offline: function() {
@@ -215,11 +215,6 @@ enyo.kind({
     },
     resume: function() {
         this.checkPendingNotifications();
-    },
-    signedIn: function() {
-        if (App.isOnline()) {
-            this.registerDevice();
-        }
     },
     // hashChanged: function() {
     //     if (!window.ignoreHashChange) {
@@ -405,6 +400,6 @@ enyo.kind({
         ]},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
-            onRequestSignIn: "requestSignIn", onSignInSuccess: "signedIn", onShowGuide: "showGuide"}
+            onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}
     ]
 });
