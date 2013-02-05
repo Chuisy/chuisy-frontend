@@ -239,12 +239,13 @@ enyo.kind({
     */
     showUser: function() {
         if (App.checkConnection()) {
-            this.doShowUser({user: this.chu.get("user")});
+            var user = new chuisy.models.User(this.chu.get("user"));
+            this.doShowUser({user: user});
         }
     },
     showCommentUser: function(sender, event) {
         if (App.checkConnection()) {
-            var user = this.comments.at(event.index).get("user");
+            var user = new chuisy.models.User(this.chu.comments.at(event.index).get("user"));
             this.doShowUser({user: user});
         }
     },

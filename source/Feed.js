@@ -79,7 +79,8 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        this.doShowUser({user: chuisy.feed.at(event.index).get("user")});
+        var user = new chuisy.models.User(chuisy.feed.at(event.index).get("user"));
+        this.doShowUser({user: user});
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "feed"});
