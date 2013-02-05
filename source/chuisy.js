@@ -16,7 +16,6 @@
             chuisy.feed.fetch();
         },
         activeUserChanged: function() {
-            console.log("activer user changed!");
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
                 Backbone.Tastypie.authCredentials = {
@@ -55,18 +54,18 @@
         signIn: function(fb_access_token, success, failure) {
             var user = new chuisy.models.User();
             user.authenticate(fb_access_token, function() {
-                chuisy.accounts.add(user, {nosync: true});
-                user.save(null, {nosync: true});
-                chuisy.accounts.setActiveUser(user);
-                if (success) {
-                    success();
-                }
-                // enyo.Signals.send("onSignInSuccess", {user: user});
+                user.fetch({remote: true, success: function() {
+                    chuisy.accounts.add(user, {nosync: true});
+                    user.save(null, {nosync: true});
+                    chuisy.accounts.setActiveUser(user);
+                    if (success) {
+                        success();
+                    }
+                }, error: failure});
             }, function() {
                 if (failure) {
                     failure();
                 }
-                // enyo.Signals.send("onSignInFail");
             });
         },
         signOut: function() {
