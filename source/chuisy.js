@@ -7,36 +7,46 @@
         online: false,
         closetDir: "closet/",
         init: function() {
+            chuisy.closet.fetch();
             chuisy.accounts.fetch();
+
+            chuisy.accounts.on("change:active_user", chuisy.activeUserChanged);
             chuisy.accounts.trigger("change:active_user");
+
+            chuisy.feed.fetch();
+        },
+        activeUserChanged: function() {
+            console.log("activer user changed!");
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
                 Backbone.Tastypie.authCredentials = {
                     username: user.get("username"),
                     apiKey: user.get("api_key")
                 };
+
+                chuisy.accounts.syncRecords();
+                chuisy.accounts.startPolling(600000);
                 user.friends.fetchAll();
+
+                chuisy.closet.syncRecords();
+                chuisy.closet.startPolling(60000);
 
                 chuisy.notifications.fetch();
                 chuisy.notifications.syncRecords();
                 chuisy.notifications.startPolling(60000);
+
+                chuisy.gifts.fetch();
+            } else {
+                Backbone.Tastypie.authCredentials = {};
             }
-            chuisy.accounts.syncRecords();
-            chuisy.accounts.startPolling(60000);
-
-            chuisy.feed.fetch();
-
-            chuisy.closet.fetch();
-            chuisy.closet.syncRecords();
-            chuisy.closet.startPolling(60000);
-
-            chuisy.gifts.fetch();
         },
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
             chuisy.online = online;
-            if (goneOnline && this.authCredentials) {
-                chuisy.closet.sync();
+            if (goneOnline && chuisy.accounts.getActiveUser()) {
+                chuisy.accounts.syncRecords();
+                chuisy.closet.syncRecords();
+                chuisy.notifications.syncRecords();
             }
         },
         /**
@@ -45,30 +55,22 @@
         signIn: function(fb_access_token, success, failure) {
             var user = new chuisy.models.User();
             user.authenticate(fb_access_token, function() {
-                chuisy.accounts.add(user);
+                chuisy.accounts.add(user, {nosync: true});
+                user.save(null, {nosync: true});
                 chuisy.accounts.setActiveUser(user);
-                user.save();
-                Backbone.Tastypie.authCredentials = {
-                    username: user.get("username"),
-                    apiKey: user.get("api_key")
-                };
-                user.fetch({
-                    remote: true,
-                    success: function() {
-                        user.save();
-                    },
-                    error: failure
-                });
                 if (success) {
                     success();
                 }
                 // enyo.Signals.send("onSignInSuccess", {user: user});
             }, function() {
+                if (failure) {
+                    failure();
+                }
                 // enyo.Signals.send("onSignInFail");
             });
         },
         signOut: function() {
-            chuisy.accounts.getActiveUser().destroy();
+            chuisy.accounts.getActiveUser().destroy({nosync: true});
             chuisy.accounts.setActiveUser(null);
         }
     };
@@ -251,7 +253,7 @@
         initialize: function() {
             Backbone.Tastypie.Collection.prototype.initialize.apply(this, arguments);
             this.listenTo(this, "create add", function(model, collection, options) {
-                if (!options || !options.remote) {
+                if (!options || !options.nosync && !options.remote) {
                     this.mark(model, "added", true);
                 }
             });
@@ -260,8 +262,8 @@
                     this.mark(model, "changed", true);
                 }
             });
-            this.listenTo(this, "destroy", function(model) {
-                if (!this.isMarked(model, "added")) {
+            this.listenTo(this, "destroy", function(model, collection, options) {
+                if (!options || !options.nosync && !this.isMarked(model, "added")) {
                     this.mark(model, "destroyed", true);
                 }
                 this.mark(model, "added", false);
@@ -374,13 +376,19 @@
                 this.trigger("change change:profile", this);
             });
             this.followers = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "followers/"
+                url: _.bind(function() {
+                    return _.result(this, "url") + "followers/";
+                }, this)
             });
             this.following = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "following/"
+                url: _.bind(function() {
+                    return _.result(this, "url") + "following/";
+                }, this)
             });
             this.friends = new chuisy.models.UserCollection([], {
-                url: _.result(this, "url") + "friends/"
+                url: _.bind(function() {
+                    return _.result(this, "url") + "friends/";
+                }, this)
             });
             this.chus = new chuisy.models.ChuCollection([], {
                 filters: {
@@ -406,6 +414,7 @@
                 dataType: "json",
                 context: this,
                 success: function(data) {
+                    this.set("username", data.username);
                     this.set("api_key", data.api_key);
                     this.set("fb_permissions", data.fb_permissions);
                     this.id = data.id;
