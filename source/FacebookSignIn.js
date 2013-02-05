@@ -42,6 +42,9 @@ enyo.kind({
             }
             this.doDone();
         }
+        if (event) {
+            event.preventDefault();
+        }
     },
     /**
         Calls _failureCallback_ and fires done event
@@ -53,6 +56,9 @@ enyo.kind({
         this.successCallback = null;
         this.failureCallback = null;
         this.doDone();
+        if (event) {
+            event.preventDefault();
+        }
     },
     components: [
         {classes: "facebooksignin-placeholder"},
