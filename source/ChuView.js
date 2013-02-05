@@ -334,21 +334,14 @@ enyo.kind({
         }
     },
     toggleFriends: function() {
-        this.friendsSliderOpen = !this.friendsSliderOpen;
-        if (this.friendsSliderOpen) {
-            this.openFriends();
-        } else {
-            this.closeFriends();
-        }
+        this.$.friendsSlider.toggleMinMax();
     },
-    openFriends: function() {
+    friendsOpened: function() {
         this.$.friendsButton.addClass("active");
         this.$.peoplePicker.setSelectedItems(this.chu.get("friends") || []);
-        this.$.friendsSlider.animateToMin();
     },
-    closeFriends: function() {
+    friendsClosed: function() {
         this.$.friendsButton.removeClass("active");
-        this.$.friendsSlider.animateToMax();
         if (this.friendsChanged) {
             var friends = [];
             var friendsModels = this.$.peoplePicker.getSelectedItems();
@@ -363,6 +356,14 @@ enyo.kind({
     },
     friendsChangedHandler: function() {
         this.friendsChanged = true;
+    },
+    friendsSliderAnimateFinish: function() {
+        this.friendsSliderOpen = this.$.friendsSlider.getValue() == this.$.friendsSlider.getMin();
+        if (this.friendsSliderOpen) {
+            this.friendsOpened();
+        } else {
+            this.friendsClosed();
+        }
     },
     activate: function(obj) {
         this.setChu(obj);
@@ -467,7 +468,8 @@ enyo.kind({
                         {style: "height: 500px"}
                     ]}
                 ]},
-                {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v", classes: "chuview-friends-slider", components: [
+                {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
+                    classes: "chuview-friends-slider", overmoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
                     {kind: "PeoplePicker", classes: "enyo-fill", onChange: "friendsChangedHandler"}
                 ]}
             ]}
