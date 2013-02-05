@@ -286,7 +286,7 @@
 }
 
 .chuview-share-controls {
-	display: none;
+	visibility: hidden;
 	float: right;
 	margin: 0px;
 	padding: 0px;
@@ -294,7 +294,7 @@
 }
 
 .chuview.owned .chuview-share-controls {
-	display: block;
+	visibility: visible;
 }
 
 .chuview-visibility {
