@@ -60,7 +60,9 @@ enyo.kind({
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.listenTo(this.chu.comments, "reset add remove", this.refreshComments);
-        this.chu.comments.fetch();
+        if (this.chu.get("url")) {
+            this.chu.comments.fetch();
+        }
     },
     updateView: function() {
         var user = this.chu.get("user");
@@ -262,7 +264,7 @@ enyo.kind({
         }
     },
     checkSynced: function() {
-        if (this.chu.id) {
+        if (this.chu.get("url") && this.chu.get("image")) {
             return true;
         } else {
             navigator.notification.alert($L("You can't share this Chu yet because it is still being uploaded. Please try again in a couple of minutes!"), function() {}, $L("Hold your horses!"), $L("OK"));
@@ -280,21 +282,23 @@ enyo.kind({
         return url;
     },
     facebook: function() {
-        var params = {
-            method: "feed",
-            display: "popup",
-            link: this.getShareUrl(),
-            picture: this.chu.get("image")
-        };
-        FB.ui(params, function(obj) {
-            console.log(obj);
-        });
+        if (App.checkConnection() && this.checkSynced()) {
+            var params = {
+                method: "feed",
+                display: "popup",
+                link: this.getShareUrl(),
+                picture: this.chu.get("image")
+            };
+            FB.ui(params, function(obj) {
+                console.log(obj);
+            });
+        }
     },
     /**
         Open twitter share dialog
     */
     twitter: function() {
-        if (this.checkSynced()) {
+        if (App.checkConnection() && this.checkSynced()) {
             var text = this.getMessage();
             var url = this.getShareUrl();
             window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
@@ -304,7 +308,7 @@ enyo.kind({
         Open pinterest share dialog
     */
     pinterest: function() {
-        if (this.checkSynced()) {
+        if (App.checkConnection() && this.checkSynced()) {
             var url = this.getShareUrl();
             var media = this.chu.get("image");
             window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
