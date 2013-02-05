@@ -9,7 +9,8 @@ enyo.kind({
         //* Chu to display
         chu: null,
         //* Whether or not the current user has like this chu
-        liked: false
+        liked: false,
+        buttonLabel: $L("back")
     },
     events: {
         //* User has tapped the back button
@@ -39,6 +40,10 @@ enyo.kind({
             s.kDragDamping = 0.2;
             s.kSnapFriction = 0.4;
         }
+        this.buttonLabelChanged();
+    },
+    buttonLabelChanged: function() {
+        this.$.doneButton.setContent(this.buttonLabel);
     },
     setupFriends: function() {
         var user = chuisy.accounts.getActiveUser();
@@ -339,6 +344,7 @@ enyo.kind({
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
         this.$.peoplePicker.setSelectedItems(this.chu.get("friends") || []);
+        this.$.doneButton.setContent($L("done"));
     },
     friendsClosed: function() {
         this.$.friendsButton.removeClass("active");
@@ -353,16 +359,26 @@ enyo.kind({
             this.chu.save({friends: friends});
             this.friendsChanged = false;
         }
+        this.buttonLabelChanged();
     },
     friendsChangedHandler: function() {
         this.friendsChanged = true;
     },
+    isFriendsSliderOpen: function() {
+        return this.$.friendsSlider.getValue() == this.$.friendsSlider.getMin();
+    },
     friendsSliderAnimateFinish: function() {
-        this.friendsSliderOpen = this.$.friendsSlider.getValue() == this.$.friendsSlider.getMin();
-        if (this.friendsSliderOpen) {
+        if (this.isFriendsSliderOpen()) {
             this.friendsOpened();
         } else {
             this.friendsClosed();
+        }
+    },
+    done: function() {
+        if (this.isFriendsSliderOpen()) {
+            this.$.friendsSlider.animateToMax();
+        } else {
+            this.doBack();
         }
     },
     activate: function(obj) {
@@ -372,7 +388,6 @@ enyo.kind({
             // So in that case we have to call it explicitly
             this.chuChanged();
         }
-        this.friendsSliderOpen = false;
         this.$.friendsButton.removeClass("active");
         this.$.friendsSlider.setValue(100);
         enyo.Signals.send("onShowGuide", {view: "chu"});
@@ -380,7 +395,8 @@ enyo.kind({
     deactivate: function() {
         this.blurredByTap = false;
         this.$.image.setSrc("assets/images/chu_image_placeholder.png");
-        this.closeFriends();
+        this.$.friendsSlider.setValue(this.$.friendsSlider.getMax());
+        this.friendsClosed();
     },
     components: [
         // IMAGE LOADING INDICATOR
@@ -398,7 +414,7 @@ enyo.kind({
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
             {classes: "header", components: [
-                {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
+                {kind: "onyx.Button", ontap: "done", classes: "back-button", name: "doneButton"},
                 {classes: "chuview-share-controls", components: [
                     {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
                         {classes: "enyo-fill", components: [
@@ -469,7 +485,7 @@ enyo.kind({
                     ]}
                 ]},
                 {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
-                    classes: "chuview-friends-slider", overmoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
+                    classes: "chuview-friends-slider", overMoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
                     {kind: "PeoplePicker", classes: "enyo-fill", onChange: "friendsChangedHandler"}
                 ]}
             ]}
