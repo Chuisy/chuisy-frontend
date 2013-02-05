@@ -10,7 +10,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("reset update", this.refresh, this);
+        chuisy.notifications.on("reset add", this.refresh, this);
     },
     /**
         Refreshes notification list with loaded items
@@ -43,14 +43,15 @@ enyo.kind({
         }
         this.$.notification.addRemoveClass("unread", !item.get("read"));
 
-        var isLastItem = event.index == chuisy.notifications.length-1;
-        if (isLastItem && chuisy.notifications.hasNextPage()) {
-            // Last item in the list and there is more! Load next page
-            this.$.loadingNextPage.show();
-            chuisy.notifications.fetchNext();
-        } else {
-            this.$.loadingNextPage.hide();
-        }
+        // var isLastItem = event.index == chuisy.notifications.length-1;
+        // if (isLastItem && chuisy.notifications.hasNextPage()) {
+        //     this.log("next page!");
+        //     // Last item in the list and there is more! Load next page
+        //     this.$.loadingNextPage.show();
+        //     chuisy.notifications.fetchNext();
+        // } else {
+        //     this.$.loadingNextPage.hide();
+        // }
 
         return true;
     },
@@ -89,8 +90,8 @@ enyo.kind({
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {kind: "Image", classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
-            ]},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            ]}
+            // {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
         ]},
         {onPushNotification: "pushNotification"}
     ]
