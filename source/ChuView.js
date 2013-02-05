@@ -383,7 +383,7 @@ enyo.kind({
     },
     components: [
         // IMAGE LOADING INDICATOR
-        {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner spinner-dark"},
+        {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
         // IMAGEVIEW
         {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
             {classes: "chuview-image-container", components: [
