@@ -47,6 +47,7 @@ enyo.kind({
         this.openView("compose");
     },
     showChu: function(sender, event) {
+        this.$.chu.setButtonLabel($L("back"));
         this.openView("chu", event.chu);
     },
     // shareChu: function(sender, event) {
@@ -71,6 +72,7 @@ enyo.kind({
         // this.openView("feed");
         // this.$.feed.loadFeed();
         this.doUpdateHistory({uri: "feed/"});
+        this.$.chu.setButtonLabel($L("done"));
         this.openView("chu", event.chu);
     },
     menuChanged: function(sender, event) {
