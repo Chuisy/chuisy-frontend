@@ -761,6 +761,9 @@
         model: chuisy.models.Chu,
         url: chuisy.apiRoot + chuisy.version + "/chu/",
         localStorage: new Backbone.LocalStorage("closet"),
+        comparator: function(model) {
+            return -(new Date(model.get("time")));
+        },
         initialize: function() {
             chuisy.models.SyncableCollection.prototype.initialize.apply(this, arguments);
             this.listenTo(this, "image_changed", function(model, options) {

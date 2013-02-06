@@ -54,7 +54,7 @@ enyo.kind({
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
         attrs.location = this.location;
-        var chu = chuisy.closet.create(attrs, {at: 0});
+        var chu = chuisy.closet.create(attrs);
         chu.changeImage(this.image, enyo.bind(this, function() {
             chuisy.closet.syncRecords();
             this.doDone({chu: chu});
