@@ -42,7 +42,7 @@ enyo.kind({
         this.$.followingCount.setContent(this.user.get("following_count"));
         var avatar = this.user.get("localAvatar") || this.user.profile.get("avatar");
         this.$.info.applyStyle("background-image", "url(" + avatar + ")");
-        this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
+        this.$.fullName.setContent(this.user.get("first_name") ? (this.user.get("first_name") + " " + this.user.get("last_name")) : "");
 
         this.$.followButton.setContent(this.user.get("following") ? "unfollow" : "follow");
         this.addRemoveClass("owned", this.user.id == chuisy.accounts.getActiveUser().id);
