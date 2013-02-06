@@ -69,6 +69,10 @@ enyo.kind({
         var coll = this.user[which];
         var user = coll.at(event.index);
         this.$[which + "Item"].setUser(user);
+        if (coll.length == 1) {
+            // Workaround for lists with a single items where userChanged does not seem to be called automatically.
+            this.$[which + "Item"].userChanged();
+        }
 
         var isLastItem = event.index == coll.length-1;
         if (isLastItem && coll.hasNextPage()) {

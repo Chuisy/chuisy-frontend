@@ -26,6 +26,10 @@ enyo.kind({
     setupUser: function(sender, event) {
         var user = this.users.at(event.index);
         this.$.userListItem.setUser(user);
+        if (this.users.length == 1) {
+            // Workaround for lists with a single items where userChanged does not seem to be called automatically.
+            this.$.userListItem.userChanged();
+        }
 
         var isLastItem = event.index == this.users.length-1;
         if (isLastItem && this.users.hasNextPage()) {
@@ -39,9 +43,9 @@ enyo.kind({
         return true;
     },
     setupChu: function(sender, event) {
-        var chu = this.chus[event.index];
+        var chu = this.chus.at(event.index);
         this.$.resultChuImage.applyStyle("background-image", "url(" + (chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png") + ")");
-        this.$.chuAvatar.setSrc(chu.user.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
+        this.$.chuAvatar.setSrc(chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
 
         var isLastItem = event.index == this.chus.length-1;
         if (isLastItem && this.chus.hasNextPage()) {
