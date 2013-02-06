@@ -49,8 +49,10 @@ enyo.kind({
         var user = chuisy.accounts.getActiveUser();
         if (user) {
             this.$.peoplePicker.setItems(user.friends.models);
-            this.listenTo(user.friends, "all", function() {
+            this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
+            this.listenTo(user.friends, "reset add", function() {
                 this.$.peoplePicker.setItems(user.friends.models);
+                this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
             });
         }
     },
@@ -487,7 +489,17 @@ enyo.kind({
                 ]},
                 {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
                     classes: "chuview-friends-slider", overMoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
-                    {kind: "PeoplePicker", classes: "enyo-fill", onChange: "friendsChangedHandler"}
+                    {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
+                        {kind: "FittableRows", components: [
+                            {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
+                            {classes: "chuview-friends-hint", content: $L("Select the people that you want to see this Chu!")}
+                        ]},
+                        {style: "padding: 80px 8px;", components: [
+                            {classes: "placeholder-image chuview-friends-placeholder-image"},
+                            {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
+                            {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%"}
+                        ]}
+                    ]}
                 ]}
             ]}
         ]},
