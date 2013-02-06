@@ -45,7 +45,6 @@ enyo.kind({
 
         var isLastItem = event.index == chuisy.notifications.length-1;
         if (isLastItem && chuisy.notifications.hasNextPage()) {
-            this.log("next page!");
             // Last item in the list and there is more! Load next page
             this.$.loadingNextPage.show();
             chuisy.notifications.fetchNext();

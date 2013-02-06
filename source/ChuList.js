@@ -14,7 +14,7 @@ enyo.kind({
     events: {
         //* A chu has been selected
         onShowChu: "",
-        onFinishedLoading: ""
+        onRefresh: ""
     },
     handlers: {
         onpostresize: "postResize"
@@ -94,6 +94,7 @@ enyo.kind({
         var chuCount = this.chus && this.chus.length || 0;
         this.$.list.setCount(Math.ceil(chuCount / (this.cellCount || 1)));
         this.$.list.refresh();
+        this.doRefresh();
     },
     chuTap: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
