@@ -31,7 +31,6 @@
                 chuisy.closet.startPolling(60000);
 
                 chuisy.notifications.fetch();
-                chuisy.notifications.syncRecords();
                 chuisy.notifications.startPolling(60000);
 
                 chuisy.gifts.fetch();
@@ -45,7 +44,7 @@
             if (goneOnline && chuisy.accounts.getActiveUser()) {
                 chuisy.accounts.syncRecords();
                 chuisy.closet.syncRecords();
-                chuisy.notifications.syncRecords();
+                chuisy.notifications.fetch();
             }
         },
         /**
@@ -811,10 +810,9 @@
         }
     });
 
-    chuisy.models.Notifications = chuisy.models.SyncableCollection.extend({
+    chuisy.models.Notifications = Backbone.Tastypie.Collection.extend({
         model: chuisy.models.Notification,
         url: chuisy.apiRoot + chuisy.version + "/notification/",
-        localStorage: new Backbone.LocalStorage("notifications"),
         seen: function(options) {
             if (this.length) {
                 options = options || {};
