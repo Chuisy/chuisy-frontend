@@ -131,14 +131,27 @@ enyo.kind({
         this.$.panels1.setIndexDirect(!obj && !App.isSignedIn() ? 1 : 0);
     },
     deactivate: function() {},
+    checkCollapsed: function(list) {
+        var collapsed = list.getScrollTop() > 100;
+        if (this.collapsed != collapsed) {
+            this.$.window.addRemoveClass("collapsed", collapsed);
+            setTimeout(enyo.bind(this, function() {
+                this.$.fittableRows.reflow();
+            }), 150);
+            this.collapsed = collapsed;
+        }
+        return true;
+    },
     components: [
         {kind: "Panels", name: "panels1", classes: "enyo-fill", draggable: false, components: [
             {kind: "FittableRows", components: [
-                {classes: "placeholder-image profileview-avatar-placeholder"},
-                {classes: "profileview-info", name: "info", components: [
-                    {classes: "profileview-fullname", name: "fullName"},
-                    {classes: "profileview-settings-button", ontap: "doShowSettings"},
-                    {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
+                {classes: "profileview-window", name: "window", components: [
+                    {classes: "profileview-info profileview-avatar-placeholder"},
+                    {classes: "profileview-info", name: "info", components: [
+                        {classes: "profileview-fullname", name: "fullName"},
+                        {classes: "profileview-settings-button", ontap: "doShowSettings"},
+                        {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
+                    ]}
                 ]},
                 {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
                     {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
@@ -155,12 +168,12 @@ enyo.kind({
                     ]}
                 ]},
                 {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
-                    {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onFinishedLoading: "chusFinishedLoading"},
-                    {kind: "List", name: "followingList", onSetupItem: "setupItem", classes: "enyo-fill", which: "following", rowsPerPage: 20, components: [
+                    {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onScroll: "checkCollapsed"},
+                    {kind: "List", name: "followingList", onSetupItem: "setupItem", classes: "enyo-fill", which: "following", rowsPerPage: 20, onScroll: "checkCollapsed", components: [
                         {kind: "UserListItem", which: "following", name: "followingItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
                         {name: "followingNextPage", classes: "loading-next-page", content: $L("Loading...")}
                     ]},
-                    {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
+                    {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, onScroll: "checkCollapsed", components: [
                         {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
                         {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
                     ]}

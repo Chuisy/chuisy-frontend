@@ -100,6 +100,9 @@ enyo.kind({
         this.doShowChu({chu: this.chus.at(index)});
         event.preventDefault();
     },
+    getScrollTop: function() {
+        return this.$.list.getScrollTop();
+    },
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chulist-row"},
