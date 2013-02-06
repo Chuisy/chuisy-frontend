@@ -24,7 +24,7 @@ enyo.kind({
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     chusPerPageChanged: function() {
-        this.$.list.setRowsPerPage(Math.ceil(this.chusPerPage/this.cellCount));
+        this.$.list.setRowsPerPage(Math.ceil(this.chusPerPage/(this.cellCount || 1)));
     },
     chusChanged: function() {
         this.stopListening();
@@ -36,7 +36,6 @@ enyo.kind({
     rendered: function() {
         this.inherited(arguments);
         this.buildCells();
-        this.chusPerPageChanged();
         this.chusChanged();
     },
     postResize: function() {
@@ -60,6 +59,7 @@ enyo.kind({
                 {classes: "chulist-chu-image", name: "chuImage" + i}
             ]});
         }
+        this.chusPerPageChanged();
     },
     setupItem: function(sender, event) {
         for (var i=0; i<this.cellCount; i++) {
