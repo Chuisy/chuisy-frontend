@@ -58,6 +58,7 @@ enyo.kind({
     },
     loaded: function() {
         this.$.spinner.hide();
+        this.$.image.removeClass("loading");
         this.arrangeImage();
     },
     chuChanged: function() {
@@ -78,6 +79,7 @@ enyo.kind({
         var image = this.chu.get("localImage") || this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png";
         if (image != this.$.image.src) {
             this.$.spinner.show();
+            this.$.image.addClass("loading");
             this.$.image.setSrc(image);
         }
 

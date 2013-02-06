@@ -19,6 +19,11 @@
 .chuview-image {
 	margin: 0 auto;
 	width: 110%;
+	-webkit-transition: opacity 1s;
+}
+
+.chuview-image.loading {
+	opacity: 0;
 }
 
 .chuview-spacer {
