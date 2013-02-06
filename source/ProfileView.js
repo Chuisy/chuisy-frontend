@@ -50,6 +50,8 @@ enyo.kind({
     menuItemSelected: function(sender, event) {
         if (event.originator.getActive()) {
             this.$.panels.setIndex(event.originator.value);
+            var list = this.$.panels.getClientControls()[event.originator.value];
+            this.checkCollapsed(list);
         }
     },
     showChu: function(sender, event) {
@@ -106,8 +108,6 @@ enyo.kind({
         this.$[which + "List"].refresh();
         return true;
     },
-    chusFinishedLoading: function(sender, event) {
-    },
     signIn: function() {
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
@@ -132,7 +132,7 @@ enyo.kind({
     },
     deactivate: function() {},
     checkCollapsed: function(list) {
-        var collapsed = list.getScrollTop() > 100;
+        var collapsed = list.getScrollTop() > 300;
         if (this.collapsed != collapsed) {
             this.$.window.addRemoveClass("collapsed", collapsed);
             setTimeout(enyo.bind(this, function() {
