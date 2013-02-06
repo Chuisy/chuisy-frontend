@@ -29,10 +29,6 @@ enyo.kind({
         this.listenTo(this.user.following, "reset add", _.bind(this.refresh, this, "following"));
 
         this.$.chuList.setChus(this.user.chus);
-
-        this.user.followers.fetch();
-        this.user.following.fetch();
-        this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}});
     },
     updateView: function() {
         this.$.panels1.setIndex(0);
@@ -133,6 +129,12 @@ enyo.kind({
             this.setUser(obj);
         }
         this.$.panels1.setIndexDirect(!obj && !App.isSignedIn() ? 1 : 0);
+
+        if (this.user) {
+            this.user.followers.fetch();
+            this.user.following.fetch();
+            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}});
+        }
     },
     deactivate: function() {},
     checkCollapsed: function(list) {
