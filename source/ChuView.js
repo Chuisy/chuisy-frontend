@@ -400,6 +400,9 @@ enyo.kind({
         this.$.friendsButton.removeClass("active");
         this.$.friendsSlider.setValue(100);
         enyo.Signals.send("onShowGuide", {view: "chu"});
+        if (this.isNew) {
+            enyo.Signals.send("onShowGuide", {view: "chu"});
+        }
     },
     deactivate: function() {
         this.blurredByTap = false;
