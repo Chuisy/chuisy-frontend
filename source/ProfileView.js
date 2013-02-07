@@ -46,13 +46,13 @@ enyo.kind({
     menuItemSelected: function(sender, event) {
         if (event.originator.getActive()) {
             this.$.panels.setIndex(event.originator.value);
-            var listMap = {
-                0: this.$.chuList,
-                1: this.$.followingList,
-                2: this.$.followersList
-            };
-            var list = listMap[event.originator.value];
-            this.checkCollapsed(list);
+            // var listMap = {
+            //     0: this.$.chuList,
+            //     1: this.$.followingList,
+            //     2: this.$.followersList
+            // };
+            // var list = listMap[event.originator.value];
+            // this.checkCollapsed(list);
         }
     },
     showChu: function(sender, event) {
@@ -187,18 +187,18 @@ enyo.kind({
                 {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
                     {classes: "enyo-fill", components: [
                         {name: "chusPlaceholder", classes: "profileview-list-placeholder chus"},
-                        {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onScroll: "checkCollapsed", onRefresh: "chuListRefresh"}
+                        {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]},
                     {classes: "enyo-fill", components: [
                         {name: "followingPlaceholder", classes: "profileview-list-placeholder following"},
-                        {kind: "List", name: "followingList", onSetupItem: "setupItem", classes: "enyo-fill", which: "following", rowsPerPage: 20, onScroll: "checkCollapsed", components: [
+                        {kind: "List", name: "followingList", onSetupItem: "setupItem", classes: "enyo-fill", which: "following", rowsPerPage: 20, components: [
                             {kind: "UserListItem", which: "following", name: "followingItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
                             {name: "followingNextPage", classes: "loading-next-page", content: $L("Loading...")}
                         ]}
                     ]},
                     {classes: "enyo-fill", components: [
                         {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
-                        {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, onScroll: "checkCollapsed", components: [
+                        {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
                             {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
                             {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
                         ]}
