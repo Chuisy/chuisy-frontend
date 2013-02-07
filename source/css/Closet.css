@@ -34,6 +34,12 @@
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 4px;
+	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;
+}
+
+.closet-chu.deleted {
+	-webkit-transform: scale(0);
+	opacity: 0;
 }
 
 .closet-chu-image {

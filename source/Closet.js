@@ -63,7 +63,7 @@ enyo.kind({
         for (var i=0; i<this.cellCount; i++) {
             var index = event.index * this.cellCount + i;
             var chu = chuisy.closet.at(index);
-
+            this.$["chu" + i].removeClass("deleted");
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
                 var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
@@ -118,7 +118,12 @@ enyo.kind({
     chuRemove: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = chuisy.closet.at(index);
-        chu.destroy();
+        this.$.list.performOnRow(event.index, function(index, cellIndex) {
+            this.$["chu" + sender.cellIndex].addClass("deleted");
+        }, this, event.index, sender.cellIndex);
+        setTimeout(function() {
+            chu.destroy();
+        }, 500);
         return true;
     },
     hold: function(sender, event) {
@@ -161,7 +166,7 @@ enyo.kind({
             {classes: "placeholder-text", content: $L("What is this? Your closet is still empty? Go ahead and fill it!")}
         ]},
         // LIST
-        {kind: "List", fit: true, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [
+        {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "closet-row"}
         ]}
     ]
