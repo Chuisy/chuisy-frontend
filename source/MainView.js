@@ -77,9 +77,7 @@ enyo.kind({
         this.openView("chu", event.chu);
     },
     chuViewDone: function(sender, event) {
-        this.openView("feed");
-        event.chu.added = true;
-        chuisy.feed.add(event.chu, {at: 0});
+        this.openView("feed", event.chu);
     },
     menuChanged: function(sender, event) {
         this.openView(event.value);

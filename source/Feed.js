@@ -62,7 +62,6 @@ enyo.kind({
                     this.$.chuFeedItem.applyStyle("opacity", 1);
                 }, this);
             }, event.index);
-            item.added = false;
         } else {
             this.$.chuFeedItem.applyStyle("opacity", 1);
         }
@@ -96,10 +95,20 @@ enyo.kind({
         var user = new chuisy.models.User(chuisy.feed.at(event.index).get("user"));
         this.doShowUser({user: user});
     },
-    activate: function() {
+    activate: function(newChu) {
         enyo.Signals.send("onShowGuide", {view: "feed"});
+        this.newChu = newChu;
+        if (newChu) {
+            newChu.added = true;
+            chuisy.feed.add(newChu, {at: 0});
+        }
     },
-    deactivate: function() {},
+    deactivate: function() {
+        if (this.newChu) {
+            this.newChu.added = false;
+            thsi.newChu = null;
+        }
+    },
     components: [
         {kind: "onyx.Spinner", classes: "absolute-center"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
