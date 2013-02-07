@@ -53,6 +53,19 @@ enyo.kind({
         var item = chuisy.feed.at(event.index);
         this.$.chuFeedItem.setChu(item);
 
+        this.$.chuFeedItem.removeClass("feed-item-added");
+        if (item.added) {
+            this.$.chuFeedItem.applyStyle("opacity", 0);
+            enyo.asyncMethod(this, function(index) {
+                this.$.feedList.performOnRow(index, function() {
+                    this.$.chuFeedItem.addClass("feed-item-added");
+                    this.$.chuFeedItem.applyStyle("opacity", 1);
+                }, this);
+            }, event.index);
+        } else {
+            this.$.chuFeedItem.applyStyle("opacity", 1);
+        }
+
         var isLastItem = event.index == chuisy.feed.length-1;
         if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.

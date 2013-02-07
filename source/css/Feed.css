@@ -4,3 +4,7 @@
 .feed.highlight {
 	background-color: Gray;
 }
+
+.feed-item-added {
+	-webkit-transition: opacity 1s linear 1s;
+}

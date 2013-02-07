@@ -71,9 +71,15 @@ enyo.kind({
     composeChuDone: function(sender, event) {
         // this.openView("feed");
         // this.$.feed.loadFeed();
-        this.doUpdateHistory({uri: "feed/"});
+        // this.doUpdateHistory({uri: "feed/"});
         this.$.chu.setButtonLabel($L("done"));
+        this.$.chu.isNew = true;
         this.openView("chu", event.chu);
+    },
+    chuViewDone: function(sender, event) {
+        this.openView("feed");
+        event.chu.added = true;
+        chuisy.feed.add(event.chu, {at: 0});
     },
     menuChanged: function(sender, event) {
         this.openView(event.value);
@@ -126,9 +132,9 @@ enyo.kind({
             case "user":
                 this.doUpdateHistory({uri: "user/" + obj.id + "/"});
                 break;
-            case "compose":
-                this.doUpdateHistory({uri: "chu/new/"});
-                break;
+            // case "compose":
+            //     this.doUpdateHistory({uri: "chu/new/"});
+            //     break;
             case "share":
                 this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
                 break;
@@ -173,7 +179,7 @@ enyo.kind({
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back"},
+            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone"},
             // // SHARE CHU
             // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS

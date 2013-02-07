@@ -18,7 +18,8 @@ enyo.kind({
         //* User has tapped the share button
         onShare: "",
         //* User has tapped the avatar or name of the chus author
-        onShowUser: ""
+        onShowUser: "",
+        onDone: ""
     },
     handlers: {
         ontap: "tapHandler",
@@ -76,7 +77,7 @@ enyo.kind({
         var user = this.chu.get("user");
         var loc = this.chu.get("location");
 
-        var image = this.chu.get("localImage") || this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png";
+        var image = this.chu.get("localImage") || this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png";
         if (image != this.$.image.src) {
             this.$.spinner.show();
             this.$.image.addClass("loading");
@@ -382,6 +383,9 @@ enyo.kind({
     done: function() {
         if (this.isFriendsSliderOpen()) {
             this.$.friendsSlider.animateToMax();
+        } else if (this.isNew) {
+            this.isNew = false;
+            this.doDone({chu: this.chu});
         } else {
             this.doBack();
         }
