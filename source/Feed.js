@@ -62,6 +62,7 @@ enyo.kind({
                     this.$.chuFeedItem.applyStyle("opacity", 1);
                 }, this);
             }, event.index);
+            item.added = false;
         } else {
             this.$.chuFeedItem.applyStyle("opacity", 1);
         }
