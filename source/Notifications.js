@@ -23,25 +23,27 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
 
-        switch (item.get("action")) {
-            case "like":
-                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
-                break;
-            case "comment":
-                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
-                break;
-            case "follow":
-                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
-                break;
-            case "share":
-                this.$.image.setSrc(item.get("actor").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-                this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
-                break;
+        if (item.get("text")) {
+            this.$.text.setContent(item.get("text"));
+        } else {
+            switch (item.get("action")) {
+                case "like":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    break;
+                case "comment":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    break;
+                case "follow":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
+                    break;
+                case "share":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
+                    break;
+            }
         }
-        this.$.notification.addRemoveClass("unread", !item.get("read"));
+
+        this.$.image.setSrc(item.get("thumbnail"));
+        this.$.notification.addRemoveClass("read", item.get("read"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
         if (isLastItem && chuisy.notifications.hasNextPage()) {
@@ -56,7 +58,7 @@ enyo.kind({
     },
     notificationTapped: function(sender, event) {
         var not = chuisy.notifications.at(event.index);
-        if (App.checkConnection()) {
+        if (App.checkConnection() && not.get("uri")) {
             this.doNotificationSelected({notification: not});
             if (!not.get("read")) {
                 // Mark notification as read
@@ -83,7 +85,11 @@ enyo.kind({
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
-                {kind: "Image", classes: "notifications-notification-image", name: "image"},
+                {classes: "notifications-notification-header", components: [
+                    {classes: "notifications-notification-seperator"},
+                    {kind: "Image", classes: "notifications-notification-image", name: "image"},
+                    {classes: "notifications-notification-seperator"}
+                ]},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
             {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
