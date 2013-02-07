@@ -9,33 +9,38 @@ enyo.kind({
     },
     views: {
         "feed": [
-            "feed_0.png",
-            "feed_1.png",
-            "feed_2.png"
+            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
+                {classes: "guide-centered", style: "height: 250px", components: [
+                    {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
+                    {classes: "guide-separator"},
+                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop or your friend's " +
+                        "shopping experiences and discover nice things from people with taste.")}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
+            ]},
+            {style: "background: url(assets/images/guide/bottom-left.png) no-repeat center bottom; background-size: 320px 568px;", components: [
+                {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
+                    $L("A fashion item or accessoire discovered by a fashion enthusiast during 'window shopping'. " +
+                        "Often used to express style or get feedback from friends.")},
+                    {style: "width: 130px; position: absolute; bottom: 60px; left: 95px;", content: $L("Push the button to post a Chu")}
+            ]},
+            {style: "background: url(assets/images/guide/menu.png) no-repeat center top; background-size: 320px 568px;", components: [
+                {classes: "guide-centered", style: "height: 65px;", content: "When you are ready to move on, use the bar above to check out the rest of the app."}
+            ]}
         ],
         "closet": [
-            "closet_0.png"
         ],
         "profile": [
-            "profile_0.png",
-            "profile_1.png"
         ],
         "chu": [
-            "chu_1.png",
-            "chu_2.png"
         ],
         "compose": [
-            "compose_1.png"
         ],
         "notifications": [
-            "affairs_0.png"
         ],
         "discover": [
-            "discover_0.png"
         ],
         "share": [
-            "share_0.png",
-            "share_1.png"
         ]
     },
     create: function() {
@@ -47,7 +52,7 @@ enyo.kind({
         var screens = this.views[this.view];
         if (screens) {
             for (var i=0; i<screens.length; i++) {
-                this.$.panels.createComponent({style: "background-image: url(" + this.getImagesPath() + screens[i] + ")"});
+                this.$.panels.createComponent(screens[i]);
             }
             this.$.panels.render();
         } else {
