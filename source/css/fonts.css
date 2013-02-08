@@ -1,16 +1,4 @@
 @font-face {
-  font-family: 'Codystar';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Codystar Light'), local('Codystar-Light'), url(../../assets/fonts/Codystar/Codystar-Light.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'Codystar';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Codystar Light'), local('Codystar-Light'), url(../../assets/fonts/Codystar/Codystar-Regular.ttf) format('truetype');
-}
-@font-face {
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 300;
@@ -35,111 +23,8 @@
   src: local('Homemade Apple'), local('HomemadeApple'), url(../../assets/fonts/Homemade_Apple/HomemadeApple.ttf) format('truetype');
 }
 @font-face {
-  font-family: 'Poiret One';
+  font-family: 'Muli';
   font-style: normal;
   font-weight: 400;
-  src: local('Homemade Apple'), local('HomemadeApple'), url(../../assets/fonts/Poiret_One/PoiretOne-Regular.ttf) format('truetype');
+  src: local('Muli'), local('Muli'), url(../../assets/fonts/Muli/Muli-Regular.ttf) format('truetype');
 }
-/*@font-face {
-    font-family: 'PTSansNarrowRegular';
-    src: url('../../assets/fonts/PTN57F-webfont.eot');
-    src: url('../../assets/fonts/PTN57F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTN57F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTN57F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTN57F-webfont.svg#PTSansNarrowRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansCaptionBold';
-    src: url('../../assets/fonts/PTC75F-webfont.eot');
-    src: url('../../assets/fonts/PTC75F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTC75F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTC75F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTC75F-webfont.svg#PTSansCaptionBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansCaptionRegular';
-    src: url('../../assets/fonts/PTC55F-webfont.eot');
-    src: url('../../assets/fonts/PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTC55F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTC55F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTC55F-webfont.svg#PTSansCaptionRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansBoldItalic';
-    src: url('../../assets/fonts/PTS76F-webfont.eot');
-    src: url('../../assets/fonts/PTS76F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTS76F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTS76F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTS76F-webfont.svg#PTSansBoldItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansBold';
-    src: url('../../assets/fonts/PTS75F-webfont.eot');
-    src: url('../../assets/fonts/PTS75F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTS75F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTS75F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTS75F-webfont.svg#PTSansBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansItalic';
-    src: url('../../assets/fonts/PTS56F-webfont.eot');
-    src: url('../../assets/fonts/PTS56F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTS56F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTS56F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTS56F-webfont.svg#PTSansItalic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansRegular';
-    src: url('../../assets/fonts/PTS55F-webfont.eot');
-    src: url('../../assets/fonts/PTS55F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTS55F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTS55F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTS55F-webfont.svg#PTSansRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'PTSansNarrowBold';
-    src: url('../../assets/fonts/PTN77F-webfont.eot');
-    src: url('../../assets/fonts/PTN77F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/PTN77F-webfont.woff') format('woff'),
-         url('../../assets/fonts/PTN77F-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/PTN77F-webfont.svg#PTSansNarrowBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-	font-family: 'Windsong';
-	src: url('/../../assets/fonts/Windsong-webfont.eot');
-	src: local('☺'), url('/../../assets/fonts/Windsong-webfont.woff') format('woff'), url('/../../assets/fonts/Windsong-webfont.ttf') format('truetype'), url('/../../assets/fonts/Windsong-webfont.svg#webfontX4pGz9fc') format('svg');
-	font-weight: 400;
-	font-style: normal;
-}*/
