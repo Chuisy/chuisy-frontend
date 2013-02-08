@@ -681,7 +681,7 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/profile/",
         toJSON: function() {
             var json = chuisy.models.OwnedModel.prototype.toJSON.apply(this, arguments);
-            delete json.avatar_thumbnail;
+            // delete json.avatar_thumbnail;
             return json;
         }
     });
