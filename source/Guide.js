@@ -25,7 +25,7 @@ enyo.kind({
                     {classes: "guide-text", style: "width: 130px; position: absolute; bottom: 60px; left: 95px;", content: $L("Push the button to post a Chu")}
             ]},
             {style: "background: url(assets/images/guide/menu.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered guide-text", style: "height: 65px;", content: "When you are ready to move on, use the bar above to check out the rest of the app."}
+                {classes: "guide-centered guide-text", style: "height: 65px;", content: $L("Use the bar above to check out the rest of the app.")}
             ]}
         ],
         "closet": [
@@ -33,7 +33,7 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 150px", components: [
                     {classes: "guide-header", content: $L("Your closet that never ends")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can find all your Chus. Be chuisy and fill it up!")}
+                    {classes: "guide-text", content: $L("Here you can find all your Chus. Be chuisy and fill it while shopping!")}
                 ]}
             ]}
         ],
@@ -51,10 +51,10 @@ enyo.kind({
         ],
         "chu": [
             {style: "background: url(assets/images/guide/top-right.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: "Ask others about your discoveries or keep it a secret. It's your choice."}
+                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: $L("Share your discovery or keep it a secret. It's your choice.")}
             ]},
             {style: "background: url(assets/images/guide/share.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: "Let friends become part of the moment and share your shopping experiences."}
+                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: $L("Let friends become part of the moment and share your shopping experiences.")}
             ]}
         ],
         "notifications": [
@@ -62,7 +62,7 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 130px", components: [
                     {classes: "guide-header", content: $L("Your affairs")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Come here to see what's hot and new")}
+                    {classes: "guide-text", content: $L("Come here to see what's hot and new.")}
                 ]}
             ]}
         ],
