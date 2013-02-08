@@ -23,6 +23,8 @@ enyo.kind({
             this.updateView();
             this.stopListening();
             this.listenTo(user, "change", this.updateView);
+        } else {
+            this.doBack();
         }
     },
     updateView: function() {
@@ -57,6 +59,7 @@ enyo.kind({
     */
     signOut: function() {
         chuisy.signOut();
+        this.doBack();
     },
     updateFacebookConnectItem: function() {
         this.$.facebookConnectItem.addRemoveClass("connected", App.isSignedIn());
