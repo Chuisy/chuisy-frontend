@@ -106,7 +106,7 @@ enyo.kind({
     deactivate: function() {
         if (this.newChu) {
             this.newChu.added = false;
-            thsi.newChu = null;
+            this.newChu = null;
         }
     },
     components: [
