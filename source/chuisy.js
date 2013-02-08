@@ -389,9 +389,9 @@
                 }, this)
             });
             this.chus = new chuisy.models.ChuCollection([], {
-                filters: {
-                    user: this.id
-                }
+                filters: _.bind(function(user) {
+                    return {user: this.id};
+                }, this)
             });
         },
         parse: function(response) {
