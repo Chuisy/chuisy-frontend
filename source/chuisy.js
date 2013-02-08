@@ -1,8 +1,8 @@
 (function($, _, Backbone, enyo) {
     chuisy = {
-        apiRoot: "http://127.0.0.1:8000/api/",
+        // apiRoot: "http://127.0.0.1:8000/api/",
         // apiRoot: "http://chuisy-staging.herokuapp.com/api/",
-        // apiRoot: "http://www.chuisy.com/api/",
+        apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
         closetDir: "closet/",
