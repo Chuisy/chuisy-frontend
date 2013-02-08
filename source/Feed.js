@@ -110,7 +110,7 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "onyx.Spinner", classes: "absolute-center"},
+        {kind: "onyx.Spinner", classes: "absolute-center onyx-light"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [

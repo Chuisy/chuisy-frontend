@@ -167,7 +167,7 @@ enyo.kind({
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-placeitem"}
             ]},
-            {kind: "onyx.Spinner", classes: "picklocation-spinner"},
+            {kind: "onyx.Spinner", classes: "picklocation-spinner onyx-light"},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
                 {kind: "onyx.InputDecorator", components: [

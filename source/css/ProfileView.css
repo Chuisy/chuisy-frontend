@@ -154,3 +154,8 @@
 .profileview-list-placeholder.followers {
 	background-image: url(../../assets/images/friends_placeholder.png);
 }
+
+.profileview-login-spinner {
+	display: block;
+	margin: 20px auto;
+}

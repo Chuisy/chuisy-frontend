@@ -2,7 +2,7 @@
 	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
 	background-size: 100px 100px;
 	text-align: center;
-	padding-top: 50px;
+	padding-top: 40px;
 }
 
 .facebooksignin-placeholder {
@@ -14,7 +14,7 @@
 }
 
 .facebooksignin-text {
-	padding: 40px 40px;
+	padding: 30px 40px;
 	text-align: center;
 	color: #555;
 	font-size: 10pt;
@@ -24,4 +24,9 @@
 	display: block;
 	margin: 5px auto;
 	width: 250px;
+}
+
+.facebooksignin-spinner {
+	display: block;
+	margin: 20px auto;
 }

@@ -412,7 +412,7 @@ enyo.kind({
     },
     components: [
         // IMAGE LOADING INDICATOR
-        {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
+        {kind: "onyx.Spinner", name: "spinner", classes: "onyx-light chuview-spinner"},
         // IMAGEVIEW
         {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
             {classes: "chuview-image-container", components: [
@@ -501,7 +501,7 @@ enyo.kind({
                     {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
                         {kind: "FittableRows", components: [
                             {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
-                            {classes: "chuview-friends-hint", content: $L("Select the people that you want to see this Chu!")}
+                            {classes: "chuview-friends-hint", content: $L("Select the people on Chuisy you want to share this Chu with!")}
                         ]},
                         {style: "padding: 80px 8px;", components: [
                             {classes: "placeholder-image chuview-friends-placeholder-image"},

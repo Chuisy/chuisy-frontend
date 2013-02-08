@@ -213,9 +213,9 @@ enyo.kind({
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
-                ]}
+                ]},
+                {kind: "onyx.Spinner", classes: "profileview-login-spinner onyx-light", showing: false}
             ]}
-        ]},
-        {kind: "onyx.Spinner", classes: "absolute-center", showing: false}
+        ]}
     ]
 });
