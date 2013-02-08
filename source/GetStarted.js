@@ -4,6 +4,11 @@ enyo.kind({
     events: {
         onDone: ""
     },
+    shown: function() {
+        setTimeout(enyo.bind(this, function() {
+            this.addClass("shown");
+        }), 1000);
+    },
     signIn: function() {
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
@@ -25,14 +30,16 @@ enyo.kind({
     components: [
         {kind: "Panels", classes: "enyo-fill", components: [
             {classes: "getstarted-login", components: [
-                {classes: "getstarted-login-text", content: $L("Hi there, stranger! Wanna tell me your name?")},
-                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                    {classes: "facebook-button-icon"},
-                    {content: $L("Sign In With Facebook")}
-                ]},
-                {kind: "onyx.Button", content: $L("No way!"), ontap: "doDone"}
+                {classes: "getstarted-login-logo"},
+                {classes: "getstarted-login-buttons", components: [
+                    {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                        {classes: "facebook-button-icon"},
+                        {content: $L("Sign In With Facebook")}
+                    ]},
+                    {kind: "onyx.Button", content: $L("Skip"), ontap: "doDone"},
+                    {kind: "onyx.Spinner", classes: "onyx-light getstarted-login-spinner", showing: false}
+                ]}
             ]}
-        ]},
-        {kind: "onyx.Spinner", classes: "absolute-center", showing: false}
+        ]}
     ]
 });

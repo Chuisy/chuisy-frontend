@@ -132,6 +132,7 @@ enyo.kind({
 
         if (!firstLaunched) {
             this.$.getStartedSlider.setValue(0);
+            this.$.getStarted.shown();
         } else {
             this.recoverStateFromUri();
         }
