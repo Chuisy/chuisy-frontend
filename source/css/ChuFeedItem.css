@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 	/*border: #ccc solid 1px;*/
 	/*margin: 10px;*/
-	height: 336px;
+	/*height: 336px;*/
 	margin: 8px;
 	background-color: White;
 	border-radius: 2px;
@@ -40,14 +40,19 @@
 
 .chufeeditem-image {
 	width: 100%;
-	height: 288px;
-	background: url("../../assets/images/chu_placeholder.png") no-repeat center center;
-	background-size: cover;
+	height: 300px;
+	/*height: 288px;*/
+	/*background: url("../../assets/images/chu_placeholder.png") no-repeat center center;*/
+	/*background-size: cover;*/
 	background-color: White;
 	box-sizing: border-box;
 	border: solid 1px #ddd;
 	margin-bottom: 4px;
-	position: relative;
+	-webkit-transition: opacity 0.5s;
+}
+
+.chufeeditem-image.hidden {
+	opacity: 0;
 }
 
 .chufeeditem-likes-comments {

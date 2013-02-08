@@ -14,7 +14,7 @@ enyo.kind({
 	},
 	chuChanged: function() {
 		if (this.chu) {
-			this.$.image.applyStyle("background-image", "url(" + (this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png") + ")");
+			this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("localImage") || "assets/images/chu_placeholder.png");
 			this.$.avatar.setSrc(this.chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
 			this.$.fullName.setContent(this.chu.get("user").first_name + " " + this.chu.get("user").last_name);
 			this.$.time.setContent(this.chu.getTimeText());
@@ -29,7 +29,7 @@ enyo.kind({
 		return true;
 	},
 	components: [
-		{name: "image", classes: "chufeeditem-image"},
+		{kind: "Image", name: "image", classes: "chufeeditem-image"},
         {classes: "chufeeditem-likes-comments", components: [
             {classes: "chufeeditem-likes-count", name: "likesCount"},
             {classes: "chufeeditem-likes-icon"},
