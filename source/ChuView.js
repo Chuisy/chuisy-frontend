@@ -35,7 +35,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         this.setupFriends();
-        this.listenTo(chuisy.accounts, "all", this.setupFriends);
+        this.listenTo(chuisy.accounts, "change:active_user", this.setupFriends);
         var s = this.$.contentScroller.getStrategy().$.scrollMath;
         if (s) {
             s.kDragDamping = 0.2;
@@ -51,6 +51,7 @@ enyo.kind({
         if (user) {
             this.$.peoplePicker.setItems(user.friends.models);
             this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
+            this.stopListening();
             this.listenTo(user.friends, "reset add", function() {
                 this.$.peoplePicker.setItems(user.friends.models);
                 this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
@@ -399,7 +400,10 @@ enyo.kind({
         }
         this.$.friendsButton.removeClass("active");
         this.$.friendsSlider.setValue(100);
-        enyo.Signals.send("onShowGuide", {view: "chu"});
+        var user = chuisy.accounts.getActiveUser();
+        if (user) {
+            user.friends.fetch();
+        }
         if (this.isNew) {
             enyo.Signals.send("onShowGuide", {view: "chu"});
         }
