@@ -42,7 +42,7 @@ enyo.kind({
             }
         }
 
-        this.$.image.setSrc(item.get("thumbnail"));
+        this.$.image.setSrc(item.get("thumbnail") || "");
         this.$.notification.addRemoveClass("read", item.get("read"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;

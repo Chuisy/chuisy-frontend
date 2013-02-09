@@ -49,8 +49,7 @@ enyo.kind({
         };
         // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
-        // Round number to correct currency format
-        attrs.price = Math.floor(this.$.chuForm.getPrice() * currFmt.fractionDigits);
+        attrs.price = this.$.chuForm.getPrice();
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
         attrs.location = this.location;
