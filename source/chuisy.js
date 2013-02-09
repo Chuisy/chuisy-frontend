@@ -36,6 +36,9 @@
                 chuisy.gifts.fetch();
             } else {
                 Backbone.Tastypie.authCredentials = {};
+                chuisy.accounts.stopPolling();
+                chuisy.closet.stopPolling();
+                chuisy.notifications.stopPolling();
             }
         },
         setOnline: function(online) {
@@ -152,6 +155,9 @@
             }, options);
         } catch (e) {
             console.error("Could not start file upload. " + e.message);
+            if (failure) {
+                failure(e);
+            }
         }
     };
 
@@ -211,6 +217,9 @@
             });
         } catch (e) {
             console.error("Could not resolve source uri. " + e);
+            if (failure) {
+                failure(e);
+            }
         }
     };
 
@@ -315,9 +324,14 @@
             var oldModel = new this.model({id: options.lid});
             this.localStorage.destroy(oldModel);
             this.mark(oldModel, "added", false);
+            model.save({syncFailed: false}, {nosync: true});
         },
         destroyedRecordSynced: function(model, response) {
             this.mark(model, "destroyed", false);
+        },
+        syncErrorHandler: function(model, request, options) {
+            console.log("Model failed to sync. id: " + model.id + ", status code: " + request.status + ", response text: " + request.responseText);
+            model.save({syncFailed: true}, {nosync: true});
         },
         syncRecords: function() {
             var added = this.getList("added");
@@ -348,7 +362,7 @@
                     model.id = null;
                     model.unset("id");
                     model.once("sync", this.newRecordSynced, this);
-                    model.save(null, {remote: true, lid: lid});
+                    model.save(null, {remote: true, lid: lid, error: this.syncErrorHandler});
                     model.id = lid;
                     model.set("id", lid);
                 }
@@ -613,7 +627,9 @@
                 this.trigger("image_changed", this);
                 this.makeThumbnail();
                 callback(path);
-            }, this));
+            }, this), function() {
+                callback(null);
+            });
         },
         downloadImage: function() {
             download(this.get("image"), chuisy.closetDir, this.id + ".jpg", _.bind(function(path) {
@@ -631,6 +647,10 @@
             upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.save({"image": response}, {nosync: true});
                 this.trigger("image_uploaded", this);
+                this.save({uploadFailed: false}, {nosync: true});
+            }, this), _.bind(function(error) {
+                console.log("Failed to upload image. id: " + this.id + ", error: " + error);
+                this.save({uploadFailed: true}, {nosync: true});
             }, this));
         },
         makeThumbnail: function() {

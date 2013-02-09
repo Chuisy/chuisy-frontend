@@ -54,6 +54,7 @@ enyo.kind({
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
             this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", onhold: "hold", name: "chu" + i, owner: this, components: [
+                {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
                 {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
             ]});
@@ -70,6 +71,7 @@ enyo.kind({
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
+                this.$["errorIcon" + i].setShowing(chu.get("syncFailed") || chu.get("uploadFailed"));
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }

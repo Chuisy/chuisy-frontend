@@ -16,7 +16,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("add", this.refreshFeed, this);
+        chuisy.feed.on("add change", this.refreshFeed, this);
     },
     feedLoaded: function() {
         this.$.spinner.hide();

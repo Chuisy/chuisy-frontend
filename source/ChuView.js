@@ -100,6 +100,7 @@ enyo.kind({
         this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
 
         this.adjustShareControls();
+        this.$.errorIcon.setShowing(this.chu.get("syncFailed") || this.chu.get("uploadFailed"));
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -414,6 +415,13 @@ enyo.kind({
         this.$.friendsSlider.setValue(this.$.friendsSlider.getMax());
         this.friendsClosed();
     },
+    errorIconTapped: function() {
+        navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
+            if (choice == 1) {
+                chuisy.closet.syncRecords();
+            }
+        }), $L("Upload failed"), [$L("Try Again"), $L("OK")].join(","));
+    },
     components: [
         // IMAGE LOADING INDICATOR
         {kind: "onyx.Spinner", name: "spinner", classes: "onyx-light chuview-spinner"},
@@ -460,7 +468,8 @@ enyo.kind({
                         {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped", components: [
                             {classes: "chuview-like-button-side back"},
                             {classes: "chuview-like-button-side front"}
-                        ]}
+                        ]},
+                        {classes: "chuview-error-icon", name: "errorIcon", ontap: "errorIconTapped"}
                     ]},
                     {classes: "chuview-content", components: [
                         // CATEGORY, PRICE, COMMENTS, LIKES
