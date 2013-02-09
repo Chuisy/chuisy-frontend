@@ -125,6 +125,7 @@ enyo.kind({
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
             chu.destroy();
+            chuisy.closet.syncRecords();
         }, 500);
         return true;
     },
