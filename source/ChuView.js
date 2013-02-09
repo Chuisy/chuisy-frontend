@@ -422,7 +422,7 @@ enyo.kind({
             if (choice == 1) {
                 chuisy.closet.syncRecords();
             }
-        }), $L("Upload failed"), [$L("Try Again"), $L("OK")].join(","));
+        }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
     },
     components: [
         // IMAGE LOADING INDICATOR
