@@ -11,9 +11,6 @@ enyo.kind({
         // A chu has been selected
         onShowChu: ""
     },
-    handlers: {
-        ontap: "tapHandler"
-    },
     create: function() {
         this.inherited(arguments);
 
@@ -112,12 +109,6 @@ enyo.kind({
         this.$[which + "NoResults"].hide();
         this.latestQuery = query;
         this[which + "s"].fetch({searchQuery: query});
-    },
-    tapHandler: function(sender, event) {
-        // Remove focus from search input if the user taps outside of it
-        if (!event.originator.isDescendantOf(this.$.searchInput)) {
-            this.$.searchInput.blur();
-        }
     },
     deactivate: function() {
         this.$.searchInput.blur();

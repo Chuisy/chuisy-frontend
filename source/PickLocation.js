@@ -11,13 +11,6 @@ enyo.kind({
         // User has tapped the back button
         onBack: ""
     },
-    // handlers: {
-    //     ontap: "tapHandler"
-    // },
-    // rendered: function() {
-    //     this.inherited(arguments);
-    //     this.$.map.initialize();
-    // },
     /**
         Resets the place list and gets the geolocation
     */
@@ -135,27 +128,6 @@ enyo.kind({
     skip: function() {
         this.doLocationPicked({location: this.location});
     },
-    // inputTap: function() {
-    //     this.log("input tap");
-    //     this.$.blurredByTap = false;
-    //     // Prevent tap event from propagating to _tapHandler_
-    //     return true;
-    // },
-    // tapHandler: function(sender, event) {
-    //     this.log("tap");
-    //     // We want to distinguish between the tapping the done button on the virtual keyboard
-    //     // and tapping outside the input so we set this flag
-    //     this.blurredByTap = true;
-    //     this.$.newPlaceInput.hasNode().blur();
-    // },
-    newPlaceBlur: function() {
-        // if (!this.blurredByTap) {
-        //     // The user has not dismissed the input by tapping outside it so he must have pressed
-        //     // the done button on the virtual keyboard. We interpret this as wanting to send it.
-            this.newPlaceEnter();
-        // }
-        // this.blurredByTap = false;
-    },
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
@@ -171,7 +143,7 @@ enyo.kind({
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
                 {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown", onblur: "newPlaceBlur"}
+                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
                 ]}
             ]}
         ]}

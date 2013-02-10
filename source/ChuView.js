@@ -22,7 +22,6 @@ enyo.kind({
         onDone: ""
     },
     handlers: {
-        ontap: "tapHandler",
         onpostresize: "postResize",
         onload: "loaded"
     },
@@ -171,14 +170,6 @@ enyo.kind({
             event.preventDefault();
         }
     },
-    commentInputBlur: function() {
-        if (!this.blurredByTap) {
-            // The user has not dismissed the input by tapping outside it so he must have pressed
-            // the done button on the virtual keyboard. We interpret this as wanting to send it.
-            this.commentEnter();
-        }
-        this.blurredByTap = false;
-    },
     commentEnter: function() {
         if (App.checkConnection()) {
             if (App.isSignedIn()) {
@@ -231,15 +222,6 @@ enyo.kind({
     */
     share: function() {
         this.doShare({chu: this.chu});
-    },
-    tapHandler: function(sender, event) {
-        // Remove focus from comment input if the user taps outside of it
-        if (!event.originator.isDescendantOf(this.$.commentInput)) {
-            // We want to distinguish between the tapping the done button on the virtual keyboard
-            // and tapping outside the input so we set this flag
-            this.blurredByTap = true;
-            this.$.commentInput.hasNode().blur();
-        }
     },
     /**
         Open this chus authors profile

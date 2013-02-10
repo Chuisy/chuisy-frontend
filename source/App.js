@@ -64,6 +64,10 @@ enyo.kind({
         }
     },
     history: [],
+    handlers: {
+        ontap: "tapHandler",
+        onfocus: "focusHandler"
+    },
     create: function() {
         this.inherited(arguments);
 
@@ -389,6 +393,15 @@ enyo.kind({
         localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
         this.$.getStartedSlider.animateToMax();
         this.recoverStateFromUri();
+    },
+    tapHandler: function(sender, event) {
+        if (this.focusedInput && !(event.originator instanceof enyo.Input)) {
+            this.focusedInput.hasNode().blur();
+            this.focusedInput = null;
+        }
+    },
+    focusHandler: function(sender, event) {
+        this.focusedInput = event.originator;
     },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
