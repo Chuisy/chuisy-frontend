@@ -244,7 +244,7 @@ enyo.kind({
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateTo: function(uri) {
+    navigateTo: function(uri, obj) {
         if ((match2 = uri.match(/^auth\/(.+)/))) {
             // auth/{base64-encoded auth credentials}
             // The user has been redirected from the backend with authentication credentials. Let's sign him in.
@@ -279,7 +279,11 @@ enyo.kind({
         } else if ((match2 = uri.match(/^gift\/(\d+)\/$/))) {
             // {user id}/
             // This is the URI to a users profile
-            if (App.checkConnection()) {
+            if (obj) {
+                // A gift object has been provided. So we can open it directly.
+                var gift = new chuisy.models.Gift(obj);
+                this.$.mainView.openView("gift", gift);
+            } else if (App.checkConnection()) {
                 var gift = new chuisy.models.Gift({id: match2[1]});
                 gift.fetch({success: enyo.bind(this, function() {
                     this.$.mainView.openView("gift", gift);
@@ -301,19 +305,15 @@ enyo.kind({
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
                 this.$.mainView.composeChu();
-            } else if ((match3 = match2[1].match(/^share\/(\d+)\/$/))) {
-                // chu/share/{chu id}
-                // Sharing is caring. And apparently this user wants to share a chu. Let' go!
-                if (App.checkConnection()) {
-                    var chu = new chuisy.models.Chu({id: match3[1]});
-                    chu.fetch({success: enyo.bind(this, function() {
-                        this.$.mainView.openView("share", chu);
-                    })});
-                }
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
-                // We have a URI pointing to a specific Chu. Let's open it.
-                if (App.checkConnection()) {
+
+                if (obj) {
+                    // A chu object has been provided. So we can open it directly.
+                    var chu = new chuisy.models.Chu(obj);
+                    this.$.mainView.openView("chu", chu);
+                } else if (App.checkConnection()) {
+                    // We don't have a chu object, but we do have an id. Let's fetch it!
                     var chu = new chuisy.models.Chu({id: match3[1]});
                     chu.fetch({success: enyo.bind(this, function() {
                         this.$.mainView.openView("chu", chu);
@@ -323,7 +323,11 @@ enyo.kind({
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // {user id}/
             // This is the URI to a users profile
-            if (App.checkConnection()) {
+            if (obj) {
+                // A user object has been provided. So we can open it directly.
+                var user = new chuisy.models.User(obj);
+                this.$.mainView.openView("user", user);
+            } else if (App.checkConnection()) {
                 var user = new chuisy.models.User({id: match2[1]});
                 user.fetch({success: enyo.bind(this, function() {
                     this.$.mainView.openView("user", user);
@@ -371,7 +375,7 @@ enyo.kind({
         this.$.signInSlider.animateToMax();
     },
     mainViewNavigateTo: function(sender, event) {
-        this.navigateTo(event.uri);
+        this.navigateTo(event.uri, event.obj);
     },
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {

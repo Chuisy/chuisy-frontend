@@ -63,7 +63,7 @@ enyo.kind({
         this.openView("gift", event.gift);
     },
     notificationSelected: function(sender, event) {
-        this.doNavigateTo({uri: event.notification.get("uri")});
+        this.doNavigateTo({uri: event.notification.get("uri"), obj: event.notification.get("target_obj")});
     },
     // shareViewDone: function(sender, event) {
     //     this.openView("chu", sender.getChu());
