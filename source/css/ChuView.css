@@ -82,7 +82,13 @@
 }
 
 .chuview-commentinput-decorator {
-	/*margin-bottom: 5px;*/
+	border-radius: 0;
+	width: 100%;
+	height: 35px;
+	padding: 0;
+}
+
+/*.chuview-commentinput-decorator {
 	background-color: White;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
@@ -97,16 +103,23 @@
 .chuview-commentinput-decorator.onyx-focused {
 	box-shadow: 0 1px 1px #888;
 	height: 80px;
-}
+}*/
 
 .chuview-commentinput-decorator > .enyo-input {
+	min-height: 0;
+	width: 100%;
+	height: 100%;
+	padding: 7px 5px;
+	box-sizing: border-box;
+}
+
+.chuview-more-comments {
 	width: 100%;
 }
 
-.chuview-commentinput-slider {
-	width: 100%;
-	position: absolute;
-	bottom: 0;
+.chuview-comments-spinner {
+	display: block;
+	margin: 0 auto;
 }
 
 .chuview-likebar {
@@ -159,7 +172,7 @@
 }
 
 .chuview-infobar {
-	padding-bottom: 5px;
+	padding: 5px 0;
 	overflow: hidden;
 }
 
