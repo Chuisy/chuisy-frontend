@@ -124,7 +124,7 @@ enyo.kind({
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
     likeButtonTapped: function() {
-        if (App.checkConnection()) {
+        if (App.checkConnection() && this.checkSynced()) {
             if (App.isSignedIn()) {
                 this.toggleLike();
             } else {
@@ -171,7 +171,7 @@ enyo.kind({
         }
     },
     commentEnter: function() {
-        if (App.checkConnection()) {
+        if (App.checkConnection() && this.checkSynced()) {
             if (App.isSignedIn()) {
                 this.postComment();
             } else {
@@ -263,7 +263,7 @@ enyo.kind({
         if (this.chu.get("url") && this.chu.get("image")) {
             return true;
         } else {
-            navigator.notification.alert($L("You can't share this Chu yet because it is still being uploaded. Please try again in a couple of minutes!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            navigator.notification.alert($L("You can't do this right now because the Chu still being uploaded. Please try again in a little while!"), function() {}, $L("Hold your horses!"), $L("OK"));
             return false;
         }
     },
