@@ -247,7 +247,9 @@ enyo.kind({
     toggleVisibility: function() {
         var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
         this.chu.save({visibility: visibility});
-        chuisy.closet.syncRecords();
+        if (App.isSignedIn()) {
+            chuisy.closet.syncRecords();
+        }
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -350,7 +352,9 @@ enyo.kind({
             }
 
             this.chu.save({friends: friends});
-            chuisy.closet.syncRecords();
+            if (App.isSignedIn()) {
+                chuisy.closet.syncRecords();
+            }
             this.friendsChanged = false;
         }
         this.buttonLabelChanged();

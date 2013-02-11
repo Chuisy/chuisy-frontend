@@ -55,7 +55,9 @@ enyo.kind({
         attrs.location = this.location;
         var chu = chuisy.closet.create(attrs, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
-            chuisy.closet.syncRecords();
+            if (App.isSignedIn()) {
+                chuisy.closet.syncRecords();
+            }
             this.doDone({chu: chu});
         }));
         return true;
