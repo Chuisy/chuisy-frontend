@@ -84,7 +84,7 @@ enyo.kind({
             this.$.image.setSrc(image);
         }
 
-        this.$.avatar.setSrc(user && user.profile.avatar_thumbnail ? user.profile.avatar_thumbnail : "assets/images/avatar_thumbnail_placeholder.png");
+        this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : "");
         this.$.location.setContent(loc && loc.place ? loc.place.name : "");
         this.$.headerText.setContent("#" + this.chu.id);

@@ -14,9 +14,10 @@ enyo.kind({
     },
     chuChanged: function() {
         if (this.chu) {
+            var user = this.chu.get("user");
             this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("localImage") || "assets/images/chu_placeholder.png");
-            this.$.avatar.setSrc(this.chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-            this.$.fullName.setContent(this.chu.get("user").first_name + " " + this.chu.get("user").last_name);
+            this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+            this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : "");
             this.$.time.setContent(this.chu.getTimeText());
             this.$.likesCount.setContent(this.chu.get("likes_count"));
             this.$.commentsCount.setContent(this.chu.get("comments_count"));
