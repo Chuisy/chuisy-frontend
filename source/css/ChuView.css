@@ -17,7 +17,7 @@
 }
 
 .chuview-image {
-	margin: 0 auto;
+	margin-left: -5%;
 	width: 110%;
 	-webkit-transition: opacity 1s;
 }
