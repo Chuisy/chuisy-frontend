@@ -69,9 +69,9 @@ enyo.kind({
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.listenTo(this.chu.comments, "reset add remove", this.refreshComments);
-        this.listenTo(this.chu.comments, "request", this.commentsLoading);
+        // this.listenTo(this.chu.comments, "request", this.commentsLoading);
         if (this.chu.get("url")) {
-            this.chu.comments.fetch();
+            this.loadComments();
         }
     },
     updateView: function() {
@@ -148,13 +148,14 @@ enyo.kind({
     refreshComments: function() {
         this.$.commentsSpinner.hide();
         this.$.moreCommentsButton.setShowing(this.chu.comments.hasNextPage());
-        this.$.commentsCount.setContent(this.chu.comments.length || this.chu.get("comments_count") || 0);
+        this.$.commentsCount.setContent(this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
     },
-    commentsLoading: function() {
+    loadComments: function() {
         this.$.moreCommentsButton.hide();
         this.$.commentsSpinner.show();
+        this.chu.comments.fetch({data: {limit: 10}});
     },
     setupComment: function(sender, event) {
         var comment = this.chu.comments.at(event.index);
@@ -201,7 +202,7 @@ enyo.kind({
     },
     online: function() {
         if (this.chu) {
-            this.chu.comments.fetch();
+            this.loadComments();
         }
     },
     offline: function() {
@@ -209,7 +210,7 @@ enyo.kind({
     pushNotification: function() {
         // Received a push notification. Let's see whats new.
         this.chu.fetch();
-        this.chu.comments.fetch();
+        this.loadComments();
     },
     scroll: function(sender, inEvent) {
         // var s = this.$.imageScroller.getStrategy().$.scrollMath;
@@ -414,6 +415,8 @@ enyo.kind({
         }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
     },
     moreComments: function() {
+        this.$.moreCommentsButton.hide();
+        this.$.commentsSpinner.show();
         this.chu.comments.fetchNext();
     },
     components: [
