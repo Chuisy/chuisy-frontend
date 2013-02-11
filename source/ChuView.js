@@ -124,7 +124,7 @@ enyo.kind({
         this.$.likeButton.addRemoveClass("active", this.liked);
     },
     likeButtonTapped: function() {
-        if (App.checkConnection() && this.checkSynced()) {
+        if (App.checkConnection()) {
             if (App.isSignedIn()) {
                 this.toggleLike();
             } else {
@@ -140,7 +140,9 @@ enyo.kind({
         Like / unlike chu depending on current status
     */
     toggleLike: function(sender, event) {
-        this.chu.toggleLike();
+        if (this.checkSynced()) {
+            this.chu.toggleLike();
+        }
     },
     refreshComments: function() {
         this.$.commentsCount.setContent(this.chu.comments.length || this.chu.get("comments_count") || 0);
@@ -171,7 +173,7 @@ enyo.kind({
         }
     },
     commentEnter: function() {
-        if (App.checkConnection() && this.checkSynced()) {
+        if (App.checkConnection()) {
             if (App.isSignedIn()) {
                 this.postComment();
             } else {
@@ -186,7 +188,7 @@ enyo.kind({
         Post a comment with the current input text
     */
     postComment: function() {
-        if (this.$.commentInput.getValue()) {
+        if (this.$.commentInput.getValue() && this.checkSynced()) {
             var attrs = {
                 text: this.$.commentInput.getValue(),
                 user: chuisy.accounts.getActiveUser().toJSON()
