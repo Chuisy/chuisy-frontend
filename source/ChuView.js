@@ -392,6 +392,9 @@ enyo.kind({
         if (this.isNew) {
             enyo.Signals.send("onShowGuide", {view: "chu"});
         }
+        enyo.asyncMethod(this, function() {
+            this.$.contentScroller.scrollToTop();
+        });
     },
     deactivate: function() {
         this.blurredByTap = false;
