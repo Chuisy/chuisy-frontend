@@ -33,7 +33,7 @@ enyo.kind({
     updateView: function() {
         this.$.panels1.setIndex(0);
         this.$.spinner.hide();
-        this.$.chuCount.setContent(this.user.get("chu_count"));
+        this.$.chusCount.setContent(this.user.get("chu_count"));
         this.$.followersCount.setContent(this.user.get("follower_count"));
         this.$.followingCount.setContent(this.user.get("following_count"));
         var avatar = this.user.get("localAvatar") || this.user.profile.get("avatar");
@@ -41,7 +41,8 @@ enyo.kind({
         this.$.fullName.setContent(this.user.get("first_name") ? (this.user.get("first_name") + " " + this.user.get("last_name")) : "");
 
         this.$.followButton.setContent(this.user.get("following") ? "unfollow" : "follow");
-        this.addRemoveClass("owned", this.user.id == chuisy.accounts.getActiveUser().id);
+        var activeUser = chuisy.accounts.getActiveUser();
+        this.addRemoveClass("owned", activeUser && this.user.id == activeUser.id);
     },
     menuItemSelected: function(sender, event) {
         if (event.originator.getActive()) {
@@ -62,6 +63,8 @@ enyo.kind({
         return true;
     },
     refresh: function(which) {
+        this.$[which + "Spinner"].hide();
+        this.$[which + "Count"].show();
         var count = this.user ? this.user[which].length : 0;
         this.$[which + "List"].setCount(count);
         this.$[which + "List"].refresh();
@@ -138,9 +141,19 @@ enyo.kind({
         this.$.panels1.setIndexDirect(!obj && !App.isSignedIn() ? 1 : 0);
 
         if (this.user) {
+            this.$.followersSpinner.show();
+            this.$.followersCount.hide();
             this.user.followers.fetch();
+            this.$.followingSpinner.show();
+            this.$.followingCount.hide();
             this.user.following.fetch();
-            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}});
+            this.$.chusSpinner.show();
+            this.$.chusCount.hide();
+            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}, success: enyo.bind(this, function() {
+                this.$.chusSpinner.hide();
+                this.$.chusCount.show();
+                this.$.chusPlaceholder.setShowing(!this.user || !this.user.chus.length);
+            })});
         }
     },
     deactivate: function() {},
@@ -156,9 +169,6 @@ enyo.kind({
         }
         return true;
     },
-    chuListRefresh: function() {
-        this.$.chusPlaceholder.setShowing(!this.user || !this.user.chus.length);
-    },
     components: [
         {kind: "Panels", name: "panels1", classes: "enyo-fill", draggable: false, components: [
             {kind: "FittableRows", components: [
@@ -173,15 +183,18 @@ enyo.kind({
                 {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
                     {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Chus")},
-                        {classes: "profileview-menu-button-count", name: "chuCount"}
+                        {classes: "profileview-menu-button-count", name: "chusCount"},
+                        {classes: "onyx-spinner tiny", name: "chusSpinner", showing: false}
                     ]},
                     {classes: "profileview-menu-button", value: 1, name: "followingMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Following")},
-                        {classes: "profileview-menu-button-count", name: "followingCount"}
+                        {classes: "profileview-menu-button-count", name: "followingCount"},
+                        {classes: "onyx-spinner tiny", name: "followingSpinner", showing: false}
                     ]},
                     {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Followers")},
-                        {classes: "profileview-menu-button-count", name: "followersCount"}
+                        {classes: "profileview-menu-button-count", name: "followersCount"},
+                        {classes: "onyx-spinner tiny", name: "followersSpinner", showing: false}
                     ]}
                 ]},
                 {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
@@ -214,7 +227,7 @@ enyo.kind({
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
                 ]},
-                {kind: "onyx.Spinner", classes: "profileview-login-spinner onyx-light", showing: false}
+                {kind: "onyx.Spinner", classes: "profileview-login-spinner", showing: false}
             ]}
         ]}
     ]

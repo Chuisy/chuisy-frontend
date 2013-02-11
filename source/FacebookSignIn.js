@@ -68,6 +68,6 @@ enyo.kind({
             {content: $L("Sign In With Facebook")}
         ]},
         {kind: "onyx.Button", content: $L("Cancel"), ontap: "cancel", classes: "facebooksignin-cancel-button"},
-        {kind: "onyx.Spinner", classes: "facebooksignin-spinner onyx-light", showing: false}
+        {kind: "onyx.Spinner", classes: "facebooksignin-spinner", showing: false}
     ]
 });

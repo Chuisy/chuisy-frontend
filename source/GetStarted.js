@@ -37,7 +37,7 @@ enyo.kind({
                         {content: $L("Sign In With Facebook")}
                     ]},
                     {kind: "onyx.Button", content: $L("Skip"), ontap: "doDone"},
-                    {kind: "onyx.Spinner", classes: "onyx-light getstarted-login-spinner", showing: false}
+                    {kind: "onyx.Spinner", classes: "getstarted-login-spinner", showing: false}
                 ]}
             ]}
         ]}

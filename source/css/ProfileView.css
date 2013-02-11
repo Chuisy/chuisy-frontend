@@ -71,6 +71,7 @@
 	border-radius: 0 !important;
 	background-image: none;
 	background-color: #eee;
+	vertical-align: top;
 }
 
 .profileview-menu-button.active {

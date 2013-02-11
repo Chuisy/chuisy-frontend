@@ -368,6 +368,14 @@ body {
 	margin-top: 5px;
 }
 
+.puller-spinner {
+	width: 35px;
+	height: 35px;
+	background: url(../../assets/images/spinner.gif) no-repeat center center;
+	background-size: 25px 25px;
+	margin-top: 7px;
+}
+
 .enyo-puller-arrow:after {
 	display: none;
 }
@@ -424,10 +432,17 @@ body {
 	margin: -2px 5px 0 0;
 }
 
-/*.onyx-spinner {
-	background-image: url(../../assets/images/berry_spinner.gif);
+/* Spinner */
+
+.onyx-spinner {
+	width: 25px;
+	height: 25px;
+	background: url(../../assets/images/spinner.gif) no-repeat center center;
+	background-size: 25px 25px;
 }
 
-.onyx-spinner.spinner-dark {
-	background-image: url(../../assets/images/berry_spinner_dark.gif);
-}*/
+.onyx-spinner.tiny {
+	width: 15px;
+	height: 15px;
+	background-size: 15px 15px;
+}

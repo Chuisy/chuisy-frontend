@@ -88,6 +88,7 @@ enyo.kind({
     refresh: function(which, collection, options, force) {
         if (force || options && options.data && options.data.q == this.latestQuery) {
             var coll = this[which + "s"];
+            this.$[which + "Count"].show();
             this.$[which + "Count"].setContent(coll.meta.total_count);
             this.$[which + "Spinner"].hide();
             this.$[which + "List"].setCount(coll.length);
@@ -106,6 +107,7 @@ enyo.kind({
         this.$[which + "List"].setCount(0);
         this.$[which + "List"].refresh();
         this.$[which + "Spinner"].show();
+        this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
         this.latestQuery = query;
         this[which + "s"].fetch({searchQuery: query});
@@ -131,11 +133,13 @@ enyo.kind({
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
             {index: 1, name: "userTab", components: [
                 {classes: "discover-tab-caption", content: "Users"},
-                {classes: "discover-tab-count", name: "userCount"}
+                {classes: "discover-tab-count", name: "userCount"},
+                {classes: "onyx-spinner tiny", name: "userSpinner", showing: false}
             ]},
             {index: 2, name: "chuTab", components: [
                 {classes: "discover-tab-caption", content: "Chus"},
-                {classes: "discover-tab-count", name: "chuCount"}
+                {classes: "discover-tab-count", name: "chuCount"},
+                {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
             ]}
         ]},
         // RESULTS
@@ -150,7 +154,6 @@ enyo.kind({
                     {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
                     {name: "userNextPage", content: $L("Loading..."), classes: "loading-next-page"}
                 ]},
-                {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center onyx-light", name: "userSpinner", showing: false},
                 {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No users found.")}
             ]},
             // CHUS
@@ -164,7 +167,6 @@ enyo.kind({
                     ]},
                     {name: "chuNextPage", content: $L("Loading..."), classes: "loading-next-page"}
                 ]},
-                {kind: "onyx.Spinner", classes: "discover-result-spinner absolute-center onyx-light", name: "chuSpinner", showing: false},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]}
         ]}
