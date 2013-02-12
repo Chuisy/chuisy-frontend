@@ -485,7 +485,7 @@ enyo.kind({
                             {classes: "chuview-time", name: "time"}
                         ]},
                         {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
-                        {kind: "onyx.Spinner", classes: "chuview-comments-spinner onyx-light", name: "commentsSpinner", showing: false},
+                        {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                             {kind: "onyx.Item", classes: "chuview-comment", name: "comment", components: [
