@@ -868,11 +868,55 @@
         url: chuisy.apiRoot + chuisy.version + "/gift/"
     });
 
+    chuisy.models.Location = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/location/",
+        parse: function(response) {
+            return {
+                name: response.name,
+                latitude: response.location.lat,
+                longitude: response.location.lng,
+                address: response.location.address,
+                zip_code: response.location.postalCode,
+                city: response.location.city,
+                country: response.location.cc,
+                foursquare_id: response.id
+            };
+        }
+    });
+
+    chuisy.models.LocationCache = Backbone.Collection.extend({
+        model: chuisy.models.Location,
+        url: "https://api.foursquare.com/v2/venues/search",
+        parse: function(response) {
+            return response && response.response && response.response.venues;
+        },
+        fetch: function(options) {
+            if (!options.latitude || !options.longitude) {
+                console.error("Latitude and longitude hand to be specified in the options!");
+                return;
+            }
+            options = options || {};
+            options.data = options.data || {};
+            _.extend(options.data, {
+                intent: "browse",
+                ll: options.latitude + "," + options.longitude,
+                radius: 5000,
+                client_id: "0XVNZDCHBFFTGKP1YGHRAG3I154DOT0QGATA120CQ3KQFIYU",
+                client_secret: "QPM5WVRLV0OEDLJK3NWV01F1OLDQVVMWS25PJJTFDLE02GOL",
+                v: "20121024",
+                limit: 50,
+                categoryId: "4bf58dd8d48988d103951735,4bf58dd8d48988d11a951735,4bf58dd8d48988d111951735"
+            });
+
+            return Backbone.Collection.prototype.fetch.call(this, options);
+        }
+    });
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.gifts = new chuisy.models.GiftsCollection();
+    chuisy.locations = new chuisy.models.LocationCache();
 
 })(window.$, window._, window.Backbone, window.enyo);
