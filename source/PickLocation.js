@@ -23,16 +23,15 @@ enyo.kind({
         Gets the geolocation, save the location and start a place lookup
     */
     getGeoLocation: function() {
-        navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
+        App.getGeoLocation(enyo.bind(this, function(position) {
             this.location = this.location || {};
             enyo.mixin(this.location, {latitude: position.coords.latitude, longitude: position.coords.longitude});
-            this.lookupPlaces();
+            // Filter places list...
         }), enyo.bind(this, function() {
-            this.error("Failed to retrieve geolocation!");
             navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
                 " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
                 " phone's settings and enable location services for Chuisy!"), function() {
-                this.doLocationPicked({location: null});
+                    // Do something...
             }, $L("Can't find you!"), $L("OK"));
         }));
     },
