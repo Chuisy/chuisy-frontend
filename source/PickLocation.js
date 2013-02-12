@@ -25,11 +25,7 @@ enyo.kind({
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
             this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-            if (App.isOnline()) {
-                this.lookupPlaces();
-            } else {
-                this.doLocationPicked({location: null});
-            }
+            this.lookupPlaces();
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
             navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
@@ -54,7 +50,6 @@ enyo.kind({
         ajax.response(enyo.bind(this, this.placesLoaded));
         ajax.error(enyo.bind(this, function(sender, response) {
             this.log(response);
-            this.skip();
         }));
         ajax.go({
             ll: this.location.latitude + "," + this.location.longitude,
