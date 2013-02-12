@@ -24,7 +24,8 @@ enyo.kind({
     */
     getGeoLocation: function() {
         navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
-            this.location = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            this.location = this.location || {};
+            enyo.mixin(this.location, {latitude: position.coords.latitude, longitude: position.coords.longitude});
             this.lookupPlaces();
         }), enyo.bind(this, function() {
             this.error("Failed to retrieve geolocation!");
@@ -91,14 +92,15 @@ enyo.kind({
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
-        this.location.place = {
+        this.location = this.location || {};
+        enyo.mixin(this.location, {
             name: place.name,
             address: place.location.address,
             zip_code: place.location.postalCode,
             city: place.location.city,
-            country: place.location.country,
+            country: place.location.cc,
             foursquare_id: place.id
-        };
+        });
         this.doLocationPicked({location: this.location});
     },
     newPlaceKeydown: function(sender, event) {
@@ -109,9 +111,15 @@ enyo.kind({
     },
     newPlaceEnter: function() {
         if (this.$.newPlaceInput.getValue()) {
-            this.location.place = {
-                name: this.$.newPlaceInput.getValue()
-            };
+            this.location = this.location || {};
+            enyo.mixin(this.location, {
+                name: this.$.newPlaceInput.getValue(),
+                address: "",
+                zip_code: null,
+                city: "",
+                country: "",
+                foursquare_id: ""
+            });
             this.doLocationPicked({location: this.location});
         }
         this.$.newPlaceInput.hasNode().blur();
