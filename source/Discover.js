@@ -70,9 +70,13 @@ enyo.kind({
     searchInputChange: function() {
         var query = this.$.searchInput.getValue();
 
-        this.latestQuery = query;
-        this.search("user", query);
-        this.search("chu", query);
+        if (query) {
+            this.latestQuery = query;
+            this.search("user", query);
+            this.search("chu", query);
+        } else {
+            this.searchInputCancel();
+        }
     },
     searchInputCancel: function() {
         this.latestQuery = null;

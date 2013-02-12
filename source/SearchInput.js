@@ -42,16 +42,11 @@ enyo.kind({
         if (this.changeTimeout) {
             clearTimeout(this.changeTimeout);
         }
-
-        if (this.getValue()) {
-            this.addClass("active");
-            // Start timeout to fire onChange event if no new input happens in the meantime
-            this.changeTimeout = setTimeout(enyo.bind(this, function() {
-                this.doChange({value: this.getValue()});
-            }), this.changeDelay);
-        } else {
-            this.cancel();
-        }
+        this.addClass("active");
+        // Start timeout to fire onChange event if no new input happens in the meantime
+        this.changeTimeout = setTimeout(enyo.bind(this, function() {
+            this.doChange({value: this.getValue()});
+        }), this.changeDelay);
     },
     /**
         Clears input and fire _onCancel_ events
