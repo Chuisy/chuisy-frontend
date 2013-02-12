@@ -22,7 +22,7 @@ enyo.kind({
             this.$.likesCount.setContent(this.chu.get("likes_count"));
             this.$.commentsCount.setContent(this.chu.get("comments_count"));
             var location = this.chu.get("location");
-            this.$.place.setContent(location && location.place ? location.place.name : "");
+            this.$.place.setContent(location && location.name || "");
             this.$.errorIcon.setShowing(this.chu.get("syncFailed") || this.chu.get("uploadFailed"));
         }
     },

@@ -676,10 +676,6 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/followingrelation/"
     });
 
-    chuisy.models.Place = Backbone.Tastypie.Model.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/place/"
-    });
-
     chuisy.models.Notification = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
         save: function(attributes, options) {
