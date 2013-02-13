@@ -14,6 +14,8 @@
             chuisy.accounts.trigger("change:active_user");
 
             chuisy.feed.fetch();
+
+            chuisy.locations.fetch();
         },
         activeUserChanged: function() {
             var user = chuisy.accounts.getActiveUser();
@@ -868,6 +870,32 @@
         url: chuisy.apiRoot + chuisy.version + "/gift/"
     });
 
+    /*
+        Converts degrees to radians
+    */
+    var rad = function(deg) {
+        return deg * Math.PI / 180;
+    };
+
+    /*
+        Calculates the distance (m) between to geographical coordinates (lat and lng in degrees)
+    */
+    var distance = function(lat, lng, lat0, lng0) {
+        var R = 6371000; // m
+        lat0 = rad(lat0);
+        lng0 = rad(lng0);
+        lat = rad(lat);
+        lng = rad(lng);
+        var dLat = (lat-lat0);
+        var dLon = (lng-lng0);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(lat0);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return d;
+    };
+
     chuisy.models.Location = Backbone.Tastypie.Model.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/location/",
         idAttribute: "foursquare_id",
@@ -882,13 +910,18 @@
                     zip_code: response.location.postalCode,
                     city: response.location.city,
                     country: response.location.cc,
-                    foursquare_id: response.id,
-                    distance: response.location.distance
+                    foursquare_id: response.id
                 };
             } else {
                 // Object comes from local storage. Is allready converted
                 return response;
             }
+        },
+        /*
+            Calculates the distance to a coordinate in meters
+        */
+        distanceTo: function(lat, lng) {
+            return distance(lat, lng, this.get("latitude"), this.get("longitude"));
         }
     });
 
