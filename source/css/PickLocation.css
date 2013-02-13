@@ -9,12 +9,18 @@
 	/*box-shadow: 0 -1px 10px #111;*/
 }
 
-.picklocation-placeitem {
+.picklocation-place {
 	background-color: White;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 10px;
 	margin: 5px;
+}
+
+.picklocation-place-address {
+	color: #555;
+	font-size: 10pt;
+	padding-top: 2px;
 }
 
 .picklocation-message {
@@ -37,7 +43,7 @@
 	color: red;
 }
 
-.picklocation .onyx-input-decorator {
+.picklocation-new-place-input {
 	margin-bottom: 5px;
 	background-color: White;
 	border-radius: 2px;
@@ -47,7 +53,12 @@
 	border: none;
 }
 
-.picklocation .onyx-input-decorator.onyx-focused {
+.picklocation .picklocation-filter-input {
+	border-radius: 0;
+	width: 100%;
+}
+
+.picklocation .picklocation-new-place-input.onyx-focused {
 	box-shadow: 0 1px 1px #888;
 }
 
