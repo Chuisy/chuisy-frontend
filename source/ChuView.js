@@ -69,8 +69,9 @@ enyo.kind({
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.listenTo(this.chu.comments, "reset add remove", this.refreshComments);
+        // this.listenTo(this.chu.comments, "request", this.commentsLoading);
         if (this.chu.get("url")) {
-            this.chu.comments.fetch();
+            this.loadComments();
         }
     },
     updateView: function() {
@@ -145,9 +146,16 @@ enyo.kind({
         }
     },
     refreshComments: function() {
-        this.$.commentsCount.setContent(this.chu.comments.length || this.chu.get("comments_count") || 0);
+        this.$.commentsSpinner.hide();
+        this.$.moreCommentsButton.setShowing(this.chu.comments.hasNextPage());
+        this.$.commentsCount.setContent(this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
+    },
+    loadComments: function() {
+        this.$.moreCommentsButton.hide();
+        this.$.commentsSpinner.show();
+        this.chu.comments.fetch({data: {limit: 10}});
     },
     setupComment: function(sender, event) {
         var comment = this.chu.comments.at(event.index);
@@ -155,15 +163,6 @@ enyo.kind({
         this.$.commentAvatar.setSrc(comment.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
-
-        var isLastItem = event.index == this.chu.comments.length-1;
-        if (isLastItem && this.chu.comments.hasNextPage()) {
-            // Last item in the list and there is more! Load next page
-            this.$.loadingNextPage.show();
-            this.chu.comments.fetchNext();
-        } else {
-            this.$.loadingNextPage.hide();
-        }
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -177,6 +176,7 @@ enyo.kind({
             if (App.isSignedIn()) {
                 this.postComment();
             } else {
+                this.$.commentInput.hasNode().blur();
                 // User is not signed in yet. Prompt him to do so before he can comment
                 enyo.Signals.send("onRequestSignIn", {
                     success: enyo.bind(this, this.postComment)
@@ -193,17 +193,16 @@ enyo.kind({
                 text: this.$.commentInput.getValue(),
                 user: chuisy.accounts.getActiveUser().toJSON()
             };
-            this.chu.comments.create(attrs, {at: 0});
+            this.chu.comments.create(attrs);
 
             this.$.commentInput.setValue("");
 
-            // Remove focus from comment input
-            this.$.commentInput.hasNode().blur();
+            this.$.contentScroller.scrollTo(0, this.$.contentScroller.getScrollBounds().maxTop);
         }
     },
     online: function() {
         if (this.chu) {
-            this.chu.comments.fetch();
+            this.loadComments();
         }
     },
     offline: function() {
@@ -211,7 +210,7 @@ enyo.kind({
     pushNotification: function() {
         // Received a push notification. Let's see whats new.
         this.chu.fetch();
-        this.chu.comments.fetch();
+        this.loadComments();
     },
     scroll: function(sender, inEvent) {
         // var s = this.$.imageScroller.getStrategy().$.scrollMath;
@@ -415,6 +414,11 @@ enyo.kind({
             }
         }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
     },
+    moreComments: function() {
+        this.$.moreCommentsButton.hide();
+        this.$.commentsSpinner.show();
+        this.chu.comments.fetchNext();
+    },
     components: [
         // IMAGE LOADING INDICATOR
         {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
@@ -424,9 +428,6 @@ enyo.kind({
                 {kind: "Image", name: "image", classes: "chuview-image"}
             ]}
         ]},
-        // {kind: "ImageView", classes: "chuview-imageview enyo-fill", preventDragPropagation: true, touchOverscroll: true,
-        //     onscroll: "imageScroll", src: "assets/images/chu_image_placeholder.png"},
-        // {classes: "chuview-cancel-fullscreen-button", ontap: "showControls"},
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
@@ -483,10 +484,8 @@ enyo.kind({
                             {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                             {classes: "chuview-time", name: "time"}
                         ]},
-                        // COMMENT INPUT
-                        {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown", onblur: "commentInputBlur"}
-                        ]},
+                        {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
+                        {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
                         // COMMENTS
                         {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                             {kind: "onyx.Item", classes: "chuview-comment", name: "comment", components: [
@@ -496,8 +495,7 @@ enyo.kind({
                                     {classes: "chuview-time", name: "commentTime"}
                                 ]},
                                 {name: "commentText", classes: "chuview-comment-text"}
-                            ]},
-                            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+                            ]}
                         ]},
                         {style: "height: 500px"}
                     ]}
@@ -516,6 +514,10 @@ enyo.kind({
                         ]}
                     ]}
                 ]}
+            ]},
+            // COMMENT INPUT
+            {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
+                {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"}
             ]}
         ]},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}

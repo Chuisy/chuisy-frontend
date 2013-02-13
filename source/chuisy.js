@@ -562,7 +562,12 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/chu/",
         initialize: function(attributes, options) {
             chuisy.models.OwnedModel.prototype.initialize.call(this, attributes, options);
-            this.comments = new chuisy.models.ChuCommentCollection([], {chu: this});
+            this.comments = new chuisy.models.ChuCommentCollection([], {
+                chu: this,
+                comparator: function(model) {
+                    return new Date(model.get("time"));
+                }
+            });
 
             this.listenTo(this, "sync", function(model, response, request) {
                 if (request && request.xhr.status == 201 && this.get("localImage")) {
