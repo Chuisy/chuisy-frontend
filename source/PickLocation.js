@@ -120,6 +120,7 @@ enyo.kind({
         this.$.moreButton.setShowing(!more);
         this.$.message.setShowing(!more);
         this.$.filterInput.setShowing(more);
+        this.$.newPlace.setShowing(more);
         this.reflow();
         this.$.scroller.scrollToTop();
     },
@@ -140,10 +141,10 @@ enyo.kind({
             // {kind: "onyx.Spinner", classes: "picklocation-spinner"},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
-                {kind: "onyx.Button", content: $L("More places..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"},
-                {kind: "onyx.InputDecorator", showing: false, components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-new-place-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
-                ]}
+                {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", name: "newPlace", components: [
+                    {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
+                ]},
+                {kind: "onyx.Button", content: $L("More places..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
             ]}
         ]}
     ]

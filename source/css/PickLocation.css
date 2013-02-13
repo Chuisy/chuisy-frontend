@@ -45,7 +45,7 @@
 	color: red;
 }
 
-.picklocation-new-place-input {
+.picklocation .picklocation-new-place-input {
 	margin-bottom: 5px;
 	background-color: White;
 	border-radius: 2px;
@@ -55,13 +55,13 @@
 	border: none;
 }
 
+.picklocation .picklocation-new-place-input.onyx-focused {
+	box-shadow: 0 1px 1px #888;
+}
+
 .picklocation .picklocation-filter-input {
 	border-radius: 0;
 	width: 100%;
-}
-
-.picklocation .picklocation-new-place-input.onyx-focused {
-	box-shadow: 0 1px 1px #888;
 }
 
 .picklocation .onyx-input-decorator > .enyo-input {
