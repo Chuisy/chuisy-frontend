@@ -21,6 +21,7 @@ enyo.kind({
         Resets the place list and gets the geolocation
     */
     initialize: function() {
+        this.morePlaces(false);
         this.getGeoLocation();
     },
     /**
@@ -49,13 +50,11 @@ enyo.kind({
         Refresh the list of places
     */
     refreshPlacesList: function() {
-        this.log("filtering", this.filterString, this.places.length);
         this.filteredPlaces = this.places.filter(enyo.bind(this, function(place) {
             return place.get("name").search(new RegExp(this.filterString, "i")) != -1 ||
                 place.get("address") && place.get("address").search(new RegExp(this.filterString, "i")) != -1;
         }));
-        this.log(this.filteredPlaces);
-        this.$.placesList.setCount(this.filteredPlaces.length);
+        this.$.placesList.setCount(this.limit || this.filteredPlaces.length);
         this.$.placesList.render();
     },
     setupItem: function(sender, event) {
@@ -112,14 +111,26 @@ enyo.kind({
         this.filterString = "";
         this.refreshPlacesList();
     },
+    moreButtonTapped: function() {
+        this.morePlaces(true);
+    },
+    morePlaces: function(more) {
+        this.limit = more ? 0 : 10;
+        this.refreshPlacesList();
+        this.$.moreButton.setShowing(!more);
+        this.$.message.setShowing(!more);
+        this.$.filterInput.setShowing(more);
+        this.reflow();
+        this.$.scroller.scrollToTop();
+    },
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
-        // {kind: "Map", classes: "picklocation-map"},
+        {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter places..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "Scroller", fit: true, components: [
-            {classes: "picklocation-message", content: $L("<strong>Spotted!</strong><br>Where are you shopping?"), allowHtml: true},
+            {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-place", components: [
                     {classes: "picklocation-place-text", name: "placeName"},
@@ -129,11 +140,11 @@ enyo.kind({
             // {kind: "onyx.Spinner", classes: "picklocation-spinner"},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
-                {kind: "onyx.InputDecorator", components: [
+                {kind: "onyx.Button", content: $L("More places..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"},
+                {kind: "onyx.InputDecorator", showing: false, components: [
                     {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-new-place-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
                 ]}
             ]}
-        ]},
-        {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter places..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"}
+        ]}
     ]
 });

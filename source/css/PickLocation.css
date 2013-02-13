@@ -26,7 +26,9 @@
 .picklocation-message {
 	width: 100%;
 	text-align: center;
-	padding: 30px 20px 20px 20px;
+	padding: 20px;
+	color: #555;
+	font-size: 18pt;
 	box-sizing: border-box;
 }
 
@@ -64,4 +66,9 @@
 
 .picklocation .onyx-input-decorator > .enyo-input {
 	width: 100%;
+}
+
+.picklocation-more-button {
+	width: 100%;
+	margin-bottom: 5px;
 }
