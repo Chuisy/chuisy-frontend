@@ -22,6 +22,7 @@ enyo.kind({
         Resets the place list and gets the geolocation
     */
     initialize: function() {
+        this.$.newPlaceInput.setValue("");
         this.morePlaces(false);
         this.getGeoLocation();
     },
@@ -83,14 +84,14 @@ enyo.kind({
     },
     newPlaceEnter: function() {
         if (this.$.newPlaceInput.getValue()) {
-            var place = {
+            var place = new chuisy.models.Location({
                 name: this.$.newPlaceInput.getValue(),
                 address: "",
                 zip_code: null,
                 city: "",
                 country: "",
                 foursquare_id: ""
-            };
+            });
             this.doLocationPicked({location: place, coordinates: this.coordinates});
         }
         this.$.newPlaceInput.hasNode().blur();
@@ -131,7 +132,7 @@ enyo.kind({
         {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter places..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "Scroller", fit: true, components: [
             {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
-            {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner"},
+            {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner", showing: false},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-place", components: [
                     {classes: "picklocation-place-text", name: "placeName"},
