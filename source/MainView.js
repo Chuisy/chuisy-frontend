@@ -138,9 +138,9 @@ enyo.kind({
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});
-                enyo.Signals.send("onShowGuide", {view: "profile"});
                 var user = chuisy.accounts.getActiveUser();
                 if (user) {
+                    enyo.Signals.send("onShowGuide", {view: "profile"});
                     user.fetch({remote: true});
                 }
                 break;

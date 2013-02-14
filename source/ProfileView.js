@@ -123,8 +123,7 @@ enyo.kind({
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
                 this.$.spinner.show();
                 chuisy.signIn(accessToken, enyo.bind(this, function() {
-                    // this.$.spinner.hide();
-                    // this.$.panels1.setIndex(0);
+                    enyo.Signals.send("onShowGuide", {view: "profile"});
                 }), enyo.bind(this, function() {
                     this.$.spinner.hide();
                     navigator.notification.alert($L("Hm, that didn't work. Please try it again later!"), enyo.bind(this, function() {
