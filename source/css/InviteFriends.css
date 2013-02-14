@@ -1,0 +1,44 @@
+.invitefriends-friend {
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 10px;
+	margin: 5px;
+	height: 32px;
+}
+
+.invitefriends-friend-avatar {
+	width: 32px;
+	height: 32px;
+}
+
+.invitefriends-friend-fullname {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 150px;
+	padding: 5px 10px;
+}
+
+.invitefriends-friend-check {
+	width: 32px;
+	height: 32px;
+	float: right;
+	background: url(../../assets/images/check.png) no-repeat center center;
+	background-size: cover;
+	margin-top: 3px;
+}
+
+.invitefriends-friend-invite-button {
+	float: right;
+	width: 85px;
+}
+
+.invitefriends-next-spinner {
+	display: block;
+	margin: 10px auto;
+}
+
+.invitefriends-filter-input {
+	border-radius: 0;
+	width: 100%;
+}

@@ -379,6 +379,49 @@
         }
     });
 
+    chuisy.models.FbFriend = Backbone.Model.extend({
+        urlRoot: "https://graph.facebook.com/",
+        getAvatar: function(width, height) {
+            return _.result(this, "url") + "/picture/?width=" + (width || 50) + "&height=" + (height || 50);
+        }
+    });
+
+    chuisy.models.FbFriendsCollection = Backbone.Collection.extend({
+        model: chuisy.models.FbFriend,
+        initialize: function(models, options) {
+            Backbone.Collection.prototype.initialize.call(this, models, options);
+            this.paging = {};
+            this.url = options && options.url || this.url;
+        },
+        parse: function(response) {
+            this.paging = response && response.paging;
+            return response.data;
+        },
+        fetchNext: function() {
+            this.fetch({
+                update: true,
+                add: true,
+                remove: false,
+                url: this.paging && this.paging.next
+            });
+        },
+        hasNextPage: function() {
+            return this.paging && this.paging.next;
+        },
+        fetchAll: function(options) {
+            options = options || {};
+            var success = options.success;
+            options.success = _.bind(function(collection, response) {
+                if (this.hasNextPage()) {
+                    this.fetchNext(options);
+                } else if (success) {
+                    success(collection, response, options);
+                }
+            }, this);
+            this.fetch(options);
+        }
+    });
+
     chuisy.models.User = Backbone.Tastypie.Model.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/user/",
         authUrl: chuisy.apiRoot + chuisy.version + "/authenticate/",
@@ -409,6 +452,11 @@
                     return {user: this.id};
                 }, this)
             });
+            this.fbFriends = new chuisy.models.FbFriendsCollection([], {
+                url: _.bind(function() {
+                    return "https://graph.facebook.com/me/friends/?access_token=" + this.get("fb_access_token");
+                }, this)
+            });
         },
         parse: function(response) {
             if (this.profile) {
@@ -423,6 +471,7 @@
             return userJSON;
         },
         authenticate: function(fbAccessToken, success, failure) {
+            this.set("fb_access_token", fbAccessToken);
             Backbone.ajax(this.authUrl, {
                 data: {fb_access_token: fbAccessToken},
                 dataType: "json",

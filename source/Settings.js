@@ -7,7 +7,8 @@ enyo.kind({
     classes: "settings",
     events: {
         // User has tapped the back button
-        onBack: ""
+        onBack: "",
+        onInviteFriends: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -146,7 +147,8 @@ enyo.kind({
                         {classes: "settings-notification-icon push", name: "pushFollowIcon", prop: "push_follow", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}
-                ]}
+                ]},
+                {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"}
             ]}
         ]}
     ]
