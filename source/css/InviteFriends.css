@@ -19,6 +19,15 @@
 	padding: 5px 10px;
 }
 
+.invitefriends-friend-check {
+	width: 32px;
+	height: 32px;
+	float: right;
+	background: url(../../assets/images/check.png) no-repeat center center;
+	background-size: cover;
+	margin-top: 3px;
+}
+
 .invitefriends-friend-invite-button {
 	float: right;
 	width: 85px;

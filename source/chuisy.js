@@ -381,8 +381,8 @@
 
     chuisy.models.FbFriend = Backbone.Model.extend({
         urlRoot: "https://graph.facebook.com/",
-        getAvatar: function() {
-            return _.result(this, "url") + "/picture";
+        getAvatar: function(width, height) {
+            return _.result(this, "url") + "/picture/?width=" + (width || 50) + "&height=" + (height || 50);
         }
     });
 

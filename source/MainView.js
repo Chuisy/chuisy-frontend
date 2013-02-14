@@ -26,7 +26,8 @@ enyo.kind({
         // share: [3, null],
         settings: [3, null],
         user: [4, null],
-        gift: [5, null]
+        gift: [5, null],
+        invite: [6, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -61,6 +62,9 @@ enyo.kind({
     },
     showGift: function(sender, event) {
         this.openView("gift", event.gift);
+    },
+    showInviteFriends: function() {
+        this.openView("invite");
     },
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.get("uri"), obj: event.notification.get("target_obj")});
@@ -181,7 +185,7 @@ enyo.kind({
             // // SHARE CHU
             // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS
-            {kind: "Settings", name: "settings", onBack: "back"},
+            {kind: "Settings", name: "settings", onBack: "back", onInviteFriends: "showInviteFriends"},
             // PROFILE VIEW (for other profiles)
             {kind: "FittableRows", components: [
                 {classes: "header", components: [
@@ -190,7 +194,8 @@ enyo.kind({
                 {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]},
             // DISPLAY GIFT
-            {kind: "GiftView", onBack: "back", name: "gift"}
+            {kind: "GiftView", onBack: "back", name: "gift"},
+            {kind: "InviteFriends", name: "invite", onBack: "back"}
         ]},
         {name: "crossover", classes: "fade-screen"}
     ]

@@ -31,8 +31,11 @@ enyo.kind({
     setupItem: function(sender, event) {
         var coll = this.user.fbFriends;
         var friend = coll.at(event.index);
-        this.$.avatar.setSrc(friend.getAvatar());
+        this.$.avatar.setSrc(friend.getAvatar(32, 32));
         this.$.fullName.setContent(friend.get("name"));
+
+        this.$.inviteButton.setShowing(!this.$.list.isSelected(event.index));
+        this.$.check.setShowing(this.$.list.isSelected(event.index));
 
         var isLastItem = event.index == coll.length-1;
         if (isLastItem && coll.hasNextPage()) {
@@ -44,16 +47,25 @@ enyo.kind({
             this.$.loadingNextPage.hide();
         }
     },
+    toggleFriend: function(sender, event) {
+        this.$.list.select(event.index);
+        this.$.list.renderRow(event.index);
+    },
+    activate: function() {
+    },
+    deactivate: function() {
+    },
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
-            {kind: "onyx.Button", ontap: "send", classes: "done-button", content: $L("continue")}
+            {kind: "onyx.Button", ontap: "send", classes: "done-button", content: $L("invite")}
         ]},
-        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
+        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, multiSelect: true, toggleSelected: true, noSelect: true, components: [
             {classes: "invitefriends-friend", components: [
                 {kind: "Image", classes: "invitefriends-friend-avatar", name: "avatar"},
                 {classes: "invitefriends-friend-fullname ellipsis", name: "fullName"},
-                {kind: "onyx.Button", content: $L("invite"), ontap: "followButtonTapped", name: "followButton", classes: "invitefriends-friend-invite-button"}
+                {classes: "invitefriends-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
+                {kind: "onyx.Button", content: $L("add"), ontap: "toggleFriend", name: "inviteButton", classes: "invitefriends-friend-invite-button"}
             ]},
             {kind: "onyx.Spinner", classes: "invitefriends-next-spinner", name: "loadingNextPage"}
         ]}
