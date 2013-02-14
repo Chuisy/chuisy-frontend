@@ -951,6 +951,10 @@
                     console.error("Latitude and longitude hand to be specified in the options!");
                     return;
                 }
+                options.update = true;
+                options.add = true;
+                options.remove = false;
+                options.merge = true;
                 options.data = options.data || {};
                 _.extend(options.data, {
                     intent: "checkin",

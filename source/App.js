@@ -63,12 +63,12 @@ enyo.kind({
             return user && user.isAuthenticated();
         },
         getGeoLocation: function(success, failure) {
-            navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
+            navigator.geolocation.getCurrentPosition(function(position) {
                 localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
                 if (success) {
                     success(position);
                 }
-            }), enyo.bind(this, function(error) {
+            }, function(error) {
                 console.error("Failed to retrieve geolocation! " + JSON.stringify(error));
                 var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
                 lastPosition = lastPositionString ? JSON.parse(lastPositionString) : null;
@@ -77,7 +77,7 @@ enyo.kind({
                 } else if (failure) {
                     failure();
                 }
-            }));
+            });
         }
     },
     history: [],
