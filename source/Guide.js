@@ -13,7 +13,7 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 250px", components: [
                     {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop or your friend's " +
+                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop of your friends' " +
                         "shopping experiences and discover nice things from people with taste.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
