@@ -39,6 +39,7 @@ enyo.kind({
     },
     locationPicked: function (sender, event) {
         this.location = event.location;
+        this.coordinates = event.coordinates;
         this.$.panels.setIndex(1);
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
@@ -52,7 +53,7 @@ enyo.kind({
         attrs.price = this.$.chuForm.getPrice();
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
-        attrs.location = this.location;
+        attrs.location = this.location.toJSON();
         var chu = chuisy.closet.create(attrs, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {

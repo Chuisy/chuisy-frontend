@@ -61,6 +61,23 @@ enyo.kind({
         isSignedIn: function() {
             var user = chuisy.accounts.getActiveUser();
             return user && user.isAuthenticated();
+        },
+        getGeoLocation: function(success, failure) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
+                if (success) {
+                    success(position);
+                }
+            }, function(error) {
+                console.error("Failed to retrieve geolocation! " + JSON.stringify(error));
+                var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
+                lastPosition = lastPositionString ? JSON.parse(lastPositionString) : null;
+                if (lastPosition && success) {
+                    success(lastPosition);
+                } else if (failure) {
+                    failure();
+                }
+            });
         }
     },
     history: [],

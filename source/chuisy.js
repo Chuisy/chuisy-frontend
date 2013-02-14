@@ -14,6 +14,8 @@
             chuisy.accounts.trigger("change:active_user");
 
             chuisy.feed.fetch();
+
+            chuisy.locations.fetch();
         },
         activeUserChanged: function() {
             var user = chuisy.accounts.getActiveUser();
@@ -868,11 +870,120 @@
         url: chuisy.apiRoot + chuisy.version + "/gift/"
     });
 
+    /*
+        Converts degrees to radians
+    */
+    var rad = function(deg) {
+        return deg * Math.PI / 180;
+    };
+
+    /*
+        Calculates the distance (m) between to geographical coordinates (lat and lng in degrees)
+    */
+    var distance = function(lat, lng, lat0, lng0) {
+        var R = 6371000; // m
+        lat0 = rad(lat0);
+        lng0 = rad(lng0);
+        lat = rad(lat);
+        lng = rad(lng);
+        var dLat = (lat-lat0);
+        var dLon = (lng-lng0);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(lat0);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return d;
+    };
+
+    chuisy.models.Location = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/location/",
+        idAttribute: "foursquare_id",
+        parse: function(response) {
+            if (response.canonicalUrl) {
+                // Object comes from foursquare api; Need to convert it
+                return {
+                    name: response.name,
+                    latitude: response.location.lat,
+                    longitude: response.location.lng,
+                    address: response.location.address,
+                    zip_code: response.location.postalCode,
+                    city: response.location.city,
+                    country: response.location.cc,
+                    foursquare_id: response.id
+                };
+            } else {
+                // Object comes from local storage. Is allready converted
+                return response;
+            }
+        },
+        /*
+            Calculates the distance to a coordinate in meters
+        */
+        distanceTo: function(lat, lng) {
+            return distance(lat, lng, this.get("latitude"), this.get("longitude"));
+        }
+    });
+
+    chuisy.models.LocationCache = Backbone.Collection.extend({
+        model: chuisy.models.Location,
+        url: "https://api.foursquare.com/v2/venues/search",
+        localStorage: new Backbone.LocalStorage("locations"),
+        initialize: function() {
+            Backbone.Collection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "sync", function(model, response, options) {
+                if (model instanceof Backbone.Model) {
+                    model.save();
+                } else if (model instanceof Backbone.Collection) {
+                    model.each(function(each) {
+                        each.save();
+                    });
+                }
+            });
+        },
+        parse: function(response) {
+            return response && response.response && response.response.venues || response;
+        },
+        fetch: function(options) {
+            options = options || {};
+            if (options.remote) {
+                if (!options.latitude || !options.longitude) {
+                    console.error("Latitude and longitude hand to be specified in the options!");
+                    return;
+                }
+                options.update = true;
+                options.add = true;
+                options.remove = false;
+                options.merge = true;
+                options.data = options.data || {};
+                _.extend(options.data, {
+                    intent: "checkin",
+                    ll: options.latitude + "," + options.longitude,
+                    radius: options.radius || 100,
+                    client_id: "0XVNZDCHBFFTGKP1YGHRAG3I154DOT0QGATA120CQ3KQFIYU",
+                    client_secret: "QPM5WVRLV0OEDLJK3NWV01F1OLDQVVMWS25PJJTFDLE02GOL",
+                    v: "20121024",
+                    limit: 50,
+                    categoryId: [
+                        // Clothing Store
+                        "4bf58dd8d48988d103951735",
+                        // Bridal Shop
+                        "4bf58dd8d48988d11a951735",
+                        // Jewelry Store
+                        "4bf58dd8d48988d111951735"
+                    ].join(",")
+                });
+            }
+
+            return Backbone.Collection.prototype.fetch.call(this, options);
+        }
+    });
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.gifts = new chuisy.models.GiftsCollection();
+    chuisy.locations = new chuisy.models.LocationCache();
 
 })(window.$, window._, window.Backbone, window.enyo);

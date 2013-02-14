@@ -11,97 +11,70 @@ enyo.kind({
         // User has tapped the back button
         onBack: ""
     },
+    create: function() {
+        this.inherited(arguments);
+        this.filterString = "";
+        this.places = [];
+        this.placesUpdated();
+        chuisy.locations.on("reset add change", this.placesUpdated, this);
+    },
     /**
         Resets the place list and gets the geolocation
     */
     initialize: function() {
-        this.places = [];
-        this.refreshPlacesList();
+        this.$.newPlaceInput.setValue("");
+        this.morePlaces(false);
         this.getGeoLocation();
     },
     /**
         Gets the geolocation, save the location and start a place lookup
     */
     getGeoLocation: function() {
-        navigator.geolocation.getCurrentPosition(enyo.bind(this, function(position) {
-            this.location = this.location || {};
-            enyo.mixin(this.location, {latitude: position.coords.latitude, longitude: position.coords.longitude});
-            this.lookupPlaces();
+        App.getGeoLocation(enyo.bind(this, function(position) {
+            this.coordinates = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            this.placesUpdated();
+            this.fetchPlaces();
         }), enyo.bind(this, function() {
-            this.error("Failed to retrieve geolocation!");
             navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
                 " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
                 " phone's settings and enable location services for Chuisy!"), function() {
-                this.doLocationPicked({location: null});
+                this.refreshPlacesList();
             }, $L("Can't find you!"), $L("OK"));
         }));
     },
-    /**
-        Loads a list of nearby places from the foursquare api based on the current location
-    */
-    lookupPlaces: function() {
+    fetchPlaces: function() {
         this.$.spinner.show();
-        this.$.resultText.hide();
-        // this.$.resultText.setContent("Loading nearby places...");
-
-        var fs_id = "0XVNZDCHBFFTGKP1YGHRAG3I154DOT0QGATA120CQ3KQFIYU";
-        var fs_secret = "QPM5WVRLV0OEDLJK3NWV01F1OLDQVVMWS25PJJTFDLE02GOL";
-        var ajax = new enyo.Ajax({url: "https://api.foursquare.com/v2/venues/search"});
-
-        ajax.response(enyo.bind(this, this.placesLoaded));
-        ajax.error(enyo.bind(this, function(sender, response) {
-            this.log(response);
-        }));
-        ajax.go({
-            ll: this.location.latitude + "," + this.location.longitude,
-            intent: "checkin",
-            client_id: fs_id,
-            client_secret: fs_secret,
-            v: "20121024"
-        });
+        chuisy.locations.fetch(enyo.mixin({remote: true, success: enyo.bind(this, function() {
+            this.$.spinner.hide();
+        }), error: enyo.bind(this, function(error) {
+            this.$.spinner.hide();
+        })}, this.coordinates));
     },
-    placesLoaded: function(sender, response) {
-        this.$.spinner.hide();
-
-        // Only show places that are less than 500m away
-        this.places = response.response.venues.filter(function(item) {
-            return item.location.distance < 500;
-        }).sort(function(a, b) {
-            return a.location.distance - b.location.distance;
-        });
-
-        if (this.places.length) {
-            this.$.resultText.hide();
-        } else {
-            this.$.resultText.show();
-            this.$.resultText.setContent($L("No nearby places found!"));
-        }
-
+    placesUpdated: function() {
+        this.places = this.coordinates ? chuisy.locations.sortBy(function(place) {
+            return place.distanceTo(this.coordinates.latitude, this.coordinates.longitude);
+        }, this) : chuisy.locations.models || [];
         this.refreshPlacesList();
     },
     /**
         Refresh the list of places
     */
     refreshPlacesList: function() {
-        this.$.placesList.setCount(this.places.length);
+        this.filteredPlaces = this.places ? this.places.filter(enyo.bind(this, function(place) {
+            return place.get("name").search(new RegExp(this.filterString, "i")) != -1 ||
+                place.get("address") && place.get("address").search(new RegExp(this.filterString, "i")) != -1;
+        })) : [];
+        this.$.placesList.setCount(this.limit ? Math.min(this.limit, this.filteredPlaces.length) : this.filteredPlaces.length);
         this.$.placesList.render();
     },
     setupItem: function(sender, event) {
-        var place = this.places[event.index];
-        this.$.place.setContent(place.name);
+        var place = this.filteredPlaces[event.index];
+        this.$.placeName.setContent(place.get("name"));
+        this.$.placeAddress.setContent(place.get("address"));
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
-        this.location = this.location || {};
-        enyo.mixin(this.location, {
-            name: place.name,
-            address: place.location.address,
-            zip_code: place.location.postalCode,
-            city: place.location.city,
-            country: place.location.cc,
-            foursquare_id: place.id
-        });
-        this.doLocationPicked({location: this.location});
+        this.doLocationPicked({location: place, coordinates: this.coordinates});
     },
     newPlaceKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -111,8 +84,7 @@ enyo.kind({
     },
     newPlaceEnter: function() {
         if (this.$.newPlaceInput.getValue()) {
-            this.location = this.location || {};
-            enyo.mixin(this.location, {
+            var place = new chuisy.models.Location({
                 name: this.$.newPlaceInput.getValue(),
                 address: "",
                 zip_code: null,
@@ -120,7 +92,7 @@ enyo.kind({
                 country: "",
                 foursquare_id: ""
             });
-            this.doLocationPicked({location: this.location});
+            this.doLocationPicked({location: place, coordinates: this.coordinates});
         }
         this.$.newPlaceInput.hasNode().blur();
         event.preventDefault();
@@ -131,23 +103,48 @@ enyo.kind({
     skip: function() {
         this.doLocationPicked({location: this.location});
     },
+    applyFilter: function() {
+        this.filterString = this.$.filterInput.getValue();
+        this.refreshPlacesList();
+    },
+    filterCancel: function() {
+        this.filterString = "";
+        this.refreshPlacesList();
+    },
+    moreButtonTapped: function() {
+        this.morePlaces(true);
+    },
+    morePlaces: function(more) {
+        this.limit = more ? 0 : 10;
+        this.refreshPlacesList();
+        this.$.moreButton.setShowing(!more);
+        this.$.message.setShowing(!more);
+        this.$.filterInput.setShowing(more);
+        this.$.newPlace.setShowing(more);
+        this.reflow();
+        this.$.scroller.scrollToTop();
+    },
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
-        // {kind: "Map", classes: "picklocation-map"},
+        {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter places..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "Scroller", fit: true, components: [
-            {classes: "picklocation-message", content: $L("<strong>Spotted!</strong><br>Where are you shopping?"), allowHtml: true},
+            {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
+            {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner", showing: false},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
-                {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-placeitem"}
+                {kind: "onyx.Item", name: "place", ontap: "placeTapped", tapHightlight: true, classes: "picklocation-place", components: [
+                    {classes: "picklocation-place-text", name: "placeName"},
+                    {classes: "picklocation-place-address", name: "placeAddress"}
+                ]}
             ]},
-            {kind: "onyx.Spinner", classes: "picklocation-spinner"},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
-                {kind: "onyx.InputDecorator", components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", classes: "picklocation-newplace-input", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
-                ]}
+                {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", name: "newPlace", components: [
+                    {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
+                ]},
+                {kind: "onyx.Button", content: $L("More places..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
             ]}
         ]}
     ]
