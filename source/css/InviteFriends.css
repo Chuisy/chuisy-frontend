@@ -37,3 +37,8 @@
 	display: block;
 	margin: 10px auto;
 }
+
+.invitefriends-filter-input {
+	border-radius: 0;
+	width: 100%;
+}

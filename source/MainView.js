@@ -181,7 +181,7 @@ enyo.kind({
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone"},
+            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone", onInviteFriends: "showInviteFriends"},
             // // SHARE CHU
             // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS

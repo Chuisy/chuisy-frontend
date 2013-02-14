@@ -19,7 +19,8 @@ enyo.kind({
         onShare: "",
         //* User has tapped the avatar or name of the chus author
         onShowUser: "",
-        onDone: ""
+        onDone: "",
+        onInviteFriends: ""
     },
     handlers: {
         onpostresize: "postResize",
@@ -510,7 +511,7 @@ enyo.kind({
                         {style: "padding: 80px 8px;", components: [
                             {classes: "placeholder-image chuview-friends-placeholder-image"},
                             {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
-                            {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%"}
+                            {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
                         ]}
                     ]}
                 ]}

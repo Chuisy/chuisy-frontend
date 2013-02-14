@@ -407,6 +407,18 @@
         },
         hasNextPage: function() {
             return this.paging && this.paging.next;
+        },
+        fetchAll: function(options) {
+            options = options || {};
+            var success = options.success;
+            options.success = _.bind(function(collection, response) {
+                if (this.hasNextPage()) {
+                    this.fetchNext(options);
+                } else if (success) {
+                    success(collection, response, options);
+                }
+            }, this);
+            this.fetch(options);
         }
     });
 
