@@ -40,6 +40,7 @@ enyo.kind({
     locationPicked: function (sender, event) {
         this.location = event.location;
         this.coordinates = event.coordinates;
+        this.$.chuForm.setLocation(this.location);
         this.$.panels.setIndex(1);
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },

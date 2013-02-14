@@ -33,17 +33,29 @@
 }
 
 .chuform-price-hint {
-	font-size: 8pt;
+	font-size: 18pt;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 110px;
+	text-shadow: 0 0 5px #000;
+	color: white;
+	text-align: center;
+	padding: 0 45px;
+	opacity: 0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.3s;
+}
+
+.chuform-location {
+	/*font-size: 8pt;*/
 	position: absolute;
 	right: 20px;
 	bottom: 20px;
 	text-shadow: 0 0 5px #000;
 	color: white;
 	text-align: right;
-	max-width: 140px;
-	opacity: 0;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.3s;
+	max-width: 150px;
 }
 
 .chuform.adjusting-price .chuform-price {
