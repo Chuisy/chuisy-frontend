@@ -10,7 +10,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("reset add", this.refresh, this);
+        chuisy.notifications.on("sync", this.refresh, this);
     },
     /**
         Refreshes notification list with loaded items

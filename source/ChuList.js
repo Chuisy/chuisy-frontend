@@ -30,7 +30,7 @@ enyo.kind({
         this.stopListening();
         this.refresh();
         if (this.chus) {
-            this.listenTo(this.chus, "reset add", this.refresh);
+            this.listenTo(this.chus, "sync", this.refresh);
         }
     },
     rendered: function() {

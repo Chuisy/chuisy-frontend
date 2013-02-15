@@ -17,8 +17,8 @@ enyo.kind({
         this.users = new chuisy.models.UserCollection();
         this.chus = new chuisy.models.ChuCollection();
 
-        this.users.on("reset add", _.bind(this.refresh, this, "user"));
-        this.chus.on("reset add", _.bind(this.refresh, this, "chu"));
+        this.users.on("sync", _.bind(this.refresh, this, "user"));
+        this.chus.on("sync", _.bind(this.refresh, this, "chu"));
     },
     setupUser: function(sender, event) {
         var user = this.users.at(event.index);

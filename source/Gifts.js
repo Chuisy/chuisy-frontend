@@ -6,7 +6,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.gifts.on("reset add remove", this.refresh, this);
+        chuisy.gifts.on("sync", this.refresh, this);
     },
     /**
         Refreshes gifts list with loaded items

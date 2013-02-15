@@ -16,7 +16,7 @@ enyo.kind({
         this.filterString = "";
         this.places = [];
         this.placesUpdated();
-        chuisy.locations.on("reset add change", this.placesUpdated, this);
+        chuisy.locations.on("reset sync", this.placesUpdated, this);
     },
     /**
         Resets the place list and gets the geolocation

@@ -24,9 +24,9 @@ enyo.kind({
         this.listenTo(this.user, "change", this.updateView);
 
         this.refresh("following");
-        this.listenTo(this.user.followers, "reset add", _.bind(this.refresh, this, "followers"));
+        this.listenTo(this.user.followers, "sync", _.bind(this.refresh, this, "followers"));
         this.refresh("followers");
-        this.listenTo(this.user.following, "reset add", _.bind(this.refresh, this, "following"));
+        this.listenTo(this.user.following, "sync", _.bind(this.refresh, this, "following"));
 
         this.$.chuList.setChus(this.user.chus);
     },
