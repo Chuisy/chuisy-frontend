@@ -52,11 +52,13 @@ enyo.kind({
         fbRequestPublishPermissions: function(callback) {
             FB.login(function(response) {
                 if (response.status == "connected") {
-                    callback(response.authResponse.accessToken);
+                    if (callback) {
+                        callback(response.authResponse.accessToken);
+                    }
                 } else {
                     console.log($L("Facebook signin failed!"));
                 }
-            }, {scope: "publish_stream"});
+            }, {scope: "publish_actions"});
         },
         isSignedIn: function() {
             var user = chuisy.accounts.getActiveUser();

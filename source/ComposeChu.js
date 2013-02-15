@@ -44,10 +44,14 @@ enyo.kind({
         this.$.panels.setIndex(1);
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
-    chuFormDone: function() {
+    postChu: function() {
+        var user = chuisy.accounts.getActiveUser();
+        if (user.profile.get("fb_og_share_actions")) {
+            App.fbRequestPublishPermissions();
+        }
         var attrs = {
             visibility: "public",
-            user: chuisy.accounts.getActiveUser()
+            user: user
         };
         // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
@@ -62,6 +66,20 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
+    },
+    chuFormDone: function() {
+        if (App.isSignedIn() && !localStorage.getItem("chuisy.hasAskedForOgShare") && navigator.notification) {
+            navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
+                var user = chuisy.accounts.getActiveUser();
+                user.profile.set("fb_og_share_actions", choice == 1 ? false : true);
+                user.save();
+                chuisy.accounts.syncRecords();
+                this.postChu();
+            }), $L("Share on Facebook"), [$L("No"), $L("Yes")].join(","));
+            localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
+        } else {
+            this.postChu();
+        }
         return true;
     },
     chuFormBack: function() {
