@@ -33,7 +33,7 @@
 	"Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your phone's settings and enable location services for Chuisy!": "Chuisy konnte deinen Standort nicht ermitteln. Wenn du das volle Chuisy-Erlebnis genießen und Vorteile wie Geschenke und Rabatte von lokalen Geschäften erhalten willst, dann aktiviere Ortungsdienste für Chuisy unter \"Einstellungen > Datenschutz > Ortungsdienste\"!",
 	"Can't find you!": "Kann dich nicht finden!",
 	"No nearby places found!": "Keine Geschäfte in der Nähe gefunden!",
-	"<strong>Spotted!</strong><br>Where are you shopping?": "<strong>Gesichtet!</strong> Wo gehst du gerade einkaufen?",
+	"Where are you shopping right now?": "Wo gehst du gerade einkaufen?",
 	"Enter custom place...": "Geschäft selbst eingeben...",
 	"Chus": "Chus",
 	"Following": "Following",
@@ -65,7 +65,7 @@
 	"{{ days }} days ago": "Vor {{ days }} Tagen",
 	"A while back...": "Ein bischen länger her...",
 	"Change": "Ändern",
-	"Type to filter...": "Freunde filtern...",
+	"Type to filter...": "Filtern...",
 	"Signing in...": "Anmelden...",
 	"This is where your profile would be if you were signed in!": "Hier könntest du dein Profil sehen, wenn du eingeloggt wärst!",
 	"You can't do this right now because the Chu still being uploaded. Please try again in a little while!": "Diese Aktion ist gerade nicht möglich, da dein Chu noch nicht hochgeladen ist. Versuch es später nochmal!",
@@ -94,6 +94,11 @@
     "Hold your horses!": "Nicht so schnell!",
     "Sorry, we couldn't upload your Chu just now. Please try again later!": "Dein Chu konnte gerade nicht hochgeladen werden. Versuch's später noch einmal!",
     "Try again": "Versuch's nochmal",
-    "Upload failed": "Upload fehlgeschlagen"
+    "Upload failed": "Upload fehlgeschlagen",
+    "Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings.": "Willst du, dass Chuisy deine Aktionen auf Facebook postet? Du kannst das auch später noch in deinen Einstellungen ändern.",
+    "Share on Facebook": "Auf Facebook teilen",
+    "Yes": "Ja",
+    "No": "Nein",
+    "More stores...": "Mehr Geschäfte..."
 }
  

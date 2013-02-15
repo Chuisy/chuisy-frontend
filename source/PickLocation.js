@@ -129,7 +129,7 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
-        {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter places..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "Scroller", fit: true, components: [
             {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
             {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner", showing: false},
@@ -144,7 +144,7 @@ enyo.kind({
                 {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", name: "newPlace", components: [
                     {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
                 ]},
-                {kind: "onyx.Button", content: $L("More places..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
+                {kind: "onyx.Button", content: $L("More stores..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
             ]}
         ]}
     ]
