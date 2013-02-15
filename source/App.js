@@ -151,9 +151,9 @@ enyo.kind({
             this.initPushNotifications();
         }
 
-        var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
+        // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
 
-        if (!firstLaunched) {
+        if (!App.isSignedIn()) {
             this.$.getStartedSlider.setValue(0);
             this.$.getStarted.shown();
         } else {
