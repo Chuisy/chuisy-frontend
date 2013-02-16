@@ -446,3 +446,29 @@ body {
 	height: 15px;
 	background-size: 15px 15px;
 }
+
+/* Toggle Button */
+
+.onyx-toggle-button {
+	border-radius: 100px;
+	height: 25px;
+	line-height: 26px;
+}
+
+.onyx-toggle-content {
+	font-size: 10pt;
+}
+
+.onyx-toggle-content.off {
+	padding-left: 2px;
+}
+
+.onyx-toggle-content.on {
+	padding-right: 2px;
+}
+
+.onyx-toggle-button-knob {
+	height: 24px;
+	width: 24px;
+	border-radius: 100px;
+}
