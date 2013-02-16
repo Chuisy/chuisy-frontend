@@ -160,8 +160,9 @@ enyo.kind({
     },
     setupComment: function(sender, event) {
         var comment = this.chu.comments.at(event.index);
+        var user = comment.get("user");
         this.$.commentText.setContent(comment.get("text"));
-        this.$.commentAvatar.setSrc(comment.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
+        this.$.commentAvatar.setSrc(user.profile.avatar_thumbnail || user.profile.avatar || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
     },

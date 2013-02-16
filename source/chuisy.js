@@ -25,8 +25,10 @@
                     apiKey: user.get("api_key")
                 };
 
-                chuisy.accounts.syncRecords();
-                chuisy.accounts.startPolling(600000);
+                chuisy.accounts.syncActiveUser();
+                setInterval(function() {
+                    chuisy.accounts.syncActiveUser();
+                }, 60000);
                 user.friends.fetchAll();
 
                 chuisy.closet.syncRecords();
@@ -46,8 +48,8 @@
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
             chuisy.online = online;
-            if (goneOnline && chuisy.accounts.getActiveUser()) {
-                chuisy.accounts.syncRecords();
+            if (goneOnline && chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().isAuthenticated()) {
+                chuisy.accounts.syncActiveUser();
                 chuisy.closet.syncRecords();
                 chuisy.notifications.fetch();
             }
@@ -300,16 +302,16 @@
         mark: function(model, type, value) {
             if (model && model.id) {
                 var ids = this.getList(type);
-                if (value && !_.contains(ids, model.id)) {
+                if (value && !_.contains(ids, model.id.toString())) {
                     ids.push(model.id);
-                } else {
-                    ids = _.without(ids, model.id);
+                } else if (!value) {
+                    ids = _.without(ids, model.id.toString());
                 }
                 this.setList(type, ids);
             }
         },
         isMarked: function(model, type) {
-            return model.id && _.contains(this.getList(type), model.id) ? true : false;
+            return model.id && _.contains(this.getList(type), model.id.toString()) ? true : false;
         },
         update: function(models, options) {
             options = _.extend({add: true, merge: true, remove: true}, options);
@@ -345,10 +347,12 @@
             console.log("changed: " + JSON.stringify(changed));
             console.log("destroyed: " + JSON.stringify(destroyed));
 
+            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
+
             for (var i=0; i<changed.length; i++) {
                 var model = this.get(changed[i]);
                 if (model && !this.isMarked(model, "added")) {
-                    model.save(null, {remote: true});
+                    model.save(null, {remote: true, nosync: true});
                 }
             }
 
@@ -369,8 +373,6 @@
                     model.set("id", lid);
                 }
             }
-
-            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
         },
         startPolling: function(interval, options) {
             this.pollInterval = setInterval(_.bind(function() {
@@ -466,10 +468,23 @@
             return response;
         },
         toJSON: function() {
-            var userJSON = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
-            userJSON.profile = this.profile.toJSON();
-            return userJSON;
+            var json = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
+            json.profile = this.profile.toJSON();
+            return json;
         },
+        // save: function(attributes, options) {
+        //     attributes = attributes || {};
+        //     if (!(this.collection && this.collection.localStorage) || options && options.remote) {
+        //         this.profile.save(null, {silent: true, success: _.bind(function() {
+        //             console.log("profile synced");
+        //             attributes.profile = this.profile.get("resource_uri");
+        //             Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+        //         }, this)});
+        //     } else {
+        //         attributes.profile = this.profile.toJSON();
+        //         Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+        //     }
+        // },
         authenticate: function(fbAccessToken, success, failure) {
             this.set("fb_access_token", fbAccessToken);
             Backbone.ajax(this.authUrl, {
@@ -634,7 +649,7 @@
                 attributes.friends = _.pluck(friends, "resource_uri");
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
-            this.set("friends", friends);
+            this.set("friends", friends, {silent: true});
         },
         destroy: function() {
             if (this.get("localImage")) {
@@ -753,7 +768,7 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/profile/",
         toJSON: function() {
             var json = chuisy.models.OwnedModel.prototype.toJSON.apply(this, arguments);
-            // delete json.avatar_thumbnail;
+            delete json.avatar_thumbnail;
             return json;
         }
     });
@@ -787,10 +802,8 @@
 
     chuisy.models.Accounts = chuisy.models.SyncableCollection.extend({
         model: chuisy.models.User,
+        url: chuisy.apiRoot + chuisy.version + "/user/",
         localStorage: new Backbone.LocalStorage("accounts"),
-        url: function() {
-            return chuisy.apiRoot + chuisy.version + "/user/set/" + this.pluck("id").join(";") + "/";
-        },
         initialize: function() {
             chuisy.models.SyncableCollection.prototype.initialize.apply(this, arguments);
             this.listenTo(this, "change:avatar", function(model, options) {
@@ -800,23 +813,27 @@
                 this.mark(model, "avatar_changed", false);
             });
         },
-        syncRecords: function() {
-            chuisy.models.SyncableCollection.prototype.syncRecords.apply(this, arguments);
-            var avatar_changed = this.getList("avatar_changed");
-            console.log("avatar_changed: " + JSON.stringify(avatar_changed));
-            for (var i=0; i<avatar_changed.length; i++) {
-                var model = this.get(avatar_changed[i]);
-                if (model && !this.isMarked(model, "added")) {
-                    model.uploadAvatar();
-                }
-            }
-        },
         setActiveUser: function(model) {
             localStorage.setItem("accounts_active", model && model.id);
             this.trigger("change:active_user");
         },
         getActiveUser: function() {
             return this.get(localStorage.getItem("accounts_active"));
+        },
+        syncActiveUser: function() {
+            var user = this.getActiveUser();
+
+            if (user) {
+                if (!this.isMarked(user, "changed") && !this.isMarked(user, "avatar_changed")) {
+                    user.fetch({remote: true});
+                }
+                if (this.isMarked(user, "changed")) {
+                    user.save(null, {remote: true, nosync: true});
+                }
+                if (this.isMarked(user, "avatar_changed")) {
+                    user.uploadAvatar();
+                }
+            }
         }
     });
 
