@@ -62,7 +62,7 @@ enyo.kind({
     */
     signOut: function() {
         if (navigator.notification) {
-            navigator.notification.confirm($L("Are you sure you want to do this?"), enyo.bind(this, function(choice) {
+            navigator.notification.confirm($L("Are you sure you want to log out?"), enyo.bind(this, function(choice) {
                 if (choice == 2) {
                     chuisy.signOut();
                     this.doBack();
@@ -134,7 +134,7 @@ enyo.kind({
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
                     {classes: "settings-item", components: [
-                        {content: $L("Post Actions"), classes: "settings-item-text"},
+                        {content: $L("Post actions"), classes: "settings-item-text"},
                         {kind: "onyx.ToggleButton", name: "ogActionsButton", onChange: "toggleOgActions"}
                     ]}
                 ]},
