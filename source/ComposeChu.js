@@ -35,6 +35,24 @@ enyo.kind({
     gotImage: function(uri) {
         this.image = uri;
         this.$.chuForm.setImage(this.image);
+        
+        var user = chuisy.accounts.getActiveUser();
+        if (App.isSignedIn() && navigator.notification) {
+            if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
+                navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
+                    var share = choice == 1 ? false : true;
+                    user.profile.set("fb_og_share_actions", share);
+                    user.save();
+                    chuisy.accounts.syncRecords();
+                    if (share) {
+                        App.fbRequestPublishPermissions();
+                    }
+                }), $L("Share on Facebook"), [$L("No"), $L("Yes")].join(","));
+                localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
+            } else if (user.profile.get("fb_og_share_actions")) {
+                App.fbRequestPublishPermissions();
+            }
+        }
         // this.$.pickLocation.initialize();
     },
     locationPicked: function (sender, event) {
@@ -44,11 +62,8 @@ enyo.kind({
         this.$.panels.setIndex(1);
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
-    postChu: function() {
+    chuFormDone: function() {
         var user = chuisy.accounts.getActiveUser();
-        if (user.profile.get("fb_og_share_actions")) {
-            App.fbRequestPublishPermissions();
-        }
         var attrs = {
             visibility: "public",
             user: user
@@ -66,21 +81,6 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
-    },
-    chuFormDone: function() {
-        if (App.isSignedIn() && !localStorage.getItem("chuisy.hasAskedForOgShare") && navigator.notification) {
-            navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
-                var user = chuisy.accounts.getActiveUser();
-                user.profile.set("fb_og_share_actions", choice == 1 ? false : true);
-                user.save();
-                chuisy.accounts.syncRecords();
-                this.postChu();
-            }), $L("Share on Facebook"), [$L("No"), $L("Yes")].join(","));
-            localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
-        } else {
-            this.postChu();
-        }
-        return true;
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);
