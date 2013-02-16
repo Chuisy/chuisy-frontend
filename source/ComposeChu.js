@@ -35,6 +35,24 @@ enyo.kind({
     gotImage: function(uri) {
         this.image = uri;
         this.$.chuForm.setImage(this.image);
+        
+        var user = chuisy.accounts.getActiveUser();
+        if (App.isSignedIn() && navigator.notification) {
+            if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
+                navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
+                    var share = choice == 1 ? false : true;
+                    user.profile.set("fb_og_share_actions", share);
+                    user.save();
+                    chuisy.accounts.syncRecords();
+                    if (share) {
+                        App.fbRequestPublishPermissions();
+                    }
+                }), $L("Share on Facebook"), [$L("No"), $L("Yes")].join(","));
+                localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
+            } else if (user.profile.get("fb_og_share_actions")) {
+                App.fbRequestPublishPermissions();
+            }
+        }
         // this.$.pickLocation.initialize();
     },
     locationPicked: function (sender, event) {
@@ -45,9 +63,10 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
+        var user = chuisy.accounts.getActiveUser();
         var attrs = {
             visibility: "public",
-            user: chuisy.accounts.getActiveUser()
+            user: user
         };
         // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
@@ -62,7 +81,6 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
-        return true;
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);

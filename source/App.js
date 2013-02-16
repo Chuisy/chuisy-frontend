@@ -49,14 +49,23 @@ enyo.kind({
                 }
             }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
         },
-        fbRequestPublishPermissions: function(callback) {
-            FB.login(function(response) {
-                if (response.status == "connected") {
-                    callback(response.authResponse.accessToken);
-                } else {
-                    console.log($L("Facebook signin failed!"));
+        fbRequestPublishPermissions: function(success, failure) {
+            FB.api('/me/permissions', function (response) {
+                if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            if (success) {
+                                success(response.authResponse.accessToken);
+                            }
+                        } else {
+                            console.log($L("Facebook signin failed!"));
+                            if (failure) {
+                                failure();
+                            }
+                        }
+                    }, {scope: "publish_actions"});
                 }
-            }, {scope: "publish_stream"});
+            });
         },
         isSignedIn: function() {
             var user = chuisy.accounts.getActiveUser();
