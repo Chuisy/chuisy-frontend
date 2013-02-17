@@ -917,6 +917,8 @@
                 Backbone.Tastypie.addAuthentication("read", this, options);
                 Backbone.ajax(options);
             }
+            this.meta = this.meta || {};
+            this.meta.unseen_count = 0;
             this.trigger("reset");
         },
         getUnseenCount: function() {
