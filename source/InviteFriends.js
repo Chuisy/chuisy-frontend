@@ -15,11 +15,18 @@ enyo.kind({
         if (this.user) {
             this.refreshList();
             this.stopListening();
+            this.reset();
+            this.listenTo(this.user.fbFriends, "request", this.showSpinner);
             this.listenTo(this.user.fbFriends, "sync", this.refreshList);
-            this.user.fbFriends.fetchAll();
         }
     },
+    showSpinner: function() {
+        this.$.spinner.show();
+        this.reflow();
+    },
     refreshList: function(model) {
+        this.$.spinner.hide();
+        this.reflow();
         this.filteredFriends = this.user ? this.user.fbFriends.filter(enyo.bind(this, function(friend) {
             return friend.get("name").search(new RegExp(this.filterString, "i")) != -1;
         })) : [];
@@ -70,6 +77,7 @@ enyo.kind({
     },
     components: [
         {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "onyx.Spinner", classes: "fbfriendspicker-spinner", showing: false},
         {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
             {classes: "fbfriendspicker-friend", components: [
                 {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
@@ -92,7 +100,7 @@ enyo.kind({
         var ids = this.$.fbFriendsPicker.getIds();
         FB.ui({
             method: 'apprequests',
-            message: 'My Great Request',
+            message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on shopping decisions!"),
             to: ids
         }, enyo.bind(this, function(response) {
             if (response.request) {
@@ -103,6 +111,10 @@ enyo.kind({
     },
     activate: function() {
         this.$.fbFriendsPicker.reset();
+        var user = chuisy.accounts.getActiveUser();
+        if (user) {
+            user.fbFriends.fetchAll();
+        }
     },
     deactivate: function() {
     },

@@ -20,11 +20,11 @@
 }
 
 .fbfriendspicker-friend-check {
-	width: 32px;
+	width: 85px;
 	height: 32px;
 	float: right;
-	background: url(../../assets/images/check.png) no-repeat center center;
-	background-size: cover;
+	background: url(../../assets/images/check.png) no-repeat right center;
+	background-size: 32px 32px;
 	margin-top: 3px;
 }
 
@@ -36,4 +36,9 @@
 .fbfriendspicker-filter-input {
 	border-radius: 0;
 	width: 100%;
+}
+
+.fbfriendspicker-spinner {
+	display: block;
+	margin: 5px auto;
 }
