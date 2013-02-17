@@ -63,7 +63,7 @@ enyo.kind({
             ]},
             {kind: "FittableRows", name: "inviteFriendsPanel", classes: "enyo-fill", components: [
                 {classes: "getstarted-invitefriends-text", content: $L("Chuisy is much more fun to use with other people. Invite your friends to Chuisy now!")},
-                {kind: "FbFriendsPicker", fit: true},
+                {kind: "FbFriendsPicker", fit: true, buttonLabel: $L("invite")},
                 {classes: "getstarted-invitefriends-continue", components: [
                     {kind: "onyx.Button", classes: "getstarted-invitefriends-continue-button", content: $L("Continue"), ontap: "inviteFriendsContinue"}
                 ]}

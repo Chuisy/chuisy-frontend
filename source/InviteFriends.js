@@ -3,6 +3,9 @@ enyo.kind({
     kind: "FittableRows",
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
+    published: {
+        buttonLabel: $L("add")
+    },
     create: function() {
         this.inherited(arguments);
         this.userChanged();
@@ -38,7 +41,8 @@ enyo.kind({
         this.$.avatar.setSrc(friend.getAvatar(32, 32));
         this.$.fullName.setContent(friend.get("name"));
 
-        this.$.inviteButton.setShowing(!this.isSelected(friend));
+        this.$.addButton.setShowing(!this.isSelected(friend));
+        this.$.addButton.setContent(this.buttonLabel);
         this.$.check.setShowing(this.isSelected(friend));
     },
     toggleFriend: function(sender, event) {
@@ -83,7 +87,7 @@ enyo.kind({
                 {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
                 {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
                 {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "onyx.Button", content: $L("add"), ontap: "toggleFriend", name: "inviteButton", classes: "fbfriendspicker-friend-add-button"}
+                {kind: "onyx.Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
             ]}
         ]}
     ]
