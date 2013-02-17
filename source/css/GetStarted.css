@@ -52,3 +52,22 @@
 	display: block;
 	margin: 40px auto;
 }
+
+.getstarted-invitefriends-text {
+	width: 100%;
+	text-align: center;
+	padding: 20px;
+	color: #555;
+	font-size: 14pt;
+	box-sizing: border-box;
+}
+
+.getstarted-invitefriends-continue {
+	padding: 10px 5px;
+	box-shadow: 0 -1px 5px #222;
+	position: relative;
+	z-index: 100;
+}
+.getstarted-invitefriends-continue-button {
+	width: 100%;
+}
