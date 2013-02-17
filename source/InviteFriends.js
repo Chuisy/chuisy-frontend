@@ -1,12 +1,8 @@
 enyo.kind({
-    name: "InviteFriends",
+    name: "FbFriendsPicker",
     kind: "FittableRows",
-    classes: "invitefriends",
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
-    events: {
-        onBack: ""
-    },
     create: function() {
         this.inherited(arguments);
         this.userChanged();
@@ -56,8 +52,44 @@ enyo.kind({
     isSelected: function(friend) {
         return this.selectedFriends[friend.id];
     },
+    getIds: function() {
+        return _.pluck(this.selectedFriends, "id");
+    },
+    applyFilter: function() {
+        this.filterString = this.$.filterInput.getValue();
+        this.refreshList();
+    },
+    filterCancel: function() {
+        this.filterString = "";
+        this.refreshList();
+    },
+    reset: function() {
+        this.filterString = "";
+        this.selectedFriends = {};
+        this.refreshList();
+    },
+    components: [
+        {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
+            {classes: "fbfriendspicker-friend", components: [
+                {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
+                {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
+                {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
+                {kind: "onyx.Button", content: $L("add"), ontap: "toggleFriend", name: "inviteButton", classes: "fbfriendspicker-friend-add-button"}
+            ]}
+        ]}
+    ]
+});
+
+enyo.kind({
+    name: "InviteFriends",
+    kind: "FittableRows",
+    classes: "invitefriends",
+    events: {
+        onBack: ""
+    },
     invite: function() {
-        var ids = _.pluck(this.selectedFriends, "id");
+        var ids = this.$.fbFriendsPicker.getIds();
         FB.ui({
             method: 'apprequests',
             message: 'My Great Request',
@@ -69,18 +101,8 @@ enyo.kind({
             }
         }));
     },
-    applyFilter: function() {
-        this.filterString = this.$.filterInput.getValue();
-        this.refreshList();
-    },
-    filterCancel: function() {
-        this.filterString = "";
-        this.refreshList();
-    },
     activate: function() {
-        this.filterString = "";
-        this.selectedFriends = {};
-        this.refreshList();
+        this.$.fbFriendsPicker.reset();
     },
     deactivate: function() {
     },
@@ -89,14 +111,6 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
             {kind: "onyx.Button", ontap: "invite", classes: "done-button", content: $L("invite")}
         ]},
-        {kind: "SearchInput", classes: "invitefriends-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
-        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
-            {classes: "invitefriends-friend", components: [
-                {kind: "Image", classes: "invitefriends-friend-avatar", name: "avatar"},
-                {classes: "invitefriends-friend-fullname ellipsis", name: "fullName"},
-                {classes: "invitefriends-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "onyx.Button", content: $L("add"), ontap: "toggleFriend", name: "inviteButton", classes: "invitefriends-friend-invite-button"}
-            ]}
-        ]}
+        {kind: "FbFriendsPicker", fit: true}
     ]
 });
