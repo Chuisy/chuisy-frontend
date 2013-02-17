@@ -39,6 +39,9 @@ enyo.kind({
                 case "share":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
                     break;
+                case "join":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
+                    break;
             }
         }
 
