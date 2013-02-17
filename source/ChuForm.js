@@ -124,7 +124,11 @@ enyo.kind({
     //     }
     // },
     locationChanged: function() {
-        this.$.location.setContent(this.location && this.location.get("name") || "");
+        if (this.location) {
+            this.$.location.setContent(this.location.get("name") || "");
+            this.currencyFormat = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, locale: this.location.get("country")});
+            this.priceChanged();
+        }
     },
     priceChanged: function() {
         this.$.price.setContent(this.currencyFormat.format(this.price));
