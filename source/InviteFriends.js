@@ -1,11 +1,10 @@
 enyo.kind({
-    name: "InviteFriends",
+    name: "FbFriendsPicker",
     kind: "FittableRows",
-    classes: "invitefriends",
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
-    events: {
-        onBack: ""
+    published: {
+        buttonLabel: $L("add")
     },
     create: function() {
         this.inherited(arguments);
@@ -19,11 +18,18 @@ enyo.kind({
         if (this.user) {
             this.refreshList();
             this.stopListening();
+            this.reset();
+            this.listenTo(this.user.fbFriends, "request", this.showSpinner);
             this.listenTo(this.user.fbFriends, "sync", this.refreshList);
-            this.user.fbFriends.fetchAll();
         }
     },
+    showSpinner: function() {
+        this.$.spinner.show();
+        this.reflow();
+    },
     refreshList: function(model) {
+        this.$.spinner.hide();
+        this.reflow();
         this.filteredFriends = this.user ? this.user.fbFriends.filter(enyo.bind(this, function(friend) {
             return friend.get("name").search(new RegExp(this.filterString, "i")) != -1;
         })) : [];
@@ -35,7 +41,8 @@ enyo.kind({
         this.$.avatar.setSrc(friend.getAvatar(32, 32));
         this.$.fullName.setContent(friend.get("name"));
 
-        this.$.inviteButton.setShowing(!this.isSelected(friend));
+        this.$.addButton.setShowing(!this.isSelected(friend));
+        this.$.addButton.setContent(this.buttonLabel);
         this.$.check.setShowing(this.isSelected(friend));
     },
     toggleFriend: function(sender, event) {
@@ -56,18 +63,8 @@ enyo.kind({
     isSelected: function(friend) {
         return this.selectedFriends[friend.id];
     },
-    invite: function() {
-        var ids = _.pluck(this.selectedFriends, "id");
-        FB.ui({
-            method: 'apprequests',
-            message: 'My Great Request',
-            to: ids
-        }, enyo.bind(this, function(response) {
-            if (response.request) {
-                // User did send the request
-                this.doBack();
-            }
-        }));
+    getIds: function() {
+        return _.pluck(this.selectedFriends, "id");
     },
     applyFilter: function() {
         this.filterString = this.$.filterInput.getValue();
@@ -77,10 +74,51 @@ enyo.kind({
         this.filterString = "";
         this.refreshList();
     },
-    activate: function() {
+    reset: function() {
         this.filterString = "";
         this.selectedFriends = {};
         this.refreshList();
+    },
+    components: [
+        {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "onyx.Spinner", classes: "fbfriendspicker-spinner", showing: false},
+        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
+            {classes: "fbfriendspicker-friend", components: [
+                {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
+                {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
+                {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
+                {kind: "onyx.Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
+            ]}
+        ]}
+    ]
+});
+
+enyo.kind({
+    name: "InviteFriends",
+    kind: "FittableRows",
+    classes: "invitefriends",
+    events: {
+        onBack: ""
+    },
+    invite: function() {
+        var ids = this.$.fbFriendsPicker.getIds();
+        FB.ui({
+            method: 'apprequests',
+            message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on shopping decisions!"),
+            to: ids
+        }, enyo.bind(this, function(response) {
+            if (response.request) {
+                // User did send the request
+                this.doBack();
+            }
+        }));
+    },
+    activate: function() {
+        this.$.fbFriendsPicker.reset();
+        var user = chuisy.accounts.getActiveUser();
+        if (user) {
+            user.fbFriends.fetchAll();
+        }
     },
     deactivate: function() {
     },
@@ -89,14 +127,6 @@ enyo.kind({
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
             {kind: "onyx.Button", ontap: "invite", classes: "done-button", content: $L("invite")}
         ]},
-        {kind: "SearchInput", classes: "invitefriends-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
-        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
-            {classes: "invitefriends-friend", components: [
-                {kind: "Image", classes: "invitefriends-friend-avatar", name: "avatar"},
-                {classes: "invitefriends-friend-fullname ellipsis", name: "fullName"},
-                {classes: "invitefriends-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "onyx.Button", content: $L("add"), ontap: "toggleFriend", name: "inviteButton", classes: "invitefriends-friend-invite-button"}
-            ]}
-        ]}
+        {kind: "FbFriendsPicker", fit: true}
     ]
 });

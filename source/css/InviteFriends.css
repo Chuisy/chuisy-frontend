@@ -1,4 +1,4 @@
-.invitefriends-friend {
+.fbfriendspicker-friend {
 	background-color: White;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
@@ -7,38 +7,38 @@
 	height: 32px;
 }
 
-.invitefriends-friend-avatar {
+.fbfriendspicker-friend-avatar {
 	width: 32px;
 	height: 32px;
 }
 
-.invitefriends-friend-fullname {
+.fbfriendspicker-friend-fullname {
 	display: inline-block;
 	vertical-align: top;
 	max-width: 150px;
 	padding: 5px 10px;
 }
 
-.invitefriends-friend-check {
-	width: 32px;
+.fbfriendspicker-friend-check {
+	width: 85px;
 	height: 32px;
 	float: right;
-	background: url(../../assets/images/check.png) no-repeat center center;
-	background-size: cover;
+	background: url(../../assets/images/check.png) no-repeat right center;
+	background-size: 32px 32px;
 	margin-top: 3px;
 }
 
-.invitefriends-friend-invite-button {
+.fbfriendspicker-friend-add-button {
 	float: right;
 	width: 85px;
 }
 
-.invitefriends-next-spinner {
-	display: block;
-	margin: 10px auto;
-}
-
-.invitefriends-filter-input {
+.fbfriendspicker-filter-input {
 	border-radius: 0;
 	width: 100%;
+}
+
+.fbfriendspicker-spinner {
+	display: block;
+	margin: 5px auto;
 }

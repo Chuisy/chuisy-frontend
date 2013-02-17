@@ -65,7 +65,7 @@
                     user.save(null, {nosync: true});
                     chuisy.accounts.setActiveUser(user);
                     if (success) {
-                        success();
+                        success(user);
                     }
                 }, error: failure});
             }, function() {
