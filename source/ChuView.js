@@ -69,6 +69,8 @@ enyo.kind({
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
+        this.refreshComments();
+        this.refreshLikes();
         this.listenTo(this.chu.comments, "sync", this.refreshComments);
         this.listenTo(this.chu.likes, "sync", this.refreshLikes);
         // this.listenTo(this.chu.comments, "request", this.commentsLoading);
@@ -157,6 +159,7 @@ enyo.kind({
     },
     refreshLikes: function() {
         this.$.likesSpinner.hide();
+        this.$.likesRepeater.show();
         var max = 7;
         var count = this.chu.likes.meta && this.chu.likes.total_count || this.chu.get("likes_count") || 0;
         this.$.likesCount.setContent(count);
@@ -165,6 +168,7 @@ enyo.kind({
         this.$.moreLikes.setShowing(count > max);
         this.$.moreLikes.setContent("+" + (count - max));
         this.$.moreLikes.addRemoveClass("big", count > 99);
+        this.$.likesContainer.setShowing(count);
     },
     loadComments: function() {
         this.$.moreCommentsButton.hide();
@@ -173,6 +177,7 @@ enyo.kind({
     },
     loadLikes: function() {
         this.$.likesSpinner.show();
+        this.$.likesRepeater.hide();
         this.chu.likes.fetch({data: {limit: 10}});
     },
     setupComment: function(sender, event) {
@@ -508,16 +513,18 @@ enyo.kind({
                             {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                             {classes: "chuview-time", name: "time"}
                         ]},
-                        {classes: "chuview-separator", components: [
-                            {classes: "chuview-separator-line"},
-                            {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
-                            {classes: "chuview-separator-line"}
+                        {name: "likesContainer", components: [
+                            {classes: "chuview-separator", components: [
+                                {classes: "chuview-separator-line"},
+                                {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
+                                {classes: "chuview-separator-line"}
+                            ]},
+                            {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                            {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
+                                {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
+                            ]},
+                            {classes: "chuview-likes-more", name: "moreLikes"}
                         ]},
-                        {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
-                        {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
-                            {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
-                        ]},
-                        {classes: "chuview-likes-more", name: "moreLikes"},
                         {classes: "chuview-separator", components: [
                             {classes: "chuview-separator-line"},
                             {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
