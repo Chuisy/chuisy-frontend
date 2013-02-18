@@ -9,6 +9,10 @@ enyo.kind({
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
+    create: function() {
+        this.inherited(arguments);
+        this.rowsPerPageChanged();
+    },
     usersChanged: function() {
         this.stopListening();
         this.refresh();
