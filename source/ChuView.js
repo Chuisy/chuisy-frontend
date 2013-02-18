@@ -175,7 +175,7 @@ enyo.kind({
     loadComments: function() {
         this.$.moreCommentsButton.hide();
         this.$.commentsSpinner.show();
-        this.chu.comments.fetch({data: {limit: 10}});
+        this.chu.comments.fetch({data: {limit: 5}});
     },
     loadLikes: function() {
         this.$.likesSpinner.show();
@@ -186,7 +186,8 @@ enyo.kind({
         var comment = this.chu.comments.at(event.index);
         var user = comment.get("user");
         this.$.commentText.setContent(comment.get("text"));
-        this.$.commentAvatar.setSrc(user.profile.avatar_thumbnail || user.profile.avatar || "assets/images/avatar_thumbnail_placeholder.png");
+        var avatar = user.profile.avatar_thumbnail || user.profile.avatar || "assets/images/avatar_thumbnail_placeholder.png";
+        this.$.commentAvatar.setSrc(avatar);
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
     },
