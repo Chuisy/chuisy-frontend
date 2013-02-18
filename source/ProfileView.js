@@ -23,10 +23,13 @@ enyo.kind({
         this.updateView();
         this.listenTo(this.user, "change", this.updateView);
 
-        this.refresh("following");
-        this.listenTo(this.user.followers, "sync", _.bind(this.refresh, this, "followers"));
-        this.refresh("followers");
-        this.listenTo(this.user.following, "sync", _.bind(this.refresh, this, "following"));
+        this.$.followersList.setUsers(this.user.followers);
+        this.$.followingList.setUsers(this.user.following);
+
+        this.synced("following");
+        this.listenTo(this.user.followers, "sync", _.bind(this.synced, this, "followers"));
+        this.synced("followers");
+        this.listenTo(this.user.following, "sync", _.bind(this.synced, this, "following"));
 
         this.$.chuList.setChus(this.user.chus);
     },
@@ -62,39 +65,11 @@ enyo.kind({
         }
         return true;
     },
-    refresh: function(which) {
+    synced: function(which) {
         this.$[which + "Spinner"].hide();
         this.$[which + "Count"].show();
         var count = this.user ? this.user[which].length : 0;
-        this.$[which + "List"].setCount(count);
-        this.$[which + "List"].refresh();
         this.$[which + "Placeholder"].setShowing(!count);
-    },
-    setupItem: function(sender, event) {
-        var which = sender.which;
-        var coll = this.user[which];
-        var user = coll.at(event.index);
-        this.$[which + "Item"].setUser(user);
-        if (coll.length == 1) {
-            // Workaround for lists with a single items where userChanged does not seem to be called automatically.
-            this.$[which + "Item"].userChanged();
-        }
-
-        var isLastItem = event.index == coll.length-1;
-        if (isLastItem && coll.hasNextPage()) {
-            this.$[which + "NextPage"].show();
-            coll.fetchNext();
-        } else {
-            this.$[which + "NextPage"].hide();
-        }
-    },
-    userTapped: function(sender, event) {
-        var which = sender.which;
-        if (App.checkConnection()) {
-            var user = this.user[which].at(event.index);
-            this.doShowUser({user: user});
-        }
-        event.preventDefault();
     },
     followButtonTapped: function() {
         if (App.checkConnection()) {
@@ -109,13 +84,6 @@ enyo.kind({
     },
     toggleFollow: function(sender, event) {
         this.user.toggleFollow();
-        return true;
-    },
-    listToggleFollow: function(sender, event) {
-        var which = sender.which;
-        var user = this.user[which].at(event.index);
-        user.toggleFollow();
-        this.$[which + "List"].refresh();
         return true;
     },
     signIn: function() {
@@ -203,17 +171,11 @@ enyo.kind({
                     ]},
                     {classes: "enyo-fill", components: [
                         {name: "followingPlaceholder", classes: "profileview-list-placeholder following"},
-                        {kind: "List", name: "followingList", onSetupItem: "setupItem", classes: "enyo-fill", which: "following", rowsPerPage: 20, components: [
-                            {kind: "UserListItem", which: "following", name: "followingItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
-                            {name: "followingNextPage", classes: "loading-next-page", content: $L("Loading...")}
-                        ]}
+                        {kind: "UserList", name: "followingList", classes: "enyo-fill", rowsPerPage: 20}
                     ]},
                     {classes: "enyo-fill", components: [
                         {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
-                        {kind: "List", name: "followersList", onSetupItem: "setupItem", classes: "enyo-fill", which: "followers", rowsPerPage: 20, components: [
-                            {kind: "UserListItem", which: "followers", name: "followersItem", ontap: "userTapped", onToggleFollow: "listToggleFollow"},
-                            {name: "followersNextPage", classes: "loading-next-page", content: $L("Loading...")}
-                        ]}
+                        {kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
                     ]}
                 ]}
             ]},

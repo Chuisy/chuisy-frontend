@@ -17,27 +17,10 @@ enyo.kind({
         this.users = new chuisy.models.UserCollection();
         this.chus = new chuisy.models.ChuCollection();
 
-        this.users.on("sync", _.bind(this.refresh, this, "user"));
-        this.chus.on("sync", _.bind(this.refresh, this, "chu"));
-    },
-    setupUser: function(sender, event) {
-        var user = this.users.at(event.index);
-        this.$.userListItem.setUser(user);
-        if (this.users.length == 1) {
-            // Workaround for lists with a single items where userChanged does not seem to be called automatically.
-            this.$.userListItem.userChanged();
-        }
+        this.$.userList.setUsers(this.users);
 
-        var isLastItem = event.index == this.users.length-1;
-        if (isLastItem && this.users.hasNextPage()) {
-            // Item is last item in the list but there is more! Load next page.
-            this.$.userNextPage.show();
-            this.users.fetchNext();
-        } else {
-            this.$.userNextPage.hide();
-        }
-
-        return true;
+        this.users.on("sync", _.bind(this.synced, this, "user"));
+        this.chus.on("sync", _.bind(this.synced, this, "chu"));
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
@@ -53,10 +36,6 @@ enyo.kind({
             this.$.chuNextPage.hide();
         }
         return true;
-    },
-    userTap: function(sender, event) {
-        this.doShowUser({user: this.users.at(event.index)});
-        event.preventDefault();
     },
     chuTap: function(sender, event) {
         this.doShowChu({chu: this.chus.at(event.index)});
@@ -84,22 +63,25 @@ enyo.kind({
         this.chus.reset();
         this.users.meta = {};
         this.chus.meta = {};
-        this.refresh("user", null, null, true);
-        this.refresh("chu", null, null, true);
+        this.synced("user", null, null, true);
+        this.synced("chu", null, null, true);
         this.$.resultPanels.setIndex(0);
         this.$.resultTabs.setActive(null);
     },
-    refresh: function(which, collection, options, force) {
+    synced: function(which, collection, options, force) {
         if (force || options && options.data && options.data.q == this.latestQuery) {
             var coll = this[which + "s"];
             this.$[which + "Count"].show();
             this.$[which + "Count"].setContent(coll.meta.total_count);
             this.$[which + "Spinner"].hide();
-            this.$[which + "List"].setCount(coll.length);
             this.$[which + "NoResults"].setShowing(!coll.length);
-            this.$[which + "List"].refresh();
             if (!this.$.resultPanels.getIndex()) {
                 this.$.resultPanels.setIndex(1);
+            }
+
+            if (which == "chu") {
+                this.$.chuList.setCount(coll.length);
+                this.$.chuList.refresh();
             }
         }
     },
@@ -108,8 +90,8 @@ enyo.kind({
     */
     search: function(which, query) {
         // We are waiting for the search response. Unload list and show spinner.
-        this.$[which + "List"].setCount(0);
-        this.$[which + "List"].refresh();
+        this[which + "s"].reset();
+        this.synced(which, null, null, true);
         this.$[which + "Spinner"].show();
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
@@ -121,12 +103,6 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
-    },
-    toggleFollow: function(sender, event) {
-        var user = this.users.at(event.index);
-        user.toggleFollow();
-        this.$.userList.refresh();
-        return true;
     },
     components: [
         // SEARCH INPUT
@@ -154,10 +130,7 @@ enyo.kind({
             ]},
             // USERS
             {classes: "discover-result-panel", components: [
-                {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", rowsPerPage: 20, components: [
-                    {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
-                    {name: "userNextPage", content: $L("Loading..."), classes: "loading-next-page"}
-                ]},
+                {kind: "UserList", classes: "enyo-fill", name: "userList", rowsPerPage: 20},
                 {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No users found.")}
             ]},
             // CHUS
