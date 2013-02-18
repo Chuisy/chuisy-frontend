@@ -634,6 +634,11 @@
                     return new Date(model.get("time"));
                 }
             });
+            this.likes = new chuisy.models.UserCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "likes/";
+                }, this)
+            });
 
             this.listenTo(this, "sync", function(model, response, request) {
                 if (request && request.xhr.status == 201 && this.get("localImage")) {

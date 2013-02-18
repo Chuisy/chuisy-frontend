@@ -69,10 +69,12 @@ enyo.kind({
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
-        this.listenTo(this.chu.comments, "reset add remove", this.refreshComments);
+        this.listenTo(this.chu.comments, "sync", this.refreshComments);
+        this.listenTo(this.chu.likes, "sync", this.refreshLikes);
         // this.listenTo(this.chu.comments, "request", this.commentsLoading);
         if (this.chu.get("url")) {
             this.loadComments();
+            this.loadLikes();
         }
     },
     updateView: function() {
@@ -153,10 +155,25 @@ enyo.kind({
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
     },
+    refreshLikes: function() {
+        this.$.likesSpinner.hide();
+        var max = 7;
+        var count = this.chu.likes.meta && this.chu.likes.total_count || this.chu.get("likes_count") || 0;
+        this.$.likesCount.setContent(count);
+        this.$.likesRepeater.setCount(Math.min(this.chu.likes.length, max));
+        this.$.likesRepeater.render();
+        this.$.moreLikes.setShowing(count > max);
+        this.$.moreLikes.setContent("+" + (count - max));
+        this.$.moreLikes.addRemoveClass("big", count > 99);
+    },
     loadComments: function() {
         this.$.moreCommentsButton.hide();
         this.$.commentsSpinner.show();
         this.chu.comments.fetch({data: {limit: 10}});
+    },
+    loadLikes: function() {
+        this.$.likesSpinner.show();
+        this.chu.likes.fetch({data: {limit: 10}});
     },
     setupComment: function(sender, event) {
         var comment = this.chu.comments.at(event.index);
@@ -165,6 +182,10 @@ enyo.kind({
         this.$.commentAvatar.setSrc(user.profile.avatar_thumbnail || user.profile.avatar || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
+    },
+    setupLike: function(sender, event) {
+        var user = this.chu.likes.at(event.index);
+        event.item.$.likeImage.setSrc(user.profile.get("avatar_thumbnail") || user.profile.get("avatar") || "assets/images/avatar_thumbnail_placeholder.png");
     },
     commentInputKeydown: function(sender, event) {
         if (event.keyCode == 13) {
@@ -196,6 +217,7 @@ enyo.kind({
                 user: chuisy.accounts.getActiveUser().toJSON()
             };
             this.chu.comments.create(attrs);
+            this.refreshComments();
 
             this.$.commentInput.setValue("");
 
@@ -486,7 +508,21 @@ enyo.kind({
                             {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                             {classes: "chuview-time", name: "time"}
                         ]},
-                        {classes: "chuview-separator"},
+                        {classes: "chuview-separator", components: [
+                            {classes: "chuview-separator-line"},
+                            {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
+                            {classes: "chuview-separator-line"}
+                        ]},
+                        {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                        {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
+                            {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
+                        ]},
+                        {classes: "chuview-likes-more", name: "moreLikes"},
+                        {classes: "chuview-separator", components: [
+                            {classes: "chuview-separator-line"},
+                            {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
+                            {classes: "chuview-separator-line"}
+                        ]},
                         {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
                         {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
                         // COMMENTS
