@@ -40,5 +40,6 @@ enyo.depends(
 	"Guide.js",
 	"GetStarted.js",
 	"GiftView.js",
-	"InviteFriends.js"
+	"InviteFriends.js",
+	"UserList.js"
 );

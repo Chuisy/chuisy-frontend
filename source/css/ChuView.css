@@ -77,6 +77,33 @@
 	font-size: 8pt;
 }
 
+.chuview-likes {
+	/*margin-bottom: -4px;*/
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chuview-like-image {
+	width: 35px;
+	height: 35px;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	margin: 0 2px;
+}
+
+.chuview-likes-more {
+	display: inline-block;
+	vertical-align: middle;
+	color: #555;
+	padding: 5px;
+	max-width: 25px;
+	font-size: 12pt;
+}
+
+.chuview-likes-more.big {
+	font-size: 9pt;
+}
+
 .chuview-commentinput-decorator {
 	border-radius: 0;
 	width: 100%;
@@ -103,7 +130,8 @@
 	margin: 5px 0;
 }
 
-.chuview-comments-spinner {
+.chuview-comments-spinner,
+.chuview-likes-spinner {
 	display: block;
 	margin: 5px auto 15px auto;
 }
@@ -160,7 +188,7 @@
 
 .chuview-separator {
 	width: 100%;
-	margin: 10px 0;
+	margin: 5px 0;
 	display: -webkit-box;
 	-webkit-box-align: center;
 }
