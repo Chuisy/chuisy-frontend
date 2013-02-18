@@ -148,6 +148,7 @@ enyo.kind({
     toggleLike: function(sender, event) {
         if (this.checkSynced()) {
             this.chu.toggleLike();
+            this.refreshLikes();
         }
     },
     refreshComments: function() {

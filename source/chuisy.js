@@ -676,6 +676,12 @@
                 return;
             }
 
+            if (liked) {
+                this.likes.unshift(activeUser);
+            } else {
+                this.likes.remove(activeUser);
+            }
+
             this.set("liked", liked);
             this.set("likes_count", this.get("likes_count") + (liked ? 1 : -1));
 
