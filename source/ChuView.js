@@ -73,6 +73,7 @@ enyo.kind({
         this.refreshLikes();
         this.listenTo(this.chu.comments, "sync", this.refreshComments);
         this.listenTo(this.chu.likes, "sync", this.refreshLikes);
+        this.$.likesList.setUsers(this.chu.likes);
         // this.listenTo(this.chu.comments, "request", this.commentsLoading);
         if (this.chu.get("url")) {
             this.loadComments();
@@ -412,6 +413,7 @@ enyo.kind({
         }
     },
     activate: function(obj) {
+        this.$.panels.setIndex(0);
         this.setChu(obj);
         if (obj == this.chu) {
             // this.chuChanged (for some reason) not automatically called if the set object is identical to the previous one
@@ -449,131 +451,147 @@ enyo.kind({
         this.$.commentsSpinner.show();
         this.chu.comments.fetchNext();
     },
+    showLikes: function() {
+        this.$.panels.setIndex(1);
+    },
+    likesBack: function() {
+        this.$.panels.setIndex(0);
+    },
     components: [
-        // IMAGE LOADING INDICATOR
-        {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
-        // IMAGEVIEW
-        {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
-            {classes: "chuview-image-container", components: [
-                {kind: "Image", name: "image", classes: "chuview-image"}
-            ]}
-        ]},
-        // CONTROLS
-        {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
-            // HEADER
-            {classes: "header", components: [
-                {kind: "onyx.Button", ontap: "done", classes: "back-button", name: "doneButton"},
-                {classes: "chuview-share-controls", components: [
-                    {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
-                        {classes: "enyo-fill", components: [
-                            {classes: "chuview-header-button messaging", ontap: "sms"},
-                            {classes: "chuview-header-button friends", name: "friendsButton", ontap: "toggleFriends"}
+        {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+            {classes: "enyo-fill", components: [
+                // IMAGE LOADING INDICATOR
+                {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
+                // IMAGEVIEW
+                {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
+                    {classes: "chuview-image-container", components: [
+                        {kind: "Image", name: "image", classes: "chuview-image"}
+                    ]}
+                ]},
+                // CONTROLS
+                {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
+                    // HEADER
+                    {classes: "header", components: [
+                        {kind: "onyx.Button", ontap: "done", classes: "back-button", name: "doneButton"},
+                        {classes: "chuview-share-controls", components: [
+                            {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
+                                {classes: "enyo-fill", components: [
+                                    {classes: "chuview-header-button messaging", ontap: "sms"},
+                                    {classes: "chuview-header-button friends", name: "friendsButton", ontap: "toggleFriends"}
+                                ]},
+                                {classes: "enyo-fill", components: [
+                                    {classes: "chuview-header-button messaging", ontap: "sms"},
+                                    {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
+                                    {classes: "chuview-header-button twitter", ontap: "twitter"},
+                                    {classes: "chuview-header-button pinterest", ontap: "pinterest"}
+                                ]}
+                            ]},
+                            {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
                         ]},
-                        {classes: "enyo-fill", components: [
-                            {classes: "chuview-header-button messaging", ontap: "sms"},
-                            {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
-                            {classes: "chuview-header-button twitter", ontap: "twitter"},
-                            {classes: "chuview-header-button pinterest", ontap: "pinterest"}
+                        {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
+                        {kind: "onyx.Button", classes: "share-button", ontap: "share", showing: false, components: [
+                            {classes: "share-button-icon"}
                         ]}
                     ]},
-                    {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
-                ]},
-                {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
-                {kind: "onyx.Button", classes: "share-button", ontap: "share", showing: false, components: [
-                    {classes: "share-button-icon"}
-                ]}
-            ]},
-            {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
-                {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll", components: [
-                    // SPACER
-                    {classes: "chuview-spacer", ontap: "hideControls"},
-                    // LIKE BAR
-                    {classes: "chuview-likebar", components: [
-                        {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped", components: [
-                            {classes: "chuview-like-button-side back"},
-                            {classes: "chuview-like-button-side front"}
-                        ]},
-                        {classes: "chuview-error-icon", name: "errorIcon", ontap: "errorIconTapped"}
-                    ]},
-                    {classes: "chuview-content", components: [
-                        // CATEGORY, PRICE, COMMENTS, LIKES
-                        {classes: "chuview-comments-likes-price", components: [
-                            // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
-                            {classes: "chuview-price", name: "price"},
-                            {classes: "chuview-likes-comments", components: [
-                                {classes: "chuview-likes-count", name: "likesCount"},
-                                {classes: "chuview-likes-icon"},
-                                {classes: "chuview-comments-count", name: "commentsCount"},
-                                {classes: "chuview-comments-icon"}
+                    {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
+                        {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll", components: [
+                            // SPACER
+                            {classes: "chuview-spacer", ontap: "hideControls"},
+                            // LIKE BAR
+                            {classes: "chuview-likebar", components: [
+                                {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped", components: [
+                                    {classes: "chuview-like-button-side back"},
+                                    {classes: "chuview-like-button-side front"}
+                                ]},
+                                {classes: "chuview-error-icon", name: "errorIcon", ontap: "errorIconTapped"}
+                            ]},
+                            {classes: "chuview-content", components: [
+                                // CATEGORY, PRICE, COMMENTS, LIKES
+                                {classes: "chuview-comments-likes-price", components: [
+                                    // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
+                                    {classes: "chuview-price", name: "price"},
+                                    {classes: "chuview-likes-comments", components: [
+                                        {classes: "chuview-likes-count", name: "likesCount"},
+                                        {classes: "chuview-likes-icon"},
+                                        {classes: "chuview-comments-count", name: "commentsCount"},
+                                        {classes: "chuview-comments-icon"}
+                                    ]}
+                                ]},
+                                // AVATAR, NAME, TIME, LOCATION
+                                {classes: "chuview-infobar", components: [
+                                    {classes: "chuview-location", name: "location"},
+                                    {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
+                                    {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
+                                    {classes: "chuview-time", name: "time"}
+                                ]},
+                                {name: "likesContainer", ontap: "showLikes", components: [
+                                    {classes: "chuview-separator", components: [
+                                        {classes: "chuview-separator-line"},
+                                        {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
+                                        {classes: "chuview-separator-line"}
+                                    ]},
+                                    {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                                    {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
+                                        {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
+                                    ]},
+                                    {classes: "chuview-likes-more", name: "moreLikes"}
+                                ]},
+                                {classes: "chuview-separator", components: [
+                                    {classes: "chuview-separator-line"},
+                                    {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
+                                    {classes: "chuview-separator-line"}
+                                ]},
+                                {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
+                                {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
+                                // COMMENTS
+                                {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                                    {classes: "chuview-comment", name: "comment", components: [
+                                        {components: [
+                                            {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
+                                        ]},
+                                        {classes: "chuview-comment-content", components: [
+                                            {name: "commentText", classes: "chuview-comment-text"},
+                                            {style: "text-align: right", components: [
+                                                {classes: "chuview-comment-footnote", content: " - "},
+                                                {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
+                                                {classes: "chuview-comment-footnote", content: ", "},
+                                                {classes: "chuview-comment-footnote", name: "commentTime"}
+                                            ]}
+                                        ]}
+                                    ]}
+                                ]},
+                                {style: "height: 500px"}
                             ]}
                         ]},
-                        // AVATAR, NAME, TIME, LOCATION
-                        {classes: "chuview-infobar", components: [
-                            {classes: "chuview-location", name: "location"},
-                            {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
-                            {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
-                            {classes: "chuview-time", name: "time"}
-                        ]},
-                        {name: "likesContainer", components: [
-                            {classes: "chuview-separator", components: [
-                                {classes: "chuview-separator-line"},
-                                {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
-                                {classes: "chuview-separator-line"}
-                            ]},
-                            {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
-                            {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
-                                {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
-                            ]},
-                            {classes: "chuview-likes-more", name: "moreLikes"}
-                        ]},
-                        {classes: "chuview-separator", components: [
-                            {classes: "chuview-separator-line"},
-                            {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
-                            {classes: "chuview-separator-line"}
-                        ]},
-                        {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
-                        {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
-                        // COMMENTS
-                        {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                            {classes: "chuview-comment", name: "comment", components: [
-                                {components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
+                        {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
+                            classes: "chuview-friends-slider", overMoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
+                            {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
+                                {kind: "FittableRows", components: [
+                                    {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
+                                    {classes: "chuview-friends-hint", content: $L("Select the people on Chuisy you want to share this Chu with!")}
                                 ]},
-                                {classes: "chuview-comment-content", components: [
-                                    {name: "commentText", classes: "chuview-comment-text"},
-                                    {style: "text-align: right", components: [
-                                        {classes: "chuview-comment-footnote", content: " - "},
-                                        {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
-                                        {classes: "chuview-comment-footnote", content: ", "},
-                                        {classes: "chuview-comment-footnote", name: "commentTime"}
-                                    ]}
+                                {style: "padding: 80px 8px;", components: [
+                                    {classes: "placeholder-image chuview-friends-placeholder-image"},
+                                    {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
+                                    {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
                                 ]}
                             ]}
-                        ]},
-                        {style: "height: 500px"}
+                        ]}
+                    ]},
+                    // COMMENT INPUT
+                    {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
+                        {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"},
+                        {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
                     ]}
                 ]},
-                {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
-                    classes: "chuview-friends-slider", overMoving: false, onAnimateFinish: "friendsSliderAnimateFinish", components: [
-                    {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
-                        {kind: "FittableRows", components: [
-                            {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
-                            {classes: "chuview-friends-hint", content: $L("Select the people on Chuisy you want to share this Chu with!")}
-                        ]},
-                        {style: "padding: 80px 8px;", components: [
-                            {classes: "placeholder-image chuview-friends-placeholder-image"},
-                            {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
-                            {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
-                        ]}
-                    ]}
-                ]}
+                {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
             ]},
-            // COMMENT INPUT
-            {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
-                {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"},
-                {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
+            {kind: "FittableRows", style: "overflow: hidden;", classes: "enyo-fill", components: [
+                {classes: "header", components: [
+                    {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
+                ]},
+                {kind: "UserList", name: "likesList", fit: true}
             ]}
-        ]},
-        {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
+        ]}
     ]
 });
