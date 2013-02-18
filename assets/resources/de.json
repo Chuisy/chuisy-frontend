@@ -59,7 +59,7 @@
 	"Check out this cool product I found at {{ place }}!": "Schau dir dieses schöne Produkt an, dass ich bei {{ place }} gefunden habe!",
 	"Check out this cool product!": "Schau dir dieses schöne Produkt an!",
 	"It seems there was some problem with your credentials. Please sign in again!": "Etwas scheint mit deinen Logindaten nicht zu stimmen. Log dich bitte noch einmal ein!",
-	"A few seconds ago": "vor ein paar Sekunden",
+	"just now": "gerade eben",
 	"{{ minutes }} minutes ago": "Vor {{ minutes }} Minuten",
 	"{{ hours }} hours ago": "Vor {{ hours }} Stunden",
 	"{{ days }} days ago": "Vor {{ days }} Tagen",
@@ -108,6 +108,7 @@
     "Continue": "Weiter",
     "Come join me on Chuisy, share beautiful fashion with me and help me decide on shopping decisions!": "Komm zu Chuisy, teile deine Shoppingentdeckungen mit mir und hilf mir bei meinen Kaufentscheidungen!",
     "Chuisy is much more fun to use with other people. Invite your friends to Chuisy now!": "Chuisy macht viel mehr Spass, wenn du es zusammen mit anderen nutzt!",
-    "<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!": "<strong>{{ name }}</strong> ist jetzt bei <strong>Chuisy</strong>!"
+    "<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!": "<strong>{{ name }}</strong> ist jetzt bei <strong>Chuisy</strong>!",
+    "send": "senden"
 }
  

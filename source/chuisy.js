@@ -82,7 +82,7 @@
 
     var timeToText = function(time) {
         if (!time) {
-            return null;
+            return $L("just now");
         }
 
         var now = new Date();
@@ -94,7 +94,7 @@
         var f = Math.floor;
 
         if (minutes < 1) {
-            return $L("A few seconds ago");
+            return $L("just now");
         } else if (hours < 1) {
             return $L("{{ minutes }} minutes ago").replace("{{ minutes }}", f(minutes));
         } else if (days < 1) {
@@ -102,7 +102,7 @@
         } else if (days < 30) {
             return $L("{{ days }} days ago").replace("{{ days }}", f(days));
         } else {
-            return $L("A while back...");
+            return $L("a while back...");
         }
     };
 

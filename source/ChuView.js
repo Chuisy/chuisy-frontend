@@ -486,17 +486,24 @@ enyo.kind({
                             {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                             {classes: "chuview-time", name: "time"}
                         ]},
+                        {classes: "chuview-separator"},
                         {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
                         {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
                         // COMMENTS
-                        {kind: "FlyweightRepeater", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                            {kind: "onyx.Item", classes: "chuview-comment", name: "comment", components: [
-                                {classes: "chuview-infobar", components: [
-                                    {kind: "Image", name: "commentAvatar", classes: "chuview-avatar", ontap: "showCommentUser"},
-                                    {classes: "chuview-fullname", name: "commentFullName", ontap: "showCommentUser"},
-                                    {classes: "chuview-time", name: "commentTime"}
+                        {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                            {classes: "chuview-comment", name: "comment", components: [
+                                {components: [
+                                    {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                 ]},
-                                {name: "commentText", classes: "chuview-comment-text"}
+                                {classes: "chuview-comment-content", components: [
+                                    {name: "commentText", classes: "chuview-comment-text"},
+                                    {style: "text-align: right", components: [
+                                        {classes: "chuview-comment-footnote", content: " - "},
+                                        {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
+                                        {classes: "chuview-comment-footnote", content: ", "},
+                                        {classes: "chuview-comment-footnote", name: "commentTime"}
+                                    ]}
+                                ]}
                             ]}
                         ]},
                         {style: "height: 500px"}
@@ -519,7 +526,8 @@ enyo.kind({
             ]},
             // COMMENT INPUT
             {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
-                {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"}
+                {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"},
+                {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
             ]}
         ]},
         {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
