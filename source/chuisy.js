@@ -462,7 +462,7 @@
         },
         parse: function(response) {
             if (this.profile) {
-                this.profile.set(response.profile);
+                this.profile.set(response.profile, {nosync: true});
                 delete response.profile;
             }
             return response;
