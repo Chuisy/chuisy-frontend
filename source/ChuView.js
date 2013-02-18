@@ -458,7 +458,7 @@ enyo.kind({
         this.$.panels.setIndex(0);
     },
     components: [
-        {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", components: [
+        {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {classes: "enyo-fill", components: [
                 // IMAGE LOADING INDICATOR
                 {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
