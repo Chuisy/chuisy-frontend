@@ -62,12 +62,30 @@
 	box-sizing: border-box;
 }
 
-.getstarted-invitefriends-continue {
-	padding: 10px 5px;
-	box-shadow: 0 -1px 5px #222;
+.getstarted-suggestedusers-text {
+	width: 100%;
+	text-align: center;
+	padding: 17px;
+	color: #555;
+	font-size: 14pt;
+	box-sizing: border-box;
+	box-shadow: 0 1px 5px rgba(0,0,0,0.5);
 	position: relative;
 	z-index: 100;
 }
-.getstarted-invitefriends-continue-button {
+
+.getstarted-continue {
+	padding: 10px 5px;
+	box-shadow: 0 -1px 5px rgba(0,0,0,0.5);
+	position: relative;
+	z-index: 100;
+}
+
+.getstarted-continue-button {
 	width: 100%;
+}
+
+.getstarted-suggestedusers-spinner {
+	display: block;
+	margin: 20px auto;
 }
