@@ -1,0 +1,63 @@
+.signinview {
+	background: url(../../assets/images/loading_screen.png) no-repeat center -20px;
+	background-size: 320px 568px;
+}
+
+.signinview-spacer {
+	-webkit-box-flex: 1;
+}
+
+.signinview-scrim {
+	background-color: white;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	-webkit-transition: opacity 0.7s;
+}
+
+.signinview.ready .signinview-scrim {
+	opacity: 0.5
+}
+
+.signinview-content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 30px;
+	left: 0;
+	z-index: 10;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-align: center;
+	opacity: 0;
+	-webkit-transition: opacity 0.5s linear 0.7s, top 0.5s linear 0.7s;
+}
+
+.signinview.ready .signinview-content {
+	top: 0;
+	opacity: 1
+}
+
+.signinview-text {
+	padding: 30px 40px;
+	text-align: center;
+	color: #555;
+	font-size: 10pt;
+}
+
+.signinview-cancel-button {
+	display: block;
+	margin: 5px auto;
+	width: 250px;
+}
+
+.signinview-spinner {
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	top: 40px;
+}

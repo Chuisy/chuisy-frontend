@@ -105,10 +105,9 @@
     "Logout": "Ausloggen",
     "add": "hinzuf.",
     "invite": "einladen",
-    "Continue": "Weiter",
-    "Come join me on Chuisy, share beautiful fashion with me and help me decide on shopping decisions!": "Komm zu Chuisy, teile deine Shoppingentdeckungen mit mir und hilf mir bei meinen Kaufentscheidungen!",
-    "Chuisy is much more fun to use with other people. Invite your friends to Chuisy now!": "Chuisy macht viel mehr Spass, wenn du es zusammen mit anderen nutzt!",
+    "continue": "weiter",
     "<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!": "<strong>{{ name }}</strong> ist jetzt bei <strong>Chuisy</strong>!",
-    "send": "senden"
+    "send": "senden",
+    "Cool People": "Coole Leute"
 }
  

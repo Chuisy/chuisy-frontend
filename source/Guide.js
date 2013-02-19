@@ -125,6 +125,6 @@ enyo.kind({
         return bounds.width/bounds.height >= 2/3 ? "assets/images/guide/2to3/" : "assets/images/guide/9to16/";
     },
     components: [
-        {kind: "Panels", classes: "enyo-fill guide-panels", components: [{}]}
+        {kind: "Panels", classes: "enyo-fill guide-panels"}
     ]
 });

@@ -122,7 +122,6 @@ body {
 	height: 44px;
 	background: url(../../assets/images/menu-bar.png) repeat-x;
 	background-size: 320px 44px;
-	text-align: center;
 	box-shadow: 0 1px 5px #222;
 	box-sizing: border-box;
 	position: relative;
@@ -132,10 +131,7 @@ body {
 .header-text {
 	color: White;
 	font-size: 14pt;
-	font-family: PTSansCaptionRegular;
-	text-align: center;
-	width: 100%;
-	padding: 6px;
+	padding: 10px;
 	box-sizing: border-box;
 }
 

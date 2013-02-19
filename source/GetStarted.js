@@ -11,52 +11,35 @@ enyo.kind({
         });
         this.$.suggestedUsersList.setUsers(this.suggestedUsers);
     },
-    shown: function() {
-        setTimeout(enyo.bind(this, function() {
-            this.addClass("shown");
-        }), 1000);
-    },
-    signIn: function() {
-        if (App.checkConnection()) {
-            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-                this.$.spinner.show();
-                chuisy.signIn(accessToken, enyo.bind(this, function(user) {
-                    this.$.spinner.hide();
-                    this.signInContinue(user);
-                }), enyo.bind(this, function() {
-                    this.$.spinner.hide();
-                    navigator.notification.alert($L("Hm, that didn't work. Please try it again later!"), enyo.bind(this, function() {
-                        this.doDone();
-                    }, $L("Authentication failed"), $L("OK")));
-                }));
-            }));
+    activate: function() {
+        var user = chuisy.accounts.getActiveUser();
+        if (user) {
+            user.fbFriends.fetchAll();
+            this.$.suggestedUsersSpinner.show();
+            this.suggestedUsers.fetch({success: enyo.bind(this, function() {
+                this.$.suggestedUsersSpinner.hide();
+                this.$.suggestedUsersPanel.reflow();
+                if (!this.suggestedUsers.length) {
+                    this.suggestedUsersContinue();
+                }
+            }), error: enyo.bind(this, function() {
+                this.suggestedUsersContinue();
+            })});
         } else {
             this.doDone();
         }
     },
-    signInContinue: function(user) {
-        user.fbFriends.fetchAll();
-        this.$.panels.setIndex(1);
-        enyo.asyncMethod(this, function() {
-            this.$.suggestedUsersPanel.reflow();
-        });
-        this.$.suggestedUsersSpinner.show();
-        this.suggestedUsers.fetch({success: enyo.bind(this, function() {
-            this.log("suggested users fetched! " + this.suggestedUsers.length);
-            this.$.suggestedUsersSpinner.hide();
-            this.$.suggestedUsersPanel.reflow();
-            if (!this.suggestedUsers.length) {
-                this.suggestedUsersContinue();
-            }
-        }), error: enyo.bind(this, function() {
-            this.suggestedUsersContinue();
-        })});
+    deactivate: function() {
+        this.$.panels.setIndex(0);
     },
     suggestedUsersContinue: function() {
-        this.$.panels.setIndex(2);
+        this.$.panels.setIndex(1);
         enyo.asyncMethod(this, function() {
             this.$.inviteFriendsPanel.reflow();
         });
+    },
+    inviteFriendsBack: function() {
+        this.$.panels.setIndex(0);
     },
     inviteFriendsContinue: function() {
         var selectedFriends = this.$.fbFriendsPicker.getIds();
@@ -77,31 +60,21 @@ enyo.kind({
     },
     components: [
         {kind: "Panels", arrangerKind: "CarouselArranger", draggable: false, classes: "enyo-fill", components: [
-            {classes: "getstarted-login enyo-fill", components: [
-                {classes: "getstarted-login-logo"},
-                {classes: "getstarted-login-buttons", components: [
-                    {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                        {classes: "facebook-button-icon"},
-                        {content: $L("Sign In With Facebook")}
-                    ]},
-                    {kind: "onyx.Button", content: $L("Skip"), ontap: "doDone"},
-                    {kind: "onyx.Spinner", classes: "getstarted-login-spinner", showing: false}
-                ]}
-            ]},
             {kind: "FittableRows", name: "suggestedUsersPanel", classes: "enyo-fill", components: [
-                {classes: "getstarted-suggestedusers-text", content: $L("Here are some people you might be interested in. Follow them to see their discoveries!")},
+                {classes: "header", components: [
+                    {classes: "header-text getstarted-header-text", content: $L("Cool People")},
+                    {kind: "onyx.Button", ontap: "suggestedUsersContinue", classes: "done-button", content: $L("continue")}
+                ]},
                 {kind: "onyx.Spinner", classes: "getstarted-suggestedusers-spinner", name: "suggestedUsersSpinner"},
-                {kind: "UserList", name: "suggestedUsersList", fit: true},
-                {classes: "getstarted-continue", components: [
-                    {kind: "onyx.Button", classes: "getstarted-continue-button", content: $L("Continue"), ontap: "suggestedUsersContinue"}
-                ]}
+                {kind: "UserList", name: "suggestedUsersList", fit: true}
             ]},
             {kind: "FittableRows", name: "inviteFriendsPanel", classes: "enyo-fill", components: [
-                {classes: "getstarted-invitefriends-text", content: $L("Chuisy is much more fun to use with other people. Invite your friends to Chuisy now!")},
-                {kind: "FbFriendsPicker", fit: true, buttonLabel: $L("invite")},
-                {classes: "getstarted-continue", components: [
-                    {kind: "onyx.Button", classes: "getstarted-continue-button", content: $L("Continue"), ontap: "inviteFriendsContinue"}
-                ]}
+                {classes: "header", components: [
+                    {classes: "header-text getstarted-header-text", content: $L("Invite Friends")},
+                    // {kind: "onyx.Button", ontap: "inviteFriendsBack", classes: "back-button", content: $L("back")},
+                    {kind: "onyx.Button", ontap: "inviteFriendsContinue", classes: "done-button", content: $L("done")}
+                ]},
+                {kind: "FbFriendsPicker", fit: true, buttonLabel: $L("invite")}
             ]}
         ]}
     ]
