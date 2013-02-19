@@ -27,7 +27,8 @@ enyo.kind({
         settings: [3, null],
         user: [4, null],
         gift: [5, null],
-        invite: [6, null]
+        invite: [6, null],
+        getstarted: [7, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -83,6 +84,9 @@ enyo.kind({
     chuViewDone: function(sender, event) {
         this.openView("feed", event.chu);
     },
+    getStartedDone: function() {
+        this.openView("feed");
+    },
     menuChanged: function(sender, event) {
         this.openView(event.value);
     },
@@ -107,8 +111,10 @@ enyo.kind({
     /**
         Shows panel assoziated with the key _view_ and updates the App history appropriately
     */
-    openView: function(view, obj) {
-        this.transition(this.currentView, view);
+    openView: function(view, obj, direct) {
+        if (!direct) {
+            this.transition(this.currentView, view);
+        }
         var oldView = this.$[this.currentView];
         var newView = this.$[view];
         this.currentView = view;
@@ -122,7 +128,7 @@ enyo.kind({
             if (indexes[1] !== null) {
                 this.$.primaryPanels.setIndex(indexes[1]);
             }
-        }), 400);
+        }), direct ? 0 : 400);
 
         switch (view) {
             case "chu":
@@ -195,7 +201,8 @@ enyo.kind({
             ]},
             // DISPLAY GIFT
             {kind: "GiftView", onBack: "back", name: "gift"},
-            {kind: "InviteFriends", name: "invite", onBack: "back"}
+            {kind: "InviteFriends", name: "invite", onBack: "back"},
+            {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},
         {name: "crossover", classes: "fade-screen"}
     ]

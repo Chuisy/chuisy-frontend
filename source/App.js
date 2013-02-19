@@ -163,6 +163,12 @@ enyo.kind({
         // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
 
         if (!App.isSignedIn()) {
+            this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
+                this.$.mainView.openView("getstarted", null, true);
+            }));
+            this.$.signInView.setFailureCallback(enyo.bind(this, function() {
+                this.$.mainView.openView("feed", null, true);
+            }));
             this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
@@ -418,11 +424,6 @@ enyo.kind({
             viewsShown[event.view] = true;
             localStorage.setItem("chuisy.viewsShown", JSON.stringify(viewsShown));
         }
-    },
-    getStartedDone: function() {
-        localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
-        this.$.getStartedSlider.animateToMax();
-        this.recoverStateFromUri();
     },
     tapHandler: function(sender, event) {
         if (this.focusedInput && !(event.originator instanceof enyo.Input)) {
