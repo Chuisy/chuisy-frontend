@@ -15,7 +15,7 @@
 
             chuisy.feed.fetch();
 
-            chuisy.locations.fetch();
+            chuisy.venues.fetch();
         },
         activeUserChanged: function() {
             var user = chuisy.accounts.getActiveUser();
@@ -975,37 +975,33 @@
         return d;
     };
 
-    chuisy.models.Location = Backbone.Tastypie.Model.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/location/",
-        idAttribute: "foursquare_id",
-        parse: function(response) {
-            if (response.canonicalUrl) {
-                // Object comes from foursquare api; Need to convert it
-                return {
-                    name: response.name,
-                    latitude: response.location.lat,
-                    longitude: response.location.lng,
-                    address: response.location.address,
-                    zip_code: response.location.postalCode,
-                    city: response.location.city,
-                    country: response.location.cc,
-                    foursquare_id: response.id
-                };
-            } else {
-                // Object comes from local storage. Is allready converted
-                return response;
-            }
-        },
+    chuisy.models.Venue = Backbone.Tastypie.Model.extend({
+        urlRoot: "https://api.foursquare.com/v2/venues/",
         /*
             Calculates the distance to a coordinate in meters
         */
         distanceTo: function(lat, lng) {
-            return distance(lat, lng, this.get("latitude"), this.get("longitude"));
+            return distance(lat, lng, this.get("location").lat, this.get("location").lng);
+        },
+        /*
+            Returns a plain object with the structure of a Chuisy Location object
+        */
+        toLocJSON: function() {
+            return {
+                name: this.get("name"),
+                latitude: this.get("location").lat,
+                longitude: this.get("location").lng,
+                address: this.get("location").address,
+                zip_code: this.get("location").postalCode,
+                city: this.get("location").city,
+                country: this.get("location").cc,
+                foursquare_id: this.id
+            };
         }
     });
 
-    chuisy.models.LocationCache = Backbone.Collection.extend({
-        model: chuisy.models.Location,
+    chuisy.models.Venues = Backbone.Collection.extend({
+        model: chuisy.models.Venue,
         url: "https://api.foursquare.com/v2/venues/search",
         localStorage: new Backbone.LocalStorage("locations"),
         initialize: function() {
@@ -1063,6 +1059,6 @@
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.gifts = new chuisy.models.GiftsCollection();
-    chuisy.locations = new chuisy.models.LocationCache();
+    chuisy.venues = new chuisy.models.Venues();
 
 })(window.$, window._, window.Backbone, window.enyo);

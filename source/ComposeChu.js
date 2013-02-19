@@ -73,7 +73,7 @@ enyo.kind({
         attrs.price = this.$.chuForm.getPrice();
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
-        attrs.location = this.location.toJSON();
+        attrs.location = this.location.toLocJSON();
         var chu = chuisy.closet.create(attrs, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
