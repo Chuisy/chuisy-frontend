@@ -163,11 +163,11 @@ enyo.kind({
         // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
 
         if (!App.isSignedIn()) {
-            this.$.getStartedSlider.setValue(0);
-            this.$.getStarted.shown();
+            this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
         }
+        this.$.signInView.ready();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -393,11 +393,11 @@ enyo.kind({
         Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
     */
     requestSignIn: function(sender, event) {
-        this.$.facebookSignIn.setSuccessCallback(event ? event.success : null);
-        this.$.facebookSignIn.setFailureCallback(event ? event.failure : null);
+        this.$.signInView.setSuccessCallback(event ? event.success : null);
+        this.$.signInView.setFailureCallback(event ? event.failure : null);
         this.$.signInSlider.animateToMin();
     },
-    facebookSignInDone: function() {
+    signInViewDone: function() {
         this.$.signInSlider.animateToMax();
     },
     mainViewNavigateTo: function(sender, event) {
@@ -406,7 +406,7 @@ enyo.kind({
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
-            this.$.facebookSignIn.cancel();
+            this.$.signInView.cancel();
         }
     },
     showGuide: function(sender, event) {
@@ -435,15 +435,10 @@ enyo.kind({
     },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
-        // GET STARTED
-        {kind: "Slideable", classes: "enyo-fill getstarted-slider", name: "getStartedSlider", draggable: false,
-            axis: "v", unit: "%", max: 100, min: 0, value: 100, overMoving: false, components: [
-            {kind: "GetStarted", classes: "enyo-fill", onDone: "getStartedDone"}
-        ]},
         // FACEBOOK SIGNIN
         {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
             unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
-            {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}
+            {kind: "SignInView", classes: "enyo-fill", onDone: "signInViewDone"}
         ]},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
