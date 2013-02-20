@@ -58,20 +58,28 @@
 .chuview-comment-content {
 	padding: 0 5px;
 	-webkit-box-flex: 1;
-	font-family: Muli;
 }
 
 .chuview-comment-text {
-	display: inline;
 	width: 100%;
 	box-sizing: border-box;
 	font-size: 10pt;
+	color: #666;
+	padding: 2px;
+	font-family: Muli;
 }
 
-.chuview-comment-footnote {
-	display: inline;
+.chuview-comment-fullname {
+	font-size: 11pt;
+	max-width: 150px;
+	padding-top: 2px;
+}
+
+.chuview-comment-time {
 	color: #555;
-	font-size: 8pt;
+	font-size: 9pt;
+	float: right;
+	margin-top: 4px;
 }
 
 .chuview-likes {
@@ -101,25 +109,41 @@
 	font-size: 9pt;
 }
 
-.chuview-commentinput-decorator {
-	border-radius: 0;
-	width: 100%;
-	height: 35px;
-	padding: 0;
+.chuview-commentinput {
 	display: -webkit-box;
+	padding: 4px;
+	/*-webkit-box-align: stretch;*/
+	height: 40px;
+	box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.3);
+	/*border-top: solid 1px #ccc;*/
+	position: relative;
+	z-index: 10;
+	background-color: #fafafa;
+}
+
+.chuview-commentinput-decorator {
+	padding: 0;
+	display: block;
+	-webkit-box-flex: 1;
+	height: 100%;
+	box-sizing: border-box;
 }
 
 .chuview-commentinput-decorator > .enyo-input {
 	display: block;
 	min-height: 0;
 	height: 100%;
+	width: 100%;
 	padding: 7px 5px;
 	box-sizing: border-box;
-	-webkit-box-flex: 1;
 }
 
 .chuview-commentinput-button {
-	margin: 2px;
+	display: block;
+	margin-left: 4px;
+	height: auto;
+	height: 100%;
+	box-sizing: border-box;
 }
 
 .chuview-more-comments {
@@ -204,7 +228,7 @@
 	margin: 0 5px;
 }
 
-.chuview-comments-likes-price {
+.chuview-location-price {
 	padding: 8px 0 4px 4px;
 }
 
@@ -234,9 +258,9 @@
 
 .chuview-location {
 	color: #555;
-	font-size: 10pt;
+	font-size: 11pt;
 	float: right;
-	max-width: 100px;
+	max-width: 120px;
 	text-align: right;
 	max-height: 35px;
 	overflow: hidden;

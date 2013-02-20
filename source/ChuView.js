@@ -516,10 +516,11 @@ enyo.kind({
                             ]},
                             {classes: "chuview-content", components: [
                                 // CATEGORY, PRICE, COMMENTS, LIKES
-                                {classes: "chuview-comments-likes-price", components: [
+                                {classes: "chuview-location-price", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price"},
-                                    {classes: "chuview-likes-comments", components: [
+                                    {classes: "chuview-location ellipsis", name: "location"},
+                                    {classes: "chuview-likes-comments", showing: false, components: [
                                         {classes: "chuview-likes-count", name: "likesCount"},
                                         {classes: "chuview-likes-icon"},
                                         {classes: "chuview-comments-count", name: "commentsCount"},
@@ -528,7 +529,6 @@ enyo.kind({
                                 ]},
                                 // AVATAR, NAME, TIME, LOCATION
                                 {classes: "chuview-infobar", components: [
-                                    {classes: "chuview-location", name: "location"},
                                     {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
                                     {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
                                     {classes: "chuview-time", name: "time"}
@@ -560,18 +560,14 @@ enyo.kind({
                                                 {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                             ]},
                                             {classes: "chuview-comment-content", components: [
-                                                {name: "commentText", classes: "chuview-comment-text"},
-                                                {style: "text-align: right", components: [
-                                                    {classes: "chuview-comment-footnote", content: " - "},
-                                                    {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
-                                                    {classes: "chuview-comment-footnote", content: ", "},
-                                                    {classes: "chuview-comment-footnote", name: "commentTime"}
-                                                ]}
+                                                {classes: "chuview-comment-time", name: "commentTime"},
+                                                {classes: "chuview-comment-fullname ellipsis", name: "commentFullName", ontap: "showCommentUser"},
+                                                {name: "commentText", classes: "chuview-comment-text"}
                                             ]}
                                         ]}
                                     ]}
                                 ]},
-                                {style: "height: 500px"}
+                                {style: "height: 505px"}
                             ]}
                         ]},
                         {kind: "Slideable", name: "friendsSlider", unit: "%", min: 0, max: 100, value: 100, axis: "v",
@@ -590,8 +586,10 @@ enyo.kind({
                         ]}
                     ]},
                     // COMMENT INPUT
-                    {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"},
+                    {classes: "chuview-commentinput", components: [
+                        {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
+                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"}
+                        ]},
                         {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
                     ]}
                 ]},
