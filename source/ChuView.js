@@ -124,7 +124,7 @@ enyo.kind({
     isOwned: function() {
         var activeUser = chuisy.accounts.getActiveUser();
         var user = this.chu.get("user");
-        return activeUser && (!user || activeUser.id == user.id);
+        return !activeUser && !user || activeUser && (!user || activeUser.id == user.id);
     },
     likedChanged: function() {
         this.addRemoveClass("liked", this.liked);
