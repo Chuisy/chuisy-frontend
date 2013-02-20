@@ -39,12 +39,13 @@ enyo.kind({
         event.preventDefault();
     },
     activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "gifts"});
     },
     deactivate: function() {},
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("You don't have any gifts yet...")}
+            {classes: "placeholder-text", content: $L("If you go shopping with Chuisy you will soon get various little goodies and discounts here.")}
         ]},
         {kind: "List", classes: "enyo-fill", onSetupItem: "setupItem", ontap: "giftTapped", components: [
             {classes: "gifts-gift", components: [

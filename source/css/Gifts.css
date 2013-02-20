@@ -26,3 +26,7 @@
 .gifts-gift-text {
 	text-align: center;
 }
+
+.gifts .placeholder {
+	padding-top: 80px;
+}

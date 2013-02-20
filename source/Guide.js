@@ -83,6 +83,16 @@ enyo.kind({
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
+        ],
+        "gifts": [
+            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
+                {classes: "guide-centered", style: "height: 200px", components: [
+                    {classes: "guide-header", content: $L("The best is yet to come.")},
+                    {classes: "guide-separator"},
+                    {classes: "guide-text", content: $L("If you go shopping with Chuisy you will soon get various little goodies and discounts here.")}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
+            ]}
         ]
     },
     create: function() {
