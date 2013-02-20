@@ -132,19 +132,13 @@ enyo.kind({
 
         switch (view) {
             case "chu":
-                this.doUpdateHistory({uri: "chu/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "chu/" + obj.id + "/", obj: obj});
                 break;
             case "gift":
-                this.doUpdateHistory({uri: "gift/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "gift/" + obj.id + "/", obj: obj});
                 break;
             case "user":
-                this.doUpdateHistory({uri: "user/" + obj.id + "/"});
-                break;
-            // case "compose":
-            //     this.doUpdateHistory({uri: "chu/new/"});
-            //     break;
-            case "share":
-                this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "user/" + obj.id + "/", obj: obj});
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});

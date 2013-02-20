@@ -320,7 +320,7 @@ enyo.kind({
             // This is the URI to a users profile
             if (obj) {
                 // A gift object has been provided. So we can open it directly.
-                var gift = new chuisy.models.Gift(obj);
+                var gift = obj instanceof chuisy.models.Gift ? obj : new chuisy.models.Gift(obj);
                 this.$.mainView.openView("gift", gift);
             } else if (App.checkConnection()) {
                 var gift = new chuisy.models.Gift({id: match2[1]});
@@ -348,7 +348,7 @@ enyo.kind({
 
                 if (obj) {
                     // A chu object has been provided. So we can open it directly.
-                    var chu = new chuisy.models.Chu(obj);
+                    var chu = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
                     this.$.mainView.openView("chu", chu);
                 } else if (App.checkConnection()) {
                     // We don't have a chu object, but we do have an id. Let's fetch it!
@@ -362,7 +362,7 @@ enyo.kind({
             // This is the URI to a users profile
             if (obj) {
                 // A user object has been provided. So we can open it directly.
-                var user = new chuisy.models.User(obj);
+                var user = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
                 this.$.mainView.openView("user", user);
             } else if (App.checkConnection()) {
                 var user = new chuisy.models.User({id: match2[1]});
@@ -385,7 +385,7 @@ enyo.kind({
         Adds current context to navigation history.
     */
     updateHistory: function(sender, event) {
-        this.history.push(event.uri);
+        this.history.push([event.uri, event.obj]);
         window.location.hash = "!/" + event.uri;
     },
     /**
@@ -394,7 +394,7 @@ enyo.kind({
     back: function() {
         if (this.history.length > 1) {
             this.history.pop();
-            this.navigateTo(this.history[this.history.length-1]);
+            this.navigateTo.apply(this, this.history[this.history.length-1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
