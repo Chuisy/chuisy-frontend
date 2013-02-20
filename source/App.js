@@ -317,9 +317,8 @@ enyo.kind({
                 this.$.mainView.openView("gift", gift);
             } else if (App.checkConnection()) {
                 var gift = new chuisy.models.Gift({id: match2[1]});
-                gift.fetch({success: enyo.bind(this, function() {
-                    this.$.mainView.openView("gift", gift);
-                })});
+                gift.fetch();
+                this.$.mainView.openView("gift", gift);
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
@@ -347,9 +346,8 @@ enyo.kind({
                 } else if (App.checkConnection()) {
                     // We don't have a chu object, but we do have an id. Let's fetch it!
                     var chu = new chuisy.models.Chu({id: match3[1]});
-                    chu.fetch({success: enyo.bind(this, function() {
-                        this.$.mainView.openView("chu", chu);
-                    })});
+                    chu.fetch();
+                    this.$.mainView.openView("chu", chu);
                 }
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
@@ -361,9 +359,8 @@ enyo.kind({
                 this.$.mainView.openView("user", user);
             } else if (App.checkConnection()) {
                 var user = new chuisy.models.User({id: match2[1]});
-                user.fetch({success: enyo.bind(this, function() {
-                    this.$.mainView.openView("user", user);
-                })});
+                user.fetch();
+                this.$.mainView.openView("user", user);
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
