@@ -65,7 +65,6 @@ enyo.kind({
     },
     chuChanged: function() {
         this.updateView();
-        this.refreshComments();
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
@@ -79,6 +78,7 @@ enyo.kind({
             this.loadComments();
             this.loadLikes();
         }
+        this.listenTo(this.chu, "sync", this.chuChanged);
     },
     updateView: function() {
         var user = this.chu.get("user");
