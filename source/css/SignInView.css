@@ -42,11 +42,28 @@
 	opacity: 1
 }
 
+.signinview-center {
+	width: 100%;
+}
+
 .signinview-text {
-	padding: 30px 40px;
+	width: 100%;
+	text-align: center;
+	padding: 0 40px 20px 40px;
+	color: #555;
+	font-size: 18pt;
+	box-sizing: border-box;
+}
+
+.signinview-terms {
+	font-size: 9pt;
 	text-align: center;
 	color: #555;
-	font-size: 10pt;
+	padding: 10px 55px 0 55px;
+}
+
+.signinview-terms .link {
+	color: #ff1e78;
 }
 
 .signinview-cancel-button {

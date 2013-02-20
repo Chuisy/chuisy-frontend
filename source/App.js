@@ -165,11 +165,14 @@ enyo.kind({
 
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.mainView.openView("getstarted", null, true);
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.mainView.openView("feed", null, true);
             }));
+            this.$.signInView.setCancelButtonLabel($L("Skip"));
             this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();

@@ -13,8 +13,7 @@ enyo.kind({
         successCallback: function() {},
         // Callback that gets called if the user taps the cancel button or something goes wrong
         failureCallback: function() {},
-        cancelButtonLabel: $L("Cancel"),
-        message: $L("")
+        cancelButtonLabel: $L("Cancel")
     },
     create: function() {
         this.inherited(arguments);
@@ -74,17 +73,21 @@ enyo.kind({
             event.preventDefault();
         }
     },
+    openTerms: function() {
+        window.location = "http://www.chuisy.com/terms/";
+    },
     components: [
         {classes: "signinview-scrim"},
         {classes: "signinview-content", components: [
             {classes: "signinview-spacer"},
             {classes: "signinview-center", components: [
-                // {classes: "signinview-text", content: $L("Connect with your Facebook account to share products with your friends, interact with other people on Chuisy and claim gifts from our local retail partners!")},
+                {classes: "signinview-text", content: $L("Discover fashion, share moments with friends.")},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
                 ]},
-                {kind: "onyx.Button", name: "cancelButton", ontap: "cancel", classes: "signinview-cancel-button"}
+                {kind: "onyx.Button", name: "cancelButton", ontap: "cancel", classes: "signinview-cancel-button"},
+                {classes: "signinview-terms", ontap: "openTerms", allowHtml: true, content: $L("By signing in you accept our<br> <span class='link'>terms of use</span>.")}
             ]},
             {classes: "signinview-spacer", components: [
                 {kind: "onyx.Spinner", classes: "signinview-spinner", showing: false}
