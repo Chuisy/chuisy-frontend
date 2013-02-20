@@ -92,7 +92,7 @@ enyo.kind({
         }
 
         this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : "");
+        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
         this.$.location.setContent(loc && loc.name || "");
         this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
@@ -260,8 +260,11 @@ enyo.kind({
         Open this chus authors profile
     */
     showUser: function() {
-        if (App.checkConnection()) {
-            var user = new chuisy.models.User(this.chu.get("user"));
+        var userJSON = this.chu.get("user");
+        if (!userJSON && !App.isSignedIn()) {
+            enyo.Signals.send("onRequestSignIn");
+        } else if (userJSON && App.checkConnection()) {
+            var user = new chuisy.models.User(userJSON);
             this.doShowUser({user: user});
         }
     },
