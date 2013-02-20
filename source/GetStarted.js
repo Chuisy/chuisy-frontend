@@ -16,7 +16,7 @@ enyo.kind({
         if (user) {
             user.fbFriends.fetchAll();
             this.$.suggestedUsersSpinner.show();
-            this.suggestedUsers.fetch({success: enyo.bind(this, function() {
+            this.suggestedUsers.fetch({data: {follow: true}, success: enyo.bind(this, function() {
                 this.$.suggestedUsersSpinner.hide();
                 this.$.suggestedUsersPanel.reflow();
                 if (!this.suggestedUsers.length) {
