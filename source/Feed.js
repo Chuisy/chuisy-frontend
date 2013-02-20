@@ -101,6 +101,11 @@ enyo.kind({
         if (newChu) {
             newChu.added = true;
             chuisy.feed.add(newChu, {at: 0});
+            this.$.feedList.setCount(chuisy.feed.length);
+            this.$.feedList.reset();
+            enyo.asyncMethod(this, function() {
+                newChu.added = false;
+            });
         }
     },
     deactivate: function() {
