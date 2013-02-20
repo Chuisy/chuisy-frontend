@@ -126,7 +126,7 @@ enyo.kind({
     locationChanged: function() {
         if (this.location) {
             this.$.location.setContent(this.location.get("name") || "");
-            this.currencyFormat = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, locale: this.location.get("country")});
+            this.currencyFormat = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, locale: this.location.get("location").cc});
             this.priceChanged();
         }
     },

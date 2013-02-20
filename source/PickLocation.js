@@ -16,7 +16,7 @@ enyo.kind({
         this.filterString = "";
         this.places = [];
         this.placesUpdated();
-        chuisy.locations.on("reset sync", this.placesUpdated, this);
+        chuisy.venues.on("reset sync", this.placesUpdated, this);
     },
     /**
         Resets the place list and gets the geolocation
@@ -44,16 +44,16 @@ enyo.kind({
     },
     fetchPlaces: function() {
         this.$.spinner.show();
-        chuisy.locations.fetch(enyo.mixin({remote: true, success: enyo.bind(this, function() {
+        chuisy.venues.fetch(enyo.mixin({remote: true, success: enyo.bind(this, function() {
             this.$.spinner.hide();
         }), error: enyo.bind(this, function(error) {
             this.$.spinner.hide();
         })}, this.coordinates));
     },
     placesUpdated: function() {
-        this.places = this.coordinates ? chuisy.locations.sortBy(function(place) {
+        this.places = this.coordinates ? chuisy.venues.sortBy(function(place) {
             return place.distanceTo(this.coordinates.latitude, this.coordinates.longitude);
-        }, this) : chuisy.locations.models || [];
+        }, this) : chuisy.venues.models || [];
         this.refreshPlacesList();
     },
     /**
@@ -61,8 +61,9 @@ enyo.kind({
     */
     refreshPlacesList: function() {
         this.filteredPlaces = this.places ? this.places.filter(enyo.bind(this, function(place) {
+            var address = place.get("location").address;
             return place.get("name").search(new RegExp(this.filterString, "i")) != -1 ||
-                place.get("address") && place.get("address").search(new RegExp(this.filterString, "i")) != -1;
+                address && address.search(new RegExp(this.filterString, "i")) != -1;
         })) : [];
         this.$.placesList.setCount(this.limit ? Math.min(this.limit, this.filteredPlaces.length) : this.filteredPlaces.length);
         this.$.placesList.render();
@@ -70,7 +71,7 @@ enyo.kind({
     setupItem: function(sender, event) {
         var place = this.filteredPlaces[event.index];
         this.$.placeName.setContent(place.get("name"));
-        this.$.placeAddress.setContent(place.get("address"));
+        this.$.placeAddress.setContent(place.get("location").address);
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
@@ -84,13 +85,9 @@ enyo.kind({
     },
     newPlaceEnter: function() {
         if (this.$.newPlaceInput.getValue()) {
-            var place = new chuisy.models.Location({
+            var place = new chuisy.models.Venue({
                 name: this.$.newPlaceInput.getValue(),
-                address: "",
-                zip_code: null,
-                city: "",
-                country: "",
-                foursquare_id: ""
+                location: {}
             });
             this.doLocationPicked({location: place, coordinates: this.coordinates});
         }
