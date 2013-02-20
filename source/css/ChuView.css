@@ -43,23 +43,20 @@
 }
 
 .chuview-comment {
-	margin: 5px 0;
+	padding: 5px 0;
 	display: -webkit-box;
+	border-bottom: solid 1px #ddd;
 }
 
 .chuview-comment-avatar {
-	margin-right: 5px;
+	margin: 2px;
 	width: 35px;
 	height: 35px;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
+	border: solid 1px #ccc;
 }
 
 .chuview-comment-content {
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	padding: 5px 10px;
+	padding: 0 5px;
 	-webkit-box-flex: 1;
 	font-family: Muli;
 }
@@ -78,17 +75,16 @@
 }
 
 .chuview-likes {
-	/*margin-bottom: -4px;*/
+	margin-bottom: -4px;
 	display: inline-block;
 	vertical-align: middle;
 }
 
 .chuview-like-image {
-	width: 35px;
-	height: 35px;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	margin: 0 2px;
+	width: 30px;
+	height: 30px;
+	margin: 0 1px;
+	border: solid 1px #ccc;
 }
 
 .chuview-likes-more {
@@ -97,7 +93,8 @@
 	color: #555;
 	padding: 5px;
 	max-width: 25px;
-	font-size: 12pt;
+	font-size: 10pt;
+	margin-bottom: -4px;
 }
 
 .chuview-likes-more.big {
@@ -127,13 +124,17 @@
 
 .chuview-more-comments {
 	width: 100%;
-	margin: 5px 0;
+	text-align: center;
+	margin-top: 5px;
+	font-size: 10pt;
+	box-sizing: border-box;
+	color: #ff1e78;
 }
 
 .chuview-comments-spinner,
 .chuview-likes-spinner {
 	display: block;
-	margin: 5px auto 15px auto;
+	margin: 5px auto 0 auto;
 }
 
 .chuview-likebar {
@@ -188,7 +189,6 @@
 
 .chuview-separator {
 	width: 100%;
-	margin: 5px 0;
 	display: -webkit-box;
 	-webkit-box-align: center;
 }
@@ -214,8 +214,7 @@
 	width: 35px;
 	height: 35px;
 	float: left;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
+	border: solid 1px #ccc;
 }
 
 .chuview-fullname {

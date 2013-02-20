@@ -153,27 +153,30 @@ enyo.kind({
         }
     },
     refreshComments: function() {
+        var totalCount = this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0;
         this.$.commentsSpinner.hide();
-        this.$.moreCommentsButton.setShowing(this.chu.comments.hasNextPage());
-        this.$.commentsCount.setContent(this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0);
+        this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
+        this.$.moreComments.setContent($L("{count} more comments...").replace("{count}", totalCount - this.chu.comments.length));
+        this.$.commentsCount.setContent(totalCount);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
+        this.$.commentsContainer.setShowing(totalCount);
     },
     refreshLikes: function() {
         this.$.likesSpinner.hide();
         this.$.likesRepeater.show();
-        var max = 7;
+        var max = 8;
         var count = this.chu.likes.meta && this.chu.likes.total_count || this.chu.get("likes_count") || 0;
         this.$.likesCount.setContent(count);
         this.$.likesRepeater.setCount(Math.min(this.chu.likes.length, max));
         this.$.likesRepeater.render();
         this.$.moreLikes.setShowing(count > max);
         this.$.moreLikes.setContent("+" + (count - max));
-        this.$.moreLikes.addRemoveClass("big", count > 99);
+        // this.$.moreLikes.addRemoveClass("big", (count - max) > 99);
         this.$.likesContainer.setShowing(count);
     },
     loadComments: function() {
-        this.$.moreCommentsButton.hide();
+        this.$.moreComments.hide();
         this.$.commentsSpinner.show();
         this.chu.comments.fetch({data: {limit: 5}});
     },
@@ -207,13 +210,15 @@ enyo.kind({
             if (App.isSignedIn()) {
                 this.postComment();
             } else {
-                this.$.commentInput.hasNode().blur();
+                // this.$.commentInput.hasNode().blur();
                 // User is not signed in yet. Prompt him to do so before he can comment
                 enyo.Signals.send("onRequestSignIn", {
                     success: enyo.bind(this, this.postComment)
                 });
             }
         }
+        event.preventDefault();
+        return true;
     },
     /**
         Post a comment with the current input text
@@ -451,7 +456,7 @@ enyo.kind({
         }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
     },
     moreComments: function() {
-        this.$.moreCommentsButton.hide();
+        this.$.moreComments.hide();
         this.$.commentsSpinner.show();
         this.chu.comments.fetchNext();
     },
@@ -540,26 +545,28 @@ enyo.kind({
                                     ]},
                                     {classes: "chuview-likes-more", name: "moreLikes"}
                                 ]},
-                                {classes: "chuview-separator", components: [
-                                    {classes: "chuview-separator-line"},
-                                    {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
-                                    {classes: "chuview-separator-line"}
-                                ]},
-                                {kind: "onyx.Button", classes: "chuview-more-comments", content: "Load more comments...", name: "moreCommentsButton", ontap: "moreComments"},
-                                {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
-                                // COMMENTS
-                                {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                                    {classes: "chuview-comment", name: "comment", components: [
-                                        {components: [
-                                            {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
-                                        ]},
-                                        {classes: "chuview-comment-content", components: [
-                                            {name: "commentText", classes: "chuview-comment-text"},
-                                            {style: "text-align: right", components: [
-                                                {classes: "chuview-comment-footnote", content: " - "},
-                                                {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
-                                                {classes: "chuview-comment-footnote", content: ", "},
-                                                {classes: "chuview-comment-footnote", name: "commentTime"}
+                                {name: "commentsContainer", components: [
+                                    {classes: "chuview-separator", components: [
+                                        {classes: "chuview-separator-line"},
+                                        {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
+                                        {classes: "chuview-separator-line"}
+                                    ]},
+                                    {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
+                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
+                                    // COMMENTS
+                                    {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
+                                        {classes: "chuview-comment", name: "comment", components: [
+                                            {components: [
+                                                {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
+                                            ]},
+                                            {classes: "chuview-comment-content", components: [
+                                                {name: "commentText", classes: "chuview-comment-text"},
+                                                {style: "text-align: right", components: [
+                                                    {classes: "chuview-comment-footnote", content: " - "},
+                                                    {classes: "chuview-comment-footnote", name: "commentFullName", ontap: "showCommentUser"},
+                                                    {classes: "chuview-comment-footnote", content: ", "},
+                                                    {classes: "chuview-comment-footnote", name: "commentTime"}
+                                                ]}
                                             ]}
                                         ]}
                                     ]}
