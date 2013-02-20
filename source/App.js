@@ -8,6 +8,7 @@ enyo.kind({
     fit: true,
     classes: "app",
     statics: {
+        version: "0.5.0",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
@@ -174,6 +175,9 @@ enyo.kind({
             this.recoverStateFromUri();
         }
         this.$.signInView.ready();
+
+        // Update the version number in localstorage
+        localStorage.setItem("chuisy.version", App.version);
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
