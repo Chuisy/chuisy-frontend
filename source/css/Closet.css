@@ -76,6 +76,21 @@
 	background-size: cover;
 }
 
+.closet-edit-hint {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	z-index: 100;
+}
+
+.closet-edit-hint-text {
+	display: inline;
+	color: #000;
+	font-size: 9pt;
+	background-color: rgba(238, 238, 238, 0.8);
+	padding: 0 2px;
+}
+
 /*
 .closet-contextmenu {
 	position: absolute;
