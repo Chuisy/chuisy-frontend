@@ -116,7 +116,7 @@ enyo.kind({
         // s.kSpringDamping = 1;
         // s.setScrollY(this.scrollerOffset);
         // s.start();
-        this.$.imageScroller.setScrollTop(this.scrollerOffset);
+        this.$.imageScroller.setScrollTop(this.$.contentScroller.getScrollTop()/3.5 + this.scrollerOffset);
     },
     /**
         Checks if the current user ownes this chu
@@ -253,7 +253,7 @@ enyo.kind({
         // var s = this.$.imageScroller.getStrategy().$.scrollMath;
         // s.setScrollY(Math.max(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5), -100);
         // s.scroll();
-        this.$.imageScroller.setScrollTop(this.$.contentScroller.getScrollTop()/3.5 + this.scrollerOffset);
+        this.arrangeImage();
     },
     /**
         Open this chus share view
