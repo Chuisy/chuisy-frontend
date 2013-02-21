@@ -10,11 +10,13 @@
 }
 
 .picklocation-place {
-	background-color: White;
+/*	background-color: White;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 10px;
-	margin: 5px;
+	margin: 5px;*/
+	padding: 8px;
+	border-top: solid 1px #ddd;
 }
 
 .picklocation-place-address {

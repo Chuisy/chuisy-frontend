@@ -1,10 +1,7 @@
 .fbfriendspicker-friend {
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	padding: 10px;
-	margin: 5px;
+	padding: 8px;
 	height: 32px;
+	border-bottom: solid 1px #ddd;
 }
 
 .fbfriendspicker-friend-avatar {
