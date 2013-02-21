@@ -81,19 +81,12 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
+        return true;
     },
     chuFormBack: function() {
         this.$.panels.setIndex(0);
         return true;
     },
-    // shareViewDone: function() {
-    //     this.doDone({chu: this.chu});
-    //     return true;
-    // },
-    // shareViewBack: function() {
-    //     this.$.panels.setIndex(1);
-    //     return true;
-    // },
     activate: function() {
         this.chu = null;
         this.$.panels.setIndex(0);
