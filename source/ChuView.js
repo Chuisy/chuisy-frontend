@@ -444,6 +444,7 @@ enyo.kind({
     },
     deactivate: function() {
         this.blurredByTap = false;
+        this.$.commentInput.setValue("");
         this.$.image.setSrc("assets/images/chu_image_placeholder.png");
         this.$.friendsSlider.setValue(this.$.friendsSlider.getMax());
         this.friendsClosed();
