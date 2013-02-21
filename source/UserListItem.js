@@ -3,7 +3,6 @@
 */
 enyo.kind({
 	name: "UserListItem",
-	kind: "onyx.Item",
 	classes: "userlistitem",
 	published: {
         // The user to display
