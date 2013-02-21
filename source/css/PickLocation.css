@@ -49,16 +49,8 @@
 
 .picklocation .picklocation-new-place-input {
 	margin-bottom: 5px;
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
 	width: 100%;
 	box-sizing: border-box;
-	border: none;
-}
-
-.picklocation .picklocation-new-place-input.onyx-focused {
-	box-shadow: 0 1px 1px #888;
 }
 
 .picklocation .picklocation-filter-input {

@@ -138,7 +138,7 @@ enyo.kind({
             ]},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
-                {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", name: "newPlace", components: [
+                {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", alwaysLooksFocused: true, name: "newPlace", components: [
                     {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
                 ]},
                 {kind: "onyx.Button", content: $L("More stores..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
