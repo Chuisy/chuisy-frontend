@@ -160,7 +160,7 @@ enyo.kind({
         this.$.commentsCount.setContent(totalCount);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
-        this.$.commentsContainer.setShowing(totalCount);
+        this.$.commentsContainer.setShowing(this.chu.comments.length);
     },
     refreshLikes: function() {
         this.$.likesSpinner.hide();
