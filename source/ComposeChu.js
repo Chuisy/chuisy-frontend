@@ -69,7 +69,8 @@ enyo.kind({
             user: user
         };
         // Number formater for providing locale-specific currency formats
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso"});
+        var locale = this.location.get("location").cc;
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso", fractionDigits: 0, locale: locale && locale.toLowerCase()});
         attrs.price = this.$.chuForm.getPrice();
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
