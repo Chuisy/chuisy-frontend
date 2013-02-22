@@ -352,7 +352,7 @@
             for (var i=0; i<changed.length; i++) {
                 var model = this.get(changed[i]);
                 if (model && !this.isMarked(model, "added")) {
-                    model.save(null, {remote: true, nosync: true});
+                    model.save(null, {remote: true, nosync: true, silent: true});
                 }
             }
 
