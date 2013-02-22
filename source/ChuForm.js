@@ -202,9 +202,10 @@ enyo.kind({
         {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
             {kind: "Image", name: "image", classes: "chuform-image"},
             {classes: "chuform-price", name: "price", ontap: "priceTapped"},
-            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!")},
+            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!"), showing: false},
             {classes: "chuform-location ellipsis", name: "location", ontap: "doBack"}
         ]},
+        {classes: "chuform-price-hint2", content: $L("Drag on the image to adjust the price!")},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
             leftBoundary: 100000, rightBoundary: 0, vertical: false, horizontal: true, kFrictionDamping: 0.95}
         //CATEGORY

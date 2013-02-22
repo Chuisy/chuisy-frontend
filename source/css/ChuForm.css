@@ -66,6 +66,15 @@
 	opacity: 1;
 }
 
+.chuform-price-hint2 {
+	width: 100%;
+	text-align: center;
+	padding: 10px 20px;
+	color: #555;
+	font-size: 17pt;
+	box-sizing: border-box;
+}
+
 /*.chuform-category-picker {
 	position: absolute;
 	z-index: 10;
