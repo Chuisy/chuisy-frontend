@@ -130,7 +130,7 @@ enyo.kind({
             // pullingMessage: "", pulledMessage: "", loadingMessage: "", pullingIconClass: "", pulledIconClass: "", loadingIconClass: "",
             onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

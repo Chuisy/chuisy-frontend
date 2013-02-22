@@ -95,7 +95,7 @@ enyo.kind({
                 ]},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

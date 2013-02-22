@@ -142,7 +142,7 @@ enyo.kind({
                             {classes: "category-icon discover-resultchu-category", name: "categoryIcon"}
                         ]}
                     ]},
-                    {name: "chuNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+                    {kind: "onyx.Spinner", name: "chuNextPage", classes: "loading-next-page"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]}

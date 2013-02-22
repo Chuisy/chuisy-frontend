@@ -107,7 +107,7 @@ enyo.kind({
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [
             {name: "listClient", classes: "chulist-row"},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "chulist-nextpage"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

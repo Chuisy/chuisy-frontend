@@ -53,7 +53,7 @@ enyo.kind({
                 {classes: "gifts-gift-value", name: "value"},
                 {classes: "gifts-gift-text", name: "text"}
             ]},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });
