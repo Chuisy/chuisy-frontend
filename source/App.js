@@ -148,7 +148,7 @@ enyo.kind({
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
-        this.history = [];
+        this.history = [["feed/"]];
 
         chuisy.notifications.on("reset", function() {
             if (App.isMobile()) {
