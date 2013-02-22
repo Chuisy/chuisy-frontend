@@ -188,6 +188,7 @@ enyo.kind({
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
                 ]},
+                {classes: "profileview-terms", ontap: "openTerms", allowHtml: true, content: $L("By signing in you accept our<br> <span class='link'>terms of use</span>.")},
                 {kind: "onyx.Spinner", classes: "profileview-login-spinner", showing: false}
             ]}
         ]}

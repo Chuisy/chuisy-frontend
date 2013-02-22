@@ -127,7 +127,7 @@
 }
 
 .profileview .placeholder {
-	padding-top: 50px;
+	padding-top: 30px;
 	padding-bottom: 40px;
 }
 
@@ -160,4 +160,15 @@
 .profileview-login-spinner {
 	display: block;
 	margin: 10px auto;
+}
+
+.profileview-terms {
+	font-size: 9pt;
+	text-align: center;
+	color: #555;
+	padding: 10px 55px 0 55px;
+}
+
+.profileview-terms .link {
+	color: #ff1e78;
 }
