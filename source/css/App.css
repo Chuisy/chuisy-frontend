@@ -379,17 +379,19 @@ body {
 	padding: 0;
 }
 
-.signin-slider {
+.app-signinview {
 	box-shadow: -2px 0 10px #555;
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-transform: translate3d(110%, 0, 0);
+	-webkit-transition: -webkit-transform 0.5s;
 }
 
-.getstarted-slider {
-	position: absolute;
-	top: 0;
-	left: 0;
+.app-signinview.showing {
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 /* Popup */

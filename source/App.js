@@ -165,19 +165,23 @@ enyo.kind({
 
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.mainView.openView("getstarted", null, true);
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-                this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.mainView.openView("feed", null, true);
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
             }));
             this.$.signInView.setCancelButtonLabel($L("Skip"));
-            this.$.signInSlider.setValue(0);
+            this.$.signInView.ready();
+            // this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
+            this.signInViewDone();
+            setTimeout(enyo.bind(this, function() {
+                this.$.signInView.ready();
+            }), 500);
         }
-        this.$.signInView.ready();
 
         // Update the version number in localstorage
         localStorage.setItem("chuisy.version", App.version);
@@ -405,10 +409,12 @@ enyo.kind({
     requestSignIn: function(sender, event) {
         this.$.signInView.setSuccessCallback(event ? event.success : null);
         this.$.signInView.setFailureCallback(event ? event.failure : null);
-        this.$.signInSlider.animateToMin();
+        // this.$.signInSlider.animateToMin();
+        this.$.signInView.addClass("showing");
     },
     signInViewDone: function() {
-        this.$.signInSlider.animateToMax();
+        // this.$.signInSlider.animateToMax();
+        this.$.signInView.removeClass("showing");
     },
     mainViewNavigateTo: function(sender, event) {
         this.navigateTo(event.uri, event.obj);
@@ -441,10 +447,7 @@ enyo.kind({
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
         // FACEBOOK SIGNIN
-        {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
-            unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
-            {kind: "SignInView", classes: "enyo-fill", onDone: "signInViewDone"}
-        ]},
+        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
             onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}
