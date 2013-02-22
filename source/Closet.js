@@ -128,10 +128,7 @@ enyo.kind({
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
             chu.destroy();
-            if (App.isSignedIn()) {
-                chuisy.closet.syncRecords();
-            }
-        }, 500);
+        }, 300);
         return true;
     },
     hold: function(sender, event) {
