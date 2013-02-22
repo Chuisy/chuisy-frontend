@@ -112,6 +112,11 @@ enyo.kind({
         Shows panel assoziated with the key _view_ and updates the App history appropriately
     */
     openView: function(view, obj, direct) {
+        if (obj instanceof chuisy.models.Chu) {
+            // Take object from the closet if possible
+            obj = chuisy.closet.get(obj.id) || obj;
+        }
+
         if (!direct) {
             this.transition(this.currentView, view);
         }
