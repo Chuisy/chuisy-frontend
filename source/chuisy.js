@@ -14,6 +14,7 @@
             chuisy.accounts.trigger("change:active_user");
 
             chuisy.feed.fetch();
+            chuisy.feed.fetch({remote: true});
 
             chuisy.venues.fetch();
         },
@@ -854,7 +855,21 @@
     });
 
     chuisy.models.Feed = chuisy.models.ChuCollection.extend({
-        url: chuisy.apiRoot + chuisy.version + "/chu/feed/"
+        url: chuisy.apiRoot + chuisy.version + "/chu/feed/",
+        localStorage: new Backbone.LocalStorage("feed"),
+        reset: function(models, options) {
+            if (!options.remote) {
+                return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+            }
+
+            while (this.length) {
+                this.at(0).destroy();
+            }
+            chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+            this.each(function(model) {
+                model.save();
+            });
+        }
     });
 
     chuisy.models.Closet = chuisy.models.SyncableCollection.extend({

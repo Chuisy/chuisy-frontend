@@ -19,7 +19,7 @@ enyo.kind({
         chuisy.feed.on("sync change remove", this.refreshFeed, this);
     },
     feedLoaded: function() {
-        this.$.spinner.hide();
+        this.$.spinner.setShowing(!chuisy.feed.length);
         this.$.feedList.setCount(chuisy.feed.length);
         if (this.pulled) {
             // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
@@ -70,7 +70,7 @@ enyo.kind({
         if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
-            chuisy.feed.fetchNext();
+            chuisy.feed.fetchNext({remote: true});
             this.$.loadingNextPage.show();
         } else {
             this.$.loadingNextPage.hide();
