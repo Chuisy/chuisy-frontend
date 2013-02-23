@@ -114,10 +114,10 @@ enyo.kind({
         this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.pullerHeight : 0;
     },
     dragFinishHandler: function() {
-        this.setPulled(this.pulling);
-        if (this.pulling) {
+        if (this.pulling && !this.pulled) {
             chuisy.feed.fetch({remote: true});
         }
+        this.setPulled(this.pulling || this.pulled);
     },
     setPulled: function(pulled) {
         this.pulled = pulled;
