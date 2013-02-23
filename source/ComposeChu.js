@@ -75,6 +75,8 @@ enyo.kind({
         // Specify the local currencies iso code (e.g. EUR)
         attrs.price_currency = currFmt.sign;
         attrs.location = this.location.toLocJSON();
+        attrs.latitude = this.coordinates && this.coordinates.latitude;
+        attrs.longitude = this.coordinates && this.coordinates.longitude;
         var chu = chuisy.closet.create(attrs, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
