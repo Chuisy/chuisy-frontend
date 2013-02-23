@@ -55,7 +55,7 @@ enyo.kind({
         return true;
     },
     components: [
-        {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", rowsPerPage: 20, components: [
+        {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy", thumb: false, rowsPerPage: 20, components: [
             {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
             {kind: "onyx.Spinner", name: "userNextPage", classes: "loading-next-page"}
         ]}

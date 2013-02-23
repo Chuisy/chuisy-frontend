@@ -174,7 +174,7 @@ enyo.kind({
             {classes: "placeholder-text", content: $L("What is this? Your closet is still empty? Go ahead and fill it!")}
         ]},
         // LIST
-        {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [
+        {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [
             {name: "listClient", classes: "closet-row"}
         ]}
     ]

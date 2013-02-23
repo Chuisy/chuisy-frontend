@@ -127,7 +127,7 @@ enyo.kind({
             // {kind: "onyx.Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
         {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
-        {kind: "Scroller", fit: true, components: [
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
             {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner", showing: false},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [

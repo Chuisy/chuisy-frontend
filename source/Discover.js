@@ -135,7 +135,8 @@ enyo.kind({
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
-                {kind: "List", classes: "enyo-fill", name: "chuList", onSetupItem: "setupChu", rowsPerPage: 20, components: [
+                {kind: "List", classes: "enyo-fill", name: "chuList", onSetupItem: "setupChu", rowsPerPage: 20,
+                    strategyKind: "TransitionScrollStrategy", thumb: false, components: [
                     {kind: "onyx.Item", name: "resultChu", classes: "discover-resultchu", ontap: "chuTap", components: [
                         {classes: "discover-resultchu-image", name: "resultChuImage", components: [
                             {kind: "Image", classes: "discover-resultchu-avatar", name: "chuAvatar"},

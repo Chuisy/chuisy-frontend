@@ -342,6 +342,46 @@ body {
 
 /* PULLER */
 
+.pulldown {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	text-align: center;
+	opacity: 0;
+	/*border: solid 1px;*/
+	-webkit-perspective: 50px;
+}
+
+.pulldown-arrow {
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+	background: url(../../assets/images/arrow.png) no-repeat center center;
+	background-size: cover;
+	margin-top: 10px;
+	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-transform: rotateX(0);
+}
+
+.pulldown.pulling .pulldown-arrow {
+	-webkit-transform: rotateX(180deg);
+}
+
+.pulldown.pulled .pulldown-arrow {
+	display: none;
+}
+
+.pulldown-spinner {
+	margin-top: 20px;
+	display: none;
+}
+
+.pulldown.pulled .pulldown-spinner {
+	display: inline-block;
+}
+
 .enyo-puller {
 	/*height: 68px;
 	background: url(../../assets/images/pulldown.png) no-repeat center center;
@@ -466,4 +506,8 @@ body {
 	height: 24px;
 	width: 24px;
 	border-radius: 100px;
+}
+
+.enyo-thumb {
+	display: none;
 }
