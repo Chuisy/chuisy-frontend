@@ -250,11 +250,15 @@ enyo.kind({
         if (this.chu && event.notification.uri == "chu/" + this.chu.id + "/") {
             if (event.notification.action == "comment") {
                 this.loadComments();
-                this.scrollToBottom();
+                setTimeout(enyo.bind(this, function() {
+                    this.scrollToBottom();
+                }), 100);
             }
             if (event.notification.action == "like") {
                 this.loadLikes();
-                this.scrollToLikes();
+                setTimeout(enyo.bind(this, function() {
+                    this.scrollToLikes();
+                }), 100);
             }
         }
     },
@@ -479,12 +483,14 @@ enyo.kind({
         s.start();
     },
     scrollToLikes: function() {
-        var s = this.$.contentScroller.getStrategy();
-        var b = this.$.likesContainer.getBounds();
-        var cHeight = this.$.contentContainer.getBounds().height;
-        this.log(cHeight);
-        s.scrollTop = b.top + b.height - cHeight + 10;
-        s.start();
+        if (this.hasNode() && this.$.likesContainer.hasNode()) {
+            var s = this.$.contentScroller.getStrategy();
+            var b = this.$.likesContainer.getBounds();
+            var cHeight = this.$.contentContainer.getBounds().height;
+            this.log(cHeight);
+            s.scrollTop = b.top + b.height - cHeight + 10;
+            s.start();
+        }
     },
     components: [
         {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
