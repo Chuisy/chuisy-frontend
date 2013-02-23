@@ -108,7 +108,7 @@ enyo.kind({
         {kind: "onyx.InputDecorator", classes: "peoplepicker-filter-input", components: [
             {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: $L("Type to filter...")}
         ]},
-        {kind: "Scroller", fit: true, components: [
+        {kind: "Scroller", strategyKind: "TransitionScrollStrategy", thumb: false, fit: true, components: [
             {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
                 {kind: "Image", name: "avatar", classes: "peoplepicker-avatar", ontap: "itemTap"}
             ]}

@@ -82,7 +82,8 @@ enyo.kind({
     components: [
         {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "onyx.Spinner", classes: "fbfriendspicker-spinner", showing: false},
-        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50, components: [
+        {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50,
+            strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "fbfriendspicker-friend", components: [
                 {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
                 {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},

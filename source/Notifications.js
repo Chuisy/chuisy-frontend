@@ -86,7 +86,8 @@ enyo.kind({
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: $L("There aren't any affairs that require your attention right now...")}
         ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
+            strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-header", components: [
                     {classes: "notifications-notification-seperator"},

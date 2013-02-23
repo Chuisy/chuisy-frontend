@@ -108,7 +108,7 @@ enyo.kind({
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
         ]},
-        {kind: "Scroller", fit: true, components: [
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "settings-content", components: [
                 // PROFILE INFORMATION
                 {classes: "settings-section-header", content: $L("Profile")},
