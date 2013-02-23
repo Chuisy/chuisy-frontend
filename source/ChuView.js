@@ -165,7 +165,8 @@ enyo.kind({
         this.$.likesSpinner.hide();
         this.$.likesRepeater.show();
         var max = 8;
-        var count = this.chu.likes.meta && this.chu.likes.total_count || this.chu.get("likes_count") || 0;
+        var count = this.chu.likes.meta && this.chu.likes.meta.total_count || this.chu.get("likes_count") || 0;
+        count = Math.max(count, this.chu.likes.length);
         this.$.likesCount.setContent(count);
         this.$.likesRepeater.setCount(Math.min(this.chu.likes.length, max));
         this.$.likesRepeater.render();
