@@ -36,11 +36,9 @@ enyo.kind({
         this.inherited(arguments);
         this.setupFriends();
         this.listenTo(chuisy.accounts, "change:active_user", this.setupFriends);
-        var s = this.$.contentScroller.getStrategy().$.scrollMath;
-        if (s) {
-            s.kDragDamping = 0.2;
-            s.kSnapFriction = 0.4;
-        }
+        var s = this.$.contentScroller.getStrategy();
+        s.scrollIntervalMS = 20;
+        s.maxScrollTop = -60;
         this.buttonLabelChanged();
     },
     buttonLabelChanged: function() {
@@ -84,7 +82,7 @@ enyo.kind({
         var user = this.chu.get("user");
         var loc = this.chu.get("location");
 
-        var image = this.chu.get("localImage") || this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("image") || "assets/images/chu_placeholder.png";
+        var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png";
         if (image != this.$.image.src) {
             this.$.spinner.show();
             this.$.image.addClass("loading");
@@ -234,7 +232,9 @@ enyo.kind({
 
             this.$.commentInput.setValue("");
 
-            this.$.contentScroller.scrollTo(0, this.$.contentScroller.getScrollBounds().maxTop);
+            var s = this.$.contentScroller.getStrategy();
+            s.scrollTop = s.getScrollBounds().maxTop;
+            s.start();
         }
     },
     online: function() {
@@ -501,7 +501,8 @@ enyo.kind({
                         ]}
                     ]},
                     {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
-                        {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll", components: [
+                        {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll",
+                            strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, components: [
                             // SPACER
                             {classes: "chuview-spacer", ontap: "hideControls"},
                             // LIKE BAR
