@@ -176,11 +176,13 @@ enyo.kind({
     loadComments: function() {
         this.$.moreComments.hide();
         this.$.commentsSpinner.show();
+        this.$.commentsContainer.show();
         this.chu.comments.fetch({data: {limit: 5}});
     },
     loadLikes: function() {
         this.$.likesSpinner.show();
         this.$.likesRepeater.hide();
+        this.$.likesContainer.show();
         this.chu.likes.fetch({data: {limit: 10}});
     },
     setupComment: function(sender, event) {
