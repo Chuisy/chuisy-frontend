@@ -246,10 +246,16 @@ enyo.kind({
     },
     offline: function() {
     },
-    pushNotification: function() {
+    pushNotification: function(sender, event) {
         // Received a push notification. Let's see whats new.
-        this.chu.fetch();
-        this.loadComments();
+        if (this.chu && event.notification.uri == "chu/" + this.chu.id + "/") {
+            if (event.notification.action == "comment") {
+                this.loadComments();
+            }
+            if (event.notification.action == "like") {
+                this.loadLikes();
+            }
+        }
     },
     scroll: function(sender, inEvent) {
         // var s = this.$.imageScroller.getStrategy().$.scrollMath;
