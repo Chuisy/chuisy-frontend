@@ -153,6 +153,7 @@ enyo.kind({
     refreshComments: function() {
         var totalCount = this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0;
         this.$.commentsSpinner.hide();
+        this.$.moreCommentsSpinner.hide();
         this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
         this.$.moreComments.setContent($L("{count} more comments...").replace("{count}", totalCount - this.chu.comments.length));
         this.$.commentsCount.setContent(totalCount);
@@ -233,10 +234,7 @@ enyo.kind({
             this.refreshComments();
 
             this.$.commentInput.setValue("");
-
-            var s = this.$.contentScroller.getStrategy();
-            s.scrollTop = s.getScrollBounds().maxTop;
-            s.start();
+            this.scrollToBottom();
         }
     },
     online: function() {
@@ -251,9 +249,11 @@ enyo.kind({
         if (this.chu && event.notification.uri == "chu/" + this.chu.id + "/") {
             if (event.notification.action == "comment") {
                 this.loadComments();
+                this.scrollToBottom();
             }
             if (event.notification.action == "like") {
                 this.loadLikes();
+                this.scrollToLikes();
             }
         }
     },
@@ -463,7 +463,7 @@ enyo.kind({
     },
     moreComments: function() {
         this.$.moreComments.hide();
-        this.$.commentsSpinner.show();
+        this.$.moreCommentsSpinner.show();
         this.chu.comments.fetchNext();
     },
     showLikes: function() {
@@ -471,6 +471,19 @@ enyo.kind({
     },
     likesBack: function() {
         this.$.panels.setIndex(0);
+    },
+    scrollToBottom: function() {
+        var s = this.$.contentScroller.getStrategy();
+        s.scrollTop = s.getScrollBounds().maxTop;
+        s.start();
+    },
+    scrollToLikes: function() {
+        var s = this.$.contentScroller.getStrategy();
+        var b = this.$.likesContainer.getBounds();
+        var cHeight = this.$.contentContainer.getBounds().height;
+        this.log(cHeight);
+        s.scrollTop = b.top + b.height - cHeight + 10;
+        s.start();
     },
     components: [
         {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
@@ -559,7 +572,7 @@ enyo.kind({
                                         {classes: "chuview-separator-line"}
                                     ]},
                                     {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
-                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false},
+                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
                                     // COMMENTS
                                     {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                                         {classes: "chuview-comment", name: "comment", components: [
@@ -572,7 +585,8 @@ enyo.kind({
                                                 {name: "commentText", classes: "chuview-comment-text"}
                                             ]}
                                         ]}
-                                    ]}
+                                    ]},
+                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
                                 ]},
                                 {style: "height: 505px"}
                             ]}
