@@ -1,0 +1,41 @@
+.fbfriendspicker-friend {
+	padding: 8px;
+	height: 32px;
+	border-bottom: solid 1px #ddd;
+}
+
+.fbfriendspicker-friend-avatar {
+	width: 32px;
+	height: 32px;
+}
+
+.fbfriendspicker-friend-fullname {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 150px;
+	padding: 6px 10px;
+}
+
+.fbfriendspicker-friend-check {
+	width: 85px;
+	height: 32px;
+	float: right;
+	background: url(../../assets/images/check.png) no-repeat right center;
+	background-size: 32px 32px;
+	margin-top: 3px;
+}
+
+.fbfriendspicker-friend-add-button {
+	float: right;
+	width: 85px;
+}
+
+.fbfriendspicker-filter-input {
+	border-radius: 0;
+	width: 100%;
+}
+
+.fbfriendspicker-spinner {
+	display: block;
+	margin: 20px auto;
+}

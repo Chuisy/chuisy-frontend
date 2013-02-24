@@ -9,7 +9,8 @@ enyo.kind({
     published: {
         //* The path to the captured image
         image: "",
-        price: 0
+        price: 0,
+        location: null
         // category: "head"
     },
     events: {
@@ -122,6 +123,14 @@ enyo.kind({
     //         categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
     //     }
     // },
+    locationChanged: function() {
+        if (this.location) {
+            this.$.location.setContent(this.location.get("name") || "");
+            var locale = this.location.get("location").cc;
+            this.currencyFormat = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, locale: locale && locale.toLowerCase()});
+            this.priceChanged();
+        }
+    },
     priceChanged: function() {
         this.$.price.setContent(this.currencyFormat.format(this.price));
     },
@@ -193,8 +202,10 @@ enyo.kind({
         {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
             {kind: "Image", name: "image", classes: "chuform-image"},
             {classes: "chuform-price", name: "price", ontap: "priceTapped"},
-            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!")}
+            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!"), showing: false},
+            {classes: "chuform-location ellipsis", name: "location", ontap: "doBack"}
         ]},
+        {classes: "chuform-price-hint2", content: $L("Drag on the image to adjust the price!")},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
             leftBoundary: 100000, rightBoundary: 0, vertical: false, horizontal: true, kFrictionDamping: 0.95}
         //CATEGORY

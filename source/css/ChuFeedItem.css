@@ -19,7 +19,7 @@
 
 .chufeeditem-avatar {
 	margin-left: 1px;
-	margin-right: 10px;
+	margin-right: 8px;
 	width: 35px;
 	height: 35px;
 	float: left;
@@ -36,7 +36,7 @@
 .chufeeditem-time {
 	color: #555;
 	font-size: 10pt;
-	padding: 2px 10px;
+	padding: 2px 10px 0 2px;
 }
 
 .chufeeditem-image {
@@ -58,6 +58,7 @@
 
 .chufeeditem-likes-comments {
 	float: right;
+	margin-right: 2px;
 	/*margin: 10px 5px;*/
 }
 
@@ -65,7 +66,7 @@
 	color: #555;
 	font-size: 10pt;
 	position: absolute;
-	right: 4px;
+	right: 6px;
 	bottom: 4px;
 	max-width: 100px;
 }
@@ -73,28 +74,28 @@
 .chufeeditem-likes-count,
 .chufeeditem-comments-count {
 	color: #888;
-	font-size: 11pt;
+	font-size: 10pt;
 	display: inline-block;
 	vertical-align: top;
-	padding: 0 4px;
+	padding: 0 3px 0 4px;
+	line-height: 14pt;
 }
 
-.chufeeditem-likes-icon {
-	width: 16px;
-	height: 16px;
-	background-image: url(../../assets/images/likes_32x32.png);
-	background-size: cover;
-	vertical-align: top;
-	display: inline-block;
-}
-
+.chufeeditem-likes-icon,
 .chufeeditem-comments-icon {
 	width: 16px;
 	height: 16px;
-	background-image: url(../../assets/images/comments_32x32.png);
 	background-size: cover;
 	vertical-align: top;
 	display: inline-block;
+}
+
+.chufeeditem-likes-icon {
+	background-image: url(../../assets/images/likes_32x32.png);
+}
+
+.chufeeditem-comments-icon {
+	background-image: url(../../assets/images/comments_32x32.png);
 }
 
 .chufeeditem-error-icon {

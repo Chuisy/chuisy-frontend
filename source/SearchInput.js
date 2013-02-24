@@ -13,7 +13,8 @@ enyo.kind({
         // Time that has to pass without input for _onChange_ event to be fired
         changeDelay: 100,
         // Set to true to disable input
-        disabled: false
+        disabled: false,
+        placeholder: $L("Type to search...")
     },
     events: {
         // User has tapped the x button
@@ -25,12 +26,16 @@ enyo.kind({
         this.inherited(arguments);
         this.valueChanged();
         this.disabledChanged();
+        this.placeholderChanged();
     },
     valueChanged: function() {
         this.$.input.setValue(this.value);
     },
     disabledChanged: function() {
         this.$.input.setDisabled(this.disabled);
+    },
+    placeholderChanged: function() {
+        this.$.input.setPlaceholder(this.placeholder);
     },
     /**
         Get the input value
@@ -42,16 +47,11 @@ enyo.kind({
         if (this.changeTimeout) {
             clearTimeout(this.changeTimeout);
         }
-
-        if (this.getValue()) {
-            this.addClass("active");
-            // Start timeout to fire onChange event if no new input happens in the meantime
-            this.changeTimeout = setTimeout(enyo.bind(this, function() {
-                this.doChange({value: this.getValue()});
-            }), this.changeDelay);
-        } else {
-            this.cancel();
-        }
+        this.addClass("active");
+        // Start timeout to fire onChange event if no new input happens in the meantime
+        this.changeTimeout = setTimeout(enyo.bind(this, function() {
+            this.doChange({value: this.getValue()});
+        }), this.changeDelay);
     },
     /**
         Clears input and fire _onCancel_ events
@@ -72,7 +72,7 @@ enyo.kind({
         this.$.input.hasNode().blur();
     },
     components: [
-        {kind: "onyx.Input", placeholder: $L("Type to search..."), onkeyup: "inputKeyup"},
+        {kind: "onyx.Input", onkeyup: "inputKeyup"},
         {classes: "searchinput-icon", ontap: "cancel"}
     ]
 });

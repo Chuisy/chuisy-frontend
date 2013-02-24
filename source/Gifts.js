@@ -6,7 +6,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.gifts.on("reset add remove", this.refresh, this);
+        chuisy.gifts.on("sync", this.refresh, this);
     },
     /**
         Refreshes gifts list with loaded items
@@ -39,12 +39,13 @@ enyo.kind({
         event.preventDefault();
     },
     activate: function() {
+        enyo.Signals.send("onShowGuide", {view: "gifts"});
     },
     deactivate: function() {},
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("You don't have any gifts yet...")}
+            {classes: "placeholder-text", content: $L("If you go shopping with Chuisy you will soon get various little goodies and discounts here.")}
         ]},
         {kind: "List", classes: "enyo-fill", onSetupItem: "setupItem", ontap: "giftTapped", components: [
             {classes: "gifts-gift", components: [
@@ -52,7 +53,7 @@ enyo.kind({
                 {classes: "gifts-gift-value", name: "value"},
                 {classes: "gifts-gift-text", name: "text"}
             ]},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

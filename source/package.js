@@ -2,7 +2,6 @@ enyo.depends(
 	"util.js",
 	"$lib/layout",
 	"$lib/onyx",
-	// "$lib/sdk",
 	"$lib/Base64.js",
 	"$lib/extra/phonegap",
 	"$lib/arrangers",
@@ -23,7 +22,6 @@ enyo.depends(
 	"ProfileView.js",
 	"Settings.js",
 	"ComposeChu.js",
-	"Map.js",
 	"PickLocation.js",
 	"ChuForm.js",
 	"UserListItem.js",
@@ -33,11 +31,12 @@ enyo.depends(
 	"ChuList.js",
 	"Notifications.js",
 	"ChuWebView.js",
-	"ShareView.js",
 	"Menu.js",
-	"FacebookSignIn.js",
+	"SignInView.js",
 	"Gifts.js",
 	"Guide.js",
 	"GetStarted.js",
-	"GiftView.js"
+	"GiftView.js",
+	"InviteFriends.js",
+	"UserList.js"
 );

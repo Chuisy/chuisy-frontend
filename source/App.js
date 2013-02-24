@@ -8,6 +8,7 @@ enyo.kind({
     fit: true,
     classes: "app",
     statics: {
+        version: "0.5.0",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
@@ -49,18 +50,44 @@ enyo.kind({
                 }
             }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
         },
-        fbRequestPublishPermissions: function(callback) {
-            FB.login(function(response) {
-                if (response.status == "connected") {
-                    callback(response.authResponse.accessToken);
-                } else {
-                    console.log($L("Facebook signin failed!"));
+        fbRequestPublishPermissions: function(success, failure) {
+            FB.api('/me/permissions', function (response) {
+                if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            if (success) {
+                                success(response.authResponse.accessToken);
+                            }
+                        } else {
+                            console.log($L("Facebook signin failed!"));
+                            if (failure) {
+                                failure();
+                            }
+                        }
+                    }, {scope: "publish_actions"});
                 }
-            }, {scope: "publish_stream"});
+            });
         },
         isSignedIn: function() {
             var user = chuisy.accounts.getActiveUser();
             return user && user.isAuthenticated();
+        },
+        getGeoLocation: function(success, failure) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
+                if (success) {
+                    success(position);
+                }
+            }, function(error) {
+                console.error("Failed to retrieve geolocation! " + JSON.stringify(error));
+                var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
+                lastPosition = lastPositionString ? JSON.parse(lastPositionString) : null;
+                if (lastPosition && success) {
+                    success(lastPosition);
+                } else if (failure) {
+                    failure();
+                }
+            });
         }
     },
     history: [],
@@ -121,7 +148,7 @@ enyo.kind({
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
-        this.history = [];
+        this.history = [["feed/"]];
 
         chuisy.notifications.on("reset", function() {
             if (App.isMobile()) {
@@ -134,14 +161,30 @@ enyo.kind({
             this.initPushNotifications();
         }
 
-        var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
+        // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
 
-        if (!firstLaunched) {
-            this.$.getStartedSlider.setValue(0);
-            this.$.getStarted.shown();
+        if (!App.isSignedIn()) {
+            this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
+                this.$.mainView.openView("getstarted", null, true);
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
+            }));
+            this.$.signInView.setFailureCallback(enyo.bind(this, function() {
+                this.$.mainView.openView("feed", null, true);
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
+            }));
+            this.$.signInView.setCancelButtonLabel($L("Skip"));
+            this.$.signInView.ready();
+            // this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
+            this.signInViewDone();
+            setTimeout(enyo.bind(this, function() {
+                this.$.signInView.ready();
+            }), 500);
         }
+
+        // Update the version number in localstorage
+        localStorage.setItem("chuisy.version", App.version);
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -281,13 +324,12 @@ enyo.kind({
             // This is the URI to a users profile
             if (obj) {
                 // A gift object has been provided. So we can open it directly.
-                var gift = new chuisy.models.Gift(obj);
+                var gift = obj instanceof chuisy.models.Gift ? obj : new chuisy.models.Gift(obj);
                 this.$.mainView.openView("gift", gift);
             } else if (App.checkConnection()) {
                 var gift = new chuisy.models.Gift({id: match2[1]});
-                gift.fetch({success: enyo.bind(this, function() {
-                    this.$.mainView.openView("gift", gift);
-                })});
+                gift.fetch();
+                this.$.mainView.openView("gift", gift);
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
@@ -310,14 +352,13 @@ enyo.kind({
 
                 if (obj) {
                     // A chu object has been provided. So we can open it directly.
-                    var chu = new chuisy.models.Chu(obj);
+                    var chu = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
                     this.$.mainView.openView("chu", chu);
                 } else if (App.checkConnection()) {
                     // We don't have a chu object, but we do have an id. Let's fetch it!
                     var chu = new chuisy.models.Chu({id: match3[1]});
-                    chu.fetch({success: enyo.bind(this, function() {
-                        this.$.mainView.openView("chu", chu);
-                    })});
+                    chu.fetch();
+                    this.$.mainView.openView("chu", chu);
                 }
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
@@ -325,13 +366,12 @@ enyo.kind({
             // This is the URI to a users profile
             if (obj) {
                 // A user object has been provided. So we can open it directly.
-                var user = new chuisy.models.User(obj);
+                var user = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
                 this.$.mainView.openView("user", user);
             } else if (App.checkConnection()) {
                 var user = new chuisy.models.User({id: match2[1]});
-                user.fetch({success: enyo.bind(this, function() {
-                    this.$.mainView.openView("user", user);
-                })});
+                user.fetch();
+                this.$.mainView.openView("user", user);
             }
         // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
         //     // {user id}/
@@ -349,7 +389,7 @@ enyo.kind({
         Adds current context to navigation history.
     */
     updateHistory: function(sender, event) {
-        this.history.push(event.uri);
+        this.history.push([event.uri, event.obj]);
         window.location.hash = "!/" + event.uri;
     },
     /**
@@ -358,7 +398,7 @@ enyo.kind({
     back: function() {
         if (this.history.length > 1) {
             this.history.pop();
-            this.navigateTo(this.history[this.history.length-1]);
+            this.navigateTo.apply(this, this.history[this.history.length-1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
@@ -367,12 +407,14 @@ enyo.kind({
         Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
     */
     requestSignIn: function(sender, event) {
-        this.$.facebookSignIn.setSuccessCallback(event ? event.success : null);
-        this.$.facebookSignIn.setFailureCallback(event ? event.failure : null);
-        this.$.signInSlider.animateToMin();
+        this.$.signInView.setSuccessCallback(event ? event.success : null);
+        this.$.signInView.setFailureCallback(event ? event.failure : null);
+        // this.$.signInSlider.animateToMin();
+        this.$.signInView.addClass("showing");
     },
-    facebookSignInDone: function() {
-        this.$.signInSlider.animateToMax();
+    signInViewDone: function() {
+        // this.$.signInSlider.animateToMax();
+        this.$.signInView.removeClass("showing");
     },
     mainViewNavigateTo: function(sender, event) {
         this.navigateTo(event.uri, event.obj);
@@ -380,7 +422,7 @@ enyo.kind({
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
-            this.$.facebookSignIn.cancel();
+            this.$.signInView.cancel();
         }
     },
     showGuide: function(sender, event) {
@@ -393,11 +435,6 @@ enyo.kind({
             localStorage.setItem("chuisy.viewsShown", JSON.stringify(viewsShown));
         }
     },
-    getStartedDone: function() {
-        localStorage.setItem("chuisy.firstLaunched", new Date().getTime());
-        this.$.getStartedSlider.animateToMax();
-        this.recoverStateFromUri();
-    },
     tapHandler: function(sender, event) {
         if (this.focusedInput && !(event.originator instanceof enyo.Input)) {
             this.focusedInput.hasNode().blur();
@@ -409,16 +446,8 @@ enyo.kind({
     },
     components: [
         {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
-        // GET STARTED
-        {kind: "Slideable", classes: "enyo-fill getstarted-slider", name: "getStartedSlider", draggable: false,
-            axis: "v", unit: "%", max: 100, min: 0, value: 100, overMoving: false, components: [
-            {kind: "GetStarted", classes: "enyo-fill", onDone: "getStartedDone"}
-        ]},
         // FACEBOOK SIGNIN
-        {kind: "Slideable", classes: "enyo-fill signin-slider", name: "signInSlider",
-            unit: "%", max: 110, min: 0, value: 110, overMoving: false, onAnimateFinish: "signInSliderAnimateFinish", components: [
-            {kind: "FacebookSignIn", classes: "enyo-fill", onDone: "facebookSignInDone"}
-        ]},
+        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
             onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}

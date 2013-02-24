@@ -26,7 +26,9 @@ enyo.kind({
         // share: [3, null],
         settings: [3, null],
         user: [4, null],
-        gift: [5, null]
+        gift: [5, null],
+        invite: [6, null],
+        getstarted: [7, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -62,6 +64,9 @@ enyo.kind({
     showGift: function(sender, event) {
         this.openView("gift", event.gift);
     },
+    showInviteFriends: function() {
+        this.openView("invite");
+    },
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.get("uri"), obj: event.notification.get("target_obj")});
     },
@@ -78,6 +83,9 @@ enyo.kind({
     },
     chuViewDone: function(sender, event) {
         this.openView("feed", event.chu);
+    },
+    getStartedDone: function() {
+        this.openView("feed");
     },
     menuChanged: function(sender, event) {
         this.openView(event.value);
@@ -103,8 +111,15 @@ enyo.kind({
     /**
         Shows panel assoziated with the key _view_ and updates the App history appropriately
     */
-    openView: function(view, obj) {
-        this.transition(this.currentView, view);
+    openView: function(view, obj, direct) {
+        if (obj instanceof chuisy.models.Chu) {
+            // Take object from the closet if possible
+            obj = chuisy.closet.get(obj.id) || obj;
+        }
+
+        if (!direct) {
+            this.transition(this.currentView, view);
+        }
         var oldView = this.$[this.currentView];
         var newView = this.$[view];
         this.currentView = view;
@@ -118,29 +133,23 @@ enyo.kind({
             if (indexes[1] !== null) {
                 this.$.primaryPanels.setIndex(indexes[1]);
             }
-        }), 400);
+        }), direct ? 0 : 400);
 
         switch (view) {
             case "chu":
-                this.doUpdateHistory({uri: "chu/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "chu/" + obj.id + "/", obj: obj});
                 break;
             case "gift":
-                this.doUpdateHistory({uri: "gift/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "gift/" + obj.id + "/", obj: obj});
                 break;
             case "user":
-                this.doUpdateHistory({uri: "user/" + obj.id + "/"});
-                break;
-            // case "compose":
-            //     this.doUpdateHistory({uri: "chu/new/"});
-            //     break;
-            case "share":
-                this.doUpdateHistory({uri: "chu/share/" + obj.id + "/"});
+                this.doUpdateHistory({uri: "user/" + obj.id + "/", obj: obj});
                 break;
             case "profile":
                 this.doUpdateHistory({uri: "profile/"});
-                enyo.Signals.send("onShowGuide", {view: "profile"});
                 var user = chuisy.accounts.getActiveUser();
                 if (user) {
+                    enyo.Signals.send("onShowGuide", {view: "profile"});
                     user.fetch({remote: true});
                 }
                 break;
@@ -177,11 +186,11 @@ enyo.kind({
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone"},
+            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone", onInviteFriends: "showInviteFriends"},
             // // SHARE CHU
             // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS
-            {kind: "Settings", name: "settings", onBack: "back"},
+            {kind: "Settings", name: "settings", onBack: "back", onInviteFriends: "showInviteFriends"},
             // PROFILE VIEW (for other profiles)
             {kind: "FittableRows", components: [
                 {classes: "header", components: [
@@ -190,7 +199,9 @@ enyo.kind({
                 {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]},
             // DISPLAY GIFT
-            {kind: "GiftView", onBack: "back", name: "gift"}
+            {kind: "GiftView", onBack: "back", name: "gift"},
+            {kind: "InviteFriends", name: "invite", onBack: "back"},
+            {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},
         {name: "crossover", classes: "fade-screen"}
     ]

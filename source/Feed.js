@@ -16,17 +16,16 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("add change remove", this.refreshFeed, this);
+        chuisy.feed.on("sync change remove", this.refreshFeed, this);
+        this.pullerHeight = 50;
+        this.pullerThreshold = 80;
     },
     feedLoaded: function() {
-        this.$.spinner.hide();
+        this.$.spinner.setShowing(!chuisy.feed.length);
         this.$.feedList.setCount(chuisy.feed.length);
-        if (this.pulled) {
-            // Reloading feed was initialized by 'pull to refresh'. Refresh list via the _PulldownList.completePull_
-            this.$.feedList.completePull();
-        } else {
-            this.$.feedList.reset();
-        }
+        this.$.feedList.getStrategy().scrollTop = 0;
+        this.setPulled(false);
+        this.$.feedList.refresh();
     },
     /**
         Refreshfeed based on the existing list.
@@ -34,20 +33,6 @@ enyo.kind({
     refreshFeed: function() {
         this.$.feedList.setCount(chuisy.feed.length);
         this.$.feedList.refresh();
-    },
-    pullRelease: function() {
-        if (App.isOnline()) {
-            // Internet access available. Reload feed!
-            this.pulled = true;
-            chuisy.feed.fetch();
-        } else {
-            // No internet access don't reload
-            this.$.feedList.completePull();
-        }
-    },
-    pullComplete: function() {
-        this.pulled = false;
-        this.$.feedList.reset();
     },
     setupFeedItem: function(sender, event) {
         var item = chuisy.feed.at(event.index);
@@ -70,7 +55,7 @@ enyo.kind({
         if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
-            chuisy.feed.fetchNext();
+            chuisy.feed.fetchNext({remote: true});
             this.$.loadingNextPage.show();
         } else {
             this.$.loadingNextPage.hide();
@@ -92,8 +77,13 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        var user = new chuisy.models.User(chuisy.feed.at(event.index).get("user"));
-        this.doShowUser({user: user});
+        var userJSON = chuisy.feed.at(event.index).get("user");
+        if (!userJSON && !App.isSignedIn()) {
+            enyo.Signals.send("onRequestSignIn");
+        } else if (userJSON) {
+            var user = new chuisy.models.User(userJSON);
+            this.doShowUser({user: user});
+        }
     },
     activate: function(newChu) {
         enyo.Signals.send("onShowGuide", {view: "feed"});
@@ -101,6 +91,11 @@ enyo.kind({
         if (newChu) {
             newChu.added = true;
             chuisy.feed.add(newChu, {at: 0});
+            this.$.feedList.setCount(chuisy.feed.length);
+            this.$.feedList.reset();
+            enyo.asyncMethod(this, function() {
+                newChu.added = false;
+            });
         }
     },
     deactivate: function() {
@@ -109,6 +104,27 @@ enyo.kind({
             this.newChu = null;
         }
     },
+    scrollHandler: function() {
+        var scrollTop = this.$.feedList.getScrollTop();
+        var offset = scrollTop + this.pullerHeight;
+        var opacity = 1 - offset/this.pullerHeight;
+        this.$.pulldown.applyStyle("opacity", opacity);
+        this.pulling = scrollTop < -this.pullerThreshold;
+        this.$.pulldown.addRemoveClass("pulling", this.pulling);
+        this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.pullerHeight : 0;
+    },
+    dragFinishHandler: function() {
+        if (this.pulling && !this.pulled) {
+            chuisy.feed.fetch({remote: true});
+        }
+        this.setPulled(this.pulling || this.pulled);
+    },
+    setPulled: function(pulled) {
+        this.pulled = pulled;
+        this.$.pulldown.addRemoveClass("pulled", this.pulled);
+        this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
+        this.$.feedList.getStrategy().start();
+    },
     components: [
         {kind: "onyx.Spinner", classes: "absolute-center"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
@@ -116,11 +132,15 @@ enyo.kind({
         {classes: "error-box", name: "errorBox", showing: false, components: [
             {classes: "error-text", content: $L("No internet connection available!")}
         ]},
-        {kind: "PulldownList", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20, thumb: false, loadingIconClass: "puller-spinner",
-            // pullingMessage: "", pulledMessage: "", loadingMessage: "", pullingIconClass: "", pulledIconClass: "", loadingIconClass: "",
-            onPullRelease: "pullRelease", onPullComplete: "pullComplete", components: [
+        {name: "pulldown", classes: "pulldown", components: [
+            {classes: "pulldown-arrow"},
+            {kind: "onyx.Spinner", classes: "pulldown-spinner"}
+        ]},
+        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20, thumb: false,
+            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
+            preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

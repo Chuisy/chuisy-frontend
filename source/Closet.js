@@ -16,7 +16,8 @@ enyo.kind({
         onShowNotifications: ""
     },
     handlers: {
-        onpostresize: "postResize"
+        onpostresize: "postResize",
+        onhold: "hold"
     },
     // Estimated width of a single chu
     chuWidth: 105,
@@ -53,7 +54,7 @@ enyo.kind({
 
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
-            this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", onhold: "hold", name: "chu" + i, owner: this, components: [
+            this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
                 {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
@@ -95,6 +96,7 @@ enyo.kind({
         // this.$.doneButton.show();
         this.$.postButton.hide();
         this.addClass("editing");
+        this.$.editHint.setContent($L("(hold to cancel)"));
     },
     /**
         Finish edit mode
@@ -103,6 +105,7 @@ enyo.kind({
         this.editing = false;
         this.removeClass("editing");
         this.$.postButton.show();
+        this.$.editHint.setContent($L("(hold to edit)"));
     },
     chuTap: function(sender, event) {
         if (!this.held) {
@@ -125,10 +128,7 @@ enyo.kind({
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
             chu.destroy();
-            if (App.isSignedIn()) {
-                chuisy.closet.syncRecords();
-            }
-        }, 500);
+        }, 300);
         return true;
     },
     hold: function(sender, event) {
@@ -160,6 +160,9 @@ enyo.kind({
         this.finishEditing();
     },
     components: [
+        {classes: "closet-edit-hint", components: [
+            {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}
+        ]},
         {kind: "Signals", onClosetUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "contextMenu", classes: "closet-contextmenu", components: [
@@ -171,7 +174,7 @@ enyo.kind({
             {classes: "placeholder-text", content: $L("What is this? Your closet is still empty? Go ahead and fill it!")}
         ]},
         // LIST
-        {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", components: [
+        {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [
             {name: "listClient", classes: "closet-row"}
         ]}
     ]

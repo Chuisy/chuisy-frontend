@@ -1,6 +1,6 @@
 .settings {
 	background-color: #f2f2f2;
-	background-image: url(../../assets/images/greyfloral@2x.png);
+	background-image: url(../../assets/images/greyfloral.png);
 	background-size: 150px 124px;
 }
 
@@ -20,63 +20,18 @@
 	/*font-variant: small-caps;*/
 }
 
-.settings-connect-item {
+.settings-item {
 	padding: 5px;
 }
 
-.settings-connect-text {
+.settings-item-text {
 	display: inline-block;
 	padding: 5px;
 }
 
-.settings-connect-button {
+.settings-item > .onyx-toggle-button {
 	float: right;
-}
-
-.settings-connect-disconnect {
-	float: right;
-	display: none;
-}
-
-.settings-connect-item.connected > .settings-connect-button {
-	display: none;
-}
-
-.settings-connect-item.connected > .settings-connect-disconnect {
-	display: inline-block;
-}
-
-/*.settings-connect-item.connected.facebook > .settings-connect-disconnect {
-	display: none;
-}*/
-
-.settings-connect-item.facebook.connected {
-	background-color: #3b5998;
-	color: white;
-}
-
-.settings-connect-item.facebook > .settings-connect-icon {
-	width: 20px;
-	height: 20px;
-	background-size: 20px 40px;
-	display: inline-block;
-	background-image: url(../../assets/images/facebook_button.png);
-	background-position: 0 0;
-	margin: 5px 0;
-	vertical-align: top;
-}
-
-.settings-connect-item.facebook.connected > .settings-connect-icon {
-	background-position: 0 -20px;
-}
-
-.settings-notifications-item {
-	padding: 5px;
-}
-
-.settings-notifications-text {
-	display: inline-block;
-	padding: 5px;
+	margin: 2px 3px;
 }
 
 .settings-content {
@@ -103,6 +58,7 @@
 	/*background: url() no-repeat 0 0;*/
 	background-size: 32px 64px;
 	float: right;
+	margin-top: -1px;
 }
 
 .settings-notification-icon.push {

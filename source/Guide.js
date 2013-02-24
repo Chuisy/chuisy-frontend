@@ -13,7 +13,7 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 250px", components: [
                     {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop or your friend's " +
+                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop of your friends' " +
                         "shopping experiences and discover nice things from people with taste.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
@@ -22,10 +22,12 @@ enyo.kind({
                 {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
                     $L("A fashion item or accessoire discovered by a fashion enthusiast during 'window shopping'. " +
                         "Often used to express style or get feedback from friends.")},
-                    {classes: "guide-text", style: "width: 130px; position: absolute; bottom: 60px; left: 95px;", content: $L("Push the button to post a Chu")}
+                    {classes: "guide-text", style: "width: 200px; position: absolute; bottom: 60px; left: 70px;", content: $L("You can post a Chu by pressing this button.")},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
             {style: "background: url(assets/images/guide/menu.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered guide-text", style: "height: 65px;", content: $L("Use the bar above to check out the rest of the app.")}
+                {classes: "guide-text", style: "width: 230px; margin: 100px auto;", content: $L("This is the menu bar. Use it to move around.")},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
         "closet": [
@@ -34,7 +36,8 @@ enyo.kind({
                     {classes: "guide-header", content: $L("Your closet that never ends")},
                     {classes: "guide-separator"},
                     {classes: "guide-text", content: $L("Here you can find all your Chus. Be chuisy and fill it while shopping!")}
-                ]}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
         "profile": [
@@ -43,18 +46,22 @@ enyo.kind({
                     {classes: "guide-header", content: $L("Hey, self!")},
                     {classes: "guide-separator"},
                     {classes: "guide-text", content: $L("This is your profile, the place where your followers and friends can visit you.")}
-                ]}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
             {style: "background: url(assets/images/guide/settings.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; top: 150px; right: 80px; width: 160px;", content: $L("You can also find your settings here.")}
+                {classes: "guide-text", style: "position: absolute; top: 150px; right: 80px; width: 160px;", content: $L("You can also find your settings here.")},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
         "chu": [
             {style: "background: url(assets/images/guide/top-right.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: $L("Share your discovery or keep it a secret. It's your choice.")}
+                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: $L("Share your discovery or keep it a secret. It's your choice.")},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
             {style: "background: url(assets/images/guide/share.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: $L("Let friends become part of the moment and share your shopping experiences.")}
+                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: $L("Let friends become part of the moment and share your shopping experiences.")},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
         "notifications": [
@@ -63,7 +70,8 @@ enyo.kind({
                     {classes: "guide-header", content: $L("Your affairs")},
                     {classes: "guide-separator"},
                     {classes: "guide-text", content: $L("Come here to see what's hot and new.")}
-                ]}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
         "discover": [
@@ -72,7 +80,18 @@ enyo.kind({
                     {classes: "guide-header", content: $L("Discover")},
                     {classes: "guide-separator"},
                     {classes: "guide-text", content: $L("Find the hottest people, products and stores on Chuisy.")}
-                ]}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
+            ]}
+        ],
+        "gifts": [
+            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
+                {classes: "guide-centered", style: "height: 200px", components: [
+                    {classes: "guide-header", content: $L("The best is yet to come.")},
+                    {classes: "guide-separator"},
+                    {classes: "guide-text", content: $L("If you go shopping with Chuisy you will soon get various little goodies and discounts here.")}
+                ]},
+                {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ]
     },
@@ -116,6 +135,6 @@ enyo.kind({
         return bounds.width/bounds.height >= 2/3 ? "assets/images/guide/2to3/" : "assets/images/guide/9to16/";
     },
     components: [
-        {kind: "Panels", classes: "enyo-fill guide-panels", components: [{}]}
+        {kind: "Panels", classes: "enyo-fill guide-panels"}
     ]
 });

@@ -30,7 +30,7 @@ enyo.kind({
         this.stopListening();
         this.refresh();
         if (this.chus) {
-            this.listenTo(this.chus, "reset add", this.refresh);
+            this.listenTo(this.chus, "sync", this.refresh);
         }
     },
     rendered: function() {
@@ -105,9 +105,10 @@ enyo.kind({
         return this.$.list.getScrollTop();
     },
     components: [
-        {kind: "List", classes: "enyo-fill chulist-list", name: "list", onSetupItem: "setupItem", components: [
+        {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
+            strategyKind: "TransitionScrollStrategy", components: [
             {name: "listClient", classes: "chulist-row"},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "chulist-nextpage"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

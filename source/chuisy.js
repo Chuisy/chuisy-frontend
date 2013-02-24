@@ -14,6 +14,9 @@
             chuisy.accounts.trigger("change:active_user");
 
             chuisy.feed.fetch();
+            chuisy.feed.fetch({remote: true});
+
+            chuisy.venues.fetch();
         },
         activeUserChanged: function() {
             var user = chuisy.accounts.getActiveUser();
@@ -23,8 +26,10 @@
                     apiKey: user.get("api_key")
                 };
 
-                chuisy.accounts.syncRecords();
-                chuisy.accounts.startPolling(600000);
+                chuisy.accounts.syncActiveUser();
+                setInterval(function() {
+                    chuisy.accounts.syncActiveUser();
+                }, 60000);
                 user.friends.fetchAll();
 
                 chuisy.closet.syncRecords();
@@ -44,8 +49,8 @@
         setOnline: function(online) {
             var goneOnline = online && !chuisy.online;
             chuisy.online = online;
-            if (goneOnline && chuisy.accounts.getActiveUser()) {
-                chuisy.accounts.syncRecords();
+            if (goneOnline && chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().isAuthenticated()) {
+                chuisy.accounts.syncActiveUser();
                 chuisy.closet.syncRecords();
                 chuisy.notifications.fetch();
             }
@@ -61,7 +66,7 @@
                     user.save(null, {nosync: true});
                     chuisy.accounts.setActiveUser(user);
                     if (success) {
-                        success();
+                        success(user);
                     }
                 }, error: failure});
             }, function() {
@@ -78,7 +83,7 @@
 
     var timeToText = function(time) {
         if (!time) {
-            return null;
+            return $L("just now");
         }
 
         var now = new Date();
@@ -90,7 +95,7 @@
         var f = Math.floor;
 
         if (minutes < 1) {
-            return $L("A few seconds ago");
+            return $L("just now");
         } else if (hours < 1) {
             return $L("{{ minutes }} minutes ago").replace("{{ minutes }}", f(minutes));
         } else if (days < 1) {
@@ -98,7 +103,7 @@
         } else if (days < 30) {
             return $L("{{ days }} days ago").replace("{{ days }}", f(days));
         } else {
-            return $L("A while back...");
+            return $L("a while back...");
         }
     };
 
@@ -298,16 +303,16 @@
         mark: function(model, type, value) {
             if (model && model.id) {
                 var ids = this.getList(type);
-                if (value && !_.contains(ids, model.id)) {
+                if (value && !_.contains(ids, model.id.toString())) {
                     ids.push(model.id);
-                } else {
-                    ids = _.without(ids, model.id);
+                } else if (!value) {
+                    ids = _.without(ids, model.id.toString());
                 }
                 this.setList(type, ids);
             }
         },
         isMarked: function(model, type) {
-            return model.id && _.contains(this.getList(type), model.id) ? true : false;
+            return model.id && _.contains(this.getList(type), model.id.toString()) ? true : false;
         },
         update: function(models, options) {
             options = _.extend({add: true, merge: true, remove: true}, options);
@@ -343,10 +348,12 @@
             console.log("changed: " + JSON.stringify(changed));
             console.log("destroyed: " + JSON.stringify(destroyed));
 
+            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
+
             for (var i=0; i<changed.length; i++) {
                 var model = this.get(changed[i]);
                 if (model && !this.isMarked(model, "added")) {
-                    model.save(null, {remote: true});
+                    model.save(null, {remote: true, nosync: true, silent: true});
                 }
             }
 
@@ -367,13 +374,54 @@
                     model.set("id", lid);
                 }
             }
-
-            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
         },
         startPolling: function(interval, options) {
             this.pollInterval = setInterval(_.bind(function() {
                 this.syncRecords();
             }, this), interval || 60000);
+        }
+    });
+
+    chuisy.models.FbFriend = Backbone.Model.extend({
+        urlRoot: "https://graph.facebook.com/",
+        getAvatar: function(width, height) {
+            return _.result(this, "url") + "/picture/?width=" + (width || 50) + "&height=" + (height || 50);
+        }
+    });
+
+    chuisy.models.FbFriendsCollection = Backbone.Collection.extend({
+        model: chuisy.models.FbFriend,
+        initialize: function(models, options) {
+            Backbone.Collection.prototype.initialize.call(this, models, options);
+            this.paging = {};
+            this.url = options && options.url || this.url;
+        },
+        parse: function(response) {
+            this.paging = response && response.paging;
+            return response.data;
+        },
+        fetchNext: function() {
+            this.fetch({
+                update: true,
+                add: true,
+                remove: false,
+                url: this.paging && this.paging.next
+            });
+        },
+        hasNextPage: function() {
+            return this.paging && this.paging.next;
+        },
+        fetchAll: function(options) {
+            options = options || {};
+            var success = options.success;
+            options.success = _.bind(function(collection, response) {
+                if (this.hasNextPage()) {
+                    this.fetchNext(options);
+                } else if (success) {
+                    success(collection, response, options);
+                }
+            }, this);
+            this.fetch(options);
         }
     });
 
@@ -407,20 +455,39 @@
                     return {user: this.id};
                 }, this)
             });
+            this.fbFriends = new chuisy.models.FbFriendsCollection([], {
+                url: _.bind(function() {
+                    return "https://graph.facebook.com/me/friends/?access_token=" + this.get("fb_access_token");
+                }, this)
+            });
         },
         parse: function(response) {
             if (this.profile) {
-                this.profile.set(response.profile);
+                this.profile.set(response.profile, {nosync: true});
                 delete response.profile;
             }
             return response;
         },
         toJSON: function() {
-            var userJSON = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
-            userJSON.profile = this.profile.toJSON();
-            return userJSON;
+            var json = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
+            json.profile = this.profile.toJSON();
+            return json;
         },
+        // save: function(attributes, options) {
+        //     attributes = attributes || {};
+        //     if (!(this.collection && this.collection.localStorage) || options && options.remote) {
+        //         this.profile.save(null, {silent: true, success: _.bind(function() {
+        //             console.log("profile synced");
+        //             attributes.profile = this.profile.get("resource_uri");
+        //             Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+        //         }, this)});
+        //     } else {
+        //         attributes.profile = this.profile.toJSON();
+        //         Backbone.Tastypie.Model.prototype.save.call(this, attributes, options);
+        //     }
+        // },
         authenticate: function(fbAccessToken, success, failure) {
+            this.set("fb_access_token", fbAccessToken);
             Backbone.ajax(this.authUrl, {
                 data: {fb_access_token: fbAccessToken},
                 dataType: "json",
@@ -562,7 +629,17 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/chu/",
         initialize: function(attributes, options) {
             chuisy.models.OwnedModel.prototype.initialize.call(this, attributes, options);
-            this.comments = new chuisy.models.ChuCommentCollection([], {chu: this});
+            this.comments = new chuisy.models.ChuCommentCollection([], {
+                chu: this,
+                comparator: function(model) {
+                    return new Date(model.get("time"));
+                }
+            });
+            this.likes = new chuisy.models.UserCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "likes/";
+                }, this)
+            });
 
             this.listenTo(this, "sync", function(model, response, request) {
                 if (request && request.xhr.status == 201 && this.get("localImage")) {
@@ -578,7 +655,7 @@
                 attributes.friends = _.pluck(friends, "resource_uri");
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
-            this.set("friends", friends);
+            this.set("friends", friends, {silent: true});
         },
         destroy: function() {
             if (this.get("localImage")) {
@@ -598,6 +675,12 @@
             if (!activeUser || !activeUser.isAuthenticated()) {
                 console.error("There has to be an active authenticated user to perform this action!");
                 return;
+            }
+
+            if (liked) {
+                this.likes.unshift(activeUser);
+            } else {
+                this.likes.remove(activeUser);
             }
 
             this.set("liked", liked);
@@ -676,10 +759,6 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/followingrelation/"
     });
 
-    chuisy.models.Place = Backbone.Tastypie.Model.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/place/"
-    });
-
     chuisy.models.Notification = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/notification/",
         save: function(attributes, options) {
@@ -701,7 +780,7 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/profile/",
         toJSON: function() {
             var json = chuisy.models.OwnedModel.prototype.toJSON.apply(this, arguments);
-            // delete json.avatar_thumbnail;
+            delete json.avatar_thumbnail;
             return json;
         }
     });
@@ -735,10 +814,8 @@
 
     chuisy.models.Accounts = chuisy.models.SyncableCollection.extend({
         model: chuisy.models.User,
+        url: chuisy.apiRoot + chuisy.version + "/user/",
         localStorage: new Backbone.LocalStorage("accounts"),
-        url: function() {
-            return chuisy.apiRoot + chuisy.version + "/user/set/" + this.pluck("id").join(";") + "/";
-        },
         initialize: function() {
             chuisy.models.SyncableCollection.prototype.initialize.apply(this, arguments);
             this.listenTo(this, "change:avatar", function(model, options) {
@@ -748,23 +825,27 @@
                 this.mark(model, "avatar_changed", false);
             });
         },
-        syncRecords: function() {
-            chuisy.models.SyncableCollection.prototype.syncRecords.apply(this, arguments);
-            var avatar_changed = this.getList("avatar_changed");
-            console.log("avatar_changed: " + JSON.stringify(avatar_changed));
-            for (var i=0; i<avatar_changed.length; i++) {
-                var model = this.get(avatar_changed[i]);
-                if (model && !this.isMarked(model, "added")) {
-                    model.uploadAvatar();
-                }
-            }
-        },
         setActiveUser: function(model) {
             localStorage.setItem("accounts_active", model && model.id);
             this.trigger("change:active_user");
         },
         getActiveUser: function() {
             return this.get(localStorage.getItem("accounts_active"));
+        },
+        syncActiveUser: function() {
+            var user = this.getActiveUser();
+
+            if (user) {
+                if (!this.isMarked(user, "changed") && !this.isMarked(user, "avatar_changed")) {
+                    user.fetch({remote: true});
+                }
+                if (this.isMarked(user, "changed")) {
+                    user.save(null, {remote: true, nosync: true});
+                }
+                if (this.isMarked(user, "avatar_changed")) {
+                    user.uploadAvatar();
+                }
+            }
         }
     });
 
@@ -774,7 +855,21 @@
     });
 
     chuisy.models.Feed = chuisy.models.ChuCollection.extend({
-        url: chuisy.apiRoot + chuisy.version + "/chu/feed/"
+        url: chuisy.apiRoot + chuisy.version + "/chu/feed/",
+        localStorage: new Backbone.LocalStorage("feed"),
+        reset: function(models, options) {
+            if (!options.remote) {
+                return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+            }
+
+            while (this.length) {
+                this.at(0).destroy();
+            }
+            chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+            this.each(function(model) {
+                model.save();
+            });
+        }
     });
 
     chuisy.models.Closet = chuisy.models.SyncableCollection.extend({
@@ -848,6 +943,8 @@
                 Backbone.Tastypie.addAuthentication("read", this, options);
                 Backbone.ajax(options);
             }
+            this.meta = this.meta || {};
+            this.meta.unseen_count = 0;
             this.trigger("reset");
         },
         getUnseenCount: function() {
@@ -867,11 +964,116 @@
         url: chuisy.apiRoot + chuisy.version + "/gift/"
     });
 
+    /*
+        Converts degrees to radians
+    */
+    var rad = function(deg) {
+        return deg * Math.PI / 180;
+    };
+
+    /*
+        Calculates the distance (m) between to geographical coordinates (lat and lng in degrees)
+    */
+    var distance = function(lat, lng, lat0, lng0) {
+        var R = 6371000; // m
+        lat0 = rad(lat0);
+        lng0 = rad(lng0);
+        lat = rad(lat);
+        lng = rad(lng);
+        var dLat = (lat-lat0);
+        var dLon = (lng-lng0);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(lat0);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return d;
+    };
+
+    chuisy.models.Venue = Backbone.Tastypie.Model.extend({
+        urlRoot: "https://api.foursquare.com/v2/venues/",
+        /*
+            Calculates the distance to a coordinate in meters
+        */
+        distanceTo: function(lat, lng) {
+            return distance(lat, lng, this.get("location").lat, this.get("location").lng);
+        },
+        /*
+            Returns a plain object with the structure of a Chuisy Location object
+        */
+        toLocJSON: function() {
+            return {
+                name: this.get("name"),
+                latitude: this.get("location").lat,
+                longitude: this.get("location").lng,
+                address: this.get("location").address,
+                zip_code: this.get("location").postalCode,
+                city: this.get("location").city,
+                country: this.get("location").cc,
+                foursquare_id: this.id
+            };
+        }
+    });
+
+    chuisy.models.Venues = Backbone.Collection.extend({
+        model: chuisy.models.Venue,
+        url: "https://api.foursquare.com/v2/venues/search",
+        localStorage: new Backbone.LocalStorage("locations"),
+        initialize: function() {
+            Backbone.Collection.prototype.initialize.apply(this, arguments);
+            this.listenTo(this, "sync", function(model, response, options) {
+                if (model instanceof Backbone.Model) {
+                    model.save();
+                } else if (model instanceof Backbone.Collection) {
+                    model.each(function(each) {
+                        each.save();
+                    });
+                }
+            });
+        },
+        parse: function(response) {
+            return response && response.response && response.response.venues || response;
+        },
+        fetch: function(options) {
+            options = options || {};
+            if (options.remote) {
+                if (!options.latitude || !options.longitude) {
+                    console.error("Latitude and longitude hand to be specified in the options!");
+                    return;
+                }
+                options.update = true;
+                options.add = true;
+                options.remove = false;
+                options.merge = true;
+                options.data = options.data || {};
+                _.extend(options.data, {
+                    intent: "checkin",
+                    ll: options.latitude + "," + options.longitude,
+                    radius: options.radius || 100,
+                    client_id: "0XVNZDCHBFFTGKP1YGHRAG3I154DOT0QGATA120CQ3KQFIYU",
+                    client_secret: "QPM5WVRLV0OEDLJK3NWV01F1OLDQVVMWS25PJJTFDLE02GOL",
+                    v: "20121024",
+                    limit: 50,
+                    categoryId: [
+                        // Clothing Store
+                        "4bf58dd8d48988d103951735",
+                        // Bridal Shop
+                        "4bf58dd8d48988d11a951735",
+                        // Jewelry Store
+                        "4bf58dd8d48988d111951735"
+                    ].join(",")
+                });
+            }
+
+            return Backbone.Collection.prototype.fetch.call(this, options);
+        }
+    });
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.gifts = new chuisy.models.GiftsCollection();
+    chuisy.venues = new chuisy.models.Venues();
 
 })(window.$, window._, window.Backbone, window.enyo);

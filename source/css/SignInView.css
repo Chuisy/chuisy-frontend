@@ -1,0 +1,80 @@
+.signinview {
+	background: url(../../assets/images/loading_screen.png) no-repeat center -20px;
+	background-size: 320px 568px;
+}
+
+.signinview-spacer {
+	-webkit-box-flex: 1;
+}
+
+.signinview-scrim {
+	background-color: white;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	-webkit-transition: opacity 0.7s;
+}
+
+.signinview.ready .signinview-scrim {
+	opacity: 0.5
+}
+
+.signinview-content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-transform: translate3d(0, 30px, 0);
+	left: 0;
+	z-index: 10;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-align: center;
+	opacity: 0;
+	-webkit-transition: opacity 0.5s linear 0.7s, -webkit-transform 0.5s linear 0.7s;
+}
+
+.signinview.ready .signinview-content {
+	-webkit-transform: translate3d(0, 0, 0);
+	opacity: 1
+}
+
+.signinview-center {
+	width: 100%;
+}
+
+.signinview-text {
+	width: 100%;
+	text-align: center;
+	padding: 0 40px 20px 40px;
+	color: #555;
+	font-size: 18pt;
+	box-sizing: border-box;
+}
+
+.signinview-terms {
+	font-size: 9pt;
+	text-align: center;
+	color: #555;
+	padding: 10px 55px 0 55px;
+}
+
+.signinview-terms .link {
+	color: #ff1e78;
+}
+
+.signinview-cancel-button {
+	display: block;
+	margin: 5px auto;
+	width: 250px;
+}
+
+.signinview-spinner {
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	top: 40px;
+}

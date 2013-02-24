@@ -10,7 +10,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("reset add", this.refresh, this);
+        chuisy.notifications.on("sync", this.refresh, this);
     },
     /**
         Refreshes notification list with loaded items
@@ -38,6 +38,9 @@ enyo.kind({
                     break;
                 case "share":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
+                    break;
+                case "join":
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
                     break;
             }
         }
@@ -83,7 +86,8 @@ enyo.kind({
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: $L("There aren't any affairs that require your attention right now...")}
         ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill", components: [
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
+            strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-header", components: [
                     {classes: "notifications-notification-seperator"},
@@ -92,7 +96,7 @@ enyo.kind({
                 ]},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {name: "loadingNextPage", content: $L("Loading..."), classes: "loading-next-page"}
+            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]
 });

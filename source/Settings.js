@@ -7,7 +7,8 @@ enyo.kind({
     classes: "settings",
     events: {
         // User has tapped the back button
-        onBack: ""
+        onBack: "",
+        onInviteFriends: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -34,21 +35,24 @@ enyo.kind({
         this.$.website.setValue(user.profile.get("website"));
         var avatar = user.get("localAvatar") || user.profile.get("avatar");
         this.$.avatar.applyStyle("background-image", "url(" + avatar + ")");
+        this.$.ogActionsButton.setValue(user.profile.get("fb_og_share_actions"));
         this.$.pushLikeIcon.addRemoveClass("active", user.profile.get("push_like"));
         this.$.emailLikeIcon.addRemoveClass("active", user.profile.get("email_like"));
         this.$.pushCommentIcon.addRemoveClass("active", user.profile.get("push_comment"));
         this.$.emailCommentIcon.addRemoveClass("active", user.profile.get("email_comment"));
         this.$.pushFollowIcon.addRemoveClass("active", user.profile.get("push_follow"));
         this.$.emailFollowIcon.addRemoveClass("active", user.profile.get("email_follow"));
-        this.updateFacebookConnectItem();
     },
     updateUser: function() {
         var user = chuisy.accounts.getActiveUser();
         user.profile.set("website", this.$.website.getValue());
+        user.profile.set("fb_og_share_actions", this.$.ogActionsButton.getValue());
         user.save({
             first_name: this.$.firstName.getValue(),
             last_name: this.$.lastName.getValue()
         });
+        // chuisy.accounts.mark(user, "changed", true);
+        chuisy.accounts.syncActiveUser();
     },
     facebookSignIn: function() {
         // Get facebook access token
@@ -58,11 +62,17 @@ enyo.kind({
         Sign out. Simply calls _chuisy.signOut_
     */
     signOut: function() {
-        chuisy.signOut();
-        this.doBack();
-    },
-    updateFacebookConnectItem: function() {
-        this.$.facebookConnectItem.addRemoveClass("connected", App.isSignedIn());
+        if (navigator.notification) {
+            navigator.notification.confirm($L("Are you sure you want to log out?"), enyo.bind(this, function(choice) {
+                if (choice == 2) {
+                    chuisy.signOut();
+                    this.doBack();
+                }
+            }), $L("Logout"), [$L("Cancel"), $L("Logout")].join(","));
+        } else {
+            chuisy.signOut();
+            this.doBack();
+        }
     },
     /**
         Open photo library to change profile picture
@@ -86,13 +96,19 @@ enyo.kind({
         user.profile.set(prop, !user.profile.get(prop));
         this.updateUser();
     },
+    toggleOgActions: function() {
+        if (this.$.ogActionsButton.getValue()) {
+            App.fbRequestPublishPermissions();
+        }
+        this.updateUser();
+    },
     activate: function() {},
     deactivate: function() {},
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
         ]},
-        {kind: "Scroller", fit: true, components: [
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "settings-content", components: [
                 // PROFILE INFORMATION
                 {classes: "settings-section-header", content: $L("Profile")},
@@ -115,38 +131,38 @@ enyo.kind({
                     ]}
                 ]},
                 // LINKED ACCOUNTS
-                {classes: "settings-section-header", content: $L("Accounts")},
+                {classes: "settings-section-header", content: $L("Facebook")},
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
-                    {classes: "settings-connect-item facebook", name: "facebookConnectItem", components: [
-                        {classes: "settings-connect-icon"},
-                        {content: $L("Facebook"), classes: "settings-connect-text"},
-                        {kind: "onyx.Button", classes: "settings-connect-button", content: $L("Connect"), ontap: "facebookSignIn"},
-                        {kind: "onyx.Button", classes: "settings-connect-disconnect", content: $L("Disconnect"), ontap: "signOut"}
+                    {classes: "settings-item", components: [
+                        {content: $L("Post actions"), classes: "settings-item-text"},
+                        {kind: "onyx.ToggleButton", name: "ogActionsButton", onChange: "toggleOgActions"}
                     ]}
                 ]},
+                {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},
                 // NOTIFICATION SETTINGS
                 {classes: "settings-section-header", content: $L("Notifications")},
                 {kind: "onyx.Groupbox", components: [
                     // LIKES
-                    {classes: "settings-notifications-item", components: [
-                        {content: $L("Likes"), classes: "settings-notifications-text"},
+                    {classes: "settings-item", components: [
+                        {content: $L("Likes"), classes: "settings-item-text"},
                         {classes: "settings-notification-icon push", name: "pushLikeIcon", prop: "push_like", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailLikeIcon", prop: "email_like", ontap: "toggleNotification"}
                     ]},
                     // COMMENTS
-                    {classes: "settings-notifications-item", components: [
-                        {content: $L("Comments"), classes: "settings-notifications-text"},
+                    {classes: "settings-item", components: [
+                        {content: $L("Comments"), classes: "settings-item-text"},
                         {classes: "settings-notification-icon push", name: "pushCommentIcon", prop: "push_comment", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailCommentIcon", prop: "email_comment", ontap: "toggleNotification"}
                     ]},
                     // FOLLOWS
-                    {classes: "settings-notifications-item", components: [
-                        {content: $L("Follows"), classes: "settings-notifications-text"},
+                    {classes: "settings-item", components: [
+                        {content: $L("Follows"), classes: "settings-item-text"},
                         {classes: "settings-notification-icon push", name: "pushFollowIcon", prop: "push_follow", ontap: "toggleNotification"},
                         {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}
-                ]}
+                ]},
+                {kind: "onyx.Button", style: "width: 100%; margin-top: 20px;", content: $L("Logout"), ontap: "signOut"}
             ]}
         ]}
     ]

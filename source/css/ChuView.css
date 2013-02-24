@@ -31,28 +31,6 @@
 	position: relative;
 }
 
-.chuview .share-button {
-	display: none;
-	position: absolute;
-	padding: 0px 10px;
-	height: 30px;
-	top: 7px;
-	right: 5px;
-	box-sizing: border-box;
-}
-
-.chuview.owned .share-button {
-	display: block;
-}
-
-.chuview-controls {
-	-webkit-transition: opacity 0.5s;
-}
-
-.chuview.fullscreen .chuview-controls {
-	opacity: 0;
-}
-
 .chuview-content {
 	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
 	background-size: 100px 100px;
@@ -61,52 +39,126 @@
 	box-shadow: 0 0 20px #000000;
 }
 
-.chuview-comment {
-	margin: 5px 0;
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	padding: 4px;
+.chuview-comments {
 }
 
-/*.chuview-comment-time {
-	float: right;
-	font-size: 10pt;
-}*/
+.chuview-comment {
+	padding: 5px 0;
+	display: -webkit-box;
+	border-bottom: solid 1px #ddd;
+}
+
+.chuview-comment-avatar {
+	margin: 2px;
+	width: 35px;
+	height: 35px;
+	border: solid 1px #ccc;
+}
+
+.chuview-comment-content {
+	padding: 0 5px;
+	-webkit-box-flex: 1;
+}
 
 .chuview-comment-text {
 	width: 100%;
 	box-sizing: border-box;
-	padding: 0 5px;
 	font-size: 10pt;
+	color: #666;
+	padding: 2px;
+	font-family: Muli;
+}
+
+.chuview-comment-fullname {
+	font-size: 11pt;
+	max-width: 150px;
+	padding-top: 2px;
+}
+
+.chuview-comment-time {
+	color: #555;
+	font-size: 9pt;
+	float: right;
+	margin-top: 4px;
+}
+
+.chuview-likes {
+	margin-bottom: -4px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chuview-like-image {
+	width: 30px;
+	height: 30px;
+	margin: 0 1px;
+	border: solid 1px #ccc;
+}
+
+.chuview-likes-more {
+	display: inline-block;
+	vertical-align: middle;
+	color: #555;
+	padding: 5px;
+	max-width: 25px;
+	font-size: 10pt;
+	margin-bottom: -4px;
+}
+
+.chuview-likes-more.big {
+	font-size: 9pt;
+}
+
+.chuview-commentinput {
+	display: -webkit-box;
+	padding: 4px;
+	/*-webkit-box-align: stretch;*/
+	height: 40px;
+	box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.3);
+	/*border-top: solid 1px #ccc;*/
+	position: relative;
+	z-index: 10;
+	background-color: #fafafa;
 }
 
 .chuview-commentinput-decorator {
-	/*margin-bottom: 5px;*/
-	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	width: 100%;
+	padding: 0;
+	display: block;
+	-webkit-box-flex: 1;
+	height: 100%;
 	box-sizing: border-box;
-	height: 40px;
-	-webkit-transition: height 0.2s;
-	border: none;
-	margin-top: 5px;
-}
-
-.chuview-commentinput-decorator.onyx-focused {
-	box-shadow: 0 1px 1px #888;
-	height: 80px;
 }
 
 .chuview-commentinput-decorator > .enyo-input {
+	display: block;
+	min-height: 0;
+	height: 100%;
 	width: 100%;
+	padding: 7px 5px;
+	box-sizing: border-box;
 }
 
-.chuview-commentinput-slider {
+.chuview-commentinput-button {
+	display: block;
+	margin-left: 4px;
+	height: auto;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.chuview-more-comments {
 	width: 100%;
-	position: absolute;
-	bottom: 0;
+	text-align: center;
+	margin-top: 5px;
+	font-size: 10pt;
+	box-sizing: border-box;
+	color: #ff1e78;
+}
+
+.chuview-comments-spinner,
+.chuview-likes-spinner {
+	display: block;
+	margin: 5px auto 0 auto;
 }
 
 .chuview-likebar {
@@ -150,42 +202,34 @@
 	-webkit-transform: rotateX(180deg);
 }
 
-/*.chuview-like-button:active:hover:not([disabled]) {
-	-webkit-transform: scale(1.1);
-}*/
-
 .chuview-like-button.active {
 	-webkit-transform: rotateX(180deg);
 }
 
 .chuview-infobar {
-	padding-bottom: 5px;
+	padding: 5px 0;
 	overflow: hidden;
 }
 
-.chuview-comments-likes-price {
+.chuview-separator {
+	width: 100%;
+	display: -webkit-box;
+	-webkit-box-align: center;
+}
+
+.chuview-separator-icon {
+	opacity: 0.5;
+}
+
+.chuview-separator-line {
+	height: 0;
+	border-top: solid 1px #ddd;
+	-webkit-box-flex: 1;
+	margin: 0 5px;
+}
+
+.chuview-location-price {
 	padding: 8px 0 4px 4px;
-}
-
-.chuview-cancel-fullscreen-button {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	display: none;
-	width: 36px;
-	height: 36px;
-	background-size: 36px 72px;
-	background-image: url(../../assets/images/delete_chu_button.png);
-	background-position: 0 0;
-	z-index: 1001;
-}
-
-.chuview-cancel-fullscreen-button:active:hover:not([disabled]) {
-	background-position: 0 -36px;
-}
-
-.chuview.fullscreen .chuview-cancel-fullscreen-button {
-	display: block;
 }
 
 .chuview-avatar {
@@ -194,6 +238,7 @@
 	width: 35px;
 	height: 35px;
 	float: left;
+	border: solid 1px #ccc;
 }
 
 .chuview-fullname {
@@ -213,9 +258,9 @@
 
 .chuview-location {
 	color: #555;
-	font-size: 10pt;
+	font-size: 11pt;
 	float: right;
-	max-width: 100px;
+	max-width: 120px;
 	text-align: right;
 	max-height: 35px;
 	overflow: hidden;
@@ -223,16 +268,7 @@
 
 .chuview-likes-comments {
 	float: right;
-	margin-right: 5px;
-}
-
-.chuview-category-icon {
-	width: 24px;
-	height: 24px;
-	background: url() no-repeat center center;
-	background-size: cover;
-	display: inline-block;
-	margin: -3px 5px 0px 5px;
+	margin-right: 2px;
 }
 
 .chuview-price {
@@ -245,29 +281,29 @@
 
 .chuview-likes-count,
 .chuview-comments-count {
-	color: #555;
-	font-size: 11pt;
+	color: #888;
+	font-size: 10pt;
 	display: inline-block;
 	vertical-align: top;
-	padding: 0 4px;
+	padding: 0 3px 0 4px;
+	line-height: 14pt;
 }
 
-.chuview-likes-icon {
-	width: 16px;
-	height: 16px;
-	background-image: url(../../assets/images/likes_32x32.png);
-	background-size: cover;
-	vertical-align: top;
-	display: inline-block;
-}
-
+.chuview-likes-icon,
 .chuview-comments-icon {
 	width: 16px;
 	height: 16px;
-	background-image: url(../../assets/images/comments_32x32.png);
 	background-size: cover;
 	vertical-align: top;
 	display: inline-block;
+}
+
+.chuview-likes-icon {
+	background-image: url(../../assets/images/likes_32x32.png);
+}
+
+.chuview-comments-icon {
+	background-image: url(../../assets/images/comments_32x32.png);
 }
 
 .chuview-image-loading {

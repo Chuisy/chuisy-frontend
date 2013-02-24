@@ -17,12 +17,12 @@ enyo.depends(
 	"ChuList.css",
 	"Notifications.css",
 	"ChuWebView.css",
-	"ShareView.css",
 	"Settings.css",
 	"Menu.css",
-	"FacebookSignIn.css",
+	"SignInView.css",
 	"Gifts.css",
 	"Guide.css",
 	"GetStarted.css",
-	"GiftView.css"
+	"GiftView.css",
+	"InviteFriends.css"
 );
