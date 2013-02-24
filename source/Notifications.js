@@ -8,6 +8,9 @@ enyo.kind({
         // User has tapped a notification
         onNotificationSelected: ""
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
         chuisy.notifications.on("sync", this.refresh, this);
@@ -81,6 +84,10 @@ enyo.kind({
         this.seen();
     },
     deactivate: function() {},
+    unfreeze: function() {
+        this.$.list.updateMetrics();
+        this.$.list.refresh();
+    },
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},

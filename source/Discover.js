@@ -11,6 +11,9 @@ enyo.kind({
         // A chu has been selected
         onShowChu: ""
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
 
@@ -103,6 +106,10 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
+    },
+    unfreeze: function() {
+        this.$.chuList.updateMetrics();
+        this.$.chuList.refresh();
     },
     components: [
         // SEARCH INPUT

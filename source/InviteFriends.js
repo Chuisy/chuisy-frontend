@@ -6,6 +6,9 @@ enyo.kind({
     published: {
         buttonLabel: $L("add")
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
         this.userChanged();
@@ -78,6 +81,10 @@ enyo.kind({
         this.filterString = "";
         this.selectedFriends = {};
         this.refreshList();
+    },
+    unfreeze: function() {
+        this.$.list.updateMetrics();
+        this.$.list.refresh();
     },
     components: [
         {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},

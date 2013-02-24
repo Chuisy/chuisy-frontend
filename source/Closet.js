@@ -35,6 +35,7 @@ enyo.kind({
     },
     postResize: function() {
         this.setupList();
+        this.$.list.updateMetrics();
         this.refresh();
     },
     setupList: function() {

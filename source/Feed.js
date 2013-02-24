@@ -13,6 +13,9 @@ enyo.kind({
         // User has tapped the avatar or name of a user
         onShowUser: ""
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
@@ -124,6 +127,10 @@ enyo.kind({
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
         this.$.feedList.getStrategy().start();
+    },
+    unfreeze: function() {
+        this.$.feedList.updateMetrics();
+        this.$.feedList.refresh();
     },
     components: [
         {kind: "onyx.Spinner", classes: "absolute-center"},

@@ -40,6 +40,7 @@ enyo.kind({
     },
     postResize: function() {
         this.buildCells();
+        this.$.list.updateMetrics();
         this.refresh();
     },
     /**

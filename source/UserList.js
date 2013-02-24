@@ -7,6 +7,9 @@ enyo.kind({
         users: null,
         rowsPerPage: 20
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     create: function() {
@@ -53,6 +56,10 @@ enyo.kind({
         user.toggleFollow();
         this.refresh();
         return true;
+    },
+    unfreeze: function() {
+        this.$.userList.updateMetrics();
+        this.$.userList.refresh();
     },
     components: [
         {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy", thumb: false, rowsPerPage: 20, components: [
