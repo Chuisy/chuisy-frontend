@@ -47,10 +47,33 @@
 	color: red;
 }
 
-.picklocation .picklocation-new-place-input {
+.picklocation-new-place {
+	display: -webkit-box;
+	-webkit-box-align: stretch;
 	margin: 5px 0;
 	width: 100%;
 	box-sizing: border-box;
+	height: 35px;
+}
+
+.picklocation .picklocation-new-place-input {
+	display: block;
+	-webkit-box-flex: 1;
+}
+
+.picklocation-new-place-button {
+	display: block;
+	width: 80px;
+	height: 100%;
+	margin-left: 5px;
+	-webkit-transition: all 0.2s;
+}
+
+.picklocation-new-place-button.collapsed {
+	width: 0;
+	padding: 0;
+	border: none;
+	margin-left: 0;
 }
 
 .picklocation .picklocation-filter-input {

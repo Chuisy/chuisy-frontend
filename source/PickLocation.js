@@ -121,6 +121,16 @@ enyo.kind({
         this.reflow();
         this.$.scroller.scrollToTop();
     },
+    newPlaceFocus: function() {
+        enyo.asyncMethod(this, function() {
+            this.$.newPlaceButton.removeClass("collapsed");
+        });
+    },
+    newPlaceBlur: function() {
+        enyo.asyncMethod(this, function() {
+            this.$.newPlaceButton.addClass("collapsed");
+        });
+    },
     components: [
         {classes: "header", components: [
             {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
@@ -138,8 +148,11 @@ enyo.kind({
             ]},
             {name: "resultText", classes: "picklocation-resulttext", showing: false},
             {style: "padding: 0 5px;", components: [
-                {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", alwaysLooksFocused: true, name: "newPlace", components: [
-                    {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown"}
+                {classes: "picklocation-new-place", name: "newPlace", components: [
+                    {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", alwaysLooksFocused: true, components: [
+                        {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown", onfocus: "newPlaceFocus", onblur: "newPlaceBlur"}
+                    ]},
+                    {kind: "onyx.Button", name: "newPlaceButton", content: $L("done"), classes: "picklocation-new-place-button collapsed", ontap: "newPlaceEnter"}
                 ]},
                 {kind: "onyx.Button", content: $L("More stores..."), ontap: "morePlaces", name: "moreButton", classes: "picklocation-more-button"}
             ]}
