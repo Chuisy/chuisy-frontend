@@ -32,7 +32,7 @@
 		<script src="build/app.js"></script>
 
 		<!-- Google Maps API -->
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+		<!-- <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script> -->
 
 		<!-- Touchmove handler for iOS -->
 		<script type="text/javascript">
@@ -48,8 +48,6 @@
 				// alert('No application build found, redirecting to debug.html.');
 				location = 'debug.html';
 			}
-	        // tell Enyo to listen for deviceready event
-	        enyo.dispatcher.listen(document, "deviceready");
 	        
 			new App().renderInto(document.body);
 		</script>
