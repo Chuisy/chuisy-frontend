@@ -95,7 +95,7 @@ enyo.kind({
         this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
 
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency"), locale: loc && loc.country.toLowerCase() || undefined});
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency"), locale: loc && loc.country && loc.country.toLowerCase() || undefined});
         this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
         this.addRemoveClass("owned", this.isOwned());
