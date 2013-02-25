@@ -41,7 +41,7 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var friend = this.filteredFriends[event.index];
-        this.$.avatar.setSrc(friend.getAvatar(32, 32));
+        this.$.avatar.setSrc(friend.getAvatar(64, 64));
         this.$.fullName.setContent(friend.get("name"));
 
         this.$.addButton.setShowing(!this.isSelected(friend));
