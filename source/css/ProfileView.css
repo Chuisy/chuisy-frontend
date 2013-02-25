@@ -127,8 +127,8 @@
 }
 
 .profileview .placeholder {
-	padding-top: 30px;
-	padding-bottom: 40px;
+	padding-top: 20px;
+	padding-bottom: 30px;
 }
 
 .profileview .placeholder-image {
@@ -163,7 +163,7 @@
 }
 
 .profileview-terms {
-	font-size: 9pt;
+	font-size: 7pt;
 	text-align: center;
 	color: #555;
 	padding: 10px 55px 0 55px;
@@ -171,4 +171,5 @@
 
 .profileview-terms .link {
 	color: #ff1e78;
+	text-decoration: none;
 }
