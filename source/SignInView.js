@@ -73,21 +73,18 @@ enyo.kind({
             event.preventDefault();
         }
     },
-    openTerms: function() {
-        window.location = "http://www.chuisy.com/terms/";
-    },
     components: [
         {classes: "signinview-scrim"},
         {classes: "signinview-content", components: [
             {classes: "signinview-spacer"},
             {classes: "signinview-center", components: [
-                {classes: "signinview-text", content: $L("Discover fashion, share moments with friends.")},
+                {classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
                 ]},
                 {kind: "onyx.Button", name: "cancelButton", ontap: "cancel", classes: "signinview-cancel-button"},
-                {classes: "signinview-terms", ontap: "openTerms", allowHtml: true, content: $L("By signing in you accept our<br> <span class='link'>terms of use</span>.")}
+                {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
             ]},
             {classes: "signinview-spacer", components: [
                 {kind: "onyx.Spinner", classes: "signinview-spinner", showing: false}

@@ -49,14 +49,14 @@
 .signinview-text {
 	width: 100%;
 	text-align: center;
-	padding: 0 40px 20px 40px;
+	padding: 0 30px 20px 30px;
 	color: #555;
 	font-size: 18pt;
 	box-sizing: border-box;
 }
 
 .signinview-terms {
-	font-size: 9pt;
+	font-size: 7pt;
 	text-align: center;
 	color: #555;
 	padding: 10px 55px 0 55px;
@@ -64,6 +64,7 @@
 
 .signinview-terms .link {
 	color: #ff1e78;
+	text-decoration: none;
 }
 
 .signinview-cancel-button {

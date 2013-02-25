@@ -6,6 +6,9 @@ enyo.kind({
     published: {
         buttonLabel: $L("add")
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
         this.userChanged();
@@ -38,7 +41,7 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var friend = this.filteredFriends[event.index];
-        this.$.avatar.setSrc(friend.getAvatar(32, 32));
+        this.$.avatar.setSrc(friend.getAvatar(64, 64));
         this.$.fullName.setContent(friend.get("name"));
 
         this.$.addButton.setShowing(!this.isSelected(friend));
@@ -78,6 +81,10 @@ enyo.kind({
         this.filterString = "";
         this.selectedFriends = {};
         this.refreshList();
+    },
+    unfreeze: function() {
+        this.$.list.updateMetrics();
+        this.$.list.refresh();
     },
     components: [
         {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},

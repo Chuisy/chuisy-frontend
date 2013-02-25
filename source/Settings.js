@@ -23,7 +23,7 @@ enyo.kind({
         if (user) {
             this.updateView();
             this.stopListening();
-            this.listenTo(user, "change", this.updateView);
+            this.listenTo(user, "change change:avatar", this.updateView);
         } else {
             this.doBack();
         }
@@ -82,7 +82,7 @@ enyo.kind({
             navigator.camera.cleanup();
             navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
                 this.warn("Getting image failed!");
-            }), {sourceType: Camera.PictureSourceType.PHOTOLIBRARY, targetWidth: 300, targetHeight: 300, allowEdit: true, correctOrientation: true, quality: 49});
+            }), {sourceType: Camera.PictureSourceType.PHOTOLIBRARY, targetWidth: 612, targetHeight: 612, allowEdit: true, correctOrientation: true, quality: 49});
         } catch (e) {
             this.warn("No camera available!");
         }

@@ -35,6 +35,7 @@ enyo.kind({
     },
     postResize: function() {
         this.setupList();
+        this.$.list.updateMetrics();
         this.refresh();
     },
     setupList: function() {
@@ -68,7 +69,7 @@ enyo.kind({
             this.$["chu" + i].removeClass("deleted");
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
-                var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
+                var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["200x200"] ||
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");

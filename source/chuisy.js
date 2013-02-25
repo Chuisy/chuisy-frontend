@@ -742,7 +742,7 @@
                 console.error("Can't make thumbnail because there is no local image.");
                 return;
             }
-            createThumbnail(image, 100, 100, _.bind(function(imageData) {
+            createThumbnail(image, 200, 200, _.bind(function(imageData) {
                 var fileName = "thumb_" + image.substring(image.lastIndexOf("/")+1);
                 saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
                     this.save({localThumbnail: path}, {nosync: true});

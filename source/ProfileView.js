@@ -188,7 +188,7 @@ enyo.kind({
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign In With Facebook")}
                 ]},
-                {classes: "profileview-terms", ontap: "openTerms", allowHtml: true, content: $L("By signing in you accept our<br> <span class='link'>terms of use</span>.")},
+                {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")},
                 {kind: "onyx.Spinner", classes: "profileview-login-spinner", showing: false}
             ]}
         ]}

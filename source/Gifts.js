@@ -4,6 +4,9 @@ enyo.kind({
     events: {
         onShowGift: ""
     },
+    handlers: {
+        onpostresize: "unfreeze"
+    },
     create: function() {
         this.inherited(arguments);
         chuisy.gifts.on("sync", this.refresh, this);
@@ -42,6 +45,10 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "gifts"});
     },
     deactivate: function() {},
+    unfreeze: function() {
+        this.$.list.updateMetrics();
+        this.$.list.refresh();
+    },
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
