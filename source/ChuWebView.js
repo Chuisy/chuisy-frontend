@@ -73,13 +73,11 @@ enyo.kind({
         this.$.fullName.setContent(fullName);
         this.$.avatar.setAttribute("title", fullName);
         this.$.location.setContent(loc && loc.name || "");
-        this.$.location2.setContent(loc && loc.name || "");
-        // this.$.time.setContent(this.chu.getTimeText());
+        this.$.time.setContent(this.chu.getTimeText());
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency")});
         var priceText = this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "";
         this.$.price.setContent(priceText);
-        this.$.price2.setContent(priceText);
 
         this.setLiked(this.chu.get("liked"));
         this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
@@ -179,28 +177,27 @@ enyo.kind({
         ]},
         {classes: "chuwebview-body", components: [
             {classes: "chuwebview-info", components: [
+                {name: "likeButton", ontap: "likeButtonTapped", classes: "chuwebview-like-button"},
                 {classes: "chuwebview-avatar-name", components: [
                     {kind: "Image", name: "avatar", classes: "chuwebview-avatar"},
-                    {classes: "chuwebview-fullname ellipsis", name: "fullName", showing: false}
+                    {classes: "chuwebview-fullname ellipsis", name: "fullName"},
+                    {classes: "chuwebview-time", name: "time"}
                 ]},
-                {classes: "chuwebview-likes-comments", components: [
+                {classes: "chuwebview-likes-comments", showing: false, components: [
                     {classes: "chuwebview-likes-icon"},
                     {name: "likesCount", classes: "chuwebview-likes-count"},
                     {classes: "chuwebview-comments-icon"},
                     {name: "commentsCount", classes: "chuwebview-comments-count"}
-                ]},
-                {classes: "chuwebview-price", name: "price", showing: false},
-                {classes: "chuwebview-location", name: "location", showing: false},
-                {name: "likeButton", ontap: "likeButtonTapped", classes: "chuwebview-like-button", showing: false}
+                ]}
             ]},
             {classes: "chuwebview-image-container", components: [
                 {style: "width: 100%", components: [
                     {kind: "Image", name: "image", classes: "chuwebview-image"},
                     {classes: "chuwebview-like-overlay", components: [
-                        {name: "likeButton2", ontap: "likeButtonTapped", classes: "chuwebview-like-button"},
-                        {classes: "chuwebview-price", name: "price2"},
-                        {classes: "chuwebview-location", name: "location2"}
-                    ]}
+                        {name: "likeButton2", ontap: "likeButtonTapped", classes: "chuwebview-like-button-2"}
+                    ]},
+                    {classes: "chuwebview-price", name: "price"},
+                    {classes: "chuwebview-location", name: "location"}
                 ]}
             ]},
             {classes: "chuwebview-comments", components: [

@@ -28,6 +28,7 @@
 	vertical-align: top;
 	width: 100px;
 	text-align: right;
+	overflow: hidden;
 }
 
 .chuwebview-avatar {
@@ -38,14 +39,18 @@
 	margin-top: 5px;
 }
 
-
 .chuwebview-fullname {
-	display: inline-block;
+	display: none;
 	vertical-align: top;
 	font-size: 11pt;
-	padding: 0 0;
+	padding-top: 2px;
 	max-width: 200px;
 	width: auto;
+}
+
+.chuwebview-time {
+	color: #555;
+	font-size: 9pt;
 }
 
 .chuwebview-likes-comments {
@@ -80,16 +85,18 @@
 }
 
 .chuwebview-like-button {
-	display: inline-block;
+	display: none;
 	position: relative;
-	width: 64px;
-	height: 64px;
+	width: 40px;
+	height: 40px;
 	background: url(../../assets/images/like_button.png) no-repeat 0 0;
-	background-size: 64px 128px;
+	background-size: 40px 80px;
+	float: right;
+	margin-top: -1px;
 }
 
 .chuwebview-like-button.active {
-	background-position: 0 -64px;
+	background-position: 0 -40px;
 }
 
 .chuwebview-image {
@@ -107,10 +114,6 @@
 	margin: 0 20px;
 }
 
-.chuwebview-image-container .chuwebview-like-button.active {
-	background-position: 0 -128px;
-}
-
 .chuwebview-like-overlay {
 	display: none;
 	position: absolute;
@@ -126,7 +129,7 @@
 	display: block;
 }
 
-.chuwebview-image-container .chuwebview-like-button {
+.chuwebview-like-button-2 {
 	/*display: none;*/
 	width: 128px;
 	height: 128px;
@@ -140,20 +143,26 @@
 	bottom: 0;
 }
 
-.chuwebview-image-container .chuwebview-price {
+.chuwebview-like-button-2.active {
+	background-position: 0 -128px;
+}
+
+.chuwebview-price {
 	position: absolute;
 	bottom: 20px;
 	left: 20px;
 	color: white;
+	text-shadow: 0 0 5px #000;
 }
 
-.chuwebview-image-container .chuwebview-location {
+.chuwebview-location {
 	position: absolute;
 	right: 20px;
 	bottom: 20px;
 	color: white;
 	text-align: right;
 	max-width: 150px;
+	text-shadow: 0 0 5px #000;
 }
 
 .chuwebview-comments {
@@ -161,6 +170,7 @@
 	vertical-align: top;
 	width: 300px;
 	text-align: left;
+	padding-top: 5px;
 }
 
 .chuwebview-commentinput-decorator {
@@ -232,7 +242,7 @@
 
 .chuwebview-comments-spinner {
 	display: block;
-	margin: 5px auto 15px auto;
+	margin: 5px auto;
 }
 
 .chuwebview-signin-dialog {
@@ -263,5 +273,39 @@
 }
 
 @media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+	.chuwebview-body {
+		width: 100%;
+		padding: 10px;
+		box-sizing: border-box;
+	}
 
+	.chuwebview-info, .chuwebview-image-container, .chuwebview-comments {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.chuwebview-info {
+		text-align: left;
+	}
+
+	.chuwebview-avatar {
+		margin: 0 10px 10px 0;
+		width: 35px;
+		height: 35px;
+		float: left;
+		border: solid 1px #ccc;
+	}
+
+	.chuwebview-fullname {
+		display: block;
+	}
+
+	.chuwebview-like-button {
+		display: block;
+	}
+
+	.chuwebview-image-container {
+		margin: 0;
+	}
 }
