@@ -2,118 +2,40 @@
 	text-align: center;
 }
 
-.chuwebview-body {
-	margin: 0 auto;
-	padding: 20px;
-	width: 100%;
-	box-sizing: border-box;
-	max-width: 600px;
-	text-align: left;
-}
-
 .chuwebview-header-logo {
 	display: inline-block;
-	width: 40px;
+	width: 70px;
 	height: 40px;
-	background: url(../../assets/images/feed.png) no-repeat center center;
-	background-size: 40px 80px;
+	background: url(../../assets/images/logo_header.png) no-repeat center center;
+	background-size: 70px 40px;
 	background-position: 0 0;
 	margin: 2px 6px;
 }
 
-.chuwebview-image {
-	width: 100%;
-	padding: 5px;
-	background-color: White;
+.chuwebview-body {
+	margin: 0 auto;
+	padding: 20px;
+	box-sizing: border-box;
+	white-space: nowrap;
+}
+
+.chuwebview-body > * {
+	white-space: normal;
+}
+
+.chuwebview-info {
+	display: inline-block;
+	vertical-align: top;
+	width: 100px;
+	text-align: right;
 }
 
 .chuwebview-avatar {
-	width: 25px;
-	height: 25px;
-	padding: 2px;
-	border-radius: 2px;
-}
-
-.chuwebview-likes-count,
-.chuwebview-comments-count {
-	display: inline-block;
-	float: right;
-	padding: 3px 0;
-}
-
-.chuwebview-likes-icon {
-	width: 16px;
-	height: 16px;
-	background-image: url(../../assets/images/likes_32x32.png);
-	background-size: cover;
-	vertical-align: top;
-	float: right;
-	margin: 3px;
-}
-
-.chuwebview-comments-icon {
-	width: 16px;
-	height: 16px;
-	background-image: url(../../assets/images/comments_32x32.png);
-	background-size: cover;
-	vertical-align: top;
-	float: right;
-	margin: 3px;
-}
-
-.chuwebview-like-button {
-	width: 100%;
+	width: 50px;
 	height: 50px;
-	max-width: 200px;
-	background-color: #eee;
-	background-image: none;
-	display: block;
-	margin: 0 auto;
-}
-
-.chuwebview-like-button.active,
-.chuwebview-like-button:active:hover:not([disabled]) {
-	background-image: none;
-	background-color: #C30F26;
-	border-top: none;
-}
-
-.chuwebview-like-button-icon {
-	width: 24px;
-	height: 24px;
-	background: url(../../assets/images/heart_16x16.png) no-repeat center center;
-}
-
-.chuwebview-like-button.active > .chuwebview-like-button-icon,
-.chuwebview-like-button:active:hover:not([disabled]) > .chuwebview-like-button-icon {
-	background-image: url(../../assets/images/heart_light_16x16.png);
-}
-
-.chuwebview-commentinput-decorator {
-	width: 100%;
-	box-sizing: border-box;
-	margin-top: 10px;
-}
-
-.chuwebview-comment {
-	margin: 10px 0;
-	background-color: White;
-	box-shadow: 0 0 4px #666;
-	padding: 10px;
-}
-
-.chuwebview-comments-repeater {
-	width: 100%;
-}
-
-.chuwebview-comment-fullname {
-	display: inline-block;
-	vertical-align: top;
-	padding: 5px;
-}
-
-.chuwebview-comment-time {
-	float: right;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	margin-top: 5px;
 }
 
 
@@ -124,6 +46,193 @@
 	padding: 0 0;
 	max-width: 200px;
 	width: auto;
+}
+
+.chuwebview-likes-comments {
+	margin-top: 5px;
+}
+
+.chuwebview-likes-count,
+.chuwebview-comments-count {
+	color: #888;
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 3px 0 4px;
+	line-height: 14pt;
+}
+
+.chuwebview-likes-icon,
+.chuwebview-comments-icon {
+	width: 16px;
+	height: 16px;
+	background-size: cover;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.chuwebview-likes-icon {
+	background-image: url(../../assets/images/likes_32x32.png);
+}
+
+.chuwebview-comments-icon {
+	background-image: url(../../assets/images/comments_32x32.png);
+}
+
+.chuwebview-like-button {
+	display: inline-block;
+	position: relative;
+	width: 64px;
+	height: 64px;
+	background: url(../../assets/images/like_button.png) no-repeat 0 0;
+	background-size: 64px 128px;
+}
+
+.chuwebview-like-button.active {
+	background-position: 0 -64px;
+}
+
+.chuwebview-image {
+	width: 100%;
+}
+
+.chuwebview-image-container {
+	display: inline-block;
+	padding: 5px;
+	background-color: White;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	position: relative;
+	width: 612px;
+	margin: 0 20px;
+}
+
+.chuwebview-image-container .chuwebview-like-button.active {
+	background-position: 0 -128px;
+}
+
+.chuwebview-like-overlay {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.5;
+	background-color: #000000;
+}
+
+.chuwebview-image-container:hover .chuwebview-like-overlay {
+	display: block;
+}
+
+.chuwebview-image-container .chuwebview-like-button {
+	/*display: none;*/
+	width: 128px;
+	height: 128px;
+	background: url(../../assets/images/like_button_2.png) no-repeat 0 0;
+	background-size: 128px 256px;
+	margin: auto;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.chuwebview-image-container .chuwebview-price {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	color: white;
+}
+
+.chuwebview-image-container .chuwebview-location {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	color: white;
+	text-align: right;
+	max-width: 150px;
+}
+
+.chuwebview-comments {
+	display: inline-block;
+	vertical-align: top;
+	width: 300px;
+	text-align: left;
+}
+
+.chuwebview-commentinput-decorator {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 10px;
+}
+
+.chuwebview-commentinput-decorator > .enyo-input {
+	width: 100%;
+}
+
+.chuwebview-comments-repeater {
+	width: 100%;
+}
+
+.chuwebview-comment {
+	padding: 5px 0;
+	display: -webkit-box;
+	border-bottom: solid 1px #ddd;
+}
+
+.chuwebview-comment-avatar {
+	margin: 2px;
+	width: 35px;
+	height: 35px;
+	border: solid 1px #ccc;
+}
+
+.chuwebview-comment-content {
+	padding: 0 5px;
+	-webkit-box-flex: 1;
+}
+
+.chuwebview-comment-text {
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 10pt;
+	color: #666;
+	padding: 2px;
+	/*font-family: Muli;*/
+}
+
+.chuwebview-comment-fullname {
+	font-size: 11pt;
+	max-width: 150px;
+	padding-top: 2px;
+}
+
+.chuwebview-comment-time {
+	color: #555;
+	font-size: 9pt;
+	float: right;
+	margin-top: 4px;
+}
+
+.chuwebview-more-comments {
+	width: 100%;
+	text-align: center;
+	margin-top: 5px;
+	font-size: 10pt;
+	box-sizing: border-box;
+	color: #ff1e78;
+}
+
+.chuwebview-more-comments:hover {
+	text-decoration: underline;
+}
+
+.chuwebview-comments-spinner {
+	display: block;
+	margin: 5px auto 15px auto;
 }
 
 .chuwebview-signin-dialog {
@@ -151,4 +260,8 @@
 
 .chuwebview-signin-cancel-button:hover {
 	background-position: 0 -36px;
+}
+
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+
 }
