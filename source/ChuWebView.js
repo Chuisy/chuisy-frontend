@@ -37,6 +37,7 @@ enyo.kind({
         // Get facebook access token
         FB.login(enyo.bind(this, function(response) {
             chuisy.signIn(response.authResponse.accessToken, enyo.bind(this, function() {
+                this.hideSignInDialog();
                 if (this.signInSuccessCallback) {
                     this.signInSuccessCallback();
                     this.signInSuccessCallback = null;
