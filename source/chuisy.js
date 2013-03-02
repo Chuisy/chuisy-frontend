@@ -868,13 +868,13 @@
                 return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
             }
 
-            while (this.length) {
-                this.at(0).destroy();
-            }
+            this.each(function(model) {
+                this.localStorage.destroy(model);
+            }, this);
             chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
             this.each(function(model) {
-                model.save();
-            });
+                this.localStorage.create(model);
+            }, this);
         }
     });
 
