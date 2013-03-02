@@ -16,7 +16,7 @@
                 chuisy.closet.fetch();
 
                 chuisy.feed.fetch();
-                chuisy.feed.fetch({remote: true});
+                chuisy.feed.fetch({remote: true, data: {limit: 30}});
 
                 chuisy.venues.fetch();
             }

@@ -58,13 +58,24 @@ enyo.kind({
         if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
-            chuisy.feed.fetchNext({remote: true});
+            this.nextPage();
             this.$.loadingNextPage.show();
         } else {
             this.$.loadingNextPage.hide();
         }
 
         return true;
+    },
+    nextPage: function() {
+        if (!this.loading) {
+            this.loading = true;
+            chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
+                this.loading = false;
+                this.refreshFeed();
+            }), error: enyo.bind(this, function() {
+                this.loading = false;
+            })});
+        }
     },
     chuTapped: function(sender, event) {
         this.doShowChu({chu: chuisy.feed.at(event.index)});
@@ -143,7 +154,7 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "onyx.Spinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 20, thumb: false,
+        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 10, thumb: false,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
