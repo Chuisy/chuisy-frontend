@@ -46,7 +46,7 @@ enyo.kind({
         if (selectedFriends.length) {
             FB.ui({
                 method: "apprequests",
-                message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on shopping decisions!"),
+                message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on what to buy!"),
                 to: selectedFriends
             }, enyo.bind(this, function(response) {
                 if (response.request) {

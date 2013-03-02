@@ -28,7 +28,7 @@ enyo.kind({
             if (App.isOnline()) {
                 return true;
             } else {
-                navigator.notification.alert($L("Can't do this right now because there is no Internet connection. Try again later!"), function() {}, $L("No internet connection"), $L("OK"));
+                navigator.notification.alert($L("Can't do this right now because there is no internet connection. Try again later!"), function() {}, $L("No internet connection"), $L("OK"));
                 return false;
             }
         },

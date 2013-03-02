@@ -6,19 +6,22 @@
         version: "v1",
         online: false,
         closetDir: "closet/",
-        init: function() {
-            chuisy.closet.fetch();
+        init: function(lightweight) {
             chuisy.accounts.fetch();
 
-            chuisy.accounts.on("change:active_user", chuisy.activeUserChanged);
+            chuisy.accounts.on("change:active_user", _.bind(chuisy.activeUserChanged, this, lightweight));
             chuisy.accounts.trigger("change:active_user");
 
-            chuisy.feed.fetch();
-            chuisy.feed.fetch({remote: true});
+            if (!lightweight) {
+                chuisy.closet.fetch();
 
-            chuisy.venues.fetch();
+                chuisy.feed.fetch();
+                chuisy.feed.fetch({remote: true, data: {limit: 30}});
+
+                chuisy.venues.fetch();
+            }
         },
-        activeUserChanged: function() {
+        activeUserChanged: function(lightweight) {
             var user = chuisy.accounts.getActiveUser();
             if (user && user.isAuthenticated()) {
                 Backbone.Tastypie.authCredentials = {
@@ -27,18 +30,21 @@
                 };
 
                 chuisy.accounts.syncActiveUser();
-                setInterval(function() {
-                    chuisy.accounts.syncActiveUser();
-                }, 60000);
-                user.friends.fetchAll();
 
-                chuisy.closet.syncRecords();
-                chuisy.closet.startPolling(60000);
+                if (!lightweight) {
+                    setInterval(function() {
+                        chuisy.accounts.syncActiveUser();
+                    }, 60000);
+                    user.friends.fetchAll();
 
-                chuisy.notifications.fetch();
-                chuisy.notifications.startPolling(60000);
+                    chuisy.closet.syncRecords();
+                    chuisy.closet.startPolling(60000);
 
-                chuisy.gifts.fetch();
+                    chuisy.notifications.fetch();
+                    chuisy.notifications.startPolling(60000);
+
+                    chuisy.gifts.fetch();
+                }
             } else {
                 Backbone.Tastypie.authCredentials = {};
                 chuisy.accounts.stopPolling();
@@ -862,13 +868,13 @@
                 return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
             }
 
-            while (this.length) {
-                this.at(0).destroy();
-            }
+            this.each(function(model) {
+                this.localStorage.destroy(model);
+            }, this);
             chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
             this.each(function(model) {
-                model.save();
-            });
+                this.localStorage.create(model);
+            }, this);
         }
     });
 
