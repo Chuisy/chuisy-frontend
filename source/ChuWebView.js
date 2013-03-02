@@ -35,8 +35,12 @@ enyo.kind({
     },
     signIn: function() {
         // Get facebook access token
+        this.$.facebookButton.setDisabled(true);
+        this.$.signInSpinner.show();
         FB.login(enyo.bind(this, function(response) {
             chuisy.signIn(response.authResponse.accessToken, enyo.bind(this, function() {
+                this.$.facebookButton.setDisabled(false);
+                this.$.signInSpinner.hide();
                 this.hideSignInDialog();
                 if (this.signInSuccessCallback) {
                     this.signInSuccessCallback();
@@ -223,9 +227,12 @@ enyo.kind({
         ]},
         {kind: "onyx.Popup", classes: "chuwebview-signin-dialog", name: "signInDialog", floating: true, centered: true, components: [
             {classes: "chuwebview-signin-text", name: "signInText"},
-            {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                {classes: "facebook-button-icon"},
-                {content: $L("Sign In With Facebook")}
+            {style: "position: relative", components: [
+                {kind: "onyx.Spinner", classes: "absolute-center", name: "signInSpinner", showing: false},
+                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                    {classes: "facebook-button-icon"},
+                    {content: $L("Sign In With Facebook")}
+                ]}
             ]},
             {classes: "chuwebview-signin-cancel-button", ontap: "hideSignInDialog"}
         ]}

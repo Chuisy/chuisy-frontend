@@ -246,8 +246,9 @@
 }
 
 .chuwebview-signin-dialog {
-	width: 100%;
-	max-width: 320px;
+	width: 90%;
+	max-width: 285px;
+	box-sizing: border-box;
 }
 
 .chuwebview-signin-text {
@@ -307,5 +308,9 @@
 
 	.chuwebview-image-container {
 		margin: 0;
+	}
+
+	.chuwebview-image-container:hover .chuwebview-like-overlay {
+		display: none;
 	}
 }
