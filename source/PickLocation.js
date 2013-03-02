@@ -61,7 +61,10 @@ enyo.kind({
     */
     refreshPlacesList: function() {
         this.filteredPlaces = this.places ? this.places.filter(enyo.bind(this, function(place) {
-            var address = place.get("location").address;
+            if (!place.get("name")) {
+                return false;
+            }
+            var address = place.get("location") && place.get("location").address || "";
             return place.get("name").search(new RegExp(this.filterString, "i")) != -1 ||
                 address && address.search(new RegExp(this.filterString, "i")) != -1;
         })) : [];
