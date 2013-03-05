@@ -1,8 +1,8 @@
 (function($, _, Backbone, enyo) {
     chuisy = {
         // apiRoot: "http://127.0.0.1:8000/api/",
-        apiRoot: "http://chuisy-staging.herokuapp.com/api/",
-        // apiRoot: "http://www.chuisy.com/api/",
+        // apiRoot: "http://chuisy-staging.herokuapp.com/api/",
+        apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
         // Directory where chu images are stored in locally
@@ -670,9 +670,6 @@
         getTimeText: function() {
             return util.timeToText(this.get("time"));
         },
-        /*
-            Let currently active user like or unlike this Chu. _liked_ specifies whether to like or unlike
-        */
         setLiked: function(liked) {
             var activeUser = chuisy.accounts.getActiveUser();
 
