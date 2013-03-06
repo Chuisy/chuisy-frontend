@@ -81,7 +81,7 @@ enyo.kind({
         this.$.time.setContent(this.chu.getTimeText());
 
         var locale = this.chu.get("location") && this.chu.get("location").country && this.chu.get("location").country.toLowerCase() || undefined;
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency"), locale: locale});
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: locale});
         var priceText = this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "";
         this.$.price.setContent(priceText);
 
