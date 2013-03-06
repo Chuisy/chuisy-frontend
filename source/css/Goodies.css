@@ -1,0 +1,92 @@
+.goodies {
+}
+
+.notransition {
+ 	-webkit-transition: none !important;
+}
+
+.goodies-item {
+	width: 100px;
+	height: 100px;
+	margin: 3px;
+	box-sizing: border-box;
+	display: inline-block;
+	position: relative;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px #888;
+	padding: 4px;
+	background: #ffffff url(../../assets/images/logo.png) no-repeat center center;
+	background-size: 80px 40px;
+}
+
+.goodies-item.tall {
+	height: 210px;
+}
+
+.goodies-item.wide {
+	width: 206px;
+}
+
+.goodies-item.panorama {
+	width: 312px;
+}
+
+.goodies-item.left {
+	float: left;
+}
+
+.goodies-item.right {
+	float: right;
+}
+
+.goodies-card-stage {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-perspective: 1000px;
+}
+
+.goodies-card {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	width: 300px;
+	height: 300px;
+	display: inline-block;
+	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transform-origin: 50% 50%;
+}
+
+.goodies-card-side {
+	position: absolute;
+ 	-webkit-backface-visibility: hidden;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	border-radius: 6px;
+	box-shadow: 0 1px 3px #888;
+	width: 100%;
+	height: 100%;
+}
+
+.goodies-card-side.front {
+	background: #ffffff url(../../assets/images/logo.png) no-repeat center center;
+	background-size: 240px 120px;
+}
+
+.goodies-card-side.back {
+	-webkit-transform: rotateY(180deg);
+	background: url(../../assets/images/loading_screen.png) no-repeat center center;
+}
+
+.goodies-card.flipped {
+	-webkit-transform: rotateY(180deg) translate3d(-100px, 100px, -50px)
+}
