@@ -32,10 +32,10 @@ enyo.kind({
     },
     components: [
         {classes: "chufeeditem-error-icon", name: "errorIcon", ontap: "handleError"},
-        {classes: "chufeeditem-image-wrapper", components: [
-            {kind: "onyx.Spinner", classes: "chufeeditem-image-spinner absolute-center"},
-            {kind: "Image", name: "image", classes: "chufeeditem-image"}
-        ]},
+        // {classes: "chufeeditem-image-wrapper", components: [
+            // {kind: "onyx.Spinner", classes: "chufeeditem-image-spinner absolute-center"},
+            {kind: "Image", name: "image", classes: "chufeeditem-image"},
+        // ]},
         {classes: "chufeeditem-likes-comments", components: [
             {classes: "chufeeditem-likes-count", name: "likesCount"},
             {classes: "chufeeditem-likes-icon"},
