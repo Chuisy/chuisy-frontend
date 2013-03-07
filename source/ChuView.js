@@ -63,8 +63,10 @@ enyo.kind({
     },
     chuChanged: function() {
         this.updateView();
+        this.syncStatusChanged();
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
+        this.listenTo(this.chu, "change:syncStatus", this.syncStatusChanged);
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.refreshComments();
         this.refreshLikes();
@@ -104,7 +106,38 @@ enyo.kind({
         this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
 
         this.adjustShareControls();
-        this.$.errorIcon.setShowing(this.chu.get("syncFailed") || this.chu.get("uploadFailed"));
+    },
+    syncStatusChanged: function() {
+        this.log("sync status changed! " + this.chu.get("syncStatus"));
+        switch (this.chu.get("syncStatus")) {
+            case "synced":
+                this.$.syncStatus.hide();
+                break;
+            case "posting":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.hide();
+                this.$.statusSpinner.show();
+                this.$.statusText.setContent($L("Posting Chu"));
+                break;
+            case "uploading":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.hide();
+                this.$.statusSpinner.show();
+                this.$.statusText.setContent($L("Uploading image"));
+                break;
+            case "postFailed":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.show();
+                this.$.statusSpinner.hide();
+                this.$.statusText.setContent($L("Post failed"));
+                break;
+            case "uploadFailed":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.show();
+                this.$.statusSpinner.hide();
+                this.$.statusText.setContent($L("Upload failed"));
+                break;
+        }
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -459,12 +492,14 @@ enyo.kind({
         this.$.friendsSlider.setValue(this.$.friendsSlider.getMax());
         this.friendsClosed();
     },
-    errorIconTapped: function() {
-        navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
-            if (choice == 1) {
-                chuisy.closet.syncRecords();
-            }
-        }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+    syncStatusTapped: function() {
+        if (this.chu.get("syncStatus") == "postFailed" || this.chu.get("syncStatus") == "uploadFailed") {
+            navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
+                if (choice == 1) {
+                    chuisy.closet.syncRecords();
+                }
+            }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+        }
     },
     moreComments: function() {
         this.$.moreComments.hide();
@@ -539,7 +574,11 @@ enyo.kind({
                                     {classes: "chuview-like-button-side back"},
                                     {classes: "chuview-like-button-side front"}
                                 ]},
-                                {classes: "chuview-error-icon", name: "errorIcon", ontap: "errorIconTapped"}
+                                {classes: "chuview-status", name: "syncStatus", ontap: "syncStatusTapped", components: [
+                                    {classes: "chuview-status-error-icon", name: "statusErrorIcon", showing: false},
+                                    {kind: "onyx.Spinner", name: "statusSpinner", classes: "chuview-status-spinner"},
+                                    {name: "statusText", classes: "chuview-status-text"}
+                                ]}
                             ]},
                             {classes: "chuview-content", components: [
                                 // CATEGORY, PRICE, COMMENTS, LIKES

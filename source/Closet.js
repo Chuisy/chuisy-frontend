@@ -73,7 +73,8 @@ enyo.kind({
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
-                this.$["errorIcon" + i].setShowing(chu.get("syncFailed") || chu.get("uploadFailed"));
+                var syncStatus = chu.get("syncStatus");
+                this.$["errorIcon" + i].setShowing(syncStatus == "postFailed" || syncStatus == "uploadFailed");
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }

@@ -423,13 +423,36 @@
 	background-image: url(../../assets/images/friends_placeholder.png);
 }
 
-.chuview-error-icon {
+.chuview-status {
 	position: absolute;
 	z-index: 100;
-	top: -20px;
-	right: 0px;
-	width: 50px;
-	height: 50px;
+	top: 5px;
+	left: 5px;
+	/*background-color: rgba(255, 255, 255, 0.5);*/
+}
+
+.chuview-status-text {
+	display: inline-block;
+	font-size: 8pt;
+	vertical-align: middle;
+	padding: 5px;
+	text-shadow: 0 0 5px #ffffff;
+}
+
+.chuview-status-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-size: 16px 16px;
+	vertical-align: middle;
+}
+
+.chuview-status-error-icon {
+	width: 16px;
+	height: 16px;
 	background: url(../../assets/images/warning_48x48.png) no-repeat center center;
-	background-size: 24px 24px;
+	background-size: 16px 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -5px;
 }
