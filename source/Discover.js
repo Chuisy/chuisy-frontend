@@ -66,13 +66,13 @@ enyo.kind({
         this.chus.reset();
         this.users.meta = {};
         this.chus.meta = {};
-        this.synced("user", null, null, true);
-        this.synced("chu", null, null, true);
+        this.synced("user", null, null, null, true);
+        this.synced("chu", null, null, null, true);
         this.$.resultPanels.setIndex(0);
         this.$.resultTabs.setActive(null);
     },
-    synced: function(which, collection, options, force) {
-        if (force || options && options.data && options.data.q == this.latestQuery) {
+    synced: function(which, collection, response, request, force) {
+        if (force || request && request.data && request.data.q == this.latestQuery) {
             var coll = this[which + "s"];
             this.$[which + "Count"].show();
             this.$[which + "Count"].setContent(coll.meta.total_count);
@@ -94,7 +94,7 @@ enyo.kind({
     search: function(which, query) {
         // We are waiting for the search response. Unload list and show spinner.
         this[which + "s"].reset();
-        this.synced(which, null, null, true);
+        this.synced(which, null, null, null, true);
         this.$[which + "Spinner"].show();
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
@@ -114,7 +114,7 @@ enyo.kind({
     components: [
         // SEARCH INPUT
         {style: "padding: 5px; box-sizing: border-box;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false}
+            {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false, changeDelay: 500}
         ]},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
