@@ -34,8 +34,6 @@ enyo.kind({
     stopListening: Backbone.Events.stopListening,
     create: function() {
         this.inherited(arguments);
-        this.setupFriends();
-        this.listenTo(chuisy.accounts, "change:active_user", this.setupFriends);
         var s = this.$.contentScroller.getStrategy();
         s.scrollIntervalMS = 20;
         s.maxScrollTop = -60;
@@ -49,8 +47,7 @@ enyo.kind({
         if (user) {
             this.$.peoplePicker.setItems(user.friends.models);
             this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
-            this.stopListening();
-            this.listenTo(user.friends, "reset add", function() {
+            this.listenTo(user.friends, "sync", function() {
                 this.$.peoplePicker.setItems(user.friends.models);
                 this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
             });
@@ -67,6 +64,7 @@ enyo.kind({
         this.stopListening();
         this.listenTo(this.chu, "change", this.updateView);
         this.listenTo(this.chu, "change:syncStatus", this.syncStatusChanged);
+        this.setupFriends();
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.refreshComments();
         this.refreshLikes();
