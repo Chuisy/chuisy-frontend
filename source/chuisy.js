@@ -335,14 +335,18 @@
             var oldModel = new this.model({id: options.lid});
             this.localStorage.destroy(oldModel);
             this.mark(oldModel, "added", false);
-            model.save({syncFailed: false}, {nosync: true});
+            if (model.get("syncStatus") == "posting") {
+                model.save({syncStatus: "synced"}, {nosync: true, silent: true});
+                model.trigger("change:syncStatus", model);
+            }
         },
         destroyedRecordSynced: function(model, response) {
             this.mark(model, "destroyed", false);
         },
         syncErrorHandler: function(model, request, options) {
             console.log("Model failed to sync. id: " + model.id + ", status code: " + request.status + ", response text: " + request.responseText);
-            model.save({syncFailed: true}, {nosync: true});
+            model.save({syncStatus: "postFailed"}, {nosync: true, silent: true});
+            model.trigger("change:syncStatus", model);
         },
         syncRecords: function() {
             var added = this.getList("added");
@@ -371,6 +375,8 @@
             for (i=0; i<added.length; i++) {
                 var model = this.get(added[i]);
                 if (model) {
+                    model.set({syncStatus: "posting"}, {nosync: true, silent: true});
+                    model.trigger("change:syncStatus", model);
                     var lid = model.id;
                     model.id = null;
                     model.unset("id");
@@ -732,14 +738,18 @@
                 console.warn("No local image to upload!");
                 return;
             }
+            this.set({syncStatus: "uploading"}, {nosync: true, silent: true});
+            this.trigger("change:syncStatus", this);
             var target = encodeURI(_.result(this, "url") + "upload_image/" + Backbone.Tastypie.getAuthUrlParams());
             upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.save({"image": response}, {nosync: true});
                 this.trigger("image_uploaded", this);
-                this.save({uploadFailed: false}, {nosync: true});
+                this.save({syncStatus: "synced"}, {nosync: true, silent: true});
+                this.trigger("change:syncStatus", this);
             }, this), _.bind(function(error) {
                 console.log("Failed to upload image. id: " + this.id + ", error: " + error);
-                this.save({uploadFailed: true}, {nosync: true});
+                this.save({syncStatus: "uploadFailed"}, {nosync: true, silent: true});
+                this.trigger("change:syncStatus", this);
             }, this));
         },
         makeThumbnail: function() {

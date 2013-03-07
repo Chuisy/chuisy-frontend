@@ -23,7 +23,8 @@ enyo.kind({
             this.$.commentsCount.setContent(this.chu.get("comments_count"));
             var location = this.chu.get("location");
             this.$.place.setContent(location && location.name || "");
-            this.$.errorIcon.setShowing(this.chu.get("syncFailed") || this.chu.get("uploadFailed"));
+            var syncStatus = this.chu.get("syncStatus");
+            this.$.errorIcon.setShowing(syncStatus == "postFailed" || syncStatus == "uploadFailed");
         }
     },
     showUser: function() {
