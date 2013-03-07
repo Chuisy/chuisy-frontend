@@ -108,11 +108,7 @@ enyo.kind({
         this.adjustShareControls();
     },
     syncStatusChanged: function() {
-        this.log("sync status changed! " + this.chu.get("syncStatus"));
         switch (this.chu.get("syncStatus")) {
-            case "synced":
-                this.$.syncStatus.hide();
-                break;
             case "posting":
                 this.$.syncStatus.show();
                 this.$.statusErrorIcon.hide();
@@ -136,6 +132,9 @@ enyo.kind({
                 this.$.statusErrorIcon.show();
                 this.$.statusSpinner.hide();
                 this.$.statusText.setContent($L("Upload failed"));
+                break;
+            default:
+                this.$.syncStatus.hide();
                 break;
         }
     },
