@@ -549,6 +549,13 @@
         */
         toggleFollow: function() {
             this.setFollowing(!this.get("following"));
+        },
+        getThumbnail: function(width, height) {
+            if (this.profile.get("avatar")) {
+                return _.result(this, "url") + "thumbnail/" + width + "x" + height + "/";
+            } else {
+                return null;
+            }
         }
     });
 
