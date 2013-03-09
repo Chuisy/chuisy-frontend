@@ -14,6 +14,7 @@
 
             if (!lightweight) {
                 chuisy.closet.fetch();
+                chuisy.cards.fetch();
 
                 chuisy.feed.fetch();
                 chuisy.feed.fetch({remote: true, data: {limit: 30}});
@@ -42,8 +43,6 @@
 
                     chuisy.notifications.fetch();
                     chuisy.notifications.startPolling(60000);
-
-                    chuisy.gifts.fetch();
                 }
             } else {
                 Backbone.Tastypie.authCredentials = {};
@@ -801,8 +800,8 @@
         }
     });
 
-    chuisy.models.Gift = Backbone.Tastypie.Model.extend({
-        urlRoot: chuisy.apiRoot + chuisy.version + "/gift/"
+    chuisy.models.Card = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/card/"
     });
 
     chuisy.models.SearchableCollection = Backbone.Tastypie.Collection.extend({
@@ -975,9 +974,9 @@
         }
     });
 
-    chuisy.models.GiftsCollection = Backbone.Tastypie.Collection.extend({
-        model: chuisy.models.Gift,
-        url: chuisy.apiRoot + chuisy.version + "/gift/"
+    chuisy.models.CardsCollection = Backbone.Tastypie.Collection.extend({
+        model: chuisy.models.Card,
+        url: chuisy.apiRoot + chuisy.version + "/card/"
     });
 
     /*
@@ -1089,7 +1088,7 @@
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
-    chuisy.gifts = new chuisy.models.GiftsCollection();
     chuisy.venues = new chuisy.models.Venues();
+    chuisy.cards = new chuisy.models.CardsCollection();
 
 })(window.$, window._, window.Backbone, window.enyo);
