@@ -1,58 +1,79 @@
 enyo.kind({
-	name: "Goodies",
-	classes: "goodies",
-	getCardCoords: function(item) {
-		var ib = item.getBounds();
-		var cb = this.$.card.getBounds();
-		var sb = this.$.stage.getBounds();
-		var scale = ib.width/cb.width;
-		var perspective = 1000;
-		xOffset = (sb.width - ib.width)/2;
-		yOffset = (sb.height - ib.height)/2;
+    name: "Goodies",
+    classes: "goodies",
+    create: function() {
+        this.inherited(arguments);
+        chuisy.cards.on("sync", this.refresh, this);
+    },
+    /**
+        Refreshes notification list with loaded items
+    */
+    refresh: function() {
+        this.$.repeater.setCount(chuisy.cards.length);
+    },
+    setupItem: function(sender, event) {
+        var card = chuisy.cards.at(event.index);
+        event.item.$.cardItem.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        event.item.$.cardItem.addClass(card.get("format"));
+        return true;
+    },
+    getCardCoords: function(item) {
+        var ib = item.getBounds();
+        var cb = this.$.card.getBounds();
+        var sb = this.$.stage.getBounds();
+        var scale = ib.width/cb.width;
+        var perspective = 1000;
+        xOffset = (sb.width - ib.width)/2;
+        yOffset = (sb.height - ib.height)/2;
 
-		return {
-			dx: (ib.left - xOffset) / scale,
-			dy: (ib.top - yOffset - this.$.scroller.getScrollTop()) / scale,
-			dz: perspective * (1 - 1/scale),
-			scale: scale
-		};
-	},
-	showCard: function(sender) {
-		this.item = sender;
-		this.$.stage.show();
+        return {
+            dx: (ib.left - xOffset) / scale,
+            dy: (ib.top - yOffset - this.$.scroller.getScrollTop()) / scale,
+            dz: perspective * (1 - 1/scale),
+            scale: scale
+        };
+    },
+    showCard: function(sender, event) {
+        this.item = sender;
+        var card = chuisy.cards.at(event.index);
 
-		var coords = this.getCardCoords(this.item);
-		var ib = this.item.getBounds();
-		var cb = this.$.card.getBounds();
-		var ratio = ib.height/ib.width;
-		this.log(ib, cb, ratio);
-		this.$.card.applyStyle("height", (ratio * cb.width) + "px");
-		this.$.front.applyStyle("background-size", (80/coords.scale) + "px " + (40/coords.scale) + "px");
+        this.$.stage.show();
 
-		this.item.applyStyle("visibility", "hidden");
-		this.$.card.addClass("notransition");
-		this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
-		enyo.asyncMethod(this, function() {
-			this.$.card.removeClass("notransition");
-			this.$.card.applyStyle("-webkit-transform", "translate3d(0, 0, 0) rotateY(180deg)");
-		});
-	},
-	hideCard: function(sender, event) {
-		// if (event.originator.isDescendantOf(this.$.card)) {
-		// 	return;
-		// }
+        var coords = this.getCardCoords(this.item);
+        var ib = this.item.getBounds();
+        var cb = this.$.card.getBounds();
+        var ratio = ib.height/ib.width;
 
-		var coords = this.getCardCoords(this.item);
+        this.$.card.applyStyle("height", (ratio * cb.width) + "px");
+        this.$.front.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        this.$.front.applyStyle("border-radius", (5/coords.scale) + "px");
+        this.$.back.applyStyle("border-radius", (5/coords.scale) + "px");
+        this.$.cardText.setContent(card.get("text"));
 
-		this.$.card.removeClass("notransition");
-		this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
-		setTimeout(enyo.bind(this, function() {
-			this.item.applyStyle("visibility", "visible");
-			setTimeout(enyo.bind(this, function() {
-				this.$.stage.hide();
-			}), 100);
-		}), 500);
-	},
+        this.item.applyStyle("visibility", "hidden");
+        this.$.card.addClass("notransition");
+        this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
+        enyo.asyncMethod(this, function() {
+            this.$.card.removeClass("notransition");
+            this.$.card.applyStyle("-webkit-transform", "translate3d(0, 0, 0) rotateY(180deg)");
+        });
+    },
+    hideCard: function(sender, event) {
+        // if (event.originator.isDescendantOf(this.$.card)) {
+        //  return;
+        // }
+
+        var coords = this.getCardCoords(this.item);
+
+        this.$.card.removeClass("notransition");
+        this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
+        setTimeout(enyo.bind(this, function() {
+            this.item.applyStyle("visibility", "visible");
+            setTimeout(enyo.bind(this, function() {
+                this.$.stage.hide();
+            }), 100);
+        }), 500);
+    },
     //* Whether or not the scroller is actively moving
     isScrolling: function() {
         return this.$.scrollMath.isScrolling();
@@ -93,48 +114,24 @@ enyo.kind({
         }
     },
     scrollMathScroll: function(inSender) {
-		this.$.card.addClass("notransition");
-		this.$.card.applyStyle("-webkit-transform", "rotateY(180deg) rotateX(" + (inSender.y - inSender.topBoundary) + "deg) rotateY(" + (inSender.x - inSender.leftBoundary) + "deg)");
+        this.$.card.addClass("notransition");
+        this.$.card.applyStyle("-webkit-transform", "rotateY(180deg) rotateX(" + (inSender.y - inSender.topBoundary) + "deg) rotateY(" + (inSender.x - inSender.leftBoundary) + "deg)");
     },
-	components: [
-		{kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
-			{components: [
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item wide", ontap: "showCard"},
-				{classes: "goodies-item tall left", ontap: "showCard"},
-				{classes: "goodies-item wide", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item tall right", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item wide", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item wide", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item tall wide left", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item panorama", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"},
-				{classes: "goodies-item", ontap: "showCard"}
-			]}
-		]},
-		{name: "stage", classes: "goodies-card-stage", showing: false, onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "hideCard", components: [
-			{name: "card", classes: "goodies-card", components: [
-				{classes: "goodies-card-side front", name: "front"},
-				{classes: "goodies-card-side back", components: [
-					{style: "width: 200px; height: 100px; text-align: center; color: #555; font-size: 25pt; box-sizing: border-box;", classes: "absolute-center", content: "Chuisy is awesome!"}
-				]}
-			]}
-		]},
+    components: [
+        {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
+            {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
+                {name: "cardItem", classes: "goodies-item", ontap: "showCard"}
+            ]}
+        ]},
+        {name: "stage", classes: "goodies-card-stage", showing: false, onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "hideCard", components: [
+            {name: "card", classes: "goodies-card", components: [
+                {classes: "goodies-card-side front", name: "front"},
+                {classes: "goodies-card-side back", name: "back", components: [
+                    {name: "cardText", classes: "goodies-card-text"}
+                ]}
+            ]}
+        ]},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
             leftBoundary: 0, rightBoundary: 0, vertical: true, horizontal: true}
-	]
+    ]
 });
