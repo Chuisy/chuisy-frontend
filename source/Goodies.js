@@ -57,23 +57,39 @@ enyo.kind({
         this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
         enyo.asyncMethod(this, function() {
             this.$.card.removeClass("notransition");
+            this.isAnimating = true;
             this.$.card.applyStyle("-webkit-transform", "translate3d(0, 0, 0) rotateY(180deg)");
+            if (this.animationTimeout) {
+                clearTimeout(this.animationTimeout);
+            }
+            this.animationTimeout = setTimeout(enyo.bind(this, function() {
+                this.$.card.addClass("notransition");
+                this.isAnimating = false;
+            }), 500);
         });
     },
-    hideCard: function(sender, event) {
-        // if (event.originator.isDescendantOf(this.$.card)) {
-        //  return;
-        // }
+    stageTapped: function(sender, event) {
+        if (!event.originator.isDescendantOf(this.$.card)) {
+            this.hideCard();
+        }
+    },
+    hideCard: function() {
         this.$.stage.removeClass("scrim");
 
         var coords = this.getCardCoords(this.item);
 
         this.$.card.removeClass("notransition");
+        this.isAnimating = true;
         this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
-        setTimeout(enyo.bind(this, function() {
+        if (this.animationTimeout) {
+            clearTimeout(this.animationTimeout);
+        }
+        this.animationTimeout = setTimeout(enyo.bind(this, function() {
             this.item.applyStyle("visibility", "visible");
             setTimeout(enyo.bind(this, function() {
                 this.$.stagePopup.hide();
+                this.$.card.addClass("notransition");
+                this.isAnimating = false;
             }), 100);
         }), 500);
     },
@@ -117,8 +133,31 @@ enyo.kind({
         }
     },
     scrollMathScroll: function(inSender) {
-        this.$.card.addClass("notransition");
-        this.$.card.applyStyle("-webkit-transform", "rotateY(180deg) rotateX(" + (inSender.y - inSender.topBoundary) + "deg) rotateY(" + (inSender.x - inSender.leftBoundary) + "deg)");
+        if (!this.isAnimating) {
+            var rotOffset = this.flipped ? 0 : 180;
+            var rotFactor = 0.3;
+            var rotX = rotFactor * (inSender.y - inSender.topBoundary);
+            var rotY = rotFactor * (inSender.x - inSender.leftBoundary) + rotOffset;
+            this.$.card.applyStyle("-webkit-transform", "rotateX(" + rotX + "deg) rotateY(" + rotY + "deg)");
+        }
+    },
+    cardTapped: function(sender, event) {
+        this.flipCard();
+        return true;
+    },
+    flipCard: function() {
+        this.flipped = !this.flipped;
+        var rotOffset = this.flipped ? 0 : 180;
+        this.$.card.removeClass("notransition");
+        this.isAnimating = true;
+        this.$.card.applyStyle("-webkit-transform", "rotateY(" + rotOffset + "deg)");
+        if (this.animationTimeout) {
+            clearTimeout(this.animationTimeout);
+        }
+        this.animationTimeout = setTimeout(enyo.bind(this, function() {
+            this.$.card.addClass("notransition");
+            this.isAnimating = false;
+        }), 500);
     },
     getAbsolutePosition: function(con) {
         var elem = con.hasNode();
@@ -147,8 +186,8 @@ enyo.kind({
             ]}
         ]},
         {kind: "Popup", style: "width: 100%; height: 100%; top: 0; left: 0;", name: "stagePopup", floating: true, components: [
-            {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "hideCard", components: [
-                {name: "card", classes: "goodies-card", components: [
+            {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
+                {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front"},
                     {classes: "goodies-card-side back", name: "back", components: [
                         {name: "cardText", classes: "goodies-card-text"}

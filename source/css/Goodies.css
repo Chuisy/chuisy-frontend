@@ -57,7 +57,7 @@
 }
 
 .goodies-card-stage.scrim {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.7);
 }
 
 .goodies-card {
@@ -70,7 +70,7 @@
 	width: 300px;
 	height: 300px;
 	display: inline-block;
-	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	-webkit-transform-style: preserve-3d;
 	-webkit-transform-origin: 50% 50%;
 }
