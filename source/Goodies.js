@@ -25,10 +25,11 @@ enyo.kind({
         var perspective = 1000;
         xOffset = (sb.width - ib.width)/2;
         yOffset = (sb.height - ib.height)/2;
+        ap = this.getAbsolutePosition(item);
 
         return {
-            dx: (ib.left - xOffset) / scale,
-            dy: (ib.top - yOffset - this.$.scroller.getScrollTop()) / scale,
+            dx: (ap.left - xOffset) / scale,
+            dy: (ap.top - yOffset - this.$.scroller.getScrollTop()) / scale,
             dz: perspective * (1 - 1/scale),
             scale: scale
         };
@@ -37,7 +38,8 @@ enyo.kind({
         this.item = sender;
         var card = chuisy.cards.at(event.index);
 
-        this.$.stage.show();
+        this.$.stagePopup.show();
+        this.$.stage.addClass("scrim");
 
         var coords = this.getCardCoords(this.item);
         var ib = this.item.getBounds();
@@ -62,6 +64,7 @@ enyo.kind({
         // if (event.originator.isDescendantOf(this.$.card)) {
         //  return;
         // }
+        this.$.stage.removeClass("scrim");
 
         var coords = this.getCardCoords(this.item);
 
@@ -70,7 +73,7 @@ enyo.kind({
         setTimeout(enyo.bind(this, function() {
             this.item.applyStyle("visibility", "visible");
             setTimeout(enyo.bind(this, function() {
-                this.$.stage.hide();
+                this.$.stagePopup.hide();
             }), 100);
         }), 500);
     },
@@ -117,17 +120,39 @@ enyo.kind({
         this.$.card.addClass("notransition");
         this.$.card.applyStyle("-webkit-transform", "rotateY(180deg) rotateX(" + (inSender.y - inSender.topBoundary) + "deg) rotateY(" + (inSender.x - inSender.leftBoundary) + "deg)");
     },
+    getAbsolutePosition: function(con) {
+        var elem = con.hasNode();
+        var offsetLeft = 0;
+        var offsetTop = 0;
+
+        do {
+            if (!isNaN(elem.offsetLeft)) {
+                offsetLeft += elem.offsetLeft;
+                offsetTop += elem.offsetTop;
+            }
+        } while (elem = elem.offsetParent);
+
+        return {
+            left: offsetLeft,
+            top: offsetTop
+        };
+    },
+    activate: function() {},
+    deactivate: function() {
+    },
     components: [
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard"}
             ]}
         ]},
-        {name: "stage", classes: "goodies-card-stage", showing: false, onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "hideCard", components: [
-            {name: "card", classes: "goodies-card", components: [
-                {classes: "goodies-card-side front", name: "front"},
-                {classes: "goodies-card-side back", name: "back", components: [
-                    {name: "cardText", classes: "goodies-card-text"}
+        {kind: "Popup", style: "width: 100%; height: 100%; top: 0; left: 0;", name: "stagePopup", floating: true, components: [
+            {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "hideCard", components: [
+                {name: "card", classes: "goodies-card", components: [
+                    {classes: "goodies-card-side front", name: "front"},
+                    {classes: "goodies-card-side back", name: "back", components: [
+                        {name: "cardText", classes: "goodies-card-text"}
+                    ]}
                 ]}
             ]}
         ]},

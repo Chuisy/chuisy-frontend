@@ -52,6 +52,12 @@
 	width: 100%;
 	height: 100%;
 	-webkit-perspective: 1000px;
+	background-color: rgba(0, 0, 0, 0);
+	-webkit-transition: background-color 0.5s;
+}
+
+.goodies-card-stage.scrim {
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .goodies-card {
