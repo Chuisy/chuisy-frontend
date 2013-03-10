@@ -52,6 +52,7 @@ enyo.kind({
         this.$.back.applyStyle("border-radius", (5/coords.scale) + "px");
         this.$.cardText.setContent(card.get("text"));
 
+        this.flipped = false;
         this.item.applyStyle("visibility", "hidden");
         this.$.card.addClass("notransition");
         this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
@@ -64,6 +65,7 @@ enyo.kind({
             }
             this.animationTimeout = setTimeout(enyo.bind(this, function() {
                 this.$.card.addClass("notransition");
+                this.$.card.addClass("elastic");
                 this.isAnimating = false;
             }), 500);
         });
@@ -78,6 +80,7 @@ enyo.kind({
 
         var coords = this.getCardCoords(this.item);
 
+        this.$.card.removeClass("elastic");
         this.$.card.removeClass("notransition");
         this.isAnimating = true;
         this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
@@ -136,7 +139,7 @@ enyo.kind({
         if (!this.isAnimating) {
             var rotOffset = this.flipped ? 0 : 180;
             var rotFactor = 0.3;
-            var rotX = rotFactor * (inSender.y - inSender.topBoundary);
+            var rotX = -rotFactor * (inSender.y - inSender.topBoundary);
             var rotY = rotFactor * (inSender.x - inSender.leftBoundary) + rotOffset;
             this.$.card.applyStyle("-webkit-transform", "rotateX(" + rotX + "deg) rotateY(" + rotY + "deg)");
         }
