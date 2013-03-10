@@ -19,7 +19,7 @@ enyo.kind({
         closet: [0, 1],
         profile: [0, 2],
         discover: [0, 3],
-        gifts: [0, 4],
+        goodies: [0, 4],
         notifications: [0, 5],
         compose: [1, null],
         chu: [2, null],
@@ -175,8 +175,8 @@ enyo.kind({
                         {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
                         // DISCOVER VIEW
                         {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
-                        // GIFTS
-                        {kind: "Gifts", name: "gifts", onShowGift: "showGift"},
+                        // GOODIES
+                        {kind: "Goodies", name: "goodies", name: "goodies"},
                         // NOTIFICATIONS
                         {kind: "Notifications", name: "notifications", onNotificationSelected: "notificationSelected"}
                     ]},
@@ -198,8 +198,6 @@ enyo.kind({
                 ]},
                 {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]},
-            // DISPLAY GIFT
-            {kind: "GiftView", onBack: "back", name: "gift"},
             {kind: "InviteFriends", name: "invite", onBack: "back"},
             {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},

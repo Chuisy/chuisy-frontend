@@ -315,28 +315,10 @@ enyo.kind({
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
             this.$.mainView.openView("closet");
-        } else if (uri.match(/^gifts\/$/)) {
+        } else if (uri.match(/^goodies\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
-            this.$.mainView.openView("gifts");
-        } else if ((match2 = uri.match(/^gift\/(\d+)\/$/))) {
-            // {user id}/
-            // This is the URI to a users profile
-            if (obj) {
-                // A gift object has been provided. So we can open it directly.
-                var gift = obj instanceof chuisy.models.Gift ? obj : new chuisy.models.Gift(obj);
-                this.$.mainView.openView("gift", gift);
-            } else if (App.checkConnection()) {
-                var gift = new chuisy.models.Gift({id: match2[1]});
-                gift.fetch();
-                this.$.mainView.openView("gift", gift);
-            }
-        // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
-        //     // {user id}/
-        //     // This is the URI to a users profile
-        //     chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-        //         this.$.mainView.openView(response);
-        //     }));
+            this.$.mainView.openView("goodies");
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
