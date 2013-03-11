@@ -1,80 +1,45 @@
 enyo.kind({
-    name: "Map",
-    published: {
-        center: {
-            latitude: 0,
-            longitude: 0
-        },
-        zoom: 19
-    },
-    handlers: {
-        onresize: "resize",
-        ondrag: "preventPropagation"
-    },
-    centerChanged: function () {
-        if (this.map) {
-            latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-            this.map.setCenter(latlng);
-        }
-    },
-    initialize: function() {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-
-        var options = {
-            zoom: this.zoom,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true,
-            panControl: false,
-            panControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_BOTTOM
-            },
-            zoomControl: false,
-            zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.LARGE,
-                position: google.maps.ControlPosition.LEFT_CENTER
-            },
-            mapTypeControl: false,
-            mapTypeControlOptions: {
-                position: google.maps.ControlPosition.LEFT_BOTTOM
-            },
-            scaleControl: false,
-            streetViewControl: false,
-            overviewMapControl: false
-        };
-
-        this.map = new google.maps.Map(this.$.map.hasNode(), options);
-        this.markers = [];
-    },
-    panToCenter: function() {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-        this.map.panTo(latlng);
-    },
-    resize: function() {
-        google.maps.event.trigger(this.map, 'resize');
-        this.panToCenter();
-    },
-    placeMarker: function(lat, lng, animation) {
-        var latlng = new google.maps.LatLng(lat, lng);
-        var marker = new google.maps.Marker({
-            position: latlng,
-            map: this.map,
-            animation: animation
-        });
-        this.markers.push(marker);
-        return marker;
-    },
-    preventPropagation: function() {
-        return true;
-    },
-    clearMarkers: function() {
-        for (var i=0; i<this.markers.length; i++) {
-            this.markers[i].setMap(null);
-            delete this.markers[i];
-        }
-        this.markers = [];
-    },
-    components: [
-        {classes: "enyo-fill", name: "map"}
-    ]
+	name: "Map",
+	published: {
+		center: {
+			latitude: 51.0,
+			longitude: 9.0
+		},
+		zoom: 6,
+		mapType: "ROADMAP" /*ROADMAP, SATELLITE, HYBRID, TERRAIN */
+	},
+	events: {
+		onMapClick: ""
+	},
+	rendered: function() {
+		this.inherited(arguments);
+		this.initialize();
+	},
+	centerChanged: function() {
+		var latlng = new L.LatLng(this.center.latitude, this.center.longitude);
+		this.map.setView(latlng, zoom);
+	},
+	zoomChanged: function() {
+		this.map.setZoom(this.zoom);
+	},
+	mapTypeChanged: function() {
+		this.map.removeLayer(this.layer);
+		this.layer = new L.Google(this.mapType);
+		this.map.addLayer(this.layer);
+	},
+	addMarker: function(latlng, control) {
+		var customHtmlIcon = L.divIcon({html: control.generateHtml()});
+		var marker = new L.Marker(latlng, {icon: customHtmlIcon});
+		this.map.addLayer(marker);
+		this.markers.push(marker);
+	},
+	initialize: function() {
+		this.map = new L.Map(this.$.map.hasNode(), {center: new L.LatLng(this.center.latitude, this.center.longitude), zoom: this.zoom});
+		this.layer = new L.Google(this.mapType);
+		this.markers = [];
+		this.map.addLayer(this.layer);
+	},
+	components: [
+		{classes: "enyo-fill", name: "map"}
+	]
 });
