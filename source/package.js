@@ -39,5 +39,6 @@ enyo.depends(
 	"GiftView.js",
 	"InviteFriends.js",
 	"UserList.js",
-	"Goodies.js"
+	"Goodies.js",
+	"FittingTextContainer.js"
 );

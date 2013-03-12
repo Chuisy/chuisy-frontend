@@ -48,6 +48,8 @@ enyo.kind({
 
         this.$.card.applyStyle("height", (ratio * cb.width) + "px");
         this.$.front.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        this.$.cardContentImage.applyStyle("background-image", "url(" + (card.get("content_image") || card.get("cover_image")) + ")");
+        this.$.cardTextWrapper.applyStyle("padding", (13/coords.scale) + "px");
         this.$.front.applyStyle("border-radius", (5/coords.scale) + "px");
         this.$.back.applyStyle("border-radius", (5/coords.scale) + "px");
         this.$.cardText.setContent(card.get("text"));
@@ -193,7 +195,10 @@ enyo.kind({
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front"},
                     {classes: "goodies-card-side back", name: "back", components: [
-                        {name: "cardText", classes: "goodies-card-text"}
+                        {name: "cardContentImage", classes: "goodies-card-content-image"},
+                        {classes: "goodies-card-text", name: "cardTextWrapper", components: [
+                            {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
+                        ]}
                     ]}
                 ]}
             ]}
