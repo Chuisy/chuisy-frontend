@@ -36,8 +36,8 @@ enyo.kind({
     },
     showCard: function(sender, event) {
         this.item = sender;
-        var card = chuisy.cards.at(event.index);
-        var coupon = card.get("coupon");
+        this.card = chuisy.cards.at(event.index);
+        var coupon = this.card.get("coupon");
 
         // Show stage
         this.$.stagePopup.show();
@@ -49,12 +49,13 @@ enyo.kind({
         this.$.card.removeClass("tall");
         this.$.card.removeClass("wide");
         this.$.card.removeClass("panorama");
-        this.$.card.addClass(card.get("format"));
+        this.$.card.addClass(this.card.get("format"));
         this.$.card.addRemoveClass("coupon", coupon);
-        this.$.front.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
-        var contentImage = (card.get("content_image") || card.get("cover_image"));
+        this.$.card.addRemoveClass("redeemed", coupon && coupon.redeemed);
+        this.$.front.applyStyle("background-image", "url(" + this.card.get("cover_image") + ")");
+        var contentImage = (this.card.get("content_image") || this.card.get("cover_image"));
         this.$.cardContentImage.applyStyle("background-image", "url(" + contentImage + ")");
-        this.$.cardText.setContent(card.get("text"));
+        this.$.cardText.setContent(this.card.get("text"));
 
         // Calculate coordinates for transition
         var coords = this.getCardCoords(this.item);
@@ -192,6 +193,15 @@ enyo.kind({
     redeemCoupon: function() {
         this.$.redeemButton.setDisabled(true);
         this.$.redeemSpinner.show();
+
+        var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
+        coupon.redeem({success: enyo.bind(this, function() {
+            this.$.redeemSpinner.hide();
+            this.$.redeemButton.setDisabled(false);
+            this.card.get("coupon").redeemed = true;
+            this.$.card.addClass("redeemed");
+        })});
+
         return true;
     },
     activate: function() {},
@@ -216,7 +226,8 @@ enyo.kind({
                             {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemCoupon", components: [
                                 {content: $L("Redeem")}
                             ]},
-                            {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false}
+                            {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
+                            {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]}
                     ]}
                 ]}

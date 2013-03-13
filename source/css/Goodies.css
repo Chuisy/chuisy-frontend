@@ -210,6 +210,22 @@
 .goodies-card-redeem-button {
 	width: 100%;
 	height: 40px;
+	font-size: 15pt;
+	border-radius: 8px;
+}
+
+.goodies-card-redeemed-text {
+	color: rgb(65, 160, 69);
+	font-size: 20pt;
+	display: none;
+}
+
+.goodies-card.redeemed .goodies-card-redeem-button {
+	display: none;
+}
+
+.goodies-card.redeemed .goodies-card-redeemed-text {
+	display: block;
 }
 
 .goodies-card.coupon .goodies-card-content-image {

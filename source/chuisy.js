@@ -804,6 +804,21 @@
         urlRoot: chuisy.apiRoot + chuisy.version + "/card/"
     });
 
+    chuisy.models.Coupon = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/coupon/",
+        redeem: function(options) {
+            options = options || {};
+            options.url = _.result(this, "url") + "redeem/";
+            var success = options.success;
+            options.success = _.bind(function() {
+                this.save("redeemed", true);
+                success();
+            }, this);
+            Backbone.Tastypie.addAuthentication("read", this, options);
+            Backbone.ajax(options);
+        }
+    });
+
     chuisy.models.SearchableCollection = Backbone.Tastypie.Collection.extend({
         fetch: function(options) {
             if (options && options.searchQuery) {
