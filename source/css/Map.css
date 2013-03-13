@@ -2,3 +2,7 @@
 	border: none;
 	background: none;
 }
+
+.leaflet-popup-close-button {
+	display: none;
+}

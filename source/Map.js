@@ -5,11 +5,14 @@ enyo.kind({
 			latitude: 51.0,
 			longitude: 9.0
 		},
-		zoom: 6,
+		zoom: 15,
 		mapType: "ROADMAP" /*ROADMAP, SATELLITE, HYBRID, TERRAIN */
 	},
 	events: {
 		onMapClick: ""
+	},
+	handlers: {
+		onpostresize: "postResize"
 	},
 	rendered: function() {
 		this.inherited(arguments);
@@ -17,7 +20,7 @@ enyo.kind({
 	},
 	centerChanged: function() {
 		var latlng = new L.LatLng(this.center.latitude, this.center.longitude);
-		this.map.setView(latlng, zoom);
+		this.map.setView(latlng, this.zoom);
 	},
 	zoomChanged: function() {
 		this.map.setZoom(this.zoom);
@@ -27,10 +30,26 @@ enyo.kind({
 		this.layer = new L.Google(this.mapType);
 		this.map.addLayer(this.layer);
 	},
-	addMarker: function(latlng, control) {
-		var customHtmlIcon = L.divIcon({html: control.generateHtml()});
-		var marker = new L.Marker(latlng, {icon: customHtmlIcon});
-		this.map.addLayer(marker);
+	/**
+		Add marker to map
+
+		_latlng_ coordinates where the marker is placed
+		_markerControl_ is an optional parameter to generate a custom icon
+		_popupControl_ is an optional parameter to create a popup for the marker
+	*/
+	addMarker: function(latlng, markerControl, popupControl) {
+		var marker;
+		if (markerControl) {
+			var customHtmlIcon = L.divIcon({html: markerControl.generateHtml()});
+			marker = new L.Marker(latlng, {icon: customHtmlIcon});
+			this.map.addLayer(marker);
+		} else {
+			marker = new L.Marker(latlng).addTo(this.map);
+		}
+		if (popupControl) {
+			marker.bindPopup(popupControl.generateHtml()).openPopup();
+			this.map.on("dragstart", enyo.bind(marker, marker.closePopup));
+		}
 		this.markers.push(marker);
 	},
 	initialize: function() {
@@ -38,6 +57,9 @@ enyo.kind({
 		this.layer = new L.Google(this.mapType);
 		this.markers = [];
 		this.map.addLayer(this.layer);
+	},
+	postResize: function() {
+		this.map.invalidateSize();
 	},
 	components: [
 		{classes: "enyo-fill", name: "map"}

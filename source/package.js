@@ -11,6 +11,7 @@ enyo.depends(
 	"$lib/backbone.js",
 	"$lib/backbone-tastypie.js",
 	"$lib/backbone-localstorage.js",
+	"$lib/leaflet",
 	"chuisy.js",
 	"css/",
 	"App.js",
@@ -38,5 +39,7 @@ enyo.depends(
 	"GetStarted.js",
 	"GiftView.js",
 	"InviteFriends.js",
-	"UserList.js"
+	"UserList.js",
+	"Map.js"
+	"leaflet-google.js"
 );
