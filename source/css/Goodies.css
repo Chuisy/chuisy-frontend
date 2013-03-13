@@ -67,8 +67,6 @@
 	right: 0;
 	bottom: 0;
 	margin: auto;
-	width: 300px;
-	height: 300px;
 	display: inline-block;
 	-webkit-transition: -webkit-transform 0.5s;
 	-webkit-transition-timing-function: ease;
@@ -78,6 +76,63 @@
 
 .goodies-card.elastic {
  	-webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.goodies-card.small {
+	width: 300px;
+	height: 300px;
+	border-radius: 15px;
+}
+
+.goodies-card.small .goodies-card-side.front,
+.goodies-card.small .goodies-card-side.back {
+	border-radius: 15px;
+}
+
+.goodies-card.big {
+	width: 300px;
+	height: 300px;
+}
+
+.goodies-card.big .goodies-card-side.front,
+.goodies-card.big .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.wide {
+	width: 300px;
+	height: 147px;
+	border-radius: 7px;
+}
+
+.goodies-card.wide .goodies-card-side.front,
+.goodies-card.wide .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.tall {
+	height: 300px;
+	width: 147px;
+}
+
+.goodies-card.tall .goodies-card-side.front,
+.goodies-card.tall .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.panorama {
+	width: 300px;
+	height: 97px;
+}
+
+.goodies-card.panorama .goodies-card-side.front,
+.goodies-card.panorama .goodies-card-side.back {
+	border-radius: 5px;
+}
+
+.goodies-card.coupon .goodies-card-side.back {
+	width: 300px;
+	height: 400px;
 }
 
 .goodies-card-side {
@@ -139,3 +194,30 @@
 	padding: 40px;
 	box-sizing: border-box;
 }
+
+.goodies-card-redeem {
+	display: none;
+	padding: 20px;
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.goodies-card.coupon .goodies-card-redeem {
+	display: block;
+}
+
+.goodies-card-redeem-button {
+	width: 100%;
+	height: 40px;
+}
+
+.goodies-card.coupon .goodies-card-content-image {
+	height: 100px;
+}
+
+.goodies-card.coupon .goodies-card-text {
+	height: 220px;
+}
+
+.goodies-card

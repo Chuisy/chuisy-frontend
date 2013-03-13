@@ -37,28 +37,36 @@ enyo.kind({
     showCard: function(sender, event) {
         this.item = sender;
         var card = chuisy.cards.at(event.index);
+        var coupon = card.get("coupon");
 
+        // Show stage
         this.$.stagePopup.show();
         this.$.stage.addClass("scrim");
-
-        var coords = this.getCardCoords(this.item);
-        var ib = this.item.getBounds();
-        var cb = this.$.card.getBounds();
-        var ratio = ib.height/ib.width;
-
-        this.$.card.applyStyle("height", (ratio * cb.width) + "px");
+        
+        // Adjust style card style and contents
+        this.$.card.removeClass("small");
+        this.$.card.removeClass("big");
+        this.$.card.removeClass("tall");
+        this.$.card.removeClass("wide");
+        this.$.card.removeClass("panorama");
+        this.$.card.addClass(card.get("format"));
+        this.$.card.addRemoveClass("coupon", coupon);
         this.$.front.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
-        this.$.cardContentImage.applyStyle("background-image", "url(" + (card.get("content_image") || card.get("cover_image")) + ")");
-        this.$.cardTextWrapper.applyStyle("padding", (13/coords.scale) + "px");
-        this.$.front.applyStyle("border-radius", (5/coords.scale) + "px");
-        this.$.back.applyStyle("border-radius", (5/coords.scale) + "px");
+        var contentImage = (card.get("content_image") || card.get("cover_image"));
+        this.$.cardContentImage.applyStyle("background-image", "url(" + contentImage + ")");
         this.$.cardText.setContent(card.get("text"));
 
+        // Calculate coordinates for transition
+        var coords = this.getCardCoords(this.item);
+
+        // Move card into position and hide item
         this.flipped = false;
         this.item.applyStyle("visibility", "hidden");
         this.$.card.addClass("notransition");
         this.$.card.applyStyle("-webkit-transform", "translate3d(" + coords.dx + "px, " + coords.dy + "px, " + coords.dz + "px) rotateY(0deg)");
+
         enyo.asyncMethod(this, function() {
+            // Trigger animation
             this.$.card.removeClass("notransition");
             this.isAnimating = true;
             this.$.card.applyStyle("-webkit-transform", "translate3d(0, 0, 0) rotateY(180deg)");
@@ -181,6 +189,11 @@ enyo.kind({
             top: offsetTop
         };
     },
+    redeemCoupon: function() {
+        this.$.redeemButton.setDisabled(true);
+        this.$.redeemSpinner.show();
+        return true;
+    },
     activate: function() {},
     deactivate: function() {
     },
@@ -198,6 +211,12 @@ enyo.kind({
                         {name: "cardContentImage", classes: "goodies-card-content-image"},
                         {classes: "goodies-card-text", name: "cardTextWrapper", components: [
                             {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
+                        ]},
+                        {classes: "goodies-card-redeem", components: [
+                            {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemCoupon", components: [
+                                {content: $L("Redeem")}
+                            ]},
+                            {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false}
                         ]}
                     ]}
                 ]}
