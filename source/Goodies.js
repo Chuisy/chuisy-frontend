@@ -9,6 +9,7 @@ enyo.kind({
         Refreshes notification list with loaded items
     */
     refresh: function() {
+        chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
     },
     setupItem: function(sender, event) {

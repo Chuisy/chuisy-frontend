@@ -989,9 +989,46 @@
         }
     });
 
-    chuisy.models.CardsCollection = Backbone.Tastypie.Collection.extend({
+    chuisy.models.CardCollection = Backbone.Tastypie.Collection.extend({
         model: chuisy.models.Card,
-        url: chuisy.apiRoot + chuisy.version + "/card/"
+        url: chuisy.apiRoot + chuisy.version + "/card/",
+        sizes: {
+                "small": [1, 1],
+                "wide": [2, 1],
+                "tall": [1, 2],
+                "big": [2, 2],
+                "panorama": [3, 1]
+        },
+        findNextItemWithMaxWidth: function(from, width) {
+            for (var i=from; i<this.length; i++) {
+                if (this.sizes[this.models[i].get("format")][0] <= width) {
+                    return i;
+                }
+            }
+        },
+        compress: function(colCount) {
+            colCount = colCount || 3;
+            var i = 0;
+
+            while (i < this.length) {
+                var val = 0, j = i;
+                while (val < colCount && j < this.length) {
+                    var model = this.models[j];
+                    var format = model.get("format");
+                    val += this.sizes[format][0];
+                    if (val > colCount) {
+                        k = this.findNextItemWithMaxWidth(j+1, val-colCount);
+                        if (k) {
+                            this.models[j] = this.models[k];
+                            this.models[k] = model;
+                            val = val - this.sizes[this.models[k].get("format")][0] + this.sizes[this.models[j].get("format")][0];
+                        }
+                    }
+                    j++;
+                }
+                i = j;
+            }
+        }
     });
 
     /*
@@ -1104,6 +1141,6 @@
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.venues = new chuisy.models.Venues();
-    chuisy.cards = new chuisy.models.CardsCollection();
+    chuisy.cards = new chuisy.models.CardCollection();
 
 })(window.$, window._, window.Backbone, window.enyo);
