@@ -190,14 +190,13 @@
 .goodies-card-text {
 	color: #555;
 	width: 100%;
-	height: 70%;
 	padding: 40px;
 	box-sizing: border-box;
 }
 
 .goodies-card-redeem {
 	display: none;
-	padding: 20px;
+	padding: 10px;
 	width: 100%;
 	box-sizing: border-box;
 	position: relative;
@@ -216,8 +215,10 @@
 
 .goodies-card-redeemed-text {
 	color: rgb(65, 160, 69);
-	font-size: 20pt;
+	font-size: 18pt;
 	display: none;
+	height: 40px;
+	line-height: 40px;
 }
 
 .goodies-card.redeemed .goodies-card-redeem-button {
@@ -232,8 +233,13 @@
 	height: 100px;
 }
 
-.goodies-card.coupon .goodies-card-text {
-	height: 220px;
+.goodies-card-stores {
+	font-size: 7pt;
+	color: #555;
+	padding: 10px;
+	display: none;
 }
 
-.goodies-card
+.goodies-card.coupon .goodies-card-stores {
+	display: block;
+}

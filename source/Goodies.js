@@ -56,6 +56,16 @@ enyo.kind({
         this.$.front.applyStyle("background-image", "url(" + this.card.get("cover_image") + ")");
         var contentImage = (this.card.get("content_image") || this.card.get("cover_image"));
         this.$.cardContentImage.applyStyle("background-image", "url(" + contentImage + ")");
+        if (coupon) {
+            var stores = [];
+            for (var i=0; i<coupon.stores.length; i++) {
+                var store = coupon.stores[i];
+                stores.push(store.name + ", " + store.location.address + ", " + store.location.city);
+            }
+            var storesText = "<strong>" + $L("Redeemable at:") + "</strong> " + stores.join(";");
+            this.$.stores.setContent(storesText);
+        }
+        this.$.back.reflow();
         this.$.cardText.setContent(this.card.get("text"));
 
         // Calculate coordinates for transition
@@ -218,9 +228,9 @@ enyo.kind({
             {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front"},
-                    {classes: "goodies-card-side back", name: "back", components: [
+                    {kind: "FittableRows", classes: "goodies-card-side back", name: "back", components: [
                         {name: "cardContentImage", classes: "goodies-card-content-image"},
-                        {classes: "goodies-card-text", name: "cardTextWrapper", components: [
+                        {classes: "goodies-card-text", fit: true, name: "cardTextWrapper", components: [
                             {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
                         ]},
                         {classes: "goodies-card-redeem", components: [
@@ -229,7 +239,9 @@ enyo.kind({
                             ]},
                             {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
-                        ]}
+                        ]},
+                        {name: "stores", classes: "goodies-card-stores", allowHtml: true},
+                        {}
                     ]}
                 ]}
             ]}
