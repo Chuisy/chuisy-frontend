@@ -14,8 +14,10 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
-        event.item.$.cardItem.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        var coupon = card.get("coupon");
+        event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
         event.item.$.cardItem.addClass(card.get("format"));
+        event.item.$.cardItemOverlay.setShowing(coupon && (coupon.kind == "discount" || coupon.kind == "cash"));
         return true;
     },
     getCardCoords: function(item) {
@@ -43,7 +45,7 @@ enyo.kind({
         // Show stage
         this.$.stagePopup.show();
         this.$.stage.addClass("scrim");
-        
+
         // Adjust style card style and contents
         this.$.card.removeClass("small");
         this.$.card.removeClass("big");
@@ -62,11 +64,12 @@ enyo.kind({
                 var store = coupon.stores[i];
                 stores.push(store.name + ", " + store.location.address + ", " + store.location.city);
             }
-            var storesText = "<strong>" + $L("Redeemable at:") + "</strong> " + stores.join(";");
+            var storesText = "<strong>" + $L("Redeemable at:") + "</strong> " + stores.join("; ");
             this.$.stores.setContent(storesText);
         }
         this.$.back.reflow();
         this.$.cardText.setContent(this.card.get("text"));
+        this.$.cardOverlay.setShowing(coupon && (coupon.kind == "discount" || coupon.kind == "cash"));
 
         // Calculate coordinates for transition
         var coords = this.getCardCoords(this.item);
@@ -221,13 +224,22 @@ enyo.kind({
     components: [
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
-                {name: "cardItem", classes: "goodies-item", ontap: "showCard"}
+                {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
+                    {name: "cardItemImage", classes: "goodies-item-image"},
+                    {name: "cardItemOverlay", classes: "goodies-overlay", components: [
+                        {classes: "goodies-overlay-discount", content: "%"}
+                    ]}
+                ]}
             ]}
         ]},
         {kind: "Popup", style: "width: 100%; height: 100%; top: 0; left: 0;", name: "stagePopup", floating: true, components: [
             {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
-                    {classes: "goodies-card-side front", name: "front"},
+                    {classes: "goodies-card-side front", name: "front", components: [
+                        {name: "cardOverlay", classes: "goodies-overlay", components: [
+                            {classes: "goodies-overlay-discount", content: "%"}
+                        ]}
+                    ]},
                     {kind: "FittableRows", classes: "goodies-card-side back", name: "back", components: [
                         {name: "cardContentImage", classes: "goodies-card-content-image"},
                         {classes: "goodies-card-text", fit: true, name: "cardTextWrapper", components: [

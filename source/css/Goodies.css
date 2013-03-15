@@ -9,15 +9,51 @@
 .goodies-item {
 	width: 100px;
 	height: 100px;
-	margin: 0 2px;
 	box-sizing: border-box;
 	display: inline-block;
 	position: relative;
 	border-radius: 5px;
 	box-shadow: 0 1px 1px #888;
-	padding: 4px;
+	background-color: #ffffff;
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0 2px;
+}
+
+.goodies-item-image {
+	width: 100%;
+	height: 100%;
 	background: #ffffff url() no-repeat center center;
 	background-size: cover;
+	border-radius: inherit;
+}
+
+.goodies-overlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+	border-radius: inherit;
+ 	-webkit-backface-visibility: hidden;
+	overflow: hidden;
+}
+
+.goodies-overlay-discount {
+	position: absolute;
+	right: -19px;
+	bottom: -30px;
+	color: #ffffff;
+	font-size: 80pt;
+	font-weight: 300;
+}
+
+.goodies-card .goodies-overlay-discount {
+	font-size: 240pt;
+	right: -54px;
+	bottom: -88px;
 }
 
 .goodies-item.tall {
