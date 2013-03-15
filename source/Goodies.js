@@ -221,6 +221,21 @@ enyo.kind({
             this.card.get("coupon").redeemed = true;
             this.$.card.addClass("redeemed");
         })});
+    },
+    redeemButtonTapped: function() {
+        if (navigator.notification) {
+            navigator.notification.confirm(
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+                enyo.bind(this, function(choice) {
+                    if (choice == 2) {
+                        this.redeemCoupon();
+                    }
+                }),
+                $L("Redeem Coupon"), [$L("Cancel"), $L("Redeem")].join(",")
+            );
+        } else {
+            this.redeemCoupon();
+        }
 
         return true;
     },
@@ -256,7 +271,7 @@ enyo.kind({
                             {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
                         ]},
                         {classes: "goodies-card-redeem", components: [
-                            {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemCoupon", components: [
+                            {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
                                 {content: $L("Redeem")}
                             ]},
                             {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
