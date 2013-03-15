@@ -176,7 +176,7 @@ enyo.kind({
                         // DISCOVER VIEW
                         {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
                         // GOODIES
-                        {kind: "Goodies", name: "goodies", name: "goodies"},
+                        {kind: "Goodies", name: "goodies"},
                         // NOTIFICATIONS
                         {kind: "Notifications", name: "notifications", onNotificationSelected: "notificationSelected"}
                     ]},
