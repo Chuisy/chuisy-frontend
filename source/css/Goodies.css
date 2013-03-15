@@ -21,6 +21,10 @@
 	margin: 0 2px;
 }
 
+.goodies-item.redeemed {
+	opacity: 0.5;
+}
+
 .goodies-item-image {
 	width: 100%;
 	height: 100%;

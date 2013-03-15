@@ -18,6 +18,7 @@ enyo.kind({
         event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
         event.item.$.cardItem.addClass(card.get("format"));
         event.item.$.cardItem.addRemoveClass("coupon", coupon);
+        event.item.$.cardItem.addRemoveClass("redeemed", coupon && coupon.redeemed);
         return true;
     },
     getCardCoords: function(item) {
@@ -38,8 +39,13 @@ enyo.kind({
         };
     },
     showCard: function(sender, event) {
+        var card = chuisy.cards.at(event.index);
+        if (!card || card.get("coupon") && card.get("coupon").redeemed) {
+            return;
+        }
+
         this.item = sender;
-        this.card = chuisy.cards.at(event.index);
+        this.card = card;
         var coupon = this.card.get("coupon");
 
         // Show stage
@@ -219,12 +225,13 @@ enyo.kind({
             this.$.redeemButton.setDisabled(false);
             this.card.get("coupon").redeemed = true;
             this.$.card.addClass("redeemed");
+            this.item.addClass("redeemed");
         })});
     },
     redeemButtonTapped: function() {
         if (navigator.notification) {
             navigator.notification.confirm(
-                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by a person at the counter! A coupon can only be redeemed once!"),
                 enyo.bind(this, function(choice) {
                     if (choice == 2) {
                         this.redeemCoupon();
