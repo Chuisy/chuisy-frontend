@@ -17,7 +17,7 @@ enyo.kind({
         var coupon = card.get("coupon");
         event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
         event.item.$.cardItem.addClass(card.get("format"));
-        event.item.$.cardItemOverlay.setShowing(coupon && (coupon.kind == "discount" || coupon.kind == "cash"));
+        event.item.$.cardItem.addRemoveClass("coupon", coupon);
         return true;
     },
     getCardCoords: function(item) {
@@ -70,7 +70,6 @@ enyo.kind({
         }
         this.$.back.reflow();
         this.$.cardText.setContent(this.card.get("text"));
-        this.$.cardOverlay.setShowing(coupon && (coupon.kind == "discount" || coupon.kind == "cash"));
 
         // Calculate coordinates for transition
         var coords = this.getCardCoords(this.item);
@@ -250,9 +249,7 @@ enyo.kind({
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
                     {name: "cardItemImage", classes: "goodies-item-image"},
-                    {name: "cardItemOverlay", classes: "goodies-overlay", components: [
-                        {classes: "goodies-overlay-discount", content: "%"}
-                    ]}
+                    {classes: "goodies-item-ribbon"}
                 ]}
             ]}
         ]},
@@ -261,9 +258,7 @@ enyo.kind({
             {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front", components: [
-                        {name: "cardOverlay", classes: "goodies-overlay", components: [
-                            {classes: "goodies-overlay-discount", content: "%"}
-                        ]}
+                        {classes: "goodies-card-ribbon"}
                     ]},
                     {kind: "FittableRows", classes: "goodies-card-side back", name: "back", components: [
                         {name: "cardContentImage", classes: "goodies-card-content-image"},
