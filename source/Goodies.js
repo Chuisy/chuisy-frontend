@@ -220,12 +220,23 @@ enyo.kind({
         this.$.redeemSpinner.show();
 
         var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
-        coupon.redeem({success: enyo.bind(this, function() {
-            this.$.redeemSpinner.hide();
-            this.$.redeemButton.setDisabled(false);
-            this.card.get("coupon").redeemed = true;
-            this.$.card.addClass("redeemed");
-            this.item.addClass("redeemed");
+        coupon.redeem({complete: enyo.bind(this, function(request, status) {
+            if (request.status == 200) {
+                this.$.redeemSpinner.hide();
+                this.$.redeemButton.setDisabled(false);
+                this.card.get("coupon").redeemed = true;
+                this.$.card.addClass("redeemed");
+                this.item.addClass("redeemed");
+            } else {
+                var message = request.status == 400 && request.responseText ? $L(request.responseText) : $L('Something went wrong. Please try again later!');
+                if (navigator.notification) {
+                    navigator.notification.alert(message, function() {}, $L("Failed to redeem coupon"), "OK");
+                } else {
+                    alert(message);
+                }
+                this.$.redeemSpinner.hide();
+                this.$.redeemButton.setDisabled(false);
+            }
         })});
     },
     redeemButtonTapped: function() {
