@@ -779,7 +779,7 @@
         save: function(attributes, options) {
             attributes = attributes || {};
             var actor = _.clone(this.get("actor"));
-            if (actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
+            if (actor && actor.resource_uri && (!(this.collection && this.collection.localStorage) || options && options.remote)) {
                 attributes.actor = actor.resource_uri;
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
