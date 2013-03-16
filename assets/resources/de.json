@@ -129,5 +129,8 @@
     "Something went wrong. Please try again later!": "Etwas ist schiefgelaufen. Versuche es später noch einmal!",
     "Coupon has already been redeemed.": "Dieser Gutschein wurde bereits eingelöst.",
     "Coupon is not valid yet.": "Dieser Gutschein ist noch nicht gültig.",
-    "Coupon has expired.": "Dieser Gutschein ist abgelaufen."
+    "Coupon has expired.": "Dieser Gutschein ist abgelaufen.",
+    "Redeemable at:": "Einlösbar bei:",
+    "Valid until:": "Gültig bis:",
+    "expired": "abgelaufen"
 }

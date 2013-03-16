@@ -21,8 +21,24 @@
 	margin: 0 2px;
 }
 
-.goodies-item.redeemed {
+.goodies-item.redeemed .goodies-item-image,
+.goodies-item.redeemed .goodies-item-ribbon,
+.goodies-item.expired .goodies-item-image,
+.goodies-item.expired .goodies-item-ribbon {
 	opacity: 0.5;
+}
+
+.goodies-item-expired {
+	color: Red;
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	font-size: 12pt;
+	display: none;
+}
+
+.goodies-item.expired .goodies-item-expired {
+	display: block;
 }
 
 .goodies-item-image {
@@ -274,13 +290,13 @@
 	height: 100px;
 }
 
-.goodies-card-stores {
+.goodies-card-disclaimer {
 	font-size: 7pt;
 	color: #555;
 	padding: 10px;
 	display: none;
 }
 
-.goodies-card.coupon .goodies-card-stores {
+.goodies-card.coupon .goodies-card-disclaimer {
 	display: block;
 }

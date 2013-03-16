@@ -4,6 +4,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.cards.on("sync", this.refresh, this);
+        this.dateFmt = new enyo.g11n.DateFmt();
     },
     /**
         Refreshes notification list with loaded items
@@ -19,6 +20,7 @@ enyo.kind({
         event.item.$.cardItem.addClass(card.get("format"));
         event.item.$.cardItem.addRemoveClass("coupon", coupon);
         event.item.$.cardItem.addRemoveClass("redeemed", coupon && coupon.redeemed);
+        event.item.$.cardItem.addRemoveClass("expired", coupon && new Date(coupon.valid_until) < new Date());
         return true;
     },
     getCardCoords: function(item) {
@@ -40,7 +42,8 @@ enyo.kind({
     },
     showCard: function(sender, event) {
         var card = chuisy.cards.at(event.index);
-        if (!card || card.get("coupon") && card.get("coupon").redeemed) {
+        var coupon = card && card.get("coupon");
+        if (!card || coupon && (coupon.redeemed || new Date(coupon.valid_until) < new Date())) {
             return;
         }
 
@@ -71,8 +74,9 @@ enyo.kind({
                 var store = coupon.stores[i];
                 stores.push(store.name + ", " + store.location.address + ", " + store.location.city);
             }
-            var storesText = "<strong>" + $L("Redeemable at:") + "</strong> " + stores.join("; ");
-            this.$.stores.setContent(storesText);
+            var disclaimer = "<strong>" + $L("Redeemable at:") + "</strong> " + stores.join("; ");
+            disclaimer += "; <strong>" + $L("Valid until:") + "</strong> " + this.dateFmt.format(new Date(coupon.valid_until));
+            this.$.disclaimer.setContent(disclaimer);
         }
         this.$.back.reflow();
         this.$.cardText.setContent(this.card.get("text"));
@@ -256,7 +260,12 @@ enyo.kind({
 
         return true;
     },
-    activate: function() {
+    activate: function(card) {
+        if (card) {
+            chuisy.cards.unshift(card);
+            this.refresh();
+        }
+        chuisy.cards.fetch({update: true, remove: false});
     },
     deactivate: function() {
         this.$.stagePopup.hide();
@@ -267,7 +276,8 @@ enyo.kind({
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
                     {name: "cardItemImage", classes: "goodies-item-image"},
-                    {classes: "goodies-item-ribbon"}
+                    {classes: "goodies-item-ribbon"},
+                    {classes: "goodies-item-expired", content: $L("expired")}
                 ]}
             ]}
         ]},
@@ -290,7 +300,7 @@ enyo.kind({
                             {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
-                        {name: "stores", classes: "goodies-card-stores", allowHtml: true},
+                        {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},
                         {}
                     ]}
                 ]}
