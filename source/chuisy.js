@@ -14,7 +14,6 @@
 
             if (!lightweight) {
                 chuisy.closet.fetch();
-                chuisy.cards.fetch();
 
                 chuisy.feed.fetch();
                 chuisy.feed.fetch({remote: true, data: {limit: 30}});
@@ -40,6 +39,8 @@
 
                     chuisy.closet.syncRecords();
                     chuisy.closet.startPolling(60000);
+
+                    chuisy.cards.fetch();
 
                     chuisy.notifications.fetch();
                     chuisy.notifications.startPolling(60000);
@@ -812,7 +813,9 @@
             var success = options.success;
             options.success = _.bind(function() {
                 this.save("redeemed", true);
-                success();
+                if (success) {
+                    success();
+                }
             }, this);
             Backbone.Tastypie.addAuthentication("read", this, options);
             Backbone.ajax(options);
