@@ -316,9 +316,15 @@ enyo.kind({
             // User wants to see his Chu Box? Our pleasure!
             this.$.mainView.openView("closet");
         } else if (uri.match(/^goodies\/$/)) {
-            // chubox/
-            // Whats new? Let's check out the notifications
+            // goodies/
             this.$.mainView.openView("goodies");
+        } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
+            // card/{card id}/
+            var card;
+            if (obj) {
+                card = obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
+            }
+            this.$.mainView.openView("goodies", card);
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
@@ -355,12 +361,6 @@ enyo.kind({
                 user.fetch();
                 this.$.mainView.openView("user", user);
             }
-        // } else if ((match2 = uri.match(/^user\/(\d+)\/chubox\/$/))) {
-        //     // {user id}/
-        //     // This is the URI to a users profile
-        //     chuisy.user.detail(match2[1], enyo.bind(this, function(sender, response) {
-        //         this.$.mainView.openView(response);
-        //     }));
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
