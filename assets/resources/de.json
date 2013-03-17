@@ -119,6 +119,18 @@
     "Posting Chu": "Chu wird gepostet",
     "Uploading image": "Bild wird hochgel.",
     "Post failed": "Posten fehlgeschl.",
-    "Upload failed": "Upload fehlgeschl."
+    "Upload failed": "Upload fehlgeschl.",
+    "You have received a new goody! Check it out on now your Goodies Wall!": "Du hast ein neues Goody bekommen! Schau es dir jetzt auf deiner Goody Wall an!",
+    "Redeem": "Einlösen",
+    "Redeemed": "Eingelöst",
+    "Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!": "Bist du dir sicher, dass du diesen Gutschein jetzt einlösen möchtest? Du solltest Gutscheine nie selbst entwerten sondern es von jemanden machen lassen, der ihn geltend machen kann! Ein Gutschein kann nur einmal eingelöst werden!",
+    "Redeem Coupon": "Gutschein Einlösen",
+    "Failed to redeem coupon": "Konnte Gutschein nicht einlösen",
+    "Something went wrong. Please try again later!": "Etwas ist schiefgelaufen. Versuche es später noch einmal!",
+    "Coupon has already been redeemed.": "Dieser Gutschein wurde bereits eingelöst.",
+    "Coupon is not valid yet.": "Dieser Gutschein ist noch nicht gültig.",
+    "Coupon has expired.": "Dieser Gutschein ist abgelaufen.",
+    "Redeemable at:": "Einlösbar bei:",
+    "Valid until:": "Gültig bis:",
+    "expired": "abgelaufen"
 }
- 

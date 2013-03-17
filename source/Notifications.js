@@ -25,7 +25,8 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
-
+        var image = null;
+        
         if (item.get("text")) {
             this.$.text.setContent(item.get("text"));
         } else {
@@ -45,10 +46,14 @@ enyo.kind({
                 case "join":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
                     break;
+                case "goody":
+                    this.$.text.setContent($L("You have received a new goody! Check it out on now your Goodies Wall!"));
+                    image = "assets/images/goody_icon_small.png";
+                    break;
             }
         }
 
-        this.$.image.setSrc(item.get("thumbnail") || "");
+        this.$.image.setSrc(image || item.get("thumbnail") || "");
         this.$.notification.addRemoveClass("read", item.get("read"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
