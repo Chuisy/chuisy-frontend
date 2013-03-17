@@ -39,7 +39,7 @@ enyo.kind({
         var user = chuisy.accounts.getActiveUser();
         if (App.isSignedIn() && navigator.notification) {
             if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
-                navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
+                navigator.notification.confirm($L("Do you want Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
                     var share = choice == 1 ? false : true;
                     user.profile.set("fb_og_share_actions", share);
                     user.save();
