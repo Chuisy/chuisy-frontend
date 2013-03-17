@@ -132,5 +132,8 @@
     "Coupon has expired.": "Dieser Gutschein ist abgelaufen.",
     "Redeemable at:": "Einlösbar bei:",
     "Valid until:": "Gültig bis:",
-    "expired": "abgelaufen"
+    "expired": "abgelaufen",
+    "Are you sure you want to remove this Chu? This action can not be undone.": "Bist du sicher, dass du diesen Chu entfernen willst? Diese Aktion kann nicht wieder rückgängig gemacht werden.",
+    "Remove Chu": "Chu Entfernen",
+    "Remove": "Entfernen"
 }

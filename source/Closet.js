@@ -58,7 +58,7 @@ enyo.kind({
             var c = this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
-                {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
+                {classes: "closet-delete-button", ontap: "removeButtonTapped", cellIndex: i}
             ]});
         }
     },
@@ -124,10 +124,26 @@ enyo.kind({
         // Happens on iOS sometimes
         event.preventDefault();
     },
+    removeButtonTapped: function(sender, event) {
+        if (navigator.notification) {
+            navigator.notification.confirm(
+                $L("Are you sure you want to remove this Chu? This action can not be undone."),
+                enyo.bind(this, function(choice) {
+                    if (choice == 2) {
+                        this.removeChu(sender, event);
+                    }
+                }),
+                $L("Remove Chu"), [$L("Cancel"), $L("Remove")].join(",")
+            );
+        } else {
+            this.removeChu(sender, event);
+        }
+        return true;
+    },
     /**
         Event handler. Remove chu associated with the event.
     */
-    chuRemove: function(sender, event) {
+    removeChu: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = chuisy.closet.at(index);
         this.$.list.performOnRow(event.index, function(index, cellIndex) {
@@ -136,7 +152,6 @@ enyo.kind({
         setTimeout(function() {
             chu.destroy();
         }, 300);
-        return true;
     },
     hold: function(sender, event) {
         this.held = true;
