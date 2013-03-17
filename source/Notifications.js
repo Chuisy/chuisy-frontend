@@ -26,16 +26,33 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
         var image = null;
-        
+
         if (item.get("text")) {
             this.$.text.setContent(item.get("text"));
         } else {
+            var connection = $L(" that you are subscribed to");
+            var targetObj = item.get("target_obj");
+            if (targetObj) {
+                if (targetObj.owned) {
+                    connection = $L(" of yours");
+                } else if (targetObj.shared) {
+                    connection = $L(" that was shared with you");
+                } else if (targetObj.commented) {
+                    connection = $L(" that you commented on");
+                } else if (targetObj.liked) {
+                    connection = $L(" that you liked");
+                }
+            }
             switch (item.get("action")) {
                 case "like":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
+                        .replace("{{ name }}", item.get("actor").first_name)
+                        .replace("{{ connection }}", connection));
                     break;
                 case "comment":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong>{{ connection }}.")
+                        .replace("{{ name }}", item.get("actor").first_name)
+                        .replace("{{ connection }}", connection));
                     break;
                 case "follow":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
