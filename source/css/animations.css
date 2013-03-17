@@ -1,0 +1,8 @@
+@-webkit-keyframes wiggle {
+	from {-webkit-transform: rotate(-2deg)}
+	to {-webkit-transform: rotate(2deg);}
+}
+
+.wiggle {
+	-webkit-animation: wiggle 0.1s linear 0 infinite alternate;
+}

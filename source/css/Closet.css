@@ -35,6 +35,7 @@
 	box-shadow: 0 1px 1px #888;
 	padding: 4px;
 	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 .closet-chu.deleted {

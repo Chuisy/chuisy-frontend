@@ -55,7 +55,7 @@ enyo.kind({
 
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
-            this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
+            var c = this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
                 {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
@@ -66,17 +66,20 @@ enyo.kind({
         for (var i=0; i<this.cellCount; i++) {
             var index = event.index * this.cellCount + i;
             var chu = chuisy.closet.at(index);
-            this.$["chu" + i].removeClass("deleted");
+            var c = this.$["chu" + i];
+            c.removeClass("deleted");
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
                 var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["200x200"] ||
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
-                this.$["chu" + i].applyStyle("visibility", "visible");
+                c.applyStyle("visibility", "visible");
                 var syncStatus = chu.get("syncStatus");
                 this.$["errorIcon" + i].setShowing(syncStatus == "postFailed" || syncStatus == "uploadFailed");
+                c.applyStyle("-webkit-animation-delay", (Math.random()/5-0.2) + "s");
+                c.addRemoveClass("wiggle", this.editing);
             } else {
-                this.$["chu" + i].applyStyle("visibility", "hidden");
+                c.applyStyle("visibility", "hidden");
             }
         }
 
@@ -99,6 +102,7 @@ enyo.kind({
         this.$.postButton.hide();
         this.addClass("editing");
         this.$.editHint.setContent($L("(hold to cancel)"));
+        this.refresh();
     },
     /**
         Finish edit mode
@@ -108,6 +112,7 @@ enyo.kind({
         this.removeClass("editing");
         this.$.postButton.show();
         this.$.editHint.setContent($L("(hold to edit)"));
+        this.refresh();
     },
     chuTap: function(sender, event) {
         if (!this.held) {
