@@ -12,6 +12,7 @@ enyo.kind({
     refresh: function() {
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
+        this.$.placeholder.setShowing(chuisy.cards.length);
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
@@ -246,7 +247,7 @@ enyo.kind({
     redeemButtonTapped: function() {
         if (navigator.notification) {
             navigator.notification.confirm(
-                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by a person at the counter! A coupon can only be redeemed once!"),
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
                 enyo.bind(this, function(choice) {
                     if (choice == 2) {
                         this.redeemCoupon();
@@ -272,6 +273,7 @@ enyo.kind({
         this.hideCard();
     },
     components: [
+        {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
