@@ -146,10 +146,13 @@ enyo.kind({
                     };
                     chuMarker = new ChuMarker();
                     chuMarker.setChu(chu);
-                    this.$.map.addMarker(coords, chuMarker, null);
+                    this.$.map.addMarker(coords, chuMarker, null, chu);
                 }
             }
         }
+    },
+    markerTapped: function(sender, event) {
+        this.doShowChu({chu: event.obj});
     },
     components: [
         // SEARCH INPUT
@@ -198,7 +201,7 @@ enyo.kind({
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]},
             {classes: "discover-result-panel", components: [
-                {kind: "Map", classes: "enyo-fill", name: "map"}
+                {kind: "Map", onMarkerTapped: "markerTapped", classes: "enyo-fill", name: "map"}
             ]}
         ]}
     ]

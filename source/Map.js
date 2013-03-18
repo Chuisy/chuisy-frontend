@@ -9,7 +9,8 @@ enyo.kind({
 		mapType: "ROADMAP" /*ROADMAP, SATELLITE, HYBRID, TERRAIN */
 	},
 	events: {
-		onMapClick: ""
+		onMapClick: "",
+		onMarkerTapped: ""
 	},
 	handlers: {
 		onpostresize: "postResize"
@@ -37,12 +38,14 @@ enyo.kind({
 		_markerControl_ is an optional parameter to generate a custom icon
 		_popupControl_ is an optional parameter to create a popup for the marker
 	*/
-	addMarker: function(coords, markerControl, popupControl) {
+	addMarker: function(coords, markerControl, popupControl, obj) {
 		var marker;
 		var latlng = new L.LatLng(coords.latitude, coords.longitude);
 		if (markerControl) {
 			var customHtmlIcon = L.divIcon({html: markerControl.generateHtml()});
 			marker = new L.Marker(latlng, {icon: customHtmlIcon});
+			marker.obj = obj;
+			marker.on("click", enyo.bind(this, this.markerClick));
 			this.map.addLayer(marker);
 		} else {
 			marker = new L.Marker(latlng);
@@ -59,6 +62,9 @@ enyo.kind({
 			this.log(this.markers[i]);
 			this.map.removeLayer(this.markers[i]);
 		}
+	},
+	markerClick: function(event) {
+		this.doMarkerTapped({obj: event.target.obj});
 	},
 	initialize: function() {
 		this.map = new L.Map(this.$.map.hasNode(), {center: new L.LatLng(this.center.latitude, this.center.longitude), zoom: this.zoom});
