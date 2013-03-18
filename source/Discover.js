@@ -116,7 +116,9 @@ enyo.kind({
     },
     updateLocation: function() {
         App.getGeoLocation(enyo.bind(this, function(position) {
-            this.$.map.clearMarkers();
+            if (this.locMarker) {
+                this.$.map.removeMarker(this.locMarker);
+            }
             this.$.map.setCenter({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
@@ -127,14 +129,14 @@ enyo.kind({
                 latitude: lat,
                 longitude: lng
             };
-            this.$.map.addMarker(this.coords, null, null, null, true);
+            this.locMarker = this.$.map.addMarker(this.coords, null, null, null, true);
         }));
     },
     updateMap: function(collection, response, request, force) {
         if (force || request && request.data && request.data.q == this.latestQuery) {
             this.$.map.clearMarkers();
             if(this.coords) {
-                this.$.map.addMarker(this.coords, null, null, null, false);
+                this.locMarker = this.$.map.addMarker(this.coords, null, null, null, false);
             }
             var chu;
             var chuMarker;

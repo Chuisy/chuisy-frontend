@@ -54,12 +54,17 @@ enyo.kind({
 			this.map.on("dragstart", enyo.bind(marker, marker.closePopup));
 		}
 		this.markers.push(marker);
+		return marker;
 	},
 	clearMarkers: function() {
 		for(var i = 0; i < this.markers.length; i++) {
 			this.map.removeLayer(this.markers[i]);
 		}
 		this.markers = [];
+	},
+	removeMarker: function(marker) {
+		this.map.removeLayer(marker);
+		this.markers = _.without(this.markers, marker);
 	},
 	markerClick: function(event) {
 		this.doMarkerTapped({obj: event.target.obj});
