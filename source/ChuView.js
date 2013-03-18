@@ -545,24 +545,32 @@ enyo.kind({
         //add marker
         var loc = this.chu.get("location");
         console.log(loc);
-        var latitude = loc.latitude;
-        var longitude = loc.longitude;
-        var latlng = new L.LatLng(latitude, longitude);
-        this.$.map.addStandardMarker(latlng);
+        var lat = loc.latitude;
+        var lng = loc.longitude;
+        var coords = {
+            latitude: lat,
+            longitude: lng
+        };
 
         //add popup to marker
         var name = loc.name;
         var address = loc.address;
         var zipcode = loc.zip_code;
         var city = loc.city;
-        var popup = new enyo.Control({allowHtml: true, content: "<b>"+ name + "</b><br>" + address + "<br>" + zipcode + " " + city});
+        if(address)
+            address = "</br>" + address;
+        if(zipcode)
+            zipcode = "</br>" + zipcode;
+        this.log(city);
+        var popup = new enyo.Control({allowHtml: true, content: "<b>" + name + "</b>" + (address || "") + (zipcode || "") + ", " + (city || "")});
 
-        this.$.map.addMarker(latlng, null, popup);
+        this.$.map.clearMarkers();
+        this.$.map.addMarker(coords, null, popup);
 
         //set center and zoom of map
         var center = {
-            latitude: latitude,
-            longitude: longitude
+            latitude: lat,
+            longitude: lng
         };
         var zoom = 15;
         this.$.map.setZoom(zoom);
