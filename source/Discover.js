@@ -96,6 +96,7 @@ enyo.kind({
         // We are waiting for the search response. Unload list and show spinner.
         this[which + "s"].reset();
         this.synced(which, null, null, null, true);
+        this.updateMap(null, null, null, true);
         this.$[which + "Spinner"].show();
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
@@ -134,10 +135,10 @@ enyo.kind({
             var chu;
             var chuMarker;
             var c = 0;
-            for(var i = 0; i < collection.length; i++) {
-                chu = collection.at(i);
+            for(var i = 0; i < this.chus.length; i++) {
+                chu = this.chus.at(i);
                 if(chu.attributes.location && chu.attributes.location.latitude) {
-                    this.log(collection.at(i));
+                    this.log(this.chus.at(i));
                     var lat = chu.attributes.location.latitude;
                     var lng = chu.attributes.location.longitude;
                     var coords = {
@@ -149,10 +150,17 @@ enyo.kind({
                     this.$.map.addMarker(coords, chuMarker, null, chu);
                 }
             }
+            this.$.mapLoadMoreButton.setShowing(this.chus.hasNextPage());
         }
     },
     markerTapped: function(sender, event) {
         this.doShowChu({chu: event.obj});
+    },
+    mapLoadMore: function() {
+        if (this.chus.hasNextPage()) {
+            this.$.chuNextPage.show();
+            this.chus.fetchNext();
+        }
     },
     components: [
         // SEARCH INPUT
@@ -201,6 +209,7 @@ enyo.kind({
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]},
             {classes: "discover-result-panel", components: [
+                {kind: "onyx.Button", name: "mapLoadMoreButton", showing: false, content: "more", ontap: "mapLoadMore", classes: "discover-map-button"},
                 {kind: "Map", onMarkerTapped: "markerTapped", classes: "enyo-fill", name: "map"}
             ]}
         ]}

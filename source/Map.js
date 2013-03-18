@@ -59,9 +59,9 @@ enyo.kind({
 	},
 	clearMarkers: function() {
 		for(var i = 0; i < this.markers.length; i++) {
-			this.log(this.markers[i]);
 			this.map.removeLayer(this.markers[i]);
 		}
+		this.markers = [];
 	},
 	markerClick: function(event) {
 		this.doMarkerTapped({obj: event.target.obj});
