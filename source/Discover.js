@@ -24,7 +24,7 @@ enyo.kind({
 
         this.users.on("sync", _.bind(this.synced, this, "user"));
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
-        this.chus.on("sync", _.bind(this.updateMap, this));
+        // this.chus.on("sync", _.bind(this.updateMap, this));
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
@@ -189,6 +189,9 @@ enyo.kind({
             {index: 3, name: "mapTab", components: [
                 {classes: "discover-tab-caption", content: "Nearby"}
             ]}
+            // {index: 3, name: "mapTab", components: [
+            //     {classes: "discover-tab-caption", content: "Nearby"}
+            // ]}
         ]},
         // RESULTS
         {kind: "Panels", fit: true, name: "resultPanels", draggable: false, animate: false, components: [
