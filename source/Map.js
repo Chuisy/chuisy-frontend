@@ -5,7 +5,7 @@ enyo.kind({
 			latitude: 51.0,
 			longitude: 9.0
 		},
-		zoom: 15,
+		zoom: 10,
 		mapType: "ROADMAP" /*ROADMAP, SATELLITE, HYBRID, TERRAIN */
 	},
 	events: {
@@ -51,6 +51,12 @@ enyo.kind({
 			this.map.on("dragstart", enyo.bind(marker, marker.closePopup));
 		}
 		this.markers.push(marker);
+	},
+	clearMarkers: function() {
+		for(var i = 0; i < this.markers.length; i++) {
+			this.log(this.markers[i]);
+			this.map.removeLayer(this.markers[i]);
+		}
 	},
 	initialize: function() {
 		this.map = new L.Map(this.$.map.hasNode(), {center: new L.LatLng(this.center.latitude, this.center.longitude), zoom: this.zoom});

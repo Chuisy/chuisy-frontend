@@ -24,6 +24,7 @@ enyo.kind({
 
         this.users.on("sync", _.bind(this.synced, this, "user"));
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
+        this.chus.on("sync", _.bind(this.updateMap, this));
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
@@ -111,6 +112,45 @@ enyo.kind({
         this.$.chuList.updateMetrics();
         this.$.chuList.refresh();
     },
+    updateLocation: function() {
+        App.getGeoLocation(enyo.bind(this, function(position) {
+            this.$.map.setCenter({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            });
+            var lat = this.$.map.getCenter().latitude;
+            var lng = this.$.map.getCenter().longitude;
+            var coords = {
+                latitude: lat,
+                longitude: lng
+            };
+            this.$.map.addMarker(coords);
+        }));
+    },
+    updateMap: function(collection, response, request, force) {
+        if (force || request && request.data && request.data.q == this.latestQuery) {
+            this.updateLocation();
+            this.$.map.clearMarkers();
+            var chu;
+            var chuMarker;
+            var c = 0;
+            for(var i = 0; i < collection.length; i++) {
+                chu = collection.at(i);
+                if(chu.attributes.location && chu.attributes.location.latitude) {
+                    this.log(collection.at(i));
+                    var lat = chu.attributes.location.latitude;
+                    var lng = chu.attributes.location.longitude;
+                    var coords = {
+                        latitude: lat,
+                        longitude: lng
+                    };
+                    chuMarker = new ChuMarker();
+                    chuMarker.setChu(chu);
+                    this.$.map.addMarker(coords, chuMarker, null);
+                }
+            }
+        }
+    },
     components: [
         // SEARCH INPUT
         {style: "padding: 5px; box-sizing: border-box;", components: [
@@ -127,6 +167,9 @@ enyo.kind({
                 {classes: "discover-tab-caption", content: "Chus"},
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
+            ]},
+            {index: 3, name: "mapTab", ontap: "updateLocation", components: [
+                {classes: "discover-tab-caption", content: "Nearby"}
             ]}
         ]},
         // RESULTS
@@ -153,6 +196,9 @@ enyo.kind({
                     {kind: "onyx.Spinner", name: "chuNextPage", classes: "loading-next-page"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
+            ]},
+            {classes: "discover-result-panel", components: [
+                {kind: "Map", classes: "enyo-fill", name: "map"}
             ]}
         ]}
     ]

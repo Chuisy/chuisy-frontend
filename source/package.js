@@ -40,6 +40,7 @@ enyo.depends(
 	"GiftView.js",
 	"InviteFriends.js",
 	"UserList.js",
-	"Map.js"
+	"Map.js",
+	"ChuMarker.js",
 	"leaflet-google.js"
 );
