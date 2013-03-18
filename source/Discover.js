@@ -108,6 +108,7 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
+        this.updateLocation();
     },
     unfreeze: function() {
         this.$.chuList.updateMetrics();
@@ -115,46 +116,50 @@ enyo.kind({
     },
     updateLocation: function() {
         App.getGeoLocation(enyo.bind(this, function(position) {
+            this.$.map.clearMarkers();
             this.$.map.setCenter({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
             });
             var lat = this.$.map.getCenter().latitude;
             var lng = this.$.map.getCenter().longitude;
-            var coords = {
+            this.coords = {
                 latitude: lat,
                 longitude: lng
             };
-            this.$.map.addMarker(coords);
+            this.$.map.addMarker(this.coords, null, null, null, true);
         }));
     },
     updateMap: function(collection, response, request, force) {
         if (force || request && request.data && request.data.q == this.latestQuery) {
-            this.updateLocation();
             this.$.map.clearMarkers();
+            if(this.coords) {
+                this.$.map.addMarker(this.coords, null, null, null, false);
+            }
             var chu;
             var chuMarker;
             var c = 0;
             for(var i = 0; i < this.chus.length; i++) {
                 chu = this.chus.at(i);
-                if(chu.attributes.location && chu.attributes.location.latitude) {
-                    this.log(this.chus.at(i));
-                    var lat = chu.attributes.location.latitude;
-                    var lng = chu.attributes.location.longitude;
+                if(chu.get("location") && chu.get("location").latitude) {
+                    var lat = chu.get("location").latitude;
+                    var lng = chu.get("location").longitude;
                     var coords = {
                         latitude: lat,
                         longitude: lng
                     };
                     chuMarker = new ChuMarker();
                     chuMarker.setChu(chu);
-                    this.$.map.addMarker(coords, chuMarker, null, chu);
+                    this.$.map.addMarker(coords, chuMarker, null, chu, true);
                 }
             }
             this.$.mapLoadMoreButton.setShowing(this.chus.hasNextPage());
         }
     },
     markerTapped: function(sender, event) {
-        this.doShowChu({chu: event.obj});
+        if (event.obj && event.obj instanceof chuisy.models.Chu) {
+            this.doShowChu({chu: event.obj});
+        }
     },
     mapLoadMore: function() {
         if (this.chus.hasNextPage()) {
@@ -179,7 +184,7 @@ enyo.kind({
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
             ]},
-            {index: 3, name: "mapTab", ontap: "updateLocation", components: [
+            {index: 3, name: "mapTab", components: [
                 {classes: "discover-tab-caption", content: "Nearby"}
             ]}
         ]},

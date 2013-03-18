@@ -26,6 +26,18 @@
 	overflow: visible;
 	box-shadow: 0 1px 1px #888;
 	border-radius: 2px;
+	-webkit-transform: translate3d(0, 0, 0);
+}
+
+@-webkit-keyframes drop {
+	0% {-webkit-transform: translate3d(0, -500px, 0); animation-timing-function: linear;}
+	60% {-webkit-transform: translate3d(0, 0, 0); animation-timing-function: linear;}
+	80% {-webkit-transform: translate3d(0, -10px, 0); animation-timing-function: linear;}
+	100% {-webkit-transform: translate3d(0, 0, 0); animation-timing-function: ease-out;}
+}
+
+.drop {
+	-webkit-animation: drop 0.5s;
 }
 
 .chumarker-chu {
@@ -38,6 +50,11 @@
 	padding: 3px;
 	width: 100%;
 	height: 100%;
+	-webkit-transition: width 2s ease, height 2s ease;  
+    -moz-transition: width 2s ease, height 2s ease;  
+    -o-transition: width 2s ease, height 2s ease;  
+    -ms-transition: width 2s ease, height 2s ease;  
+    transition: width 2s ease, height 2s ease;    
 }
 
 .chu-tip {

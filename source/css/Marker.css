@@ -1,0 +1,6 @@
+.marker {
+	width: 48px;
+	height: 48px;
+	background-image: url("../../assets/images/marker-pink96x96.png");
+	background-size: cover;
+}

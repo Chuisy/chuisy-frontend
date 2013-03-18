@@ -38,19 +38,17 @@ enyo.kind({
 		_markerControl_ is an optional parameter to generate a custom icon
 		_popupControl_ is an optional parameter to create a popup for the marker
 	*/
-	addMarker: function(coords, markerControl, popupControl, obj) {
+	addMarker: function(coords, markerControl, popupControl, obj, animate) {
 		var marker;
+		var customHtmlIcon;
 		var latlng = new L.LatLng(coords.latitude, coords.longitude);
-		if (markerControl) {
-			var customHtmlIcon = L.divIcon({html: markerControl.generateHtml()});
-			marker = new L.Marker(latlng, {icon: customHtmlIcon});
-			marker.obj = obj;
-			marker.on("click", enyo.bind(this, this.markerClick));
-			this.map.addLayer(marker);
-		} else {
-			marker = new L.Marker(latlng);
-			this.map.addLayer(marker);
-		}
+		markerControl = markerControl || new Marker();
+		markerControl.addRemoveClass("drop", animate);
+		customHtmlIcon = L.divIcon({html: markerControl.generateHtml()});
+		marker = new L.Marker(latlng, {icon: customHtmlIcon});
+		marker.obj = obj;
+		marker.on("click", enyo.bind(this, this.markerClick));
+		this.map.addLayer(marker);
 		if (popupControl) {
 			marker.bindPopup(popupControl.generateHtml()).openPopup();
 			this.map.on("dragstart", enyo.bind(marker, marker.closePopup));
