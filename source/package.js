@@ -11,6 +11,8 @@ enyo.depends(
 	"$lib/backbone.js",
 	"$lib/backbone-tastypie.js",
 	"$lib/backbone-localstorage.js",
+	"util.js",
+	"fsShortcuts.js",
 	"chuisy.js",
 	"css/",
 	"App.js",

@@ -87,184 +87,6 @@
         }
     };
 
-    var timeToText = function(time) {
-        if (!time) {
-            return $L("just now");
-        }
-
-        var now = new Date();
-        var posted = new Date(time);
-        var seconds = (now.getTime() - posted.getTime()) / 1000;
-        var minutes = seconds / 60;
-        var hours = minutes / 60;
-        var days = hours / 24;
-        var f = Math.floor;
-
-        if (minutes < 1) {
-            return $L("just now");
-        } else if (hours < 1) {
-            return $L("{{ minutes }} minutes ago").replace("{{ minutes }}", f(minutes));
-        } else if (days < 1) {
-            return $L("{{ hours }} hours ago").replace("{{ hours }}", f(hours));
-        } else if (days < 30) {
-            return $L("{{ days }} days ago").replace("{{ days }}", f(days));
-        } else {
-            return $L("a while back...");
-        }
-    };
-
-    var createThumbnail = function(imgSrc, width, height, callback) {
-        var canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        var context = canvas.getContext("2d");
-        var img = new Image();
-        img.onload = function() {
-            var targetWidth, targetHeight, targetX, targetY;
-            if (img.width < img.height) {
-                targetWidth = width;
-                targetHeight = width/img.width*img.height;
-                targetX = 0;
-                targetY = (height-targetHeight)/2;
-            } else {
-                targetWidth = height/img.height*img.width;
-                targetHeight = height;
-                targetX = (width-targetWidth)/2;
-                targetY = 0;
-            }
-
-            context.drawImage(img, targetX, targetY, targetWidth, targetHeight);
-            callback(canvas.toDataURL());
-        };
-        img.src = imgSrc;
-    };
-
-    var upload = function(source, target, fileKey, fileName, mimeType, success, failure, progress) {
-        try {
-            var options = new FileUploadOptions();
-            options.fileKey = fileKey;
-            options.fileName = fileName;
-            options.mimeType = mimeType;
-
-            var ft = new FileTransfer();
-            ft.onprogress = function(event) {
-                console.log("Upload progress: " + JSON.stringify(event));
-                if (progress) {
-                    progress(event);
-                }
-            };
-            ft.upload(source, target, function(r) {
-                console.log("upload successfull! " + JSON.stringify(r));
-                if (success) {
-                    success(r.response);
-                }
-            }, function(error) {
-                console.error("File upload failed! " + error);
-                if (failure) {
-                    failure(error);
-                }
-            }, options);
-        } catch (e) {
-            console.error("Could not start file upload. " + e.message);
-            if (failure) {
-                failure(e);
-            }
-        }
-    };
-
-    var download = function(source, targetDir, targetFileName, success, failure) {
-        try {
-            getDir(targetDir, function(directory) {
-                var target = directory.fullPath + "/" + targetFileName;
-                var ft = new FileTransfer();
-                var uri = encodeURI(source);
-
-                ft.download(uri, target, function(entry) {
-                    console.log("Download complete: " + entry.fullPath);
-                    if (success) {
-                        success("file://" + entry.fullPath);
-                    }
-                }, function(error) {
-                    console.error("File download failed! " + error);
-                });
-            });
-        } catch (e) {
-            console.error("Could not start file download. " + e);
-        }
-    };
-
-    var getDir = function(relPath, success, failure) {
-        try {
-            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {
-                fileSys.root.getDirectory(relPath, {create:true, exclusive: false}, function(directory) {
-                    if (success) {
-                        success(directory);
-                    }
-                }, function(error) {
-                    console.error("Could not get directory. " + error);
-                });
-            }, function(error) {
-                console.error("Could not get file system. " + error);
-            });
-        } catch (e) {
-            console.error("Could not get directory. " + e);
-        }
-    };
-
-    var moveFile = function(source, targetDir, targetFileName, success, failure) {
-        try {
-            window.resolveLocalFileSystemURI(source, function(entry) {
-                getDir(targetDir, function(directory) {
-                    entry.copyTo(directory, targetFileName, function(entry) {
-                        if (success) {
-                            success("file://" + entry.fullPath);
-                        }
-                    }, function(error) {
-                        console.error("Could not copy file. " + error);
-                    });
-                });
-            }, function(error) {
-                console.error("Could not resolve source uri. " + error);
-            });
-        } catch (e) {
-            console.error("Could not resolve source uri. " + e);
-            if (failure) {
-                failure(e);
-            }
-        }
-    };
-
-    var saveImageFromData = function(data, relTargetPath, success, failure) {
-        try {
-            var baseData = data.replace(/^data:image\/(png|jpg);base64,/, "");
-            window.plugins.imageResizer.storeImage(function(fullPath) {
-                if (success) {
-                    success("file://" + fullPath);
-                }
-            }, function(error) {
-                console.error("Could not save image. " + error);
-            }, baseData, {filename: relTargetPath});
-        } catch(e) {
-            console.error("Could not save image. " + e);
-        }
-    };
-
-    var removeFile = function(url) {
-        try {
-            window.resolveLocalFileSystemURI(url, function(entry) {
-                entry.remove(function() {
-                    console.log("File removed successfully: " + entry.fullPath);
-                }, function(error) {
-                    console.error("Failed to remove file at " + entry.fullPath + ". " + error);
-                });
-            }, function(error) {
-                console.error("Could not resolve url " + error);
-            });
-        } catch(e) {
-            console.error("Failed to remove file at " + url + ". " + e);
-        }
-    };
-
     chuisy.models = {};
 
     chuisy.models.SyncableCollection = Backbone.Tastypie.Collection.extend({
@@ -524,7 +346,7 @@
             return this.get("username") && this.get("api_key") ? true : false;
         },
         changeAvatar: function(url) {
-            moveFile(url, "avatars/", "avatar_" + new Date().getTime() + ".jpg", _.bind(function(newUrl) {
+            fsShortcuts.moveFile(url, "avatars/", "avatar_" + new Date().getTime() + ".jpg", _.bind(function(newUrl) {
                 this.save({localAvatar: newUrl}, {nosync: true});
                 this.trigger("change:avatar", this);
                 this.uploadAvatar();
@@ -534,7 +356,7 @@
         uploadAvatar: function() {
             var uri = this.get("localAvatar");
             var target = encodeURI(_.result(this, "url") + "upload_avatar/" + Backbone.Tastypie.getAuthUrlParams());
-            upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
+            fsShortcuts.upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.profile.set("avatar", response);
                 this.save(null, {nosync: true});
                 this.trigger("sync:avatar", this);
@@ -607,7 +429,7 @@
     chuisy.models.ChuComment = chuisy.models.OwnedModel.extend({
         urlRoot: chuisy.apiRoot + chuisy.version + "/chucomment/",
         getTimeText: function() {
-            return timeToText(this.get("time"));
+            return util.timeToText(this.get("time"));
         }
     });
 
@@ -671,15 +493,15 @@
         },
         destroy: function() {
             if (this.get("localImage")) {
-                removeFile(this.get("localImage"));
+                fsShortcuts.removeFile(this.get("localImage"));
             }
             if (this.get("localThumbnail")) {
-                removeFile(this.get("localThumbnail"));
+                fsShortcuts.removeFile(this.get("localThumbnail"));
             }
             return chuisy.models.OwnedModel.prototype.destroy.apply(this, arguments);
         },
         getTimeText: function() {
-            return timeToText(this.get("time"));
+            return util.timeToText(this.get("time"));
         },
         setLiked: function(liked) {
             var activeUser = chuisy.accounts.getActiveUser();
@@ -717,7 +539,7 @@
             this.setLiked(!this.get("liked"));
         },
         changeImage: function(url, callback) {
-            moveFile(url, chuisy.closetDir, new Date().getTime() + ".jpg", _.bind(function(path) {
+            fsShortcuts.moveFile(url, chuisy.closetDir, new Date().getTime() + ".jpg", _.bind(function(path) {
                 this.save({"localImage": path}, {nosync: true});
                 this.trigger("image_changed", this);
                 this.makeThumbnail();
@@ -727,7 +549,7 @@
             });
         },
         downloadImage: function() {
-            download(this.get("image"), chuisy.closetDir, this.id + ".jpg", _.bind(function(path) {
+            fsShortcuts.download(this.get("image"), chuisy.closetDir, this.id + ".jpg", _.bind(function(path) {
                 this.save({"localImage": path}, {nosync: true});
                 this.makeThumbnail();
             }, this));
@@ -741,7 +563,7 @@
             this.set({syncStatus: "uploading"}, {nosync: true, silent: true});
             this.trigger("change:syncStatus", this);
             var target = encodeURI(_.result(this, "url") + "upload_image/" + Backbone.Tastypie.getAuthUrlParams());
-            upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
+            fsShortcuts.upload(uri, target, "image", uri.substr(uri.lastIndexOf('/')+1), "image/jpeg", _.bind(function(response) {
                 this.save({"image": response}, {nosync: true});
                 this.trigger("image_uploaded", this);
                 this.save({syncStatus: "synced"}, {nosync: true, silent: true});
@@ -758,9 +580,9 @@
                 console.error("Can't make thumbnail because there is no local image.");
                 return;
             }
-            createThumbnail(image, 200, 200, _.bind(function(imageData) {
+            util.createThumbnail(image, 200, 200, _.bind(function(imageData) {
                 var fileName = "thumb_" + image.substring(image.lastIndexOf("/")+1);
-                saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
+                fsShortcuts.saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
                     this.save({localThumbnail: path}, {nosync: true});
                 }, this));
             }, this));
