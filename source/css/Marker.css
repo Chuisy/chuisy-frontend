@@ -7,8 +7,3 @@
 	background-image: url("../../assets/images/marker-pink96x96.png");
 	background-size: cover;
 }
-
-.leaflet-popup {
-	margin-bottom: 54px;
-	margin-left: -6px;
-}
