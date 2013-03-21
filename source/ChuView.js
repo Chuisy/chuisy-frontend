@@ -225,6 +225,7 @@ enyo.kind({
         this.$.commentAvatar.setSrc(avatar);
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
+        this.$.commentDeleteButton.setShowing(user.id == chuisy.accounts.getActiveUser().id);
     },
     setupLike: function(sender, event) {
         var user = this.chu.likes.at(event.index);
@@ -576,6 +577,11 @@ enyo.kind({
         this.$.map.setZoom(zoom);
         this.$.map.setCenter(center);
     },
+    deleteComment: function(sender, event) {
+        var comment = this.chu.comments.at(event.index);
+        comment.destroy();
+        this.refreshComments();
+    },
     components: [
         {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {classes: "enyo-fill", components: [
@@ -675,6 +681,7 @@ enyo.kind({
                                                 {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                             ]},
                                             {classes: "chuview-comment-content", components: [
+                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteComment"},
                                                 {classes: "chuview-comment-time", name: "commentTime"},
                                                 {classes: "chuview-comment-fullname ellipsis", name: "commentFullName", ontap: "showCommentUser"},
                                                 {name: "commentText", classes: "chuview-comment-text"}

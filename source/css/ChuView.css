@@ -456,3 +456,18 @@
 	vertical-align: middle;
 	margin-top: -5px;
 }
+
+.chuview-comment-delete-button {
+	float: right;
+	width: 18px;
+	height: 18px;
+	background-size: 18px 36px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
+	margin-top: 2px;
+	margin-left: 2px;
+}
+
+.chuview-comment-delete-button:active:hover/*:not([disabled]) */{
+	background-position: 0 -18px;
+}
