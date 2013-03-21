@@ -96,7 +96,7 @@ enyo.kind({
         // We are waiting for the search response. Unload list and show spinner.
         this[which + "s"].reset();
         this.synced(which, null, null, null, true);
-        this.updateMap(null, null, null, true);
+        // this.updateMap(null, null, null, true);
         this.$[which + "Spinner"].show();
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
@@ -108,7 +108,7 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
-        this.updateLocation();
+        // this.updateLocation();
     },
     unfreeze: function() {
         this.$.chuList.updateMetrics();

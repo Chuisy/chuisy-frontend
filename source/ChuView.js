@@ -225,7 +225,7 @@ enyo.kind({
         this.$.commentAvatar.setSrc(avatar);
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
-        this.$.commentDeleteButton.setShowing(user.id == chuisy.accounts.getActiveUser().id);
+        this.$.commentDeleteButton.setShowing(chuisy.accounts.getActiveUser() && (user.id == chuisy.accounts.getActiveUser().id));
     },
     setupLike: function(sender, event) {
         var user = this.chu.likes.at(event.index);
