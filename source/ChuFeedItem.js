@@ -43,9 +43,9 @@ enyo.kind({
             {classes: "chufeeditem-comments-count", name: "commentsCount"},
             {classes: "chufeeditem-comments-icon"}
         ]},
-        {classes: "chufeeditem-place ellipsis", name: "place"},
+        {classes: "chufeeditem-time  ellipsis", name: "time"},
         {kind: "Image", classes: "chufeeditem-avatar", name: "avatar", ontap: "showUser"},
         {classes: "chufeeditem-fullname ellipsis", name: "fullName", ontap: "showUser"},
-        {classes: "chufeeditem-time", name: "time"}
+        {classes: "chufeeditem-place", name: "place"}
     ]
 });
