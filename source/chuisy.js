@@ -1,8 +1,8 @@
 (function($, _, Backbone, enyo) {
     chuisy = {
         // apiRoot: "http://127.0.0.1:8000/api/",
-        // apiRoot: "http://chuisy-staging.herokuapp.com/api/",
-        apiRoot: "http://www.chuisy.com/api/",
+        apiRoot: "http://chuisy-staging.herokuapp.com/api/",
+        // apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
         // Directory where chu images are stored in locally
@@ -384,6 +384,12 @@
             this.chus = new chuisy.models.ChuCollection([], {
                 filters: _.bind(function(user) {
                     return {user: this.id};
+                }, this)
+            });
+            //Liked Chus by this user
+            this.likedChus = new chuisy.models.ChuCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "likes/";
                 }, this)
             });
             // This users facebook friends
