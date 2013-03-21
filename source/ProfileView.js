@@ -32,6 +32,7 @@ enyo.kind({
         this.listenTo(this.user.following, "sync", _.bind(this.synced, this, "following"));
 
         this.$.chuList.setChus(this.user.chus);
+        this.$.likedChuList.setChus(this.user.likedChus);
     },
     updateView: function() {
         this.$.panels1.setIndex(0);
@@ -39,6 +40,7 @@ enyo.kind({
         this.$.chusCount.setContent(this.user.get("chu_count"));
         this.$.followersCount.setContent(this.user.get("follower_count"));
         this.$.followingCount.setContent(this.user.get("following_count"));
+        this.$.likedChusCount.setContent(this.user.likedChus.length);
         var avatar = this.user.get("localAvatar") || this.user.profile.get("avatar");
         this.$.info.applyStyle("background-image", "url(" + avatar + ")");
         this.$.fullName.setContent(this.user.get("first_name") ? (this.user.get("first_name") + " " + this.user.get("last_name")) : "");
@@ -118,10 +120,18 @@ enyo.kind({
             this.user.following.fetch();
             this.$.chusSpinner.show();
             this.$.chusCount.hide();
+            this.$.likedChusSpinner.show();
+            this.$.likedChusCount.hide();
             this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}, success: enyo.bind(this, function() {
                 this.$.chusSpinner.hide();
                 this.$.chusCount.show();
                 this.$.chusPlaceholder.setShowing(!this.user || !this.user.chus.length);
+            })});
+            this.user.likedChus.fetch({data: {limit: this.$.likedChuList.getChusPerPage()}, success: enyo.bind(this, function() {
+                this.$.likedChusSpinner.hide();
+                this.$.likedChusCount.show();
+                this.$.likedChusPlaceholder.setShowing(!this.user || !this.user.likedChus.length);
+                this.$.likedChusCount.setContent(this.user.likedChus.meta.total_count);
             })});
         }
     },
@@ -164,6 +174,11 @@ enyo.kind({
                         {classes: "profileview-menu-button-caption", content: $L("Followers")},
                         {classes: "profileview-menu-button-count", name: "followersCount"},
                         {classes: "onyx-spinner tiny", name: "followersSpinner", showing: false}
+                    ]},
+                    {classes: "profileview-menu-button", value: 3, name: "likedChusMenuButton", components: [
+                        {classes: "profileview-menu-button-caption", content: $L("Hearts")},
+                        {classes: "profileview-menu-button-count", name: "likedChusCount"},
+                        {classes: "onyx-spinner tiny", name: "likedChusSpinner", showing: false}
                     ]}
                 ]},
                 {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
@@ -178,6 +193,10 @@ enyo.kind({
                     {classes: "enyo-fill", components: [
                         {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
                         {kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
+                    ]},
+                    {classes: "enyo-fill", components: [
+                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder chus"},
+                        {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]}
                 ]}
             ]},
