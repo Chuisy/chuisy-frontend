@@ -24,6 +24,7 @@ enyo.kind({
 
         this.users.on("sync", _.bind(this.synced, this, "user"));
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
+        // this.chus.on("sync", _.bind(this.updateMap, this));
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
@@ -95,6 +96,7 @@ enyo.kind({
         // We are waiting for the search response. Unload list and show spinner.
         this[which + "s"].reset();
         this.synced(which, null, null, null, true);
+        this.updateMap(null, null, null, true);
         this.$[which + "Spinner"].show();
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
@@ -106,10 +108,66 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
+        this.updateLocation();
     },
     unfreeze: function() {
         this.$.chuList.updateMetrics();
         this.$.chuList.refresh();
+    },
+    updateLocation: function() {
+        App.getGeoLocation(enyo.bind(this, function(position) {
+            if (this.locMarker) {
+                this.$.map.removeMarker(this.locMarker);
+            }
+            this.$.map.setCenter({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            });
+            var lat = this.$.map.getCenter().latitude;
+            var lng = this.$.map.getCenter().longitude;
+            this.coords = {
+                latitude: lat,
+                longitude: lng
+            };
+            this.locMarker = this.$.map.addMarker(this.coords, null, null, null, true);
+        }));
+    },
+    updateMap: function(collection, response, request, force) {
+        if (force || request && request.data && request.data.q == this.latestQuery) {
+            this.$.map.clearMarkers();
+            if(this.coords) {
+                this.locMarker = this.$.map.addMarker(this.coords, null, null, null, false);
+            }
+            var chu;
+            var chuMarker;
+            var c = 0;
+            for(var i = 0; i < this.chus.length; i++) {
+                chu = this.chus.at(i);
+                if(chu.get("location") && chu.get("location").latitude) {
+                    var lat = chu.get("location").latitude;
+                    var lng = chu.get("location").longitude;
+                    var coords = {
+                        latitude: lat,
+                        longitude: lng
+                    };
+                    chuMarker = new ChuMarker();
+                    chuMarker.setChu(chu);
+                    this.$.map.addMarker(coords, chuMarker, null, chu, true);
+                }
+            }
+            this.$.mapLoadMoreButton.setShowing(this.chus.hasNextPage());
+        }
+    },
+    markerTapped: function(sender, event) {
+        if (event.obj && event.obj instanceof chuisy.models.Chu) {
+            this.doShowChu({chu: event.obj});
+        }
+    },
+    mapLoadMore: function() {
+        if (this.chus.hasNextPage()) {
+            this.$.chuNextPage.show();
+            this.chus.fetchNext();
+        }
     },
     components: [
         // SEARCH INPUT
@@ -127,7 +185,11 @@ enyo.kind({
                 {classes: "discover-tab-caption", content: "Chus"},
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
+            ]}/*,
+            {index: 3, name: "mapTab", components: [
+                {classes: "discover-tab-caption", content: "Nearby"}
             ]}
+            */
         ]},
         // RESULTS
         {kind: "Panels", fit: true, name: "resultPanels", draggable: false, animate: false, components: [
@@ -153,7 +215,12 @@ enyo.kind({
                     {kind: "onyx.Spinner", name: "chuNextPage", classes: "loading-next-page"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
+            ]}/*,
+            {classes: "discover-result-panel", components: [
+                {kind: "onyx.Button", name: "mapLoadMoreButton", showing: false, content: "more", ontap: "mapLoadMore", classes: "discover-map-button"},
+                {kind: "Map", onMarkerTapped: "markerTapped", classes: "enyo-fill", name: "map"}
             ]}
+            */
         ]}
     ]
 });

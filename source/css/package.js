@@ -26,5 +26,8 @@ enyo.depends(
 	"GetStarted.css",
 	"GiftView.css",
 	"InviteFriends.css",
+	"Map.css",
+	"Marker.css",
+	"ChuMarker.css",
 	"Goodies.css"
 );
