@@ -58,7 +58,7 @@ enyo.kind({
             var c = this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
-                {classes: "closet-delete-button", ontap: "removeButtonTapped", cellIndex: i}
+                {classes: "closet-delete-button", name: "deleteButton", ontap: "removeButtonTapped", cellIndex: i}
             ]});
         }
     },
@@ -155,10 +155,12 @@ enyo.kind({
     },
     hold: function(sender, event) {
         this.held = true;
-        if (this.editing) {
-            this.finishEditing();
-        } else {
-            this.startEditing();
+        if (event.originator != this.$.deleteButton) {
+            if (this.editing) {
+                this.finishEditing();
+            } else {
+                this.startEditing();
+            }
         }
         // this.openContextMenu(sender, event);
     },
