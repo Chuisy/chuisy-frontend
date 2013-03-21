@@ -565,7 +565,7 @@ enyo.kind({
         var popup = new enyo.Control({allowHtml: true, content: "<b>" + name + "</b>" + (address || "") + (zipcode || "") + ", " + (city || "")});
 
         this.$.map.clearMarkers();
-        this.$.map.addMarker(coords, null, popup);
+        this.$.map.addMarker(coords, null, popup, null, true);
 
         //set center and zoom of map
         var center = {
