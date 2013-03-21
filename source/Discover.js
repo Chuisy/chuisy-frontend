@@ -185,13 +185,11 @@ enyo.kind({
                 {classes: "discover-tab-caption", content: "Chus"},
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
-            ]},
+            ]}/*,
             {index: 3, name: "mapTab", components: [
                 {classes: "discover-tab-caption", content: "Nearby"}
             ]}
-            // {index: 3, name: "mapTab", components: [
-            //     {classes: "discover-tab-caption", content: "Nearby"}
-            // ]}
+            */
         ]},
         // RESULTS
         {kind: "Panels", fit: true, name: "resultPanels", draggable: false, animate: false, components: [
@@ -217,11 +215,12 @@ enyo.kind({
                     {kind: "onyx.Spinner", name: "chuNextPage", classes: "loading-next-page"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
-            ]},
+            ]}/*,
             {classes: "discover-result-panel", components: [
                 {kind: "onyx.Button", name: "mapLoadMoreButton", showing: false, content: "more", ontap: "mapLoadMore", classes: "discover-map-button"},
                 {kind: "Map", onMarkerTapped: "markerTapped", classes: "enyo-fill", name: "map"}
             ]}
+            */
         ]}
     ]
 });
