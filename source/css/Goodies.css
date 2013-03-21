@@ -1,0 +1,312 @@
+.goodies {
+	padding: 0;
+}
+
+.notransition {
+ 	-webkit-transition: none !important;
+}
+
+.goodies-item {
+	width: 100px;
+	height: 100px;
+	box-sizing: border-box;
+	display: inline-block;
+	position: relative;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px #888;
+	background-color: #ffffff;
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0 2px;
+}
+
+.goodies-item.redeemed .goodies-item-image,
+.goodies-item.redeemed .goodies-item-ribbon,
+.goodies-item.expired .goodies-item-image,
+.goodies-item.expired .goodies-item-ribbon {
+	opacity: 0.5;
+}
+
+.goodies-item-expired {
+	color: Red;
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	font-size: 12pt;
+	display: none;
+}
+
+.goodies-item.expired .goodies-item-expired {
+	display: block;
+}
+
+.goodies-item-image {
+	width: 100%;
+	height: 100%;
+	background: #ffffff url() no-repeat center center;
+	background-size: cover;
+	border-radius: inherit;
+}
+
+.goodies-item.tall {
+	height: 204px;
+}
+
+.goodies-item.wide {
+	width: 204px;
+}
+
+.goodies-item.big {
+	height: 204px;
+	width: 204px;
+}
+
+.goodies-item.panorama {
+	width: 308px;
+}
+
+.goodies-item.left {
+	float: left;
+}
+
+.goodies-item.right {
+	float: right;
+}
+
+.goodies-item-ribbon {
+	position: absolute;
+	right: -4px;
+	top: -4px;
+	width: 80px;
+	height: 80px;
+	background: url(../../assets/images/goody_ribbon_160x160.png) no-repeat center center;
+	background-size: cover;
+	display: none;
+}
+
+.goodies-card-ribbon {
+	position: absolute;
+	width: 240px;
+	height: 240px;
+	top: -12px;
+	right: -12px;
+	background: url(../../assets/images/goody_ribbon_480x480.png) no-repeat center center;
+	background-size: cover;
+	display: none;
+	-webkit-backface-visibility: hidden;
+}
+
+.goodies-item.coupon .goodies-item-ribbon,
+.goodies-card.coupon .goodies-card-ribbon {
+	display: block;
+}
+
+.goodies-card-stage {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-perspective: 1000px;
+	background-color: rgba(0, 0, 0, 0);
+	-webkit-transition: background-color 0.5s;
+}
+
+.goodies-card-stage.scrim {
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.goodies-card {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	display: inline-block;
+	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-transition-timing-function: ease;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transform-origin: 50% 50%;
+}
+
+.goodies-card.elastic {
+ 	-webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.goodies-card.small {
+	width: 300px;
+	height: 300px;
+	border-radius: 15px;
+}
+
+.goodies-card.small .goodies-card-side.front,
+.goodies-card.small .goodies-card-side.back {
+	border-radius: 15px;
+}
+
+.goodies-card.big {
+	width: 300px;
+	height: 300px;
+}
+
+.goodies-card.big .goodies-card-side.front,
+.goodies-card.big .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.wide {
+	width: 300px;
+	height: 147px;
+	border-radius: 7px;
+}
+
+.goodies-card.wide .goodies-card-side.front,
+.goodies-card.wide .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.tall {
+	height: 300px;
+	width: 147px;
+}
+
+.goodies-card.tall .goodies-card-side.front,
+.goodies-card.tall .goodies-card-side.back {
+	border-radius: 7px;
+}
+
+.goodies-card.panorama {
+	width: 300px;
+	height: 97px;
+}
+
+.goodies-card.panorama .goodies-card-side.front,
+.goodies-card.panorama .goodies-card-side.back {
+	border-radius: 5px;
+}
+
+.goodies-card.coupon .goodies-card-side.back {
+	width: 300px;
+	height: 400px;
+}
+
+.goodies-card-side {
+	position: absolute;
+ 	-webkit-backface-visibility: hidden;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	box-shadow: 0 0 5px #888;
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+}
+
+.goodies-card-side.front {
+	background: #ffffff url() no-repeat center center;
+	background-size: cover;
+}
+
+.goodies-card-side.back {
+	-webkit-transform: rotateY(180deg);
+	background-color: White;
+	background-image: url(../../assets/images/lightpaperfibers.png);
+	background-size: 500px 300px;
+	text-align: center;
+}
+
+/*.goodies-card-content-image {
+	background: url(../../assets/images/achievement_icon.png) no-repeat center bottom;
+	background-size: 128px 128px;
+	width: 100%;
+	height: 50%;
+}
+
+.goodies-card-text {
+	color: #555;
+	width: 100%;
+	height: 50%;
+	padding: 20px 40px 40px 40px;
+	box-sizing: border-box;
+}*/
+
+.goodies-card-content-image {
+	background: url() no-repeat center center;
+	background-size: cover;
+	width: 100%;
+	height: 30%;
+	border-top-right-radius: inherit;
+	border-top-left-radius: inherit;
+	box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.goodies-card-text {
+	color: #555;
+	width: 100%;
+	padding: 40px;
+	box-sizing: border-box;
+}
+
+.goodies-card-redeem {
+	display: none;
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.goodies-card.coupon .goodies-card-redeem {
+	display: block;
+}
+
+.goodies-card-redeem-button {
+	width: 100%;
+	height: 40px;
+	font-size: 15pt;
+	border-radius: 8px;
+}
+
+.goodies-card-redeemed-text {
+	color: rgb(65, 160, 69);
+	font-size: 18pt;
+	display: none;
+	height: 40px;
+	line-height: 40px;
+}
+
+.goodies-card.redeemed .goodies-card-redeem-button {
+	display: none;
+}
+
+.goodies-card.redeemed .goodies-card-redeemed-text {
+	display: block;
+}
+
+.goodies-card.coupon .goodies-card-content-image {
+	height: 100px;
+}
+
+.goodies-card-disclaimer {
+	font-size: 7pt;
+	color: #555;
+	padding: 10px;
+	display: none;
+}
+
+.goodies-card.coupon .goodies-card-disclaimer {
+	display: block;
+}
+
+.goodies .placeholder-image {
+	background-image: url(../../assets/images/goodies_placeholder.png);
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+}

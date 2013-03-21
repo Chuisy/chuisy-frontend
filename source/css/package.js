@@ -1,5 +1,6 @@
 enyo.depends(
 	"fonts.css",
+	"animations.css",
 	"App.css",
 	"Closet.css",
 	"ChuView.css",
@@ -27,5 +28,6 @@ enyo.depends(
 	"InviteFriends.css",
 	"Map.css",
 	"Marker.css",
-	"ChuMarker.css"
+	"ChuMarker.css",
+	"Goodies.css"
 );

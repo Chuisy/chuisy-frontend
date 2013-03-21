@@ -12,6 +12,8 @@ enyo.depends(
 	"$lib/backbone-tastypie.js",
 	"$lib/backbone-localstorage.js",
 	"$lib/leaflet",
+	"util.js",
+	"fsShortcuts.js",
 	"chuisy.js",
 	"css/",
 	"App.js",
@@ -42,5 +44,7 @@ enyo.depends(
 	"UserList.js",
 	"Map.js",
 	"ChuMarker.js",
-	"Marker.js"
+	"Marker.js",
+	"Goodies.js",
+	"FittingTextContainer.js"
 );

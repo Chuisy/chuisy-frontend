@@ -35,11 +35,11 @@ enyo.kind({
     gotImage: function(uri) {
         this.image = uri;
         this.$.chuForm.setImage(this.image);
-        
+
         var user = chuisy.accounts.getActiveUser();
         if (App.isSignedIn() && navigator.notification) {
             if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
-                navigator.notification.confirm($L("Do you want to Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
+                navigator.notification.confirm($L("Do you want Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
                     var share = choice == 1 ? false : true;
                     user.profile.set("fb_og_share_actions", share);
                     user.save();
@@ -63,6 +63,11 @@ enyo.kind({
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
+        if (this.postingChu) {
+            return true;
+        }
+        this.postingChu = true;
+
         var user = chuisy.accounts.getActiveUser();
         var attrs = {
             visibility: "public",
@@ -92,6 +97,7 @@ enyo.kind({
     },
     activate: function() {
         this.chu = null;
+        this.postingChu = false;
         this.$.panels.setIndex(0);
         this.$.pickLocation.initialize();
         this.$.chuForm.clear();
