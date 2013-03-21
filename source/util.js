@@ -15,11 +15,11 @@ window.util = {
         if (minutes < 1) {
             return $L("just now");
         } else if (hours < 1) {
-            return $L("{{ minutes }} minutes ago").replace("{{ minutes }}", f(minutes));
+            return $L("{{ minutes }} min").replace("{{ minutes }}", f(minutes));
         } else if (days < 1) {
-            return $L("{{ hours }} hours ago").replace("{{ hours }}", f(hours));
+            return $L("{{ hours }} h").replace("{{ hours }}", f(hours));
         } else if (days < 30) {
-            return $L("{{ days }} days ago").replace("{{ days }}", f(days));
+            return $L("{{ days }} d").replace("{{ days }}", f(days));
         } else {
             return $L("a while back...");
         }
