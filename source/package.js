@@ -42,6 +42,5 @@ enyo.depends(
 	"UserList.js",
 	"Map.js",
 	"ChuMarker.js",
-	"leaflet-google.js",
 	"Marker.js"
 );
