@@ -62,6 +62,22 @@ enyo.kind({
         this.updateView();
         this.syncStatusChanged();
         this.stopListening();
+        this.listenTo(this.chu, "request", enyo.bind(this, function() {
+            this.$.loadingPanel.show();
+            enyo.asyncMethod(this, function() {
+                this.$.loadingPanel.removeClass("fade");
+            });
+        }));
+        this.listenTo(this.chu, "sync", enyo.bind(this, function() {
+            this.$.loadingPanel.addClass("fade");
+            setTimeout(enyo.bind(this, function() {
+                this.$.loadingPanel.hide();
+            }), 500);
+            this.chu.set({"stub": false}, {silent: true});
+        }));
+        if (this.chu.get("stub")) {
+            this.chu.fetch();
+        }
         this.listenTo(this.chu, "change", this.updateView);
         this.listenTo(this.chu, "change:syncStatus", this.syncStatusChanged);
         this.setupFriends();
@@ -583,6 +599,12 @@ enyo.kind({
         this.refreshComments();
     },
     components: [
+        {name: "loadingPanel", classes: "chuview-loading-panel", showing: false, components: [
+            {classes: "chuview-loading-content", components: [
+                {kind: "onyx.Spinner", name: "loadingSpinner", showing: true, classes: "chuview-loading-spinner dark"},
+                {content: $L("Loading..."), classes: "chuview-loading-text"}
+            ]}
+        ]},
         {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {classes: "enyo-fill", components: [
                 // IMAGE LOADING INDICATOR

@@ -476,6 +476,13 @@ body {
 	background-size: 25px 25px;
 }
 
+.onyx-spinner.dark {
+	width: 25px;
+	height: 25px;
+	background: url(../../assets/images/spinner_dark.gif) no-repeat center center;
+	background-size: 25px 25px;
+}
+
 .onyx-spinner.tiny {
 	width: 15px;
 	height: 15px;
