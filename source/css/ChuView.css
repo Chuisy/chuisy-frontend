@@ -471,3 +471,41 @@
 .chuview-comment-delete-button:active:hover/*:not([disabled]) */{
 	background-position: 0 -18px;
 }
+
+.chuview-loading-panel {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.7);
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	opacity: 1;
+	-webkit-transition: opacity 0.5s;
+}
+
+.chuview-loading-content {
+	color: #eee;
+	position: absolute;
+	text-align: center;
+	height: 20px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	font-family: Muli;
+}
+
+.chuview-loading-spinner {
+	display: inline-block; 
+	margin-right: 10px; 
+	margin-bottom: -7px;
+}
+
+.chuview-loading-text {
+	display: inline-block; 
+	padding-bottom: 5px;
+}
+
+.fade {
+	opacity: 0;
+}

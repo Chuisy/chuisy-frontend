@@ -344,8 +344,7 @@ enyo.kind({
                     this.$.mainView.openView("chu", chu);
                 } else if (App.checkConnection()) {
                     // We don't have a chu object, but we do have an id. Let's fetch it!
-                    var chu = new chuisy.models.Chu({id: match3[1]});
-                    chu.fetch();
+                    var chu = new chuisy.models.Chu({id: match3[1], stub: true});
                     this.$.mainView.openView("chu", chu);
                 }
             }
