@@ -12,7 +12,7 @@ enyo.kind({
     refresh: function() {
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
-        this.$.placeholder.setShowing(chuisy.cards.length);
+        this.$.placeholder.setShowing(!chuisy.cards.length);
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
