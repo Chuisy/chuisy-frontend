@@ -506,6 +506,15 @@
 	padding-bottom: 5px;
 }
 
+.chuview-loading-dismiss {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	color: #eee;
+	font-size: 9pt;
+	text-align: center;
+}
+
 .fade {
 	opacity: 0;
 }
