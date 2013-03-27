@@ -88,6 +88,22 @@ enyo.kind({
                     failure();
                 }
             });
+        },
+        confirm: function(title, text, callback, buttonLabels) {
+            if (navigator.notification) {
+                if (!buttonLabels) {
+                    buttonLabels = [$L("Cancel"), $L("Confirm")];
+                }
+                navigator.notification.confirm(text, function(choice) {
+                    callback(choice == 2);
+                },
+                title, buttonLabels.join(","));
+            } else {
+                var respond = confirm(text);
+                if (respond === true) {
+                    callback(respond);
+                }
+            }
         }
     },
     history: [],

@@ -598,6 +598,18 @@ enyo.kind({
         comment.destroy();
         this.refreshComments();
     },
+    deleteCommentButtonTapped: function(sender, event) {
+        App.confirm(
+            $L("Delete Comment"),
+            $L("Are you sure you want to delete this comment? This action cannot be undone."),
+            enyo.bind(this, function(choice) {
+                if (choice) {
+                    this.deleteComment(sender, event);
+                }
+            }),
+            [$L("Cancel"), $L("Delete")]
+        );
+    },
     components: [
         {name: "loadingPanel", classes: "chuview-loading-panel", showing: false, components: [
             {classes: "chuview-loading-content", components: [
@@ -703,7 +715,7 @@ enyo.kind({
                                                 {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                             ]},
                                             {classes: "chuview-comment-content", components: [
-                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteComment"},
+                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteCommentButtonTapped"},
                                                 {classes: "chuview-comment-time", name: "commentTime"},
                                                 {classes: "chuview-comment-fullname ellipsis", name: "commentFullName", ontap: "showCommentUser"},
                                                 {name: "commentText", classes: "chuview-comment-text"}
