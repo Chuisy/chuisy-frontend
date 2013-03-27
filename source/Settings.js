@@ -62,17 +62,17 @@ enyo.kind({
         Sign out. Simply calls _chuisy.signOut_
     */
     signOut: function() {
-        if (navigator.notification) {
-            navigator.notification.confirm($L("Are you sure you want to log out?"), enyo.bind(this, function(choice) {
-                if (choice == 2) {
+        App.confirm(
+            $L("Logout"),
+            $L("Are you sure you want to log out?"),
+            enyo.bind(this, function(choice) {
+                if (choice) {
                     chuisy.signOut();
                     this.doBack();
                 }
-            }), $L("Logout"), [$L("Cancel"), $L("Logout")].join(","));
-        } else {
-            chuisy.signOut();
-            this.doBack();
-        }
+            }),
+            [$L("Cancel"), $L("Logout")]
+        );
     },
     /**
         Open photo library to change profile picture

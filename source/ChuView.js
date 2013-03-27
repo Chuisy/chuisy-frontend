@@ -508,11 +508,24 @@ enyo.kind({
     },
     syncStatusTapped: function() {
         if (this.chu.get("syncStatus") == "postFailed" || this.chu.get("syncStatus") == "uploadFailed") {
-            navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
-                if (choice == 1) {
-                    chuisy.closet.syncRecords();
-                }
-            }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+            App.confirm(
+                $L("Upload failed"),
+                $L("Sorry, we couldn't upload your Chu just now. Please try again later!"),
+                enyo.bind(this, function(choice) {
+                    if (!choice) {
+                        chuisy.closet.syncRecords();
+                    }
+                }),
+                [$L("Try again"), $L("OK")]
+            );
+
+
+            // navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
+            //     if (choice == 1) {
+            //         chuisy.closet.syncRecords();
+            //     }
+            // }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+
         }
     },
     moreComments: function() {

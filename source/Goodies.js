@@ -243,19 +243,31 @@ enyo.kind({
         })});
     },
     redeemButtonTapped: function() {
-        if (navigator.notification) {
-            navigator.notification.confirm(
-                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
-                enyo.bind(this, function(choice) {
-                    if (choice == 2) {
-                        this.redeemCoupon();
-                    }
-                }),
-                $L("Redeem Coupon"), [$L("Cancel"), $L("Redeem")].join(",")
-            );
-        } else {
-            this.redeemCoupon();
-        }
+        App.confirm(
+            $L("Redeem Coupon"),
+            $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+            enyo.bind(this, function(choice) {
+                if (choice) {
+                    this.redeemCoupon();
+                }
+            }),
+            [$L("Cancel"), $L("Redeem")]
+        );
+
+
+        // if (navigator.notification) {
+        //     navigator.notification.confirm(
+        //         $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+        //         enyo.bind(this, function(choice) {
+        //             if (choice == 2) {
+        //                 this.redeemCoupon();
+        //             }
+        //         }),
+        //         $L("Redeem Coupon"), [$L("Cancel"), $L("Redeem")].join(",")
+        //     );
+        // } else {
+        //     this.redeemCoupon();
+        // }
 
         return true;
     },
