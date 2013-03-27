@@ -125,19 +125,16 @@ enyo.kind({
         event.preventDefault();
     },
     removeButtonTapped: function(sender, event) {
-        if (navigator.notification) {
-            navigator.notification.confirm(
-                $L("Are you sure you want to remove this Chu? This action can not be undone."),
-                enyo.bind(this, function(choice) {
-                    if (choice == 2) {
-                        this.removeChu(sender, event);
-                    }
-                }),
-                $L("Remove Chu"), [$L("Cancel"), $L("Remove")].join(",")
-            );
-        } else {
-            this.removeChu(sender, event);
-        }
+        App.confirm(
+            $L("Remove Chu"),
+            $L("Are you sure you want to remove this Chu? This action can not be undone."),
+            enyo.bind(this, function(choice) {
+                if (choice) {
+                    this.removeChu(sender, event);
+                }
+            }),
+            [$L("Cancel"), $L("Remove")]
+        );
         return true;
     },
     deleteButtonHold: function(sender, event) {
