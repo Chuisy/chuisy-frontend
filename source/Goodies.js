@@ -47,10 +47,8 @@ enyo.kind({
         if (!card || coupon && (coupon.redeemed || new Date(coupon.valid_until) < new Date())) {
             return;
         }
-
-        this.item = sender;
+        this.item = this.$.repeater.itemAtIndex(event.index).$.cardItem;
         this.card = card;
-        var coupon = this.card.get("coupon");
 
         // Show stage
         this.$.stagePopup.show();
