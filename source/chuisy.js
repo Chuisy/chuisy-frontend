@@ -677,6 +677,16 @@
         getTimeText: function() {
             return util.timeToText(this.get("time"));
         },
+        /*
+            Get image url for thumbnail with _width_ and _height_
+        */
+        getThumbnail: function(width, height) {
+            if (this.get("image")) {
+                return _.result(this, "url") + "thumbnail/" + width + "x" + height + "/";
+            } else {
+                return null;
+            }
+        },
         setLiked: function(liked) {
             var activeUser = chuisy.accounts.getActiveUser();
 
@@ -786,7 +796,7 @@
                 console.error("Can't make thumbnail because there is no local image.");
                 return;
             }
-            util.createThumbnail(image, 200, 200, _.bind(function(imageData) {
+            util.createThumbnail(image, 100, 100, _.bind(function(imageData) {
                 var fileName = "thumb_" + image.substring(image.lastIndexOf("/")+1);
                 fsShortcuts.saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
                     this.save({localThumbnail: path}, {nosync: true});
@@ -982,6 +992,13 @@
             this.each(function(model) {
                 this.localStorage.create(model);
             }, this);
+        },
+        fetch: function(options) {
+            // Request thumbnails
+            options = options || {};
+            options.data = options.data || {};
+            options.data.thumbnails = options.data.thumbnails || ["300x300"];
+            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
         }
     });
 
@@ -1047,6 +1064,13 @@
                     model.uploadImage();
                 }
             }
+        },
+        fetch: function(options) {
+            // Request thumbnails
+            options = options || {};
+            options.data = options.data || {};
+            options.data.thumbnails = options.data.thumbnails || ["100x100"];
+            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
         }
     });
 

@@ -28,7 +28,7 @@ enyo.kind({
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
-        var image = chu.getThumbnail(600, 200) || "assets/images/chu_placeholder.png";
+        var image = chu.get("thumbails") && chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
         this.$.resultChuImage.applyStyle("background-image", "url(" + image + ")");
         this.$.chuAvatar.setSrc(chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
 
@@ -102,7 +102,7 @@ enyo.kind({
         this.$[which + "Count"].hide();
         this.$[which + "NoResults"].hide();
         this.latestQuery = query;
-        this[which + "s"].fetch({searchQuery: query});
+        this[which + "s"].fetch({searchQuery: query, data: {thumbnails: ["300x100"]}});
     },
     deactivate: function() {
         this.$.searchInput.blur();

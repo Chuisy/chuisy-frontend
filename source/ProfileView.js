@@ -122,12 +122,12 @@ enyo.kind({
             this.$.chusCount.hide();
             this.$.likedChusSpinner.show();
             this.$.likedChusCount.hide();
-            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage()}, success: enyo.bind(this, function() {
+            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage(), thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
                 this.$.chusSpinner.hide();
                 this.$.chusCount.show();
                 this.$.chusPlaceholder.setShowing(!this.user || !this.user.chus.length);
             })});
-            this.user.likedChus.fetch({data: {limit: this.$.likedChuList.getChusPerPage()}, success: enyo.bind(this, function() {
+            this.user.likedChus.fetch({data: {limit: this.$.likedChuList.getChusPerPage(), thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
                 this.$.likedChusSpinner.hide();
                 this.$.likedChusCount.show();
                 this.$.likedChusPlaceholder.setShowing(!this.user || !this.user.likedChus.length);

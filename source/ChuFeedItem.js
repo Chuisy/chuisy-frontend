@@ -15,7 +15,7 @@ enyo.kind({
     chuChanged: function() {
         if (this.chu) {
             var user = this.chu.get("user");
-            this.$.image.setSrc(this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png");
+            this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("localImage") || "assets/images/chu_placeholder.png");
             this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
             this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
             this.$.time.setContent(this.chu.getTimeText());

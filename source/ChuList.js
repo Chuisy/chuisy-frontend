@@ -68,7 +68,7 @@ enyo.kind({
             var chu = this.chus.at(index);
 
             if (chu) {
-                var image = chu.getThumbnail(200, 200) || "assets/images/chu_placeholder.png";
+                var image = chu.get("thumbnails") && chu.get("thumbnails")["100x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
             } else {
