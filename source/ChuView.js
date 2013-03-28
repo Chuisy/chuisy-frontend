@@ -538,7 +538,7 @@ enyo.kind({
     },
     showLikes: function() {
         this.$.panels.setIndex(1);
-        this.$.likesMapPanels.setIndex(0);
+        // this.$.likesMapPanels.setIndex(0);
     },
     likesBack: function() {
         this.$.panels.setIndex(0);
@@ -567,7 +567,7 @@ enyo.kind({
     showLocMap: function() {
         if(this.chu.get("location") && this.chu.get("location").latitude) {
             this.$.panels.setIndex(1);
-            this.$.likesMapPanels.setIndex(1);
+            // this.$.likesMapPanels.setIndex(1);
             this.setLocMarker();
         }
     },
@@ -691,7 +691,7 @@ enyo.kind({
                                 {classes: "chuview-location-price", style: "position: relative; z-index: 100;", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price"},
-                                    {classes: "chuview-location ellipsis", name: "location", ontap: "showLocMap"},
+                                    {classes: "chuview-location ellipsis", name: "location"},
                                     {classes: "chuview-likes-comments", showing: false, components: [
                                         {classes: "chuview-likes-count", name: "likesCount"},
                                         {classes: "chuview-likes-icon"},
@@ -769,22 +769,22 @@ enyo.kind({
                 ]},
                 {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
             ]},
-            {kind: "Panels", name: "likesMapPanels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, animate: false, components: [
+            // {kind: "Panels", name: "likesMapPanels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, animate: false, components: [
                 //LIKES
                 {kind: "FittableRows", classes: "enyo-fill", components: [
                     {classes: "header", components: [
                         {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
                     ]},
                     {kind: "UserList", name: "likesList", fit: true}
-                ]},
-                //MAP
-                {kind: "FittableRows", classes: "enyo-fill", components: [
-                    {classes: "header", components: [
-                        {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
-                    ]},
-                    {kind: "Map", name: "map", fit: true}
                 ]}
-            ]}
+            //     //MAP
+            //     {kind: "FittableRows", classes: "enyo-fill", components: [
+            //         {classes: "header", components: [
+            //             {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
+            //         ]},
+            //         {kind: "Map", name: "map", fit: true}
+            //     ]}
+            // ]}
         ]}
     ]
 });
