@@ -28,7 +28,9 @@ enyo.kind({
         this.$.feedList.setCount(chuisy.feed.length);
         this.setPulled(false);
         if (this.hasNode()) {
-            this.$.feedList.reset();
+            enyo.asyncMethod(this, function() {
+                this.$.feedList.reset();
+            });
         }
     },
     /**
