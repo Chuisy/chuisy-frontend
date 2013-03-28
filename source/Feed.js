@@ -19,16 +19,17 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("sync change remove", this.refreshFeed, this);
+        chuisy.feed.on("change remove", this.refreshFeed, this);
         this.pullerHeight = 50;
         this.pullerThreshold = 80;
     },
     feedLoaded: function() {
         this.$.spinner.setShowing(!chuisy.feed.length);
         this.$.feedList.setCount(chuisy.feed.length);
-        this.$.feedList.getStrategy().scrollTop = 0;
         this.setPulled(false);
-        this.$.feedList.refresh();
+        if (this.hasNode()) {
+            this.$.feedList.reset();
+        }
     },
     /**
         Refreshfeed based on the existing list.
@@ -41,18 +42,20 @@ enyo.kind({
         var item = chuisy.feed.at(event.index);
         this.$.chuFeedItem.setChu(item);
 
-        this.$.chuFeedItem.removeClass("feed-item-added");
-        if (item.added) {
-            this.$.chuFeedItem.applyStyle("opacity", 0);
-            enyo.asyncMethod(this, function(index) {
-                this.$.feedList.performOnRow(index, function() {
-                    this.$.chuFeedItem.addClass("feed-item-added");
-                    this.$.chuFeedItem.applyStyle("opacity", 1);
-                }, this);
-            }, event.index);
-        } else {
-            this.$.chuFeedItem.applyStyle("opacity", 1);
-        }
+        // this.$.chuFeedItem.removeClass("feed-item-added");
+        // if (item.added) {
+        // this.$.chuFeedItem.applyStyle("-webkit-transition", "none");
+        // this.$.chuFeedItem.applyStyle("-webkit-transform", "rotateX(90deg)");
+        // enyo.asyncMethod(this, function(index) {
+        //     this.$.feedList.performOnRow(index, function() {
+        //         // this.$.chuFeedItem.addClass("feed-item-added");
+        //         this.$.chuFeedItem.applyStyle("-webkit-transition", "-webkit-transform 0.5s");
+        //         this.$.chuFeedItem.applyStyle("-webkit-transform", "rotateX(0deg)");
+        //     }, this);
+        // }, event.index);
+        // } else {
+        //     this.$.chuFeedItem.applyStyle("opacity", 1);
+        // }
 
         var isLastItem = event.index == chuisy.feed.length-1;
         if (isLastItem && chuisy.feed.hasNextPage()) {
@@ -154,10 +157,12 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "onyx.Spinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 10, thumb: false,
+        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 1, thumb: false,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
+            {style: "-webkit-perspective: 1000px;", components: [
+                {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped", classes: "fall"}
+            ]},
             {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
         ]}
     ]

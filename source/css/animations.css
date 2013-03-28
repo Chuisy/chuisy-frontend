@@ -6,3 +6,19 @@
 .wiggle {
 	-webkit-animation: wiggle 0.1s linear 0 infinite alternate;
 }
+
+@-webkit-keyframes fall {
+	from {
+		-webkit-transform: translate3d(0, 0, -200px) rotateX(-45deg);
+		opacity: 0;
+	}
+	to {
+		-webkit-transform: translate3d(0, 0, 0) rotateX(0deg);
+		opacity: 1
+	}
+}
+
+.fall {
+	-webkit-transform-origin: 0 0;
+	-webkit-animation: fall 0.3s;
+}

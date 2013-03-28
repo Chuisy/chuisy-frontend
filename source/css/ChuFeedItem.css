@@ -3,14 +3,15 @@
 	/*border: #ccc solid 1px;*/
 	/*margin: 10px;*/
 	/*height: 336px;*/
-	margin: 8px;
-	background-color: White;
+	margin: 4px 8px;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 4px;
 	position: relative;
 	overflow: hidden;
 	-webkit-transform: translate3d(0, 0, 0);
+	background: #ffffff url('../../assets/images/chu_placeholder.png') no-repeat center 4px;
+	background-size: 300px 300px;
 }
 
 /* Is applied when item is highlighted via onyx list tap highlighting */
