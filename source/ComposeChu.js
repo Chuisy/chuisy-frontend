@@ -47,7 +47,7 @@ enyo.kind({
                         user.profile.set("fb_og_share_actions", choice);
                         user.save();
                         chuisy.accounts.syncActiveUser();
-                        if (share) {
+                        if (choice) {
                             App.fbRequestPublishPermissions();
                         }
                     }),

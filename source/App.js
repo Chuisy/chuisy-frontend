@@ -99,10 +99,8 @@ enyo.kind({
                 },
                 title, buttonLabels.join(","));
             } else {
-                var respond = confirm(text);
-                if (respond === true) {
-                    callback(respond);
-                }
+                var response = confirm(text);
+                callback(response);
             }
         }
     },
