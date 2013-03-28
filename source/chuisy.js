@@ -1,8 +1,8 @@
 (function($, _, Backbone, enyo) {
     chuisy = {
         // apiRoot: "http://127.0.0.1:8000/api/",
-        apiRoot: "http://chuisy-staging.herokuapp.com/api/",
-        // apiRoot: "http://www.chuisy.com/api/",
+        // apiRoot: "http://chuisy-staging.herokuapp.com/api/",
+        apiRoot: "http://www.chuisy.com/api/",
         version: "v1",
         online: false,
         // Directory where chu images are stored in locally
@@ -549,6 +549,13 @@
         */
         toggleFollow: function() {
             this.setFollowing(!this.get("following"));
+        },
+        getThumbnail: function(width, height) {
+            if (this.profile.get("avatar")) {
+                return _.result(this, "url") + "thumbnail/" + width + "x" + height + "/";
+            } else {
+                return null;
+            }
         }
     });
 
@@ -671,8 +678,15 @@
             return util.timeToText(this.get("time"));
         },
         /*
-            Let currently active user like or unlike this Chu. _liked_ specifies whether to like or unlike
+            Get image url for thumbnail with _width_ and _height_
         */
+        getThumbnail: function(width, height) {
+            if (this.get("image")) {
+                return _.result(this, "url") + "thumbnail/" + width + "x" + height + "/";
+            } else {
+                return null;
+            }
+        },
         setLiked: function(liked) {
             var activeUser = chuisy.accounts.getActiveUser();
 
@@ -782,7 +796,7 @@
                 console.error("Can't make thumbnail because there is no local image.");
                 return;
             }
-            util.createThumbnail(image, 200, 200, _.bind(function(imageData) {
+            util.createThumbnail(image, 100, 100, _.bind(function(imageData) {
                 var fileName = "thumb_" + image.substring(image.lastIndexOf("/")+1);
                 fsShortcuts.saveImageFromData(imageData, chuisy.closetDir + fileName, _.bind(function(path) {
                     this.save({localThumbnail: path}, {nosync: true});
@@ -978,6 +992,13 @@
             this.each(function(model) {
                 this.localStorage.create(model);
             }, this);
+        },
+        fetch: function(options) {
+            // Request thumbnails
+            options = options || {};
+            options.data = options.data || {};
+            options.data.thumbnails = options.data.thumbnails || ["300x300"];
+            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
         }
     });
 
@@ -1043,6 +1064,13 @@
                     model.uploadImage();
                 }
             }
+        },
+        fetch: function(options) {
+            // Request thumbnails
+            options = options || {};
+            options.data = options.data || {};
+            options.data.thumbnails = options.data.thumbnails || ["100x100"];
+            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
         }
     });
 
