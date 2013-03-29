@@ -94,7 +94,7 @@ enyo.kind({
 
         var user = chuisy.accounts.getActiveUser();
         var attrs = {
-            visibility: "public",
+            visibility: App.isSignedIn() ? "public" : "private",
             user: user
         };
         // Number formater for providing locale-specific currency formats
