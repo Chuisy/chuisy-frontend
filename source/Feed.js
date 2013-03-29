@@ -1,3 +1,24 @@
+enyo.kind({
+    name:"ex.List",
+    kind:"enyo.List",
+    events:{
+        onGeneratePage:""
+    },
+    generatePage:function(inPageNo, inTarget) {
+        this.inherited(arguments);
+        var n = inTarget.hasNode();
+        if(n) {
+            enyo.forEach(n.querySelectorAll("IMG"), function(img) {
+                img.style.opacity = 0;
+                enyo.dispatcher.listen(img, "load", function() {
+                    img.style["-webkit-animation"] = "fadein 0.5s";
+                    img.style.opacity = 1;
+                });
+            });
+        }
+    }
+});
+
 /**
     _Feed_ displays chus from people the user follows and other public chus.
 */
@@ -159,7 +180,7 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "onyx.Spinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 1, thumb: false,
+        {kind: "ex.List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 1, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {style: "-webkit-perspective: 1000px;", components: [

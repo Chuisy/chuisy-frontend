@@ -1,6 +1,12 @@
 @-webkit-keyframes wiggle {
-	from {-webkit-transform: rotate(-2deg)}
-	to {-webkit-transform: rotate(2deg);}
+	from {
+		-webkit-transform: rotate(-2deg);
+		-webkit-transform: translate3d(0, 0, 0);
+	}
+	to {
+		-webkit-transform: rotate(2deg);
+		-webkit-transform: translate3d(0, 0, 0);
+	}
 }
 
 .wiggle {
@@ -21,4 +27,19 @@
 .fall {
 	-webkit-transform-origin: 0 0;
 	-webkit-animation: fall 0.3s;
+}
+
+@-webkit-keyframes fadein {
+	from {
+		-webkit-transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+	to {
+		-webkit-transform: translate3d(0, 0, 0);
+		opacity: 1
+	}
+}
+
+.fadein {
+	-webkit-animation: fadin 0.5s;
 }
