@@ -344,16 +344,16 @@ enyo.kind({
     getMessage: function() {
         var loc = this.chu.get("location");
         if (loc && loc.name) {
-            return $L("Check out this cool product I found at {{ place }}!").replace("{{ place }}", loc.name);
+            return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", loc.name);
         } else {
-            return $L("Check out this cool product!");
+            return $L("Check out this cool fashion item!");
         }
     },
     checkSynced: function() {
         if (this.chu.get("url") && this.chu.get("image")) {
             return true;
         } else {
-            navigator.notification.alert($L("You can't do this right now because the Chu still being uploaded. Please try again in a little while!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
             return false;
         }
     },
@@ -748,11 +748,11 @@ enyo.kind({
                             {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
                                 {kind: "FittableRows", components: [
                                     {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
-                                    {classes: "chuview-friends-hint", content: $L("Select the people on Chuisy you want to share this Chu with!")}
+                                    {classes: "chuview-friends-hint", content: $L("Select the people you want to share this Chu with!")}
                                 ]},
                                 {style: "padding: 80px 8px;", components: [
                                     {classes: "placeholder-image chuview-friends-placeholder-image"},
-                                    {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
+                                    {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
                                     {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
                                 ]}
                             ]}
@@ -761,7 +761,7 @@ enyo.kind({
                     // COMMENT INPUT
                     {classes: "chuview-commentinput", components: [
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"}
+                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Comment..."), onkeydown: "commentInputKeydown"}
                         ]},
                         {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
                     ]}

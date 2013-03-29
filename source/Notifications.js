@@ -30,7 +30,7 @@ enyo.kind({
         if (item.get("text")) {
             this.$.text.setContent(item.get("text"));
         } else {
-            var connection = $L(" that you are subscribed to");
+            var connection = $L(" that you are interested in");
             var targetObj = item.get("target_obj");
             if (targetObj) {
                 if (targetObj.owned) {
@@ -113,7 +113,7 @@ enyo.kind({
     components: [
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("There aren't any affairs that require your attention right now...")}
+            {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [

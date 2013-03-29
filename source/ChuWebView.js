@@ -96,7 +96,12 @@ enyo.kind({
     requestSignIn: function(params) {
         this.signInSuccessCallback = params.success;
         this.signInFailureCallback = params.failure;
-        var text = $L("Please connect with your Facebook account so the owner of this Chu can know who this " + params.action + " came from!");
+        var text;
+        if (action == "like") {
+            text = $L("Please connect with your Facebook account to let your friend know who’s giving a heart.");
+        } else {
+            text = $L("Please connect with your Facebook account to let your friend know who’s commenting.");
+        }
         this.$.signInText.setContent(text);
         this.$.signInDialog.show();
     },

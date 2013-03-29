@@ -35,9 +35,9 @@ enyo.kind({
             this.placesUpdated();
             this.fetchPlaces();
         }), enyo.bind(this, function() {
-            navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
-                " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
-                " phone's settings and enable location services for Chuisy!"), function() {
+            navigator.notification.alert($L("Chuisy couldn't get your current location. " +
+                "If you want to properly enjoy Chuisy and receive little gifts from local retailers, " +
+                "go to 'Privacy > Location Services' in your phone's settings and enable location services for Chuisy!"), function() {
                 this.refreshPlacesList();
             }, $L("Can't find you!"), $L("OK"));
         }));

@@ -197,7 +197,7 @@ enyo.kind({
             {components: [
                 {classes: "placeholder", name: "placeholder", components: [
                     {classes: "placeholder-image"},
-                    {classes: "placeholder-text", content: $L("This is where your profile would be if you were signed in!")}
+                    {classes: "placeholder-text", content: $L("Here you can see your profile as soon as you log in!")}
                 ]},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},

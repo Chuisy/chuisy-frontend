@@ -42,7 +42,7 @@ enyo.kind({
             if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
                 App.confirm(
                     $L("Share on Facebook"),
-                    $L("Do you want Chuisy to post your actions on Facebook? You can change this later in your settings."),
+                    $L("Do you want to post your actions on Facebook? Some gifts can only be received if you share your stories. You can change this later in your settings."),
                     enyo.bind(this, function(choice) {
                         user.profile.set("fb_og_share_actions", choice);
                         user.save();

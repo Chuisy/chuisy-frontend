@@ -201,7 +201,7 @@ enyo.kind({
             // USERS
             {classes: "discover-result-panel", components: [
                 {kind: "UserList", classes: "enyo-fill", name: "userList", rowsPerPage: 20},
-                {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No users found.")}
+                {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No people found.")}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [

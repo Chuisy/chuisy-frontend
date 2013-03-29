@@ -46,7 +46,7 @@ enyo.kind({
         if (selectedFriends.length) {
             FB.ui({
                 method: "apprequests",
-                message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on what to buy!"),
+                message: $L("Come join me on Chuisy, help me decide on what to buy and share beautiful fashion you like!"),
                 to: selectedFriends
             }, enyo.bind(this, function(response) {
                 if (response.request) {
@@ -62,7 +62,7 @@ enyo.kind({
         {kind: "Panels", arrangerKind: "CarouselArranger", draggable: false, classes: "enyo-fill", components: [
             {kind: "FittableRows", name: "suggestedUsersPanel", classes: "enyo-fill", components: [
                 {classes: "header", components: [
-                    {classes: "header-text getstarted-header-text", content: $L("Cool People")},
+                    {classes: "header-text getstarted-header-text", content: $L("Interesting People")},
                     {kind: "onyx.Button", ontap: "suggestedUsersContinue", classes: "done-button", content: $L("continue")}
                 ]},
                 {kind: "onyx.Spinner", classes: "getstarted-suggestedusers-spinner", name: "suggestedUsersSpinner"},
