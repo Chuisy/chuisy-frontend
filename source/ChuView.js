@@ -252,15 +252,7 @@ enyo.kind({
     },
     commentEnter: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.postComment();
-            } else {
-                // this.$.commentInput.hasNode().blur();
-                // User is not signed in yet. Prompt him to do so before he can comment
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.postComment)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.postComment));
         }
         event.preventDefault();
         return true;

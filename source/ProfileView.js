@@ -77,13 +77,7 @@ enyo.kind({
     },
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.toggleFollow();
-            } else {
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.toggleFollow)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.toggleFollow));
         }
     },
     toggleFollow: function(sender, event) {

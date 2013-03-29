@@ -21,14 +21,7 @@ enyo.kind({
 	},
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.doToggleFollow();
-            } else {
-                // User is not signed in Ask him to sign in first
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.doToggleFollow)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.doToggleFollow));
         }
         return true;
     },
