@@ -102,6 +102,16 @@ enyo.kind({
                 var response = confirm(text);
                 callback(response);
             }
+        },
+        requireSignIn: function(callback) {
+            if (App.isSignedIn()) {
+                callback();
+            } else {
+                // User is not signed in yet. Prompt him to do so before he can like something
+                enyo.Signals.send("onRequestSignIn", {
+                    success: callback
+                });
+            }
         }
     },
     history: [],

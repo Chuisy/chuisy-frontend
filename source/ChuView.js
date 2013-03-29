@@ -179,14 +179,7 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.toggleLike();
-            } else {
-                // User is not signed in yet. Prompt him to do so before he can like something
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.toggleLike)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.toggleLike));
         }
         return true;
     },
@@ -347,8 +340,10 @@ enyo.kind({
         this.arrangeImage();
     },
     toggleVisibility: function() {
-        var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
-        this.chu.save({visibility: visibility});
+        App.requireSignIn(enyo.bind(this, function() {
+            var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
+            this.chu.save({visibility: visibility});
+        }));
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -381,59 +376,71 @@ enyo.kind({
         return url;
     },
     facebook: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var params = {
-                method: "feed",
-                display: "popup",
-                link: this.getShareUrl(),
-                picture: this.chu.get("image")
-            };
-            FB.ui(params, function(obj) {
-                console.log(obj);
-            });
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var params = {
+                    method: "feed",
+                    display: "popup",
+                    link: this.getShareUrl(),
+                    picture: this.chu.get("image")
+                };
+                FB.ui(params, function(obj) {
+                    console.log(obj);
+                });
+            }
+        }));
     },
     /**
         Open twitter share dialog
     */
     twitter: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var text = this.getMessage();
-            var url = this.getShareUrl();
-            window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var text = this.getMessage();
+                var url = this.getShareUrl();
+                window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+            }
+        }));
     },
     /**
         Open pinterest share dialog
     */
     pinterest: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var url = this.getShareUrl();
-            var media = this.chu.get("image");
-            window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var url = this.getShareUrl();
+                var media = this.chu.get("image");
+                window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+            }
+        }));
     },
     /**
         Open sms composer with message / link
     */
     sms: function() {
-        if (this.checkSynced()) {
-            var message = this.getMessage();
-            window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (this.checkSynced()) {
+                var message = this.getMessage();
+                window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+            }
+        }));
     },
     /**
         Open email composer with message / link
     */
     email: function() {
-        if (this.checkSynced()) {
-            var subject = $L("Hi there!");
-            var message = this.getMessage();
-            window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (this.checkSynced()) {
+                var subject = $L("Hi there!");
+                var message = this.getMessage();
+                window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+            }
+        }));
     },
     toggleFriends: function() {
-        this.$.friendsSlider.toggleMinMax();
+        App.requireSignIn(enyo.bind(this, function() {
+            this.$.friendsSlider.toggleMinMax();
+        }));
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
