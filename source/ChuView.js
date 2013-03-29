@@ -771,7 +771,7 @@ enyo.kind({
             ]},
             // {kind: "Panels", name: "likesMapPanels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, animate: false, components: [
                 //LIKES
-                {kind: "FittableRows", classes: "enyo-fill", components: [
+                {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
                     {classes: "header", components: [
                         {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
                     ]},
