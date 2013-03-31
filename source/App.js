@@ -384,6 +384,9 @@ enyo.kind({
                 user.fetch();
                 this.$.mainView.openView("user", user);
             }
+        } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
+            // Looks like its a hyperlink
+            window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
