@@ -39,10 +39,10 @@
 	margin: 10px auto;
 }
 
-.picklocation-resulttext {
+.picklocation-noresults {
 	width: 100%;
 	text-align: center;
-	padding-bottom: 20px;
+	padding: 10px;
 	box-sizing: border-box;
 	color: red;
 }
@@ -50,7 +50,6 @@
 .picklocation-new-place {
 	display: -webkit-box;
 	-webkit-box-align: stretch;
-	margin: 5px 0;
 	width: 100%;
 	box-sizing: border-box;
 	height: 35px;
@@ -87,5 +86,4 @@
 
 .picklocation-more-button {
 	width: 100%;
-	margin-bottom: 5px;
 }

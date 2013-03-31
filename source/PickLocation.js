@@ -44,10 +44,25 @@ enyo.kind({
     },
     fetchPlaces: function() {
         this.$.spinner.show();
+        this.$.noResults.hide();
         chuisy.venues.fetch(enyo.mixin({remote: true, success: enyo.bind(this, function() {
             this.$.spinner.hide();
+            this.$.noResults.setShowing(!chuisy.venues.length);
+            if (!chuisy.venues.length) {
+                this.$.moreButton.hide();
+                this.$.newPlace.show();
+            } else {
+                this.morePlaces(false);
+            }
         }), error: enyo.bind(this, function(error) {
             this.$.spinner.hide();
+            this.$.noResults.setShowing(!chuisy.venues.length);
+            if (!chuisy.venues.length) {
+                this.$.moreButton.hide();
+                this.$.newPlace.show();
+            } else {
+                this.morePlaces(false);
+            }
         })}, this.coordinates));
     },
     placesUpdated: function() {
@@ -149,8 +164,8 @@ enyo.kind({
                     {classes: "picklocation-place-address", name: "placeAddress"}
                 ]}
             ]},
-            {name: "resultText", classes: "picklocation-resulttext", showing: false},
-            {style: "padding: 0 5px;", components: [
+            {name: "noResults", classes: "picklocation-noresults", content: $L("No nearby places found!"), showing: false},
+            {style: "padding: 0 5px 5px 5px;", components: [
                 {classes: "picklocation-new-place", name: "newPlace", components: [
                     {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", alwaysLooksFocused: true, components: [
                         {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown", onfocus: "newPlaceFocus", onblur: "newPlaceBlur"}
