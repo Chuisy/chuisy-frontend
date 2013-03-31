@@ -277,6 +277,7 @@ enyo.kind({
             this.refresh();
         }
         chuisy.cards.fetch({update: true, remove: false});
+        enyo.Signals.send("onShowGuide", {view: "goodies"});
     },
     deactivate: function() {
         this.$.stagePopup.hide();
