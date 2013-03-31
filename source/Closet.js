@@ -115,11 +115,10 @@ enyo.kind({
         this.refresh();
     },
     chuTap: function(sender, event) {
-        if (!this.held) {
+        if (!this.editing) {
             var index = event.index * this.cellCount + sender.cellIndex;
             this.doShowChu({chu: chuisy.closet.at(index)});
         }
-        this.held = false;
         // Call this to prevent event propagating to an input element and focussing it
         // Happens on iOS sometimes
         event.preventDefault();
@@ -154,7 +153,6 @@ enyo.kind({
         }, 300);
     },
     hold: function(sender, event) {
-        this.held = true;
         if (this.editing) {
             this.finishEditing();
         } else {
