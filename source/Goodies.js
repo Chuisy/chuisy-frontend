@@ -310,7 +310,7 @@ enyo.kind({
                             {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
                                 {content: $L("Redeem")}
                             ]},
-                            {kind: "onyx.Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
+                            {kind: "CssSpinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},

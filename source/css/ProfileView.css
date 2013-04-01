@@ -173,3 +173,7 @@
 	color: #ff1e78;
 	text-decoration: none;
 }
+
+.profileview-tab-spinner {
+	margin: 20px auto;
+}

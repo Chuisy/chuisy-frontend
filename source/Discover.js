@@ -35,12 +35,18 @@ enyo.kind({
         var isLastItem = event.index == this.chus.length-1;
         if (isLastItem && this.chus.hasNextPage()) {
             // Item is last item in the list but there is more! Load next page.
-            this.$.chuNextPage.show();
-            this.chus.fetchNext();
+            this.$.chuNextPageSpacer.show();
+            this.chuNextPage();
         } else {
-            this.$.chuNextPage.hide();
+            this.$.chuNextPageSpacer.hide();
         }
         return true;
+    },
+    chuNextPage: function() {
+        this.$.chuNextPageSpinner.addClass("rise");
+        this.chus.fetchNext({success: enyo.bind(this, function() {
+            this.$.chuNextPageSpinner.removeClass("rise");
+        })});
     },
     chuTap: function(sender, event) {
         this.doShowChu({chu: this.chus.at(event.index)});
@@ -205,6 +211,7 @@ enyo.kind({
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
+                {kind: "CssSpinner", name: "chuNextPageSpinner", classes: "next-page-spinner"},
                 {kind: "List", classes: "enyo-fill", name: "chuList", onSetupItem: "setupChu", rowsPerPage: 20,
                     strategyKind: "TransitionScrollStrategy", thumb: false, components: [
                     {kind: "onyx.Item", name: "resultChu", classes: "discover-resultchu", ontap: "chuTap", components: [
@@ -213,7 +220,7 @@ enyo.kind({
                             {classes: "category-icon discover-resultchu-category", name: "categoryIcon"}
                         ]}
                     ]},
-                    {kind: "onyx.Spinner", name: "chuNextPage", classes: "loading-next-page"}
+                    {name: "chuNextPageSpacer", classes: "next-page-spacer"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]}/*,

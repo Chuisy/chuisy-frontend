@@ -43,11 +43,11 @@ enyo.kind({
         chuisy.feed.on("change remove", this.refreshFeed, this);
         this.pullerHeight = 50;
         this.pullerThreshold = 80;
+        this.setPulled(true);
     },
     feedLoaded: function() {
-        this.$.spinner.setShowing(!chuisy.feed.length);
         this.$.feedList.setCount(chuisy.feed.length);
-        this.setPulled(false);
+        this.setPulled(!chuisy.feed.length);
         if (this.hasNode()) {
             enyo.asyncMethod(this, function() {
                 this.$.feedList.reset();
@@ -85,9 +85,9 @@ enyo.kind({
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
             this.nextPage();
-            this.$.loadingNextPage.show();
+            this.$.nextPageSpacer.show();
         } else {
-            this.$.loadingNextPage.hide();
+            this.$.nextPageSpacer.hide();
         }
 
         return true;
@@ -95,11 +95,14 @@ enyo.kind({
     nextPage: function() {
         if (!this.loading) {
             this.loading = true;
+            this.$.nextPageSpinner.addClass("rise");
             chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.removeClass("rise");
                 this.refreshFeed();
             }), error: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.removeClass("rise");
             })});
         }
     },
@@ -162,6 +165,7 @@ enyo.kind({
     setPulled: function(pulled) {
         this.pulled = pulled;
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
+        this.$.pulldown.applyStyle("opacity", this.pulled ? 1 : 0);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
         this.$.feedList.getStrategy().start();
     },
@@ -170,7 +174,7 @@ enyo.kind({
         this.$.feedList.refresh();
     },
     components: [
-        {kind: "onyx.Spinner", classes: "absolute-center"},
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
@@ -178,7 +182,7 @@ enyo.kind({
         ]},
         {name: "pulldown", classes: "pulldown", components: [
             {classes: "pulldown-arrow"},
-            {kind: "onyx.Spinner", classes: "pulldown-spinner"}
+            {kind: "CssSpinner", classes: "pulldown-spinner"}
         ]},
         {kind: "ex.List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 1, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
@@ -186,7 +190,7 @@ enyo.kind({
             {style: "-webkit-perspective: 1000px;", components: [
                 {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped", classes: "fall"}
             ]},
-            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

@@ -76,13 +76,19 @@ enyo.kind({
         var isLastItem = event.index == chuisy.notifications.length-1;
         if (isLastItem && chuisy.notifications.hasNextPage()) {
             // Last item in the list and there is more! Load next page
-            this.$.loadingNextPage.show();
-            chuisy.notifications.fetchNext();
+            this.$.nextPageSpacer.show();
+            this.nextPage();
         } else {
-            this.$.loadingNextPage.hide();
+            this.$.nextPageSpacer.hide();
         }
 
         return true;
+    },
+    nextPage: function() {
+        this.$.nextPageSpinner.addClass("rise");
+        chuisy.notifications.fetchNext({success: enyo.bind(this, function() {
+            this.$.nextPageSpinner.removeClass("rise");
+        })});
     },
     notificationTapped: function(sender, event) {
         var not = chuisy.notifications.at(event.index);
@@ -111,6 +117,7 @@ enyo.kind({
         this.$.list.refresh();
     },
     components: [
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
@@ -125,7 +132,7 @@ enyo.kind({
                 ]},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

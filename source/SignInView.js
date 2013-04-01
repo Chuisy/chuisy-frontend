@@ -87,7 +87,7 @@ enyo.kind({
                 {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
             ]},
             {classes: "signinview-spacer", components: [
-                {kind: "onyx.Spinner", classes: "signinview-spinner", showing: false}
+                {kind: "CssSpinner", classes: "signinview-spinner", showing: false}
             ]}
         ]}
     ]

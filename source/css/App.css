@@ -65,9 +65,23 @@ body {
 }
 
 /* Indicator for when the next page in a list is loaded */
-.loading-next-page {
-	display: block;
-	margin: 10px auto;
+.next-page-spacer {
+	height: 60px;
+}
+
+.next-page-spinner {
+	height: 60px;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-transform: translate3d(0, 100px, 0);
+	-webkit-transition: -webkit-transform 0.5s;
+}
+
+.next-page-spinner.rise {
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 .fade-screen {
@@ -374,12 +388,16 @@ body {
 }
 
 .pulldown-spinner {
-	margin-top: 20px;
-	display: none;
+	/*display: none;*/
+	height: 50px;
+	width: 100%;
+	-webkit-transform: translate3d(0, -100px, 0);
+	-webkit-transition: -webkit-transform 0.5s;
 }
 
 .pulldown.pulled .pulldown-spinner {
-	display: inline-block;
+	/*display: inline-block;*/
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 .enyo-puller {

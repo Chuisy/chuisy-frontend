@@ -79,14 +79,22 @@ enyo.kind({
             if (isLastItem && this.chus.hasNextPage()) {
                 // We are at the end of the list and there seems to be more.
                 // Load next bunch of chus
-                this.$.loadingNextPage.show();
-                this.chus.fetchNext();
+                this.$.nextPageSpacer.show();
+                this.nextPage();
             } else {
-                this.$.loadingNextPage.hide();
+                this.$.nextPageSpacer.hide();
             }
         }
 
         return true;
+    },
+    nextPage: function() {
+        this.$.nextPageSpinner.addClass("rise");
+        this.chus.fetchNext({
+            success: enyo.bind(this, function() {
+                this.$.nextPageSpinner.removeClass("rise");
+            })
+        });
     },
     /**
         Sets list count according to number of chus and refreshs
@@ -106,10 +114,11 @@ enyo.kind({
         return this.$.list.getScrollTop();
     },
     components: [
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
             strategyKind: "TransitionScrollStrategy", components: [
             {name: "listClient", classes: "chulist-row"},
-            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

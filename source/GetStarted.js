@@ -65,7 +65,7 @@ enyo.kind({
                     {classes: "header-text getstarted-header-text", content: $L("Interesting People")},
                     {kind: "onyx.Button", ontap: "suggestedUsersContinue", classes: "done-button", content: $L("continue")}
                 ]},
-                {kind: "onyx.Spinner", classes: "getstarted-suggestedusers-spinner", name: "suggestedUsersSpinner"},
+                {kind: "CssSpinner", classes: "getstarted-suggestedusers-spinner", name: "suggestedUsersSpinner"},
                 {kind: "UserList", name: "suggestedUsersList", fit: true}
             ]},
             {kind: "FittableRows", name: "inviteFriendsPanel", classes: "enyo-fill", components: [
