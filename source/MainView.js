@@ -23,12 +23,10 @@ enyo.kind({
         notifications: [0, 5],
         compose: [1, null],
         chu: [2, null],
-        // share: [3, null],
         settings: [3, null],
         user: [4, null],
-        gift: [5, null],
-        invite: [6, null],
-        getstarted: [7, null]
+        invite: [5, null],
+        getstarted: [6, null]
     },
     create: function() {
         this.inherited(arguments);
