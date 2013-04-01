@@ -157,6 +157,10 @@
 	background-image: url(../../assets/images/friends_placeholder.png);
 }
 
+.profileview-list-placeholder.likes {
+	background-image: url(../../assets/images/hearts_placeholder.png);
+}
+
 .profileview-login-spinner {
 	display: block;
 	margin: 10px auto;

@@ -183,7 +183,7 @@ enyo.kind({
                     ]},
                     {classes: "enyo-fill", components: [
                         {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
-                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder chus"},
+                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
                         {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]}
                 ]}
