@@ -88,7 +88,7 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 150px", components: [
                     {classes: "guide-header", content: $L("Your Goodies")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can collect little gifts, badgets and coupons while using Chuisy.")}
+                    {classes: "guide-text", content: $L("Here you can collect little gifts, badges and coupons while using Chuisy.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
