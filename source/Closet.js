@@ -55,10 +55,10 @@ enyo.kind({
 
         this.$.listClient.destroyClientControls();
         for (var i=0; i<this.cellCount; i++) {
-            this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
+            var c = this.$.listClient.createComponent({classes: "closet-chu", cellIndex: i, ontap: "chuTap", name: "chu" + i, owner: this, components: [
                 {classes: "closet-chu-error-icon", name: "errorIcon" + i},
                 {classes: "closet-chu-image", name: "chuImage" + i},
-                {classes: "closet-delete-button", ontap: "chuRemove", cellIndex: i}
+                {classes: "closet-delete-button", onhold: "deleteButtonHold", ontap: "removeButtonTapped", cellIndex: i}
             ]});
         }
     },
@@ -66,16 +66,20 @@ enyo.kind({
         for (var i=0; i<this.cellCount; i++) {
             var index = event.index * this.cellCount + i;
             var chu = chuisy.closet.at(index);
-            this.$["chu" + i].removeClass("deleted");
+            var c = this.$["chu" + i];
+            c.removeClass("deleted");
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
-                var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["200x200"] ||
+                var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
-                this.$["chu" + i].applyStyle("visibility", "visible");
-                this.$["errorIcon" + i].setShowing(chu.get("syncFailed") || chu.get("uploadFailed"));
+                c.applyStyle("visibility", "visible");
+                var syncStatus = chu.get("syncStatus");
+                this.$["errorIcon" + i].setShowing(syncStatus == "postFailed" || syncStatus == "uploadFailed");
+                c.applyStyle("-webkit-animation-delay", (Math.random()/5-0.2) + "s");
+                c.addRemoveClass("wiggle", this.editing);
             } else {
-                this.$["chu" + i].applyStyle("visibility", "hidden");
+                c.applyStyle("visibility", "hidden");
             }
         }
 
@@ -98,6 +102,7 @@ enyo.kind({
         this.$.postButton.hide();
         this.addClass("editing");
         this.$.editHint.setContent($L("(hold to cancel)"));
+        this.refresh();
     },
     /**
         Finish edit mode
@@ -107,21 +112,37 @@ enyo.kind({
         this.removeClass("editing");
         this.$.postButton.show();
         this.$.editHint.setContent($L("(hold to edit)"));
+        this.refresh();
     },
     chuTap: function(sender, event) {
-        if (!this.held) {
+        if (!this.editing) {
             var index = event.index * this.cellCount + sender.cellIndex;
             this.doShowChu({chu: chuisy.closet.at(index)});
         }
-        this.held = false;
         // Call this to prevent event propagating to an input element and focussing it
         // Happens on iOS sometimes
         event.preventDefault();
     },
+    removeButtonTapped: function(sender, event) {
+        App.confirm(
+            $L("Remove Chu"),
+            $L("Are you sure you want to remove this Chu? This action can not be undone."),
+            enyo.bind(this, function(choice) {
+                if (choice) {
+                    this.removeChu(sender, event);
+                }
+            }),
+            [$L("Cancel"), $L("Remove")]
+        );
+        return true;
+    },
+    deleteButtonHold: function(sender, event) {
+        return true;
+    },
     /**
         Event handler. Remove chu associated with the event.
     */
-    chuRemove: function(sender, event) {
+    removeChu: function(sender, event) {
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = chuisy.closet.at(index);
         this.$.list.performOnRow(event.index, function(index, cellIndex) {
@@ -130,10 +151,8 @@ enyo.kind({
         setTimeout(function() {
             chu.destroy();
         }, 300);
-        return true;
     },
     hold: function(sender, event) {
-        this.held = true;
         if (this.editing) {
             this.finishEditing();
         } else {
@@ -172,7 +191,7 @@ enyo.kind({
         ]},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("What is this? Your closet is still empty? Go ahead and fill it!")}
+            {classes: "placeholder-text", content: $L("Your closet is still empty? Fill it while shopping!")}
         ]},
         // LIST
         {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [

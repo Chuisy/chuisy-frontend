@@ -306,26 +306,6 @@
 	background-image: url(../../assets/images/comments_32x32.png);
 }
 
-.chuview-image-loading {
-	position: absolute;
-	z-index: -2000;
-	top: 0;
-	left: 0;
-	width: 100%;
-	text-align: center;
-	padding-top: 110px;
-	font-size: 18pt;
-	color: white;
-}
-
-.chuview-spinner {
-	position: absolute;
-	top: 150px;
-	left: 0;
-	right: 0;
-	margin: auto;
-}
-
 .chuview-share-controls {
 	visibility: hidden;
 	float: right;
@@ -423,13 +403,97 @@
 	background-image: url(../../assets/images/friends_placeholder.png);
 }
 
-.chuview-error-icon {
+.chuview-status {
 	position: absolute;
 	z-index: 100;
-	top: -20px;
-	right: 0px;
-	width: 50px;
-	height: 50px;
+	top: 5px;
+	left: 5px;
+	/*background-color: rgba(255, 255, 255, 0.5);*/
+}
+
+.chuview-status-text {
+	display: inline-block;
+	font-size: 8pt;
+	vertical-align: middle;
+	padding: 5px;
+	text-shadow: 0 0 5px #ffffff;
+}
+
+.chuview-status-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+}
+
+.chuview-status-error-icon {
+	width: 16px;
+	height: 16px;
 	background: url(../../assets/images/warning_48x48.png) no-repeat center center;
-	background-size: 24px 24px;
+	background-size: 16px 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -5px;
+}
+
+.chuview-comment-delete-button {
+	float: right;
+	width: 18px;
+	height: 18px;
+	background-size: 18px 36px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
+	margin-top: 2px;
+	margin-left: 2px;
+}
+
+.chuview-comment-delete-button:active:hover/*:not([disabled]) */{
+	background-position: 0 -18px;
+}
+
+.chuview-loading-panel {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.7);
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	opacity: 1;
+	-webkit-transition: opacity 0.5s;
+}
+
+.chuview-loading-content {
+	color: #eee;
+	position: absolute;
+	text-align: center;
+	height: 20px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	font-family: Muli;
+}
+
+.chuview-loading-spinner {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.chuview-loading-text {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chuview-loading-dismiss {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	color: #eee;
+	font-size: 9pt;
+	text-align: center;
+}
+
+.fade {
+	opacity: 0;
 }

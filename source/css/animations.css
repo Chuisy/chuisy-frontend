@@ -1,0 +1,43 @@
+@-webkit-keyframes wiggle {
+	from {
+		-webkit-transform: rotateZ(-2deg);
+	}
+	to {
+		-webkit-transform: rotateZ(2deg);
+	}
+}
+
+.wiggle {
+	-webkit-animation: wiggle 0.1s linear 0 infinite alternate;
+}
+
+@-webkit-keyframes fall {
+	from {
+		-webkit-transform: translate3d(0, 0, -200px) rotateX(-45deg);
+		opacity: 0;
+	}
+	to {
+		-webkit-transform: translate3d(0, 0, 0) rotateX(0deg);
+		opacity: 1
+	}
+}
+
+.fall {
+	-webkit-transform-origin: 0 0;
+	-webkit-animation: fall 0.3s;
+}
+
+@-webkit-keyframes fadein {
+	from {
+		-webkit-transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+	to {
+		-webkit-transform: translate3d(0, 0, 0);
+		opacity: 1
+	}
+}
+
+.fadein {
+	-webkit-animation: fadein 0.3s;
+}

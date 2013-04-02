@@ -88,7 +88,7 @@ enyo.kind({
     },
     components: [
         {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
-        {kind: "onyx.Spinner", classes: "fbfriendspicker-spinner", showing: false},
+        {kind: "CssSpinner", name: "spinner", classes: "fbfriendspicker-spinner", showing: false},
         {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "fbfriendspicker-friend", components: [
@@ -112,7 +112,7 @@ enyo.kind({
         var ids = this.$.fbFriendsPicker.getIds();
         FB.ui({
             method: 'apprequests',
-            message: $L("Come join me on Chuisy, share beautiful fashion with me and help me decide on what to buy!"),
+            message: $L("Come join me on Chuisy, help me decide on what to buy and share beautiful fashion you like!"),
             to: ids
         }, enyo.bind(this, function(response) {
             if (response.request) {

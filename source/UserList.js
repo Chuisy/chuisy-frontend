@@ -35,13 +35,19 @@ enyo.kind({
         var isLastItem = event.index == this.users.length-1;
         if (isLastItem && this.users.hasNextPage()) {
             // Item is last item in the list but there is more! Load next page.
-            this.$.userNextPage.show();
-            this.users.fetchNext();
+            this.$.nextPageSpacer.show();
+            this.nextPage();
         } else {
-            this.$.userNextPage.hide();
+            this.$.nextPageSpacer.hide();
         }
 
         return true;
+    },
+    nextPage: function() {
+        this.$.nextPageSpinner.addClass("rise");
+        this.users.fetchNext({success: enyo.bind(this, function() {
+            this.$.nextPageSpinner.removeClass("rise");
+        })});
     },
     userTap: function(sender, event) {
         this.doShowUser({user: this.users.at(event.index)});
@@ -62,9 +68,10 @@ enyo.kind({
         this.$.userList.refresh();
     },
     components: [
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy", thumb: false, rowsPerPage: 20, components: [
             {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
-            {kind: "onyx.Spinner", name: "userNextPage", classes: "loading-next-page"}
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

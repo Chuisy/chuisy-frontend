@@ -13,14 +13,13 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 250px", components: [
                     {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Use the Chu Flow to stay in the loop of your friends' " +
-                        "shopping experiences and discover nice things from people with taste.")}
+                    {classes: "guide-text", content: $L("Use the Chu Flow to follow your friends shopping experiences and discover nice things from people with taste.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
             {style: "background: url(assets/images/guide/bottom-left.png) no-repeat left bottom; background-size: 320px 568px;", components: [
                 {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
-                    $L("A fashion item or accessoire discovered by a fashion enthusiast during 'window shopping'. " +
+                    $L("A fashion item or accessory discovered by a fashion enthusiast during 'window shopping'. " +
                         "Often used to express style or get feedback from friends.")},
                     {classes: "guide-text", style: "width: 200px; position: absolute; bottom: 60px; left: 70px;", content: $L("You can post a Chu by pressing this button.")},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
@@ -79,17 +78,17 @@ enyo.kind({
                 {classes: "guide-centered", style: "height: 150px", components: [
                     {classes: "guide-header", content: $L("Discover")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Find the hottest people, products and stores on Chuisy.")}
+                    {classes: "guide-text", content: $L("Find the coolest people, products and stores.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}
         ],
-        "gifts": [
+        "goodies": [
             {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 200px", components: [
-                    {classes: "guide-header", content: $L("The best is yet to come.")},
+                {classes: "guide-centered", style: "height: 150px", components: [
+                    {classes: "guide-header", content: $L("Your Goodies")},
                     {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("If you go shopping with Chuisy you will soon get various little goodies and discounts here.")}
+                    {classes: "guide-text", content: $L("Here you can collect little gifts, badges and coupons while using Chuisy.")}
                 ]},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]}

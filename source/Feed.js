@@ -1,3 +1,24 @@
+enyo.kind({
+    name:"ex.List",
+    kind:"enyo.List",
+    events:{
+        onGeneratePage:""
+    },
+    generatePage:function(inPageNo, inTarget) {
+        this.inherited(arguments);
+        var n = inTarget.hasNode();
+        if(n) {
+            enyo.forEach(n.querySelectorAll("IMG"), function(img) {
+                img.style.opacity = 0;
+                enyo.dispatcher.listen(img, "load", function() {
+                    img.style["-webkit-animation"] = "fadein 0.5s";
+                    img.style.opacity = 1;
+                });
+            });
+        }
+    }
+});
+
 /**
     _Feed_ displays chus from people the user follows and other public chus.
 */
@@ -19,16 +40,22 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("sync change remove", this.refreshFeed, this);
+        chuisy.feed.on("change remove", this.refreshFeed, this);
+        chuisy.feed.on("add", this.preloadImage, this);
         this.pullerHeight = 50;
         this.pullerThreshold = 80;
+        this.setPulled(true);
     },
     feedLoaded: function() {
-        this.$.spinner.setShowing(!chuisy.feed.length);
         this.$.feedList.setCount(chuisy.feed.length);
-        this.$.feedList.getStrategy().scrollTop = 0;
-        this.setPulled(false);
-        this.$.feedList.refresh();
+        this.setPulled(!chuisy.feed.length);
+        if (this.hasNode()) {
+            enyo.asyncMethod(this, function() {
+                this.$.feedList.reset();
+            });
+        }
+
+        chuisy.feed.each(this.preloadImage, this);
     },
     /**
         Refreshfeed based on the existing list.
@@ -37,31 +64,37 @@ enyo.kind({
         this.$.feedList.setCount(chuisy.feed.length);
         this.$.feedList.refresh();
     },
+    preloadImage: function(model, coll, options) {
+        var img = new Image();
+        img.src = model.get("thumbnails")["300x300"];
+    },
     setupFeedItem: function(sender, event) {
         var item = chuisy.feed.at(event.index);
         this.$.chuFeedItem.setChu(item);
 
-        this.$.chuFeedItem.removeClass("feed-item-added");
-        if (item.added) {
-            this.$.chuFeedItem.applyStyle("opacity", 0);
-            enyo.asyncMethod(this, function(index) {
-                this.$.feedList.performOnRow(index, function() {
-                    this.$.chuFeedItem.addClass("feed-item-added");
-                    this.$.chuFeedItem.applyStyle("opacity", 1);
-                }, this);
-            }, event.index);
-        } else {
-            this.$.chuFeedItem.applyStyle("opacity", 1);
-        }
+        // this.$.chuFeedItem.removeClass("feed-item-added");
+        // if (item.added) {
+        // this.$.chuFeedItem.applyStyle("-webkit-transition", "none");
+        // this.$.chuFeedItem.applyStyle("-webkit-transform", "rotateX(90deg)");
+        // enyo.asyncMethod(this, function(index) {
+        //     this.$.feedList.performOnRow(index, function() {
+        //         // this.$.chuFeedItem.addClass("feed-item-added");
+        //         this.$.chuFeedItem.applyStyle("-webkit-transition", "-webkit-transform 0.5s");
+        //         this.$.chuFeedItem.applyStyle("-webkit-transform", "rotateX(0deg)");
+        //     }, this);
+        // }, event.index);
+        // } else {
+        //     this.$.chuFeedItem.applyStyle("opacity", 1);
+        // }
 
         var isLastItem = event.index == chuisy.feed.length-1;
         if (isLastItem && chuisy.feed.hasNextPage()) {
             // We are at the end of the list and there seems to be more.
             // Load next bunch of chus
             this.nextPage();
-            this.$.loadingNextPage.show();
+            this.$.nextPageSpacer.show();
         } else {
-            this.$.loadingNextPage.hide();
+            this.$.nextPageSpacer.hide();
         }
 
         return true;
@@ -69,11 +102,14 @@ enyo.kind({
     nextPage: function() {
         if (!this.loading) {
             this.loading = true;
+            this.$.nextPageSpinner.addClass("rise");
             chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.removeClass("rise");
                 this.refreshFeed();
             }), error: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.removeClass("rise");
             })});
         }
     },
@@ -136,6 +172,7 @@ enyo.kind({
     setPulled: function(pulled) {
         this.pulled = pulled;
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
+        this.$.pulldown.applyStyle("opacity", this.pulled ? 1 : 0);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
         this.$.feedList.getStrategy().start();
     },
@@ -144,7 +181,7 @@ enyo.kind({
         this.$.feedList.refresh();
     },
     components: [
-        {kind: "onyx.Spinner", classes: "absolute-center"},
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "error-box", name: "errorBox", showing: false, components: [
@@ -152,13 +189,15 @@ enyo.kind({
         ]},
         {name: "pulldown", classes: "pulldown", components: [
             {classes: "pulldown-arrow"},
-            {kind: "onyx.Spinner", classes: "pulldown-spinner"}
+            {kind: "CssSpinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 10, thumb: false,
+        {kind: "ex.List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 1, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-            {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
+            {style: "-webkit-perspective: 1000px;", components: [
+                {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped", classes: "fadein"}
+            ]},
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

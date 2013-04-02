@@ -35,8 +35,12 @@ enyo.kind({
     },
     signIn: function() {
         // Get facebook access token
+        this.$.facebookButton.setDisabled(true);
+        this.$.signInSpinner.show();
         FB.login(enyo.bind(this, function(response) {
             chuisy.signIn(response.authResponse.accessToken, enyo.bind(this, function() {
+                this.$.facebookButton.setDisabled(false);
+                this.$.signInSpinner.hide();
                 this.hideSignInDialog();
                 if (this.signInSuccessCallback) {
                     this.signInSuccessCallback();
@@ -76,7 +80,8 @@ enyo.kind({
         this.$.location.setContent(loc && loc.name || "");
         this.$.time.setContent(this.chu.getTimeText());
 
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency")});
+        var locale = this.chu.get("location") && this.chu.get("location").country && this.chu.get("location").country.toLowerCase() || undefined;
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: locale});
         var priceText = this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "";
         this.$.price.setContent(priceText);
 
@@ -91,7 +96,12 @@ enyo.kind({
     requestSignIn: function(params) {
         this.signInSuccessCallback = params.success;
         this.signInFailureCallback = params.failure;
-        var text = $L("Please connect with your Facebook account so the owner of this Chu can know who this " + params.action + " came from!");
+        var text;
+        if (action == "like") {
+            text = $L("Please connect with your Facebook account to let your friend know who’s giving a heart.");
+        } else {
+            text = $L("Please connect with your Facebook account to let your friend know who’s commenting.");
+        }
         this.$.signInText.setContent(text);
         this.$.signInDialog.show();
     },
@@ -223,9 +233,12 @@ enyo.kind({
         ]},
         {kind: "onyx.Popup", classes: "chuwebview-signin-dialog", name: "signInDialog", floating: true, centered: true, components: [
             {classes: "chuwebview-signin-text", name: "signInText"},
-            {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                {classes: "facebook-button-icon"},
-                {content: $L("Sign In With Facebook")}
+            {style: "position: relative", components: [
+                {kind: "onyx.Spinner", classes: "absolute-center", name: "signInSpinner", showing: false},
+                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                    {classes: "facebook-button-icon"},
+                    {content: $L("Sign In With Facebook")}
+                ]}
             ]},
             {classes: "chuwebview-signin-cancel-button", ontap: "hideSignInDialog"}
         ]}

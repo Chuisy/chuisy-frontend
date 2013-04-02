@@ -1,19 +1,52 @@
-/**
- * Removes the elements in the specified range from an array
- * @param {Object} from
- * starting removing here
- * @param {Object} to
- * stop removing here
- */
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
+window.util = {
+    timeToText: function(time) {
+        if (!time) {
+            return $L("just now");
+        }
 
-/**
- * Inserts the given value at the given index and returns the resulting array. Does NOT alter the original array
- */
-Array.prototype.insertAt = function(index, value) {
-    return this.slice(0, index).concat([value], this.slice(index));
+        var now = new Date();
+        var posted = new Date(time);
+        var seconds = (now.getTime() - posted.getTime()) / 1000;
+        var minutes = seconds / 60;
+        var hours = minutes / 60;
+        var days = hours / 24;
+        var f = Math.floor;
+
+        if (minutes < 1) {
+            return $L("just now");
+        } else if (hours < 1) {
+            return $L("{{ minutes }} min").replace("{{ minutes }}", f(minutes));
+        } else if (days < 1) {
+            return $L("{{ hours }} h").replace("{{ hours }}", f(hours));
+        } else if (days < 30) {
+            return $L("{{ days }} d").replace("{{ days }}", f(days));
+        } else {
+            return $L("a while back...");
+        }
+    },
+    createThumbnail: function(imgSrc, width, height, callback) {
+        var canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        img.onload = function() {
+            var targetWidth, targetHeight, targetX, targetY;
+            if (img.width < img.height) {
+                targetWidth = width;
+                targetHeight = width/img.width*img.height;
+                targetX = 0;
+                targetY = (height-targetHeight)/2;
+            } else {
+                targetWidth = height/img.height*img.width;
+                targetHeight = height;
+                targetX = (width-targetWidth)/2;
+                targetY = 0;
+            }
+
+            context.drawImage(img, targetX, targetY, targetWidth, targetHeight);
+            callback(canvas.toDataURL());
+        };
+        img.src = imgSrc;
+    }
 };

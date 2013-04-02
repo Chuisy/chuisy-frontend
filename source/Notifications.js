@@ -25,16 +25,34 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
+        var image = null;
 
         if (item.get("text")) {
             this.$.text.setContent(item.get("text"));
         } else {
+            var connection = $L(" that you are interested in");
+            var targetObj = item.get("target_obj");
+            if (targetObj) {
+                if (targetObj.owned) {
+                    connection = $L(" of yours");
+                } else if (targetObj.shared) {
+                    connection = $L(" that was shared with you");
+                } else if (targetObj.commented) {
+                    connection = $L(" that you commented on");
+                } else if (targetObj.liked) {
+                    connection = $L(" that you liked");
+                }
+            }
             switch (item.get("action")) {
                 case "like":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
+                        .replace("{{ name }}", item.get("actor").first_name)
+                        .replace("{{ connection }}", connection));
                     break;
                 case "comment":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong> you are subscribed to.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong>{{ connection }}.")
+                        .replace("{{ name }}", item.get("actor").first_name)
+                        .replace("{{ connection }}", connection));
                     break;
                 case "follow":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
@@ -45,22 +63,32 @@ enyo.kind({
                 case "join":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
                     break;
+                case "goody":
+                    this.$.text.setContent($L("You have received a new goody! Check it out on now your Goodies Wall!"));
+                    image = "assets/images/goody_icon_small.png";
+                    break;
             }
         }
 
-        this.$.image.setSrc(item.get("thumbnail") || "");
+        this.$.image.setSrc(image || item.get("thumbnail") || "");
         this.$.notification.addRemoveClass("read", item.get("read"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
         if (isLastItem && chuisy.notifications.hasNextPage()) {
             // Last item in the list and there is more! Load next page
-            this.$.loadingNextPage.show();
-            chuisy.notifications.fetchNext();
+            this.$.nextPageSpacer.show();
+            this.nextPage();
         } else {
-            this.$.loadingNextPage.hide();
+            this.$.nextPageSpacer.hide();
         }
 
         return true;
+    },
+    nextPage: function() {
+        this.$.nextPageSpinner.addClass("rise");
+        chuisy.notifications.fetchNext({success: enyo.bind(this, function() {
+            this.$.nextPageSpinner.removeClass("rise");
+        })});
     },
     notificationTapped: function(sender, event) {
         var not = chuisy.notifications.at(event.index);
@@ -89,9 +117,10 @@ enyo.kind({
         this.$.list.refresh();
     },
     components: [
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("There aren't any affairs that require your attention right now...")}
+            {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
         ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
@@ -103,7 +132,7 @@ enyo.kind({
                 ]},
                 {classes: "notifications-notification-text", name: "text", allowHtml: true}
             ]},
-            {kind: "onyx.Spinner", name: "loadingNextPage", classes: "loading-next-page"}
+            {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
     ]
 });

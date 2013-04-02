@@ -35,19 +35,34 @@ enyo.kind({
             this.placesUpdated();
             this.fetchPlaces();
         }), enyo.bind(this, function() {
-            navigator.notification.alert($L("Chuisy couldn't get your current location. If you want to enjoy the full Chuisy experience" +
-                " and receive perks like gifts and discounts from local retailers, go to 'Privacy > Location Services' in your" +
-                " phone's settings and enable location services for Chuisy!"), function() {
+            navigator.notification.alert($L("Chuisy couldn't get your current location. " +
+                "If you want to properly enjoy Chuisy and receive little gifts from local retailers, " +
+                "go to 'Privacy > Location Services' in your phone's settings and enable location services for Chuisy!"), function() {
                 this.refreshPlacesList();
             }, $L("Can't find you!"), $L("OK"));
         }));
     },
     fetchPlaces: function() {
         this.$.spinner.show();
+        this.$.noResults.hide();
         chuisy.venues.fetch(enyo.mixin({remote: true, success: enyo.bind(this, function() {
             this.$.spinner.hide();
+            this.$.noResults.setShowing(!chuisy.venues.length);
+            if (!chuisy.venues.length) {
+                this.$.moreButton.hide();
+                this.$.newPlace.show();
+            } else {
+                this.morePlaces(false);
+            }
         }), error: enyo.bind(this, function(error) {
             this.$.spinner.hide();
+            this.$.noResults.setShowing(!chuisy.venues.length);
+            if (!chuisy.venues.length) {
+                this.$.moreButton.hide();
+                this.$.newPlace.show();
+            } else {
+                this.morePlaces(false);
+            }
         })}, this.coordinates));
     },
     placesUpdated: function() {
@@ -142,15 +157,15 @@ enyo.kind({
         {kind: "SearchInput", classes: "picklocation-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "picklocation-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
-            {kind: "onyx.Spinner", classes: "picklocation-spinner", name: "spinner", showing: false},
+            {kind: "CssSpinner", classes: "picklocation-spinner", name: "spinner", showing: false},
             {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "picklocation-placeslist", components: [
                 {name: "place", ontap: "placeTapped", classes: "picklocation-place", components: [
                     {classes: "picklocation-place-text", name: "placeName"},
                     {classes: "picklocation-place-address", name: "placeAddress"}
                 ]}
             ]},
-            {name: "resultText", classes: "picklocation-resulttext", showing: false},
-            {style: "padding: 0 5px;", components: [
+            {name: "noResults", classes: "picklocation-noresults", content: $L("No nearby places found!"), showing: false},
+            {style: "padding: 0 5px 5px 5px;", components: [
                 {classes: "picklocation-new-place", name: "newPlace", components: [
                     {kind: "onyx.InputDecorator", classes: "picklocation-new-place-input", alwaysLooksFocused: true, components: [
                         {kind: "onyx.Input", name: "newPlaceInput", placeholder: $L("Enter custom place..."), onkeydown: "newPlaceKeydown", onfocus: "newPlaceFocus", onblur: "newPlaceBlur"}

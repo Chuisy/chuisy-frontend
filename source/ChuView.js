@@ -23,8 +23,7 @@ enyo.kind({
         onInviteFriends: ""
     },
     handlers: {
-        onpostresize: "postResize",
-        onload: "loaded"
+        onpostresize: "postResize"
     },
     scrollerOffset: 20,
     twitterUrl: "http://twitter.com/share/",
@@ -34,8 +33,6 @@ enyo.kind({
     stopListening: Backbone.Events.stopListening,
     create: function() {
         this.inherited(arguments);
-        this.setupFriends();
-        this.listenTo(chuisy.accounts, "change:active_user", this.setupFriends);
         var s = this.$.contentScroller.getStrategy();
         s.scrollIntervalMS = 20;
         s.maxScrollTop = -60;
@@ -49,22 +46,43 @@ enyo.kind({
         if (user) {
             this.$.peoplePicker.setItems(user.friends.models);
             this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
-            this.stopListening();
-            this.listenTo(user.friends, "reset add", function() {
+            this.listenTo(user.friends, "sync", function() {
                 this.$.peoplePicker.setItems(user.friends.models);
                 this.$.friendsPanels.setIndex(user.friends.length ? 0 : 1);
             });
         }
     },
-    loaded: function() {
+    imageLoaded: function() {
         this.$.spinner.hide();
         this.$.image.removeClass("loading");
         this.arrangeImage();
     },
+    showLoadingPanel: function() {
+        this.$.loadingPanel.show();
+        enyo.asyncMethod(this, function() {
+            this.$.loadingPanel.removeClass("fade");
+        });
+    },
+    hideLoadingPanel: function() {
+        this.$.loadingPanel.addClass("fade");
+        setTimeout(enyo.bind(this, function() {
+            this.$.loadingPanel.hide();
+        }), 500);
+    },
     chuChanged: function() {
         this.updateView();
+        this.syncStatusChanged();
         this.stopListening();
+        if (this.chu.get("stub")) {
+            this.showLoadingPanel();
+            this.chu.fetch({success: enyo.bind(this, function() {
+                this.hideLoadingPanel();
+                this.chu.set({"stub": false}, {silent: true});
+            })});
+        }
         this.listenTo(this.chu, "change", this.updateView);
+        this.listenTo(this.chu, "change:syncStatus", this.syncStatusChanged);
+        this.setupFriends();
         this.$.commentsCount.setContent(this.chu.get("comments_count") || 0);
         this.refreshComments();
         this.refreshLikes();
@@ -95,7 +113,7 @@ enyo.kind({
         this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
 
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", currency: this.chu.get("price_currency"), locale: loc && loc.country && loc.country.toLowerCase() || undefined});
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: loc && loc.country && loc.country.toLowerCase() || undefined});
         this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
         this.addRemoveClass("owned", this.isOwned());
@@ -104,7 +122,37 @@ enyo.kind({
         this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
 
         this.adjustShareControls();
-        this.$.errorIcon.setShowing(this.chu.get("syncFailed") || this.chu.get("uploadFailed"));
+    },
+    syncStatusChanged: function() {
+        switch (this.chu.get("syncStatus")) {
+            case "posting":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.hide();
+                this.$.statusSpinner.show();
+                this.$.statusText.setContent($L("Posting Chu"));
+                break;
+            case "uploading":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.hide();
+                this.$.statusSpinner.show();
+                this.$.statusText.setContent($L("Uploading image"));
+                break;
+            case "postFailed":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.show();
+                this.$.statusSpinner.hide();
+                this.$.statusText.setContent($L("Post failed"));
+                break;
+            case "uploadFailed":
+                this.$.syncStatus.show();
+                this.$.statusErrorIcon.show();
+                this.$.statusSpinner.hide();
+                this.$.statusText.setContent($L("Upload failed"));
+                break;
+            default:
+                this.$.syncStatus.hide();
+                break;
+        }
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -130,14 +178,7 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.toggleLike();
-            } else {
-                // User is not signed in yet. Prompt him to do so before he can like something
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.toggleLike)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.toggleLike));
         }
         return true;
     },
@@ -184,6 +225,7 @@ enyo.kind({
     loadLikes: function() {
         this.$.likesSpinner.show();
         this.$.likesRepeater.hide();
+        this.$.moreLikes.hide();
         this.$.likesContainer.show();
         this.chu.likes.fetch({data: {limit: 10}});
     },
@@ -195,6 +237,7 @@ enyo.kind({
         this.$.commentAvatar.setSrc(avatar);
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
+        // this.$.commentDeleteButton.setShowing(chuisy.accounts.getActiveUser() && (user.id == chuisy.accounts.getActiveUser().id));
     },
     setupLike: function(sender, event) {
         var user = this.chu.likes.at(event.index);
@@ -209,15 +252,7 @@ enyo.kind({
     },
     commentEnter: function() {
         if (App.checkConnection()) {
-            if (App.isSignedIn()) {
-                this.postComment();
-            } else {
-                // this.$.commentInput.hasNode().blur();
-                // User is not signed in yet. Prompt him to do so before he can comment
-                enyo.Signals.send("onRequestSignIn", {
-                    success: enyo.bind(this, this.postComment)
-                });
-            }
+            App.requireSignIn(enyo.bind(this, this.postComment));
         }
         event.preventDefault();
         return true;
@@ -297,8 +332,10 @@ enyo.kind({
         this.arrangeImage();
     },
     toggleVisibility: function() {
-        var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
-        this.chu.save({visibility: visibility});
+        App.requireSignIn(enyo.bind(this, function() {
+            var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
+            this.chu.save({visibility: visibility});
+        }));
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -307,16 +344,16 @@ enyo.kind({
     getMessage: function() {
         var loc = this.chu.get("location");
         if (loc && loc.name) {
-            return $L("Check out this cool product I found at {{ place }}!").replace("{{ place }}", loc.name);
+            return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", loc.name);
         } else {
-            return $L("Check out this cool product!");
+            return $L("Check out this cool fashion item!");
         }
     },
     checkSynced: function() {
         if (this.chu.get("url") && this.chu.get("image")) {
             return true;
         } else {
-            navigator.notification.alert($L("You can't do this right now because the Chu still being uploaded. Please try again in a little while!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
             return false;
         }
     },
@@ -331,59 +368,71 @@ enyo.kind({
         return url;
     },
     facebook: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var params = {
-                method: "feed",
-                display: "popup",
-                link: this.getShareUrl(),
-                picture: this.chu.get("image")
-            };
-            FB.ui(params, function(obj) {
-                console.log(obj);
-            });
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var params = {
+                    method: "feed",
+                    display: "popup",
+                    link: this.getShareUrl(),
+                    picture: this.chu.get("image")
+                };
+                FB.ui(params, function(obj) {
+                    console.log(obj);
+                });
+            }
+        }));
     },
     /**
         Open twitter share dialog
     */
     twitter: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var text = this.getMessage();
-            var url = this.getShareUrl();
-            window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var text = this.getMessage();
+                var url = this.getShareUrl();
+                window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+            }
+        }));
     },
     /**
         Open pinterest share dialog
     */
     pinterest: function() {
-        if (App.checkConnection() && this.checkSynced()) {
-            var url = this.getShareUrl();
-            var media = this.chu.get("image");
-            window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (App.checkConnection() && this.checkSynced()) {
+                var url = this.getShareUrl();
+                var media = this.chu.get("image");
+                window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+            }
+        }));
     },
     /**
         Open sms composer with message / link
     */
     sms: function() {
-        if (this.checkSynced()) {
-            var message = this.getMessage();
-            window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (this.checkSynced()) {
+                var message = this.getMessage();
+                window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+            }
+        }));
     },
     /**
         Open email composer with message / link
     */
     email: function() {
-        if (this.checkSynced()) {
-            var subject = $L("Hi there!");
-            var message = this.getMessage();
-            window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
-        }
+        App.requireSignIn(enyo.bind(this, function() {
+            if (this.checkSynced()) {
+                var subject = $L("Hi there!");
+                var message = this.getMessage();
+                window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+            }
+        }));
     },
     toggleFriends: function() {
-        this.$.friendsSlider.toggleMinMax();
+        App.requireSignIn(enyo.bind(this, function() {
+            this.$.friendsSlider.toggleMinMax();
+        }));
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
@@ -459,12 +508,27 @@ enyo.kind({
         this.$.friendsSlider.setValue(this.$.friendsSlider.getMax());
         this.friendsClosed();
     },
-    errorIconTapped: function() {
-        navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
-            if (choice == 1) {
-                chuisy.closet.syncRecords();
-            }
-        }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+    syncStatusTapped: function() {
+        if (this.chu.get("syncStatus") == "postFailed" || this.chu.get("syncStatus") == "uploadFailed") {
+            App.confirm(
+                $L("Upload failed"),
+                $L("Sorry, we couldn't upload your Chu just now. Please try again later!"),
+                enyo.bind(this, function(choice) {
+                    if (!choice) {
+                        chuisy.closet.syncRecords();
+                    }
+                }),
+                [$L("Try again"), $L("OK")]
+            );
+
+
+            // navigator.notification.confirm($L("Sorry, we couldn't upload your Chu just now. Please try again later!"), enyo.bind(this, function(choice) {
+            //     if (choice == 1) {
+            //         chuisy.closet.syncRecords();
+            //     }
+            // }), $L("Upload failed"), [$L("Try again"), $L("OK")].join(","));
+
+        }
     },
     moreComments: function() {
         this.$.moreComments.hide();
@@ -473,8 +537,12 @@ enyo.kind({
     },
     showLikes: function() {
         this.$.panels.setIndex(1);
+        // this.$.likesMapPanels.setIndex(0);
     },
     likesBack: function() {
+        this.$.panels.setIndex(0);
+    },
+    mapBack: function() {
         this.$.panels.setIndex(0);
     },
     scrollToBottom: function() {
@@ -492,15 +560,86 @@ enyo.kind({
             s.start();
         }
     },
+    /**
+        Show map and add marker
+    */
+    showLocMap: function() {
+        if(this.chu.get("location") && this.chu.get("location").latitude) {
+            this.$.panels.setIndex(1);
+            // this.$.likesMapPanels.setIndex(1);
+            this.setLocMarker();
+        }
+    },
+    /**
+        Set marker for shop and center map to it
+    */
+    setLocMarker: function() {
+        //add marker
+        var loc = this.chu.get("location");
+        console.log(loc);
+        var lat = loc.latitude;
+        var lng = loc.longitude;
+        var coords = {
+            latitude: lat,
+            longitude: lng
+        };
+
+        //add popup to marker
+        var name = loc.name;
+        var address = loc.address;
+        var zipcode = loc.zip_code;
+        var city = loc.city;
+        if(address)
+            address = "</br>" + address;
+        if(zipcode)
+            zipcode = "</br>" + zipcode;
+        this.log(city);
+        var popup = new enyo.Control({allowHtml: true, content: "<b>" + name + "</b>" + (address || "") + (zipcode || "") + ", " + (city || "")});
+
+        this.$.map.clearMarkers();
+        this.$.map.addMarker(coords, null, popup, null, true);
+
+        //set center and zoom of map
+        var center = {
+            latitude: lat,
+            longitude: lng
+        };
+        var zoom = 15;
+        this.$.map.setZoom(zoom);
+        this.$.map.setCenter(center);
+    },
+    deleteComment: function(sender, event) {
+        var comment = this.chu.comments.at(event.index);
+        comment.destroy();
+        this.refreshComments();
+    },
+    deleteCommentButtonTapped: function(sender, event) {
+        App.confirm(
+            $L("Delete Comment"),
+            $L("Are you sure you want to delete this comment? This action cannot be undone."),
+            enyo.bind(this, function(choice) {
+                if (choice) {
+                    this.deleteComment(sender, event);
+                }
+            }),
+            [$L("Cancel"), $L("Delete")]
+        );
+    },
     components: [
         {kind: "Panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             {classes: "enyo-fill", components: [
-                // IMAGE LOADING INDICATOR
-                {kind: "onyx.Spinner", name: "spinner", classes: "chuview-spinner"},
+                {name: "loadingPanel", classes: "chuview-loading-panel", showing: false, ontap: "hideLoadingPanel", components: [
+                    {classes: "chuview-loading-content", components: [
+                        {kind: "CssSpinner", name: "loadingSpinner", classes: "chuview-loading-spinner", color: "#fff"},
+                        {content: $L("Loading..."), classes: "chuview-loading-text"}
+                    ]},
+                    {classes: "chuview-loading-dismiss", content: $L("(tap to dismiss)")}
+                ]},
                 // IMAGEVIEW
                 {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
                     {classes: "chuview-image-container", components: [
-                        {kind: "Image", name: "image", classes: "chuview-image"}
+                        {kind: "CssSpinner", name: "spinner", classes: "absolute-center"},
+                        {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
                     ]}
                 ]},
                 // CONTROLS
@@ -539,11 +678,15 @@ enyo.kind({
                                     {classes: "chuview-like-button-side back"},
                                     {classes: "chuview-like-button-side front"}
                                 ]},
-                                {classes: "chuview-error-icon", name: "errorIcon", ontap: "errorIconTapped"}
+                                {classes: "chuview-status", name: "syncStatus", ontap: "syncStatusTapped", components: [
+                                    {classes: "chuview-status-error-icon", name: "statusErrorIcon", showing: false},
+                                    {kind: "CssSpinner", name: "statusSpinner", classes: "chuview-status-spinner"},
+                                    {name: "statusText", classes: "chuview-status-text"}
+                                ]}
                             ]},
                             {classes: "chuview-content", components: [
                                 // CATEGORY, PRICE, COMMENTS, LIKES
-                                {classes: "chuview-location-price", components: [
+                                {classes: "chuview-location-price", style: "position: relative; z-index: 100;", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price"},
                                     {classes: "chuview-location ellipsis", name: "location"},
@@ -566,7 +709,7 @@ enyo.kind({
                                         {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
                                         {classes: "chuview-separator-line"}
                                     ]},
-                                    {kind: "onyx.Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                                    {kind: "CssSpinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
                                     {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
                                         {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
                                     ]},
@@ -579,7 +722,7 @@ enyo.kind({
                                         {classes: "chuview-separator-line"}
                                     ]},
                                     {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
-                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
+                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
                                     // COMMENTS
                                     {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                                         {classes: "chuview-comment", name: "comment", components: [
@@ -587,13 +730,14 @@ enyo.kind({
                                                 {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                             ]},
                                             {classes: "chuview-comment-content", components: [
+                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteCommentButtonTapped", showing: false},
                                                 {classes: "chuview-comment-time", name: "commentTime"},
                                                 {classes: "chuview-comment-fullname ellipsis", name: "commentFullName", ontap: "showCommentUser"},
                                                 {name: "commentText", classes: "chuview-comment-text"}
                                             ]}
                                         ]}
                                     ]},
-                                    {kind: "onyx.Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
+                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
                                 ]},
                                 {style: "height: 505px"}
                             ]}
@@ -603,11 +747,11 @@ enyo.kind({
                             {kind: "Panels", classes: "enyo-fill", name: "friendsPanels", animate: false, draggable: false, components: [
                                 {kind: "FittableRows", components: [
                                     {kind: "PeoplePicker", fit: true, onChange: "friendsChangedHandler"},
-                                    {classes: "chuview-friends-hint", content: $L("Select the people on Chuisy you want to share this Chu with!")}
+                                    {classes: "chuview-friends-hint", content: $L("Select the people you want to share this Chu with!")}
                                 ]},
                                 {style: "padding: 80px 8px;", components: [
                                     {classes: "placeholder-image chuview-friends-placeholder-image"},
-                                    {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("Oh no! You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
+                                    {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
                                     {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
                                 ]}
                             ]}
@@ -616,19 +760,29 @@ enyo.kind({
                     // COMMENT INPUT
                     {classes: "chuview-commentinput", components: [
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
-                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Enter comment..."), onkeydown: "commentInputKeydown"}
+                            {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Comment..."), onkeydown: "commentInputKeydown"}
                         ]},
                         {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
                     ]}
                 ]},
                 {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
             ]},
-            {kind: "FittableRows", style: "overflow: hidden;", classes: "enyo-fill", components: [
-                {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
-                ]},
-                {kind: "UserList", name: "likesList", fit: true}
-            ]}
+            // {kind: "Panels", name: "likesMapPanels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, animate: false, components: [
+                //LIKES
+                {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
+                    {classes: "header", components: [
+                        {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
+                    ]},
+                    {kind: "UserList", name: "likesList", fit: true}
+                ]}
+            //     //MAP
+            //     {kind: "FittableRows", classes: "enyo-fill", components: [
+            //         {classes: "header", components: [
+            //             {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
+            //         ]},
+            //         {kind: "Map", name: "map", fit: true}
+            //     ]}
+            // ]}
         ]}
     ]
 });
