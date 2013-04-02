@@ -39,5 +39,5 @@
 }
 
 .fadein {
-	-webkit-animation: fadin 0.5s;
+	-webkit-animation: fadein 0.3s;
 }

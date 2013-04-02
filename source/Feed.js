@@ -195,7 +195,7 @@ enyo.kind({
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {style: "-webkit-perspective: 1000px;", components: [
-                {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped", classes: "fall"}
+                {kind: "ChuFeedItem", tapHighlight: true, ontap: "chuTapped", onUserTapped: "userTapped", classes: "fadein"}
             ]},
             {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
