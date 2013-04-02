@@ -237,7 +237,7 @@ enyo.kind({
         this.$.commentAvatar.setSrc(avatar);
         this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
         this.$.commentTime.setContent(comment.getTimeText());
-        this.$.commentDeleteButton.setShowing(chuisy.accounts.getActiveUser() && (user.id == chuisy.accounts.getActiveUser().id));
+        // this.$.commentDeleteButton.setShowing(chuisy.accounts.getActiveUser() && (user.id == chuisy.accounts.getActiveUser().id));
     },
     setupLike: function(sender, event) {
         var user = this.chu.likes.at(event.index);
@@ -730,7 +730,7 @@ enyo.kind({
                                                 {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                             ]},
                                             {classes: "chuview-comment-content", components: [
-                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteCommentButtonTapped"},
+                                                {classes: "chuview-comment-delete-button", name: "commentDeleteButton", ontap: "deleteCommentButtonTapped", showing: false},
                                                 {classes: "chuview-comment-time", name: "commentTime"},
                                                 {classes: "chuview-comment-fullname ellipsis", name: "commentFullName", ontap: "showCommentUser"},
                                                 {name: "commentText", classes: "chuview-comment-text"}
