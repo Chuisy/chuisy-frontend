@@ -41,6 +41,7 @@ enyo.kind({
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
         chuisy.feed.on("change remove", this.refreshFeed, this);
+        chuisy.feed.on("add", this.preloadImage, this);
         this.pullerHeight = 50;
         this.pullerThreshold = 80;
         this.setPulled(true);
@@ -53,6 +54,8 @@ enyo.kind({
                 this.$.feedList.reset();
             });
         }
+
+        chuisy.feed.each(this.preloadImage, this);
     },
     /**
         Refreshfeed based on the existing list.
@@ -60,6 +63,10 @@ enyo.kind({
     refreshFeed: function() {
         this.$.feedList.setCount(chuisy.feed.length);
         this.$.feedList.refresh();
+    },
+    preloadImage: function(model, coll, options) {
+        var img = new Image();
+        img.src = model.get("thumbnails")["300x300"];
     },
     setupFeedItem: function(sender, event) {
         var item = chuisy.feed.at(event.index);
