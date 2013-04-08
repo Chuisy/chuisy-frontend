@@ -13,7 +13,7 @@ enyo.kind({
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     userChanged: function() {
-        this.$.chusMenuButton.setActive(true);
+        this.$.likedChusMenuButton.setActive(true);
         this.$.panels.setIndex(0);
 
         this.$.info.applyStyle("background-image", "url()");
@@ -148,24 +148,29 @@ enyo.kind({
                     ]}
                 ]},
                 {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
-                    {classes: "profileview-menu-button", value: 0, name: "chusMenuButton", components: [
+                    {classes: "profileview-menu-button", value: 0, name: "likedChusMenuButton", components: [
+                        {classes: "profileview-menu-button-caption", content: $L("Hearts")},
+                        {classes: "profileview-menu-button-count", name: "likedChusCount"}
+                    ]},
+                    {classes: "profileview-menu-button", value: 1, name: "chusMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Chus")},
                         {classes: "profileview-menu-button-count", name: "chusCount"}
                     ]},
-                    {classes: "profileview-menu-button", value: 1, name: "followingMenuButton", components: [
+                    {classes: "profileview-menu-button", value: 2, name: "followingMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Following")},
                         {classes: "profileview-menu-button-count", name: "followingCount"}
                     ]},
-                    {classes: "profileview-menu-button", value: 2, name: "followersMenuButton", components: [
+                    {classes: "profileview-menu-button", value: 3, name: "followersMenuButton", components: [
                         {classes: "profileview-menu-button-caption", content: $L("Followers")},
                         {classes: "profileview-menu-button-count", name: "followersCount"}
-                    ]},
-                    {classes: "profileview-menu-button", value: 3, name: "likedChusMenuButton", components: [
-                        {classes: "profileview-menu-button-caption", content: $L("Hearts")},
-                        {classes: "profileview-menu-button-count", name: "likedChusCount"}
                     ]}
                 ]},
                 {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
+                    {classes: "enyo-fill", components: [
+                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
+                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
+                        {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
+                    ]},
                     {classes: "enyo-fill", components: [
                         {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "chusSpinner", showing: false},
                         {name: "chusPlaceholder", classes: "profileview-list-placeholder chus"},
@@ -180,11 +185,6 @@ enyo.kind({
                         {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "followersSpinner", showing: false},
                         {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
                         {kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
-                    ]},
-                    {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
-                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
-                        {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]}
                 ]}
             ]},
