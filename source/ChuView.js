@@ -596,7 +596,7 @@ enyo.kind({
         } else if (city) {
             city = "<br>" + city;
         }
-        var popup = "<b>" + name + "</b>" + (address || "") + (zipcode || "") + (city || "");
+        var popup = "<strong>" + name + "</strong>" + "<span style='font-size: 14px'>" + (address || "") + (zipcode || "") + (city || "") + "</span>";
 
         this.$.map.clearMarkers();
         this.$.map.addMarker(coords, null, popup, null, true);

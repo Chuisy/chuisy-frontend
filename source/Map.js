@@ -50,15 +50,19 @@ enyo.kind({
     addMarker: function(coords, markerControl, popupContent, obj, animate) {
         var marker;
         var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
-        // var image = "./assets/images/marker-pink96x96.png";
+        var image = "./assets/images/marker-pink96x96.png";
         if (markerControl) {
             markerControl.addRemoveClass("drop", animate);
         } else {
             marker = new google.maps.Marker({
                 position: latlng,
                 map: this.map,
-                animation: google.maps.Animation.DROP
-                // icon: image
+                animation: google.maps.Animation.DROP,
+                icon: new google.maps.MarkerImage(
+                    image,
+                    null, null, null,
+                    new google.maps.Size(48, 48)
+                )
             });
         }
         if (popupContent) {
@@ -66,9 +70,9 @@ enyo.kind({
             google.maps.event.addListener(marker, "click", function() {
                 infobox.setVisible(!(infobox.getVisible()));
             });
-            google.maps.event.addListener(this.map, "dragstart", function() {
-                infobox.setVisible(false);
-            });
+            // google.maps.event.addListener(this.map, "dragstart", function() {
+            //     infobox.setVisible(false);
+            // });
         }
         this.markers.push(marker);
         return marker;
@@ -86,7 +90,7 @@ enyo.kind({
         var options = {
             content: boxText.generateHtml(),
             zIndex: null,
-            pixelOffset: new google.maps.Size(0, -45),
+            pixelOffset: new google.maps.Size(0, -60),
             closeBoxURL: "",
             boxStyle: {
                 width: 0,

@@ -11,7 +11,6 @@ enyo.depends(
 	"$lib/backbone.js",
 	"$lib/backbone-tastypie.js",
 	"$lib/backbone-localstorage.js",
-	"$lib/leaflet",
 	"$lib/spin.js",
 	"$lib/gmaps",
 	"util.js",
