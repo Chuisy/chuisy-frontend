@@ -12,6 +12,9 @@ enyo.kind({
         onresize: "resize",
         ondrag: "preventPropagation"
     },
+    events: {
+        onMarkerTap: ""
+    },
     rendered: function() {
         this.inherited(arguments);
         this.initialize();
@@ -53,6 +56,15 @@ enyo.kind({
         var image = "./assets/images/marker-pink96x96.png";
         if (markerControl) {
             markerControl.addRemoveClass("drop", animate);
+            marker = new RichMarker({
+                position: latlng,
+                map: this.map,
+                content: markerControl.generateHtml(),
+                flat: true
+            });
+            google.maps.event.addListener(marker, "click", enyo.bind(this, function() {
+                this.doMarkerTap({obj: obj});
+            }));
         } else {
             marker = new google.maps.Marker({
                 position: latlng,
@@ -120,6 +132,10 @@ enyo.kind({
             delete this.markers[i];
         }
         this.markers = [];
+    },
+    removeMarker: function(marker) {
+        marker.setMap(null);
+        this.markers = _.without(this.markers, marker);
     },
     components: [
         {classes: "enyo-fill", name: "map"}

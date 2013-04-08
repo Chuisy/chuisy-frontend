@@ -537,7 +537,7 @@ enyo.kind({
     },
     showLikes: function() {
         this.$.panels.setIndex(1);
-        // this.$.likesMapPanels.setIndex(0);
+        this.$.likesMapPanels.setIndex(0);
     },
     likesBack: function() {
         this.$.panels.setIndex(0);
