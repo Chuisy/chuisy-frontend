@@ -566,7 +566,8 @@ enyo.kind({
     showLocMap: function() {
         if(this.chu.get("location") && this.chu.get("location").latitude) {
             this.$.panels.setIndex(1);
-            // this.$.likesMapPanels.setIndex(1);
+            this.$.likesMapPanels.setIndex(1);
+            this.$.map.initialize();
             this.setLocMarker();
         }
     },
@@ -576,7 +577,6 @@ enyo.kind({
     setLocMarker: function() {
         //add marker
         var loc = this.chu.get("location");
-        console.log(loc);
         var lat = loc.latitude;
         var lng = loc.longitude;
         var coords = {
@@ -589,12 +589,14 @@ enyo.kind({
         var address = loc.address;
         var zipcode = loc.zip_code;
         var city = loc.city;
-        if(address)
-            address = "</br>" + address;
-        if(zipcode)
-            zipcode = "</br>" + zipcode;
-        this.log(city);
-        var popup = new enyo.Control({allowHtml: true, content: "<b>" + name + "</b>" + (address || "") + (zipcode || "") + ", " + (city || "")});
+        if (address) {
+            address = "<br>" + address;
+        } if (zipcode) {
+            zipcode = "<br>" + zipcode + ", ";
+        } else if (city) {
+            city = "<br>" + city;
+        }
+        var popup = "<strong>" + name + "</strong>" + "<span style='font-size: 14px'>" + (address || "") + (zipcode || "") + (city || "") + "</span>";
 
         this.$.map.clearMarkers();
         this.$.map.addMarker(coords, null, popup, null, true);
@@ -689,7 +691,7 @@ enyo.kind({
                                 {classes: "chuview-location-price", style: "position: relative; z-index: 100;", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price"},
-                                    {classes: "chuview-location ellipsis", name: "location"},
+                                    {classes: "chuview-location ellipsis", name: "location" /*, ontap: "showLocMap" */},
                                     {classes: "chuview-likes-comments", showing: false, components: [
                                         {classes: "chuview-likes-count", name: "likesCount"},
                                         {classes: "chuview-likes-icon"},
@@ -775,13 +777,13 @@ enyo.kind({
                     ]},
                     {kind: "UserList", name: "likesList", fit: true}
                 ]}
-            //     //MAP
-            //     {kind: "FittableRows", classes: "enyo-fill", components: [
-            //         {classes: "header", components: [
-            //             {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
-            //         ]},
-            //         {kind: "Map", name: "map", fit: true}
-            //     ]}
+                //MAP
+                // {kind: "FittableRows", classes: "enyo-fill", components: [
+                //     {classes: "header", components: [
+                //         {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
+                //     ]},
+                //     {kind: "Map", name: "map", fit: true}
+                // ]}
             // ]}
         ]}
     ]
