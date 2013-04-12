@@ -228,7 +228,7 @@
 	margin: 0 5px;
 }
 
-.chuview-location-price {
+.chuview-store-price {
 	padding: 8px 0 4px 4px;
 }
 
@@ -256,7 +256,7 @@
 	padding: 0 10px;
 }
 
-.chuview-location {
+.chuview-store {
 	color: #555;
 	font-size: 11pt;
 	float: right;
@@ -264,6 +264,22 @@
 	text-align: right;
 	max-height: 35px;
 	overflow: hidden;
+}
+
+.chuview-store.button {
+	margin-top: -4px;
+	padding: 2px 1px 2px 6px;
+	height: auto;
+}
+
+.chuview-store-button-text {
+	max-width: 75px;
+}
+
+.chuview-store-icon {
+	width: 13px;
+	height: 13px;
+	margin: -2px 0 0 2px;
 }
 
 .chuview-likes-comments {

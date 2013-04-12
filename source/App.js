@@ -373,7 +373,7 @@ enyo.kind({
                 }
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
-            // {user id}/
+            // user/{user id}/
             // This is the URI to a users profile
             if (obj) {
                 // A user object has been provided. So we can open it directly.
@@ -383,6 +383,18 @@ enyo.kind({
                 var user = new chuisy.models.User({id: match2[1]});
                 user.fetch();
                 this.$.mainView.openView("user", user);
+            }
+        } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
+            // store/{store id}/
+            // This is the URI to a store
+            if (obj) {
+                // A user store has been provided. So we can open it directly.
+                var store = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
+                this.$.mainView.openView("store", store);
+            } else if (App.checkConnection()) {
+                var store = new chuisy.models.Store({id: match2[1]});
+                store.fetch();
+                this.$.mainView.openView("store", store);
             }
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
