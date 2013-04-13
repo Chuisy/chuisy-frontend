@@ -69,7 +69,6 @@ enyo.kind({
     },
     synced: function(which) {
         this.$[which + "Spinner"].hide();
-        this.$[which + "Count"].show();
         var coll = this.user && this.user[which];
         var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
         this.$[which + "Count"].setContent(count);

@@ -382,7 +382,7 @@
             });
             // Chus by this user
             this.chus = new chuisy.models.ChuCollection([], {
-                filters: _.bind(function(user) {
+                filters: _.bind(function() {
                     return {user: this.id};
                 }, this)
             });
@@ -852,6 +852,73 @@
             var json = chuisy.models.OwnedModel.prototype.toJSON.apply(this, arguments);
             delete json.avatar_thumbnail;
             return json;
+        }
+    });
+
+    /*
+        A store
+    */
+    chuisy.models.Store = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/store/",
+        initialize: function(attributes, options) {
+            Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
+            // Chus posted in this store
+            this.chus = new chuisy.models.ChuCollection([], {
+                filters: _.bind(function() {
+                    return {store: this.id};
+                }, this)
+            });
+            // The stores followers
+            this.followers = new chuisy.models.UserCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "followers/";
+                }, this)
+            });
+        },
+        /*
+            If _following_ is true, the currently active user will follow this user. If false, the active user
+            will unfollow this user.
+        */
+        setFollowing: function(following) {
+            var activeUser = chuisy.accounts.getActiveUser();
+
+            if (!activeUser || !activeUser.isAuthenticated()) {
+                console.error("There has to be an active authenticated user to perform this action!");
+                return;
+            }
+            if (activeUser.id == this.id) {
+                console.error("User can't follow himself.");
+                return;
+            }
+
+            this.set("following", following);
+
+            var options = {
+                url: _.result(this, "url") + "follow/",
+                data: {follow: following},
+                type: "POST",
+                contentType: "application/json"
+            };
+            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.ajax(options);
+        },
+        /*
+            Let currently active user follow this user
+        */
+        follow: function() {
+            this.setFollowing(true);
+        },
+        /*
+            Let currently active user unfollow this user
+        */
+        unfollow: function() {
+            this.setFollowing(false);
+        },
+        /*
+            Toggle following this user
+        */
+        toggleFollow: function() {
+            this.setFollowing(!this.get("following"));
         }
     });
 

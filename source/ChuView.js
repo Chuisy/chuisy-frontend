@@ -20,7 +20,8 @@ enyo.kind({
         //* User has tapped the avatar or name of the chus author
         onShowUser: "",
         onDone: "",
-        onInviteFriends: ""
+        onInviteFriends: "",
+        onShowStore: ""
     },
     handlers: {
         onpostresize: "postResize"
@@ -98,7 +99,7 @@ enyo.kind({
     },
     updateView: function() {
         var user = this.chu.get("user");
-        var loc = this.chu.get("location");
+        var store = this.chu.get("store");
 
         var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png";
         if (image != this.$.image.src) {
@@ -107,14 +108,18 @@ enyo.kind({
             this.$.image.setSrc(image);
         }
 
+        this.$.storeButton.setShowing(store && store.foursquare_id);
+        this.$.store.setShowing(!store || !store.foursquare_id);
+
         this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
-        this.$.location.setContent(loc && loc.name || "");
+        this.$.store.setContent(store && store.name || "");
+        this.$.storeButtonText.setContent(store && store.name || "");
         this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
 
-        var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: loc && loc.country && loc.country.toLowerCase() || undefined});
-        this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
+        var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
+        // this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
         this.addRemoveClass("owned", this.isOwned());
 
@@ -327,6 +332,10 @@ enyo.kind({
             this.doShowUser({user: user});
         }
     },
+    showStore: function(sender, event) {
+        var store = new chuisy.models.Store(this.chu.get("store"));
+        this.doShowStore({store: store});
+    },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
         this.arrangeImage();
@@ -342,9 +351,9 @@ enyo.kind({
         this.$.sharePanels.setIndex(this.chu.get("visibility") == "public" ? 1 : 0);
     },
     getMessage: function() {
-        var loc = this.chu.get("location");
-        if (loc && loc.name) {
-            return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", loc.name);
+        var store = this.chu.get("store");
+        if (store && store.name) {
+            return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", store.name);
         } else {
             return $L("Check out this cool fashion item!");
         }
@@ -537,12 +546,8 @@ enyo.kind({
     },
     showLikes: function() {
         this.$.panels.setIndex(1);
-        // this.$.likesMapPanels.setIndex(0);
     },
     likesBack: function() {
-        this.$.panels.setIndex(0);
-    },
-    mapBack: function() {
         this.$.panels.setIndex(0);
     },
     scrollToBottom: function() {
@@ -559,56 +564,6 @@ enyo.kind({
             s.scrollTop = b.top + b.height - cHeight + 10;
             s.start();
         }
-    },
-    /**
-        Show map and add marker
-    */
-    showLocMap: function() {
-        if(this.chu.get("location") && this.chu.get("location").latitude) {
-            this.$.panels.setIndex(1);
-            this.$.likesMapPanels.setIndex(1);
-            this.$.map.initialize();
-            this.setLocMarker();
-        }
-    },
-    /**
-        Set marker for shop and center map to it
-    */
-    setLocMarker: function() {
-        //add marker
-        var loc = this.chu.get("location");
-        var lat = loc.latitude;
-        var lng = loc.longitude;
-        var coords = {
-            latitude: lat,
-            longitude: lng
-        };
-
-        //add popup to marker
-        var name = loc.name;
-        var address = loc.address;
-        var zipcode = loc.zip_code;
-        var city = loc.city;
-        if (address) {
-            address = "<br>" + address;
-        } if (zipcode) {
-            zipcode = "<br>" + zipcode + ", ";
-        } else if (city) {
-            city = "<br>" + city;
-        }
-        var popup = "<strong>" + name + "</strong>" + "<span style='font-size: 14px'>" + (address || "") + (zipcode || "") + (city || "") + "</span>";
-
-        this.$.map.clearMarkers();
-        this.$.map.addMarker(coords, null, popup, null, true);
-
-        //set center and zoom of map
-        var center = {
-            latitude: lat,
-            longitude: lng
-        };
-        var zoom = 15;
-        this.$.map.setZoom(zoom);
-        this.$.map.setCenter(center);
     },
     deleteComment: function(sender, event) {
         var comment = this.chu.comments.at(event.index);
@@ -688,10 +643,14 @@ enyo.kind({
                             ]},
                             {classes: "chuview-content", components: [
                                 // CATEGORY, PRICE, COMMENTS, LIKES
-                                {classes: "chuview-location-price", style: "position: relative; z-index: 100;", components: [
+                                {classes: "chuview-store-price", style: "position: relative; z-index: 100;", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
-                                    {classes: "chuview-price", name: "price"},
-                                    {classes: "chuview-location ellipsis", name: "location" /*, ontap: "showLocMap" */},
+                                    {classes: "chuview-price", name: "price", content: "35€"},
+                                    {kind: "onyx.Button", classes: "chuview-store button", name: "storeButton", showing: false, ontap: "showStore", components: [
+                                        {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
+                                        {tag: "img", classes: "chuview-store-icon", attributes: {src: "assets/images/black_marker.png"}}
+                                    ]},
+                                    {name: "store", classes: "chuview-store ellipsis", showing: false},
                                     {classes: "chuview-likes-comments", showing: false, components: [
                                         {classes: "chuview-likes-count", name: "likesCount"},
                                         {classes: "chuview-likes-icon"},
@@ -699,7 +658,7 @@ enyo.kind({
                                         {classes: "chuview-comments-icon"}
                                     ]}
                                 ]},
-                                // AVATAR, NAME, TIME, LOCATION
+                                // AVATAR, NAME, TIME
                                 {classes: "chuview-infobar", components: [
                                     {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
                                     {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
@@ -769,22 +728,12 @@ enyo.kind({
                 ]},
                 {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
             ]},
-            // {kind: "Panels", name: "likesMapPanels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, animate: false, components: [
-                //LIKES
-                {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
-                    {classes: "header", components: [
-                        {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
-                    ]},
-                    {kind: "UserList", name: "likesList", fit: true}
-                ]}
-                //MAP
-                // {kind: "FittableRows", classes: "enyo-fill", components: [
-                //     {classes: "header", components: [
-                //         {kind: "onyx.Button", ontap: "mapBack", classes: "back-button", content: $L("back")}
-                //     ]},
-                //     {kind: "Map", name: "map", fit: true}
-                // ]}
-            // ]}
+            {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
+                {classes: "header", components: [
+                    {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
+                ]},
+                {kind: "UserList", name: "likesList", fit: true}
+            ]}
         ]}
     ]
 });

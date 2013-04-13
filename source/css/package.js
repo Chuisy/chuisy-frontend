@@ -30,5 +30,6 @@ enyo.depends(
 	"Map.css",
 	"Marker.css",
 	"ChuMarker.css",
-	"Goodies.css"
+	"Goodies.css",
+	"StoreView.css"
 );
