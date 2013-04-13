@@ -526,8 +526,7 @@
             var options = {
                 url: _.result(this, "url") + "follow/",
                 data: {follow: following},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
@@ -709,8 +708,7 @@
             var options = {
                 url: _.result(this, "url") + "like/",
                 data: {like: liked},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             // Add authentication so the server knows who want to like/unlike
             Backbone.Tastypie.addAuthentication("create", this, options);
@@ -896,8 +894,7 @@
             var options = {
                 url: _.result(this, "url") + "follow/",
                 data: {follow: following},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
