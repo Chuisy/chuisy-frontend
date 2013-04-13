@@ -163,10 +163,11 @@
 
 .chuview-likebar {
 	width: 320px;
-	height: 64px;
+	height: 10px;
+	overflow: visible;
 	background: url(../../assets/images/chu_separator.png) no-repeat 0 center;
 	background-size: 320px 48px;
-	margin-bottom: -32px;
+	margin-bottom: -5px;
 	position: relative;
 	z-index: 10;
 	text-align: center;
@@ -179,6 +180,7 @@
 	display: inline-block;
 	-webkit-transition: -webkit-transform 0.5s;
 	position: relative;
+	top: -29px;
 	-webkit-transform-style: preserve-3d;
 }
 

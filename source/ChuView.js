@@ -643,7 +643,7 @@ enyo.kind({
                             ]},
                             {classes: "chuview-content", components: [
                                 // CATEGORY, PRICE, COMMENTS, LIKES
-                                {classes: "chuview-store-price", style: "position: relative; z-index: 100;", components: [
+                                {classes: "chuview-store-price", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price", content: "35€"},
                                     {kind: "onyx.Button", classes: "chuview-store button", name: "storeButton", showing: false, ontap: "showStore", components: [
