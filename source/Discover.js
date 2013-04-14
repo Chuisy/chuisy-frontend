@@ -28,10 +28,9 @@ enyo.kind({
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
-        var image = chu.get("thumbails") && chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
+        var image = chu.get("thumbnails") && chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
         this.$.resultChuImage.applyStyle("background-image", "url(" + image + ")");
         this.$.chuAvatar.setSrc(chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-
         var isLastItem = event.index == this.chus.length-1;
         if (isLastItem && this.chus.hasNextPage()) {
             // Item is last item in the list but there is more! Load next page.
@@ -46,7 +45,7 @@ enyo.kind({
         this.$.chuNextPageSpinner.addClass("rise");
         this.chus.fetchNext({success: enyo.bind(this, function() {
             this.$.chuNextPageSpinner.removeClass("rise");
-        })});
+        }), data: {thumbnails: ["300x100"]}});
     },
     chuTap: function(sender, event) {
         this.doShowChu({chu: this.chus.at(event.index)});

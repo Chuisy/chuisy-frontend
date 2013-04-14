@@ -93,7 +93,9 @@ enyo.kind({
         this.chus.fetchNext({
             success: enyo.bind(this, function() {
                 this.$.nextPageSpinner.removeClass("rise");
-            })
+            }), data: {
+                thumbnails: ["100x100"]
+            }
         });
     },
     /**
