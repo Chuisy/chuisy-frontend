@@ -262,7 +262,7 @@
             // Sync all added models
             for (i=0; i<added.length; i++) {
                 var model = this.get(added[i]);
-                if (model) {
+                if (model && model.get("syncStatus") != "posting") {
                     // Set syncStatus to 'posting' to indicate that the model is being posted to the server
                     model.set({syncStatus: "posting"}, {nosync: true, silent: true});
                     model.trigger("change:syncStatus", model);
