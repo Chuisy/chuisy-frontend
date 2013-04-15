@@ -179,7 +179,7 @@ enyo.kind({
                         // OWN PROFILE VIEW
                         {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
                         // DISCOVER VIEW
-                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
+                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu", onShowStore: "showStore"},
                         // GOODIES
                         {kind: "Goodies", name: "goodies"},
                         // NOTIFICATIONS

@@ -20,7 +20,7 @@
                 chuisy.closet.fetch();
 
                 chuisy.feed.fetch();
-                chuisy.feed.fetch({remote: true, data: {limit: 30}});
+                chuisy.feed.fetch({remote: true, data: {limit: 20}});
 
                 chuisy.venues.fetch();
             }
@@ -977,6 +977,14 @@
     chuisy.models.UserCollection = chuisy.models.SearchableCollection.extend({
         model: chuisy.models.User,
         url: chuisy.apiRoot + chuisy.version + "/user/"
+    });
+
+    /*
+        A collection of _Store_ models
+    */
+    chuisy.models.StoreCollection = chuisy.models.SearchableCollection.extend({
+        model: chuisy.models.Store,
+        url: chuisy.apiRoot + chuisy.version + "/store/"
     });
 
     /*

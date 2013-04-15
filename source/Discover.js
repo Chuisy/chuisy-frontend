@@ -9,7 +9,8 @@ enyo.kind({
         // An avatar or username has been tapped
         onShowUser: "",
         // A chu has been selected
-        onShowChu: ""
+        onShowChu: "",
+        onShowStore: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -19,11 +20,13 @@ enyo.kind({
 
         this.users = new chuisy.models.UserCollection();
         this.chus = new chuisy.models.ChuCollection();
+        this.stores = new chuisy.models.StoreCollection();
 
         this.$.userList.setUsers(this.users);
 
         this.users.on("sync", _.bind(this.synced, this, "user"));
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
+        this.stores.on("sync", _.bind(this.synced, this, "store"));
         // this.chus.on("sync", _.bind(this.updateMap, this));
     },
     setupChu: function(sender, event) {
@@ -41,14 +44,38 @@ enyo.kind({
         }
         return true;
     },
+    setupStore: function(sender, event) {
+        var store = this.stores.at(event.index);
+        this.$.storeName.setContent(store.get("name"));
+        this.$.storeAddress.setContent(store.get("address"));
+        var isLastItem = event.index == this.stores.length-1;
+        if (isLastItem && this.stores.hasNextPage()) {
+            // Item is last item in the list but there is more! Load next page.
+            this.$.storeNextPageSpacer.show();
+            this.storeNextPage();
+        } else {
+            this.$.storeNextPageSpacer.hide();
+        }
+        return true;
+    },
     chuNextPage: function() {
         this.$.chuNextPageSpinner.addClass("rise");
         this.chus.fetchNext({success: enyo.bind(this, function() {
             this.$.chuNextPageSpinner.removeClass("rise");
         }), data: {thumbnails: ["300x100"]}});
     },
+    storeNextPage: function() {
+        this.$.storeNextPageSpinner.addClass("rise");
+        this.stores.fetchNext({success: enyo.bind(this, function() {
+            this.$.storeNextPageSpinner.removeClass("rise");
+        })});
+    },
     chuTap: function(sender, event) {
         this.doShowChu({chu: this.chus.at(event.index)});
+        event.preventDefault();
+    },
+    storeTap: function(sender, event) {
+        this.doShowStore({store: this.stores.at(event.index)});
         event.preventDefault();
     },
     radioGroupActivate: function(sender, event) {
@@ -63,6 +90,7 @@ enyo.kind({
             this.latestQuery = query;
             this.search("user", query);
             this.search("chu", query);
+            this.search("store", query);
         } else {
             this.searchInputCancel();
         }
@@ -71,10 +99,13 @@ enyo.kind({
         this.latestQuery = null;
         this.users.reset();
         this.chus.reset();
+        this.stores.reset();
         this.users.meta = {};
         this.chus.meta = {};
+        this.stores.meta = {};
         this.synced("user", null, null, null, true);
         this.synced("chu", null, null, null, true);
+        this.synced("store", null, null, null, true);
         this.$.resultPanels.setIndex(0);
         this.$.resultTabs.setActive(null);
     },
@@ -89,9 +120,9 @@ enyo.kind({
                 this.$.resultPanels.setIndex(1);
             }
 
-            if (which == "chu") {
-                this.$.chuList.setCount(coll.length);
-                this.$.chuList.refresh();
+            if (which == "chu" || which == "store") {
+                this.$[which + "List"].setCount(coll.length);
+                this.$[which + "List"].refresh();
             }
         }
     },
@@ -182,31 +213,27 @@ enyo.kind({
         ]},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
-            {index: 1, name: "userTab", components: [
-                {classes: "discover-tab-caption", content: "Users"},
-                {classes: "discover-tab-count", name: "userCount"},
-                {classes: "onyx-spinner tiny", name: "userSpinner", showing: false}
-            ]},
-            {index: 2, name: "chuTab", components: [
-                {classes: "discover-tab-caption", content: "Chus"},
+            {index: 1, name: "chuTab", components: [
+                {classes: "discover-tab-caption", content: $L("Chus")},
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
-            ]}/*,
-            {index: 3, name: "mapTab", components: [
-                {classes: "discover-tab-caption", content: "Nearby"}
+            ]},
+            {index: 2, name: "storeTab", components: [
+                {classes: "discover-tab-caption", content: $L("Stores")},
+                {classes: "discover-tab-count", name: "storeCount"},
+                {classes: "onyx-spinner tiny", name: "storeSpinner", showing: false}
+            ]},
+            {index: 3, name: "userTab", components: [
+                {classes: "discover-tab-caption", content: $L("People")},
+                {classes: "discover-tab-count", name: "userCount"},
+                {classes: "onyx-spinner tiny", name: "userSpinner", showing: false}
             ]}
-            */
         ]},
         // RESULTS
         {kind: "Panels", fit: true, name: "resultPanels", draggable: false, animate: false, components: [
             // PLACEHOLDER
             {classes: "discover-result-panel", components: [
                 {classes: "discover-placeholder absolute-center", name: "placeholder"}
-            ]},
-            // USERS
-            {classes: "discover-result-panel", components: [
-                {kind: "UserList", classes: "enyo-fill", name: "userList", rowsPerPage: 20},
-                {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No people found.")}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
@@ -222,12 +249,25 @@ enyo.kind({
                     {name: "chuNextPageSpacer", classes: "next-page-spacer"}
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
-            ]}/*,
+            ]},
+            // CHUS
             {classes: "discover-result-panel", components: [
-                {kind: "onyx.Button", name: "mapLoadMoreButton", showing: false, content: "more", ontap: "mapLoadMore", classes: "discover-map-button"},
-                {kind: "Map", onMarkerTapped: "markerTapped", classes: "enyo-fill", name: "map"}
+                {kind: "CssSpinner", name: "storeNextPageSpinner", classes: "next-page-spinner"},
+                {kind: "List", classes: "enyo-fill", name: "storeList", onSetupItem: "setupStore", rowsPerPage: 20,
+                    strategyKind: "TransitionScrollStrategy", thumb: false, components: [
+                    {name: "store", ontap: "storeTap", classes: "discover-store", components: [
+                        {classes: "discover-store-text", name: "storeName"},
+                        {classes: "discover-store-address", name: "storeAddress"}
+                    ]},
+                    {name: "storeNextPageSpacer", classes: "next-page-spacer"}
+                ]},
+                {name: "storeNoResults", classes: "discover-no-results absolute-center", content: $L("No Stores found.")}
+            ]},
+            // USERS
+            {classes: "discover-result-panel", components: [
+                {kind: "UserList", classes: "enyo-fill", name: "userList", rowsPerPage: 20},
+                {name: "userNoResults", classes: "discover-no-results absolute-center", content: $L("No people found.")}
             ]}
-            */
         ]}
     ]
 });
