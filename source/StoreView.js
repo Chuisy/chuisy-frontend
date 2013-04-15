@@ -187,12 +187,13 @@ enyo.kind({
 					{classes: "storeview-menu-button", value: 1, name: "followersMenuButton", components: [
 						{classes: "storeview-menu-button-caption", content: $L("Follower")},
 						{classes: "storeview-menu-button-count", name: "followersCount"}
-						]},
-						{classes: "storeview-menu-button", value: 2, name: "infoMenuButton", components: [
-						{classes: "storeview-menu-button-caption", content: $L("Info")}
+					]},
+					{classes: "storeview-menu-button", value: 2, name: "infoMenuButton", components: [
+						{classes: "storeview-menu-button-caption", content: $L("Info")},
+						{kind: "Image", src: "assets/images/info.png", style: "width: 13px; height: 13px; margin-top: -5px;"}
 					]}
 				]},
-				{kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
+				{kind: "Panels", name: "panels", fit: true, draggable: false, components: [
 					{classes: "enyo-fill", components: [
 						{kind: "CssSpinner", classes: "storeview-tab-spinner", name: "chusSpinner", showing: false},
 						{name: "chusPlaceholder", classes: "storeview-list-placeholder chus"},

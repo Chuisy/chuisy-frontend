@@ -192,9 +192,13 @@
 }
 
 .storeview-info-block {
-	padding: 15px;
+	padding: 15px 15px 0 15px;
 	line-height: 1.3em;
 	font-size: 11pt;
+}
+
+.storeview-info-block:last-child {
+	padding-bottom: 15px;
 }
 
 .storeview-info-header {

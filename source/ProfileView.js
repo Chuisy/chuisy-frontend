@@ -164,7 +164,7 @@ enyo.kind({
                         {classes: "profileview-menu-button-count", name: "followersCount"}
                     ]}
                 ]},
-                {kind: "Panels", name: "panels", arrangerKind: "CarouselArranger", fit: true, draggable: false, components: [
+                {kind: "Panels", name: "panels", fit: true, draggable: false, components: [
                     {classes: "enyo-fill", components: [
                         {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
                         {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
