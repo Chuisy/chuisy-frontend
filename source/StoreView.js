@@ -36,7 +36,7 @@ enyo.kind({
         this.$.followButton.setContent(this.store.get("following") ? "unfollow" : "follow");
         this.$.followersCount.setContent(this.store.get("follower_count"));
 
-        var coverImage = this.store.get("coverImage") || this.coverPlaceholder;
+        var coverImage = this.store.get("cover_image") || this.coverPlaceholder;
         this.$.info.applyStyle("background-image", "url(" + coverImage + ")");
 
         this.updateInfoText();
@@ -204,7 +204,7 @@ enyo.kind({
 						{name: "followersPlaceholder", classes: "storeview-list-placeholder followers"},
 						{kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
 					]},
-					{kind: "Scroller", classes: "enyo-fill", components: [
+					{kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
 						{kind: "onyx.Button", name: "locationButton", ontap: "showMap", classes: "storeview-location-button"},
 						{classes: "storeview-info-block", components: [
 							{classes: "storeview-info-text", components: [
