@@ -81,7 +81,7 @@ enyo.kind({
                 {classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
-                    {content: $L("Sign In With Facebook")}
+                    {content: $L("Sign in with Facebook")}
                 ]},
                 {kind: "onyx.Button", name: "cancelButton", ontap: "cancel", classes: "signinview-cancel-button"},
                 {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
