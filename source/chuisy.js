@@ -20,7 +20,7 @@
                 chuisy.closet.fetch();
 
                 chuisy.feed.fetch();
-                chuisy.feed.fetch({remote: true, data: {limit: 30}});
+                chuisy.feed.fetch({remote: true, data: {limit: 20}});
 
                 chuisy.venues.fetch();
             }
@@ -262,7 +262,7 @@
             // Sync all added models
             for (i=0; i<added.length; i++) {
                 var model = this.get(added[i]);
-                if (model) {
+                if (model && model.get("syncStatus") != "posting") {
                     // Set syncStatus to 'posting' to indicate that the model is being posted to the server
                     model.set({syncStatus: "posting"}, {nosync: true, silent: true});
                     model.trigger("change:syncStatus", model);
@@ -382,7 +382,7 @@
             });
             // Chus by this user
             this.chus = new chuisy.models.ChuCollection([], {
-                filters: _.bind(function(user) {
+                filters: _.bind(function() {
                     return {user: this.id};
                 }, this)
             });
@@ -526,8 +526,7 @@
             var options = {
                 url: _.result(this, "url") + "follow/",
                 data: {follow: following},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
@@ -709,8 +708,7 @@
             var options = {
                 url: _.result(this, "url") + "like/",
                 data: {like: liked},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             // Add authentication so the server knows who want to like/unlike
             Backbone.Tastypie.addAuthentication("create", this, options);
@@ -856,6 +854,72 @@
     });
 
     /*
+        A store
+    */
+    chuisy.models.Store = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/store/",
+        initialize: function(attributes, options) {
+            Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
+            // Chus posted in this store
+            this.chus = new chuisy.models.ChuCollection([], {
+                filters: _.bind(function() {
+                    return {store: this.id};
+                }, this)
+            });
+            // The stores followers
+            this.followers = new chuisy.models.UserCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "followers/";
+                }, this)
+            });
+        },
+        /*
+            If _following_ is true, the currently active user will follow this user. If false, the active user
+            will unfollow this user.
+        */
+        setFollowing: function(following) {
+            var activeUser = chuisy.accounts.getActiveUser();
+
+            if (!activeUser || !activeUser.isAuthenticated()) {
+                console.error("There has to be an active authenticated user to perform this action!");
+                return;
+            }
+            if (activeUser.id == this.id) {
+                console.error("User can't follow himself.");
+                return;
+            }
+
+            this.set("following", following);
+
+            var options = {
+                url: _.result(this, "url") + "follow/",
+                data: {follow: following},
+                type: "POST"
+            };
+            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.ajax(options);
+        },
+        /*
+            Let currently active user follow this user
+        */
+        follow: function() {
+            this.setFollowing(true);
+        },
+        /*
+            Let currently active user unfollow this user
+        */
+        unfollow: function() {
+            this.setFollowing(false);
+        },
+        /*
+            Toggle following this user
+        */
+        toggleFollow: function() {
+            this.setFollowing(!this.get("following"));
+        }
+    });
+
+    /*
         A card
     */
     chuisy.models.Card = Backbone.Tastypie.Model.extend({
@@ -913,6 +977,14 @@
     chuisy.models.UserCollection = chuisy.models.SearchableCollection.extend({
         model: chuisy.models.User,
         url: chuisy.apiRoot + chuisy.version + "/user/"
+    });
+
+    /*
+        A collection of _Store_ models
+    */
+    chuisy.models.StoreCollection = chuisy.models.SearchableCollection.extend({
+        model: chuisy.models.Store,
+        url: chuisy.apiRoot + chuisy.version + "/store/"
     });
 
     /*

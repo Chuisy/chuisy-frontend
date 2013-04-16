@@ -25,8 +25,9 @@ enyo.kind({
         chu: [2, null],
         settings: [3, null],
         user: [4, null],
-        invite: [5, null],
-        getstarted: [6, null]
+        store: [5, null],
+        invite: [6, null],
+        getstarted: [7, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -64,6 +65,9 @@ enyo.kind({
     },
     showInviteFriends: function() {
         this.openView("invite");
+    },
+    showStore: function(sender, event) {
+        this.openView("store", event.store);
     },
     notificationSelected: function(sender, event) {
         this.doNavigateTo({uri: event.notification.get("uri"), obj: event.notification.get("target_obj")});
@@ -151,6 +155,9 @@ enyo.kind({
                     user.fetch({remote: true});
                 }
                 break;
+            case "store":
+                this.doUpdateHistory({uri: "store/" + obj.id + "/", obj: obj});
+                break;
             default:
                 this.doUpdateHistory({uri: view + "/"});
                 this.$.menu.selectItem(view);
@@ -172,7 +179,7 @@ enyo.kind({
                         // OWN PROFILE VIEW
                         {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
                         // DISCOVER VIEW
-                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu"},
+                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu", onShowStore: "showStore"},
                         // GOODIES
                         {kind: "Goodies", name: "goodies"},
                         // NOTIFICATIONS
@@ -184,7 +191,7 @@ enyo.kind({
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone", onInviteFriends: "showInviteFriends"},
+            {kind: "ChuView", name: "chu", onShowStore: "showStore", onShowChu: "showChu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone", onInviteFriends: "showInviteFriends"},
             // // SHARE CHU
             // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
             // SETTINGS
@@ -196,6 +203,8 @@ enyo.kind({
                 ]},
                 {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
             ]},
+            // LOCATION VIEW
+            {kind: "StoreView", name: "store", fit: true, onShowChu: "showChu", onShowUser: "showUser", onBack: "back"},
             {kind: "InviteFriends", name: "invite", onBack: "back"},
             {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},

@@ -1,80 +1,84 @@
 enyo.kind({
-    name: "MapOld",
-    published: {
-        center: {
-            latitude: 0,
-            longitude: 0
-        },
-        zoom: 19
-    },
-    handlers: {
-        onresize: "resize",
-        ondrag: "preventPropagation"
-    },
-    centerChanged: function () {
-        if (this.map) {
-            latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-            this.map.setCenter(latlng);
-        }
-    },
-    initialize: function() {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
+	name: "MapOld",
+	published: {
+		center: {
+			latitude: 51.0,
+			longitude: 9.0
+		},
+		zoom: 10,
+		mapType: "ROADMAP" /*ROADMAP, SATELLITE, HYBRID, TERRAIN */
+	},
+	events: {
+		onMapClick: "",
+		onMarkerTapped: ""
+	},
+	handlers: {
+		onpostresize: "postResize"
+	},
+	rendered: function() {
+		this.inherited(arguments);
+		this.initialize();
+	},
+	centerChanged: function() {
+		var latlng = new L.LatLng(this.center.latitude, this.center.longitude);
+		this.map.setView(latlng, this.zoom);
+	},
+	zoomChanged: function() {
+		this.map.setZoom(this.zoom);
+	},
+	mapTypeChanged: function() {
+		this.map.removeLayer(this.layer);
+		this.layer = new L.Google(this.mapType);
+		this.map.addLayer(this.layer);
+	},
+	/**
+		Add marker to map
 
-        var options = {
-            zoom: this.zoom,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true,
-            panControl: false,
-            panControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_BOTTOM
-            },
-            zoomControl: false,
-            zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.LARGE,
-                position: google.maps.ControlPosition.LEFT_CENTER
-            },
-            mapTypeControl: false,
-            mapTypeControlOptions: {
-                position: google.maps.ControlPosition.LEFT_BOTTOM
-            },
-            scaleControl: false,
-            streetViewControl: false,
-            overviewMapControl: false
-        };
-
-        this.map = new google.maps.Map(this.$.map.hasNode(), options);
-        this.markers = [];
-    },
-    panToCenter: function() {
-        latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
-        this.map.panTo(latlng);
-    },
-    resize: function() {
-        google.maps.event.trigger(this.map, 'resize');
-        this.panToCenter();
-    },
-    placeMarker: function(lat, lng, animation) {
-        var latlng = new google.maps.LatLng(lat, lng);
-        var marker = new google.maps.Marker({
-            position: latlng,
-            map: this.map,
-            animation: animation
-        });
-        this.markers.push(marker);
-        return marker;
-    },
-    preventPropagation: function() {
-        return true;
-    },
-    clearMarkers: function() {
-        for (var i=0; i<this.markers.length; i++) {
-            this.markers[i].setMap(null);
-            delete this.markers[i];
-        }
-        this.markers = [];
-    },
-    components: [
-        {classes: "enyo-fill", name: "map"}
-    ]
+		_latlng_ coordinates where the marker is placed
+		_markerControl_ is an optional parameter to generate a custom icon
+		_popupControl_ is an optional parameter to create a popup for the marker
+	*/
+	addMarker: function(coords, markerControl, popupControl, obj, animate) {
+		var marker;
+		var customHtmlIcon;
+		var latlng = new L.LatLng(coords.latitude, coords.longitude);
+		markerControl = markerControl || new Marker();
+		markerControl.addRemoveClass("drop", animate);
+		customHtmlIcon = L.divIcon({html: markerControl.generateHtml()});
+		marker = new L.Marker(latlng, {icon: customHtmlIcon});
+		marker.obj = obj;
+		marker.on("click", enyo.bind(this, this.markerClick));
+		this.map.addLayer(marker);
+		if (popupControl) {
+			marker.bindPopup(popupControl.generateHtml()).openPopup();
+			this.map.on("dragstart", enyo.bind(marker, marker.closePopup));
+		}
+		this.markers.push(marker);
+		return marker;
+	},
+	clearMarkers: function() {
+		for(var i = 0; i < this.markers.length; i++) {
+			this.map.removeLayer(this.markers[i]);
+		}
+		this.markers = [];
+	},
+	removeMarker: function(marker) {
+		this.map.removeLayer(marker);
+		this.markers = _.without(this.markers, marker);
+	},
+	markerClick: function(event) {
+		this.doMarkerTapped({obj: event.target.obj});
+	},
+	initialize: function() {
+		this.map = new L.Map(this.$.map.hasNode(), {center: new L.LatLng(this.center.latitude, this.center.longitude), zoom: this.zoom});
+		this.layer = new L.Google(this.mapType);
+		this.markers = [];
+		this.map.addLayer(this.layer);
+	},
+	postResize: function() {
+		this.map.invalidateSize();
+	},
+	components: [
+		{classes: "enyo-fill", name: "map"}
+	]
 });

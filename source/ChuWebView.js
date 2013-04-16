@@ -237,7 +237,7 @@ enyo.kind({
                 {kind: "onyx.Spinner", classes: "absolute-center", name: "signInSpinner", showing: false},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
-                    {content: $L("Sign In With Facebook")}
+                    {content: $L("Sign in with Facebook")}
                 ]}
             ]},
             {classes: "chuwebview-signin-cancel-button", ontap: "hideSignInDialog"}

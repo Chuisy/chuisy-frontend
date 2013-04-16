@@ -26,16 +26,11 @@
 	display: inline-block;
 	position: relative;
 	z-index: 2;
-	background-color: White;
 	border-radius: 2px;
 	padding: 3px;
 	width: 100%;
 	height: 100%;
-	-webkit-transition: width 2s ease, height 2s ease;  
-    -moz-transition: width 2s ease, height 2s ease;  
-    -o-transition: width 2s ease, height 2s ease;  
-    -ms-transition: width 2s ease, height 2s ease;  
-    transition: width 2s ease, height 2s ease;    
+	background-color: white
 }
 
 .chu-tip {

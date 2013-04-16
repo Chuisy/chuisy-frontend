@@ -8,7 +8,7 @@ enyo.kind({
     fit: true,
     classes: "app",
     statics: {
-        version: "1.1.0",
+        version: "1.2.0",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
@@ -191,18 +191,23 @@ enyo.kind({
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
                 this.$.mainView.openView("getstarted", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
                 this.$.mainView.openView("feed", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setCancelButtonLabel($L("Skip"));
+            this.$.signInView.setText("primary");
             this.$.signInView.ready();
             // this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
             this.signInViewDone();
             setTimeout(enyo.bind(this, function() {
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
                 this.$.signInView.ready();
             }), 500);
         }
@@ -373,7 +378,7 @@ enyo.kind({
                 }
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
-            // {user id}/
+            // user/{user id}/
             // This is the URI to a users profile
             if (obj) {
                 // A user object has been provided. So we can open it directly.
@@ -383,6 +388,18 @@ enyo.kind({
                 var user = new chuisy.models.User({id: match2[1]});
                 user.fetch();
                 this.$.mainView.openView("user", user);
+            }
+        } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
+            // store/{store id}/
+            // This is the URI to a store
+            if (obj) {
+                // A user store has been provided. So we can open it directly.
+                var store = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
+                this.$.mainView.openView("store", store);
+            } else if (App.checkConnection()) {
+                var store = new chuisy.models.Store({id: match2[1]});
+                store.fetch();
+                this.$.mainView.openView("store", store);
             }
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
