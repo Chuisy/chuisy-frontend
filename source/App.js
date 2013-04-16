@@ -8,7 +8,7 @@ enyo.kind({
     fit: true,
     classes: "app",
     statics: {
-        version: "1.1.0",
+        version: "1.2.0",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
