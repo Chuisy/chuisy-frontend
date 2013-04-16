@@ -13,14 +13,20 @@ enyo.kind({
         successCallback: function() {},
         // Callback that gets called if the user taps the cancel button or something goes wrong
         failureCallback: function() {},
-        cancelButtonLabel: $L("Cancel")
+        cancelButtonLabel: $L("Cancel"),
+        text: "primary"
     },
     create: function() {
         this.inherited(arguments);
         this.cancelButtonLabelChanged();
+        this.textChanged();
     },
     cancelButtonLabelChanged: function() {
         this.$.cancelButton.setContent(this.cancelButtonLabel);
+    },
+    textChanged: function() {
+        this.$.primaryText.setShowing(this.text == "primary");
+        this.$.secondaryText.setShowing(this.text == "secondary");
     },
     ready: function() {
         setTimeout(enyo.bind(this, function() {
@@ -78,7 +84,9 @@ enyo.kind({
         {classes: "signinview-content", components: [
             {classes: "signinview-spacer"},
             {classes: "signinview-center", components: [
-                {classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
+                {name: "primaryText", classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
+                {name: "secondaryText", classes: "signinview-text", style: "font-size: 13pt;", showing: false,
+                    content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
                 {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                     {classes: "facebook-button-icon"},
                     {content: $L("Sign in with Facebook")}

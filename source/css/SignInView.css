@@ -1,5 +1,5 @@
 .signinview {
-	background: url(../../assets/images/loading_screen.png) no-repeat center -20px;
+	background: url(../../assets/images/loading_screen.png) no-repeat center bottom;
 	background-size: 320px 568px;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .signinview.ready .signinview-scrim {
-	opacity: 0.5
+	opacity: 0.8;
 }
 
 .signinview-content {

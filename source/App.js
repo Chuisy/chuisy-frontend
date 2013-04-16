@@ -191,18 +191,23 @@ enyo.kind({
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
                 this.$.mainView.openView("getstarted", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
                 this.$.mainView.openView("feed", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setCancelButtonLabel($L("Skip"));
+            this.$.signInView.setText("primary");
             this.$.signInView.ready();
             // this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
             this.signInViewDone();
             setTimeout(enyo.bind(this, function() {
+                this.$.signInView.setCancelButtonLabel($L("Cancel"));
+                this.$.signInView.setText("secondary");
                 this.$.signInView.ready();
             }), 500);
         }
