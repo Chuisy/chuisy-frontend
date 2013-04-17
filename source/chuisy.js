@@ -108,7 +108,9 @@
             Destroy the active user object locally and set the active user to null
         */
         signOut: function() {
-            chuisy.accounts.getActiveUser().destroy({nosync: true});
+            if (chuisy.accounts.getActiveUser()) {
+                chuisy.accounts.getActiveUser().destroy({nosync: true});
+            }
             chuisy.accounts.setActiveUser(null);
         }
     };

@@ -276,8 +276,10 @@ enyo.kind({
             chuisy.cards.unshift(card);
             this.refresh();
         }
-        chuisy.cards.fetch({update: true, remove: false});
-        enyo.Signals.send("onShowGuide", {view: "goodies"});
+        if (chuisy.accounts.getActiveUser()) {
+            chuisy.cards.fetch({update: true, remove: false});
+            enyo.Signals.send("onShowGuide", {view: "goodies"});
+        }
     },
     deactivate: function() {
         this.$.stagePopup.hide();
