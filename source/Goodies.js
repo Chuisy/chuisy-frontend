@@ -276,7 +276,7 @@ enyo.kind({
             chuisy.cards.unshift(card);
             this.refresh();
         }
-        if (chuisy.accounts.getActiveUser()) {
+        if (App.isSignedIn()) {
             chuisy.cards.fetch({update: true, remove: false});
             enyo.Signals.send("onShowGuide", {view: "goodies"});
         }
