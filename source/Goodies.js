@@ -3,7 +3,7 @@ enyo.kind({
     classes: "goodies",
     create: function() {
         this.inherited(arguments);
-        chuisy.cards.on("sync", this.refresh, this);
+        chuisy.cards.on("sync reset", this.refresh, this);
         this.dateFmt = new enyo.g11n.DateFmt();
     },
     /**

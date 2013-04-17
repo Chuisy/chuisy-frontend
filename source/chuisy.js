@@ -65,6 +65,8 @@
                 chuisy.accounts.stopPolling();
                 chuisy.closet.stopPolling();
                 chuisy.notifications.stopPolling();
+                chuisy.notifications.reset();
+                chuisy.cards.reset();
             }
         },
         /*

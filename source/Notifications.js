@@ -13,7 +13,7 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("sync", this.refresh, this);
+        chuisy.notifications.on("sync reset", this.refresh, this);
     },
     /**
         Refreshes notification list with loaded items
@@ -64,7 +64,7 @@ enyo.kind({
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "goody":
-                    this.$.text.setContent($L("You have received a new goody! Check it out on now your Goodies Wall!"));
+                    this.$.text.setContent($L("You have received a new goody! Check it out now on your Goodies Wall!"));
                     image = "assets/images/goody_icon_small.png";
                     break;
             }
