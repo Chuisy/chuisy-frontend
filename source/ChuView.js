@@ -119,7 +119,7 @@ enyo.kind({
         this.$.time.setContent(this.chu.getTimeText());
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
-        // this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
+        this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
         this.addRemoveClass("owned", this.isOwned());
 
@@ -645,7 +645,7 @@ enyo.kind({
                                 // CATEGORY, PRICE, COMMENTS, LIKES
                                 {classes: "chuview-store-price", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
-                                    {classes: "chuview-price", name: "price", content: "35€"},
+                                    {classes: "chuview-price", name: "price"},
                                     {kind: "onyx.Button", classes: "chuview-store button", name: "storeButton", showing: false, ontap: "showStore", components: [
                                         {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
                                         {tag: "img", classes: "chuview-store-icon", attributes: {src: "assets/images/black_marker.png"}}
