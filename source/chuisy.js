@@ -503,8 +503,7 @@
             var options = {
                 url: chuisy.apiRoot + chuisy.version + "/device/add/",
                 data: {token: deviceToken},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
