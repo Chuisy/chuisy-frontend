@@ -189,12 +189,12 @@ enyo.kind({
 
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.$.mainView.openView("getstarted", null, true);
+                this.navigateTo("getstarted", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-                this.$.mainView.openView("feed", null, true);
+                this.navigateTo("feed", null, true);
                 this.$.signInView.setCancelButtonLabel($L("Cancel"));
                 this.$.signInView.setText("secondary");
             }));
@@ -255,7 +255,7 @@ enyo.kind({
         window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
             var notification = pending.notifications[0];
             if (notification) {
-                this.navigateTo(notification.uri);
+                this.navigateToUri(notification.uri);
             }
         }));
     },
@@ -308,114 +308,126 @@ enyo.kind({
     recoverStateFromUri: function() {
         var match, hash = window.location.hash;
         if ((match = hash.match(/^#!\/(.+)/))) {
-            this.navigateTo(match[1]);
+            this.updateHistory("feed");
+            this.navigateToUri(match[1]);
         } else {
-            this.navigateTo("feed/");
+            this.navigateTo("feed");
         }
     },
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateTo: function(uri, obj) {
-        if ((match2 = uri.match(/^auth\/(.+)/))) {
-            // auth/{base64-encoded auth credentials}
-            // The user has been redirected from the backend with authentication credentials. Let's sign him in.
-            chuisy.authCredentials = JSON.parse(Base64.decode(match2[1]));
-            chuisy.savePersistentObject("authCredentials", chuisy.authCredentials);
-            this.signedIn();
-            App.updateHistory("");
-        } else if (uri.match(/^feed\/$/)) {
+    navigateToUri: function(uri, obj) {
+        if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.$.mainView.openView("feed");
+            this.navigateTo("feed");
         } else if (uri.match(/^discover\/$/)) {
             // discover/
             // Lets discover some stuff!
-            this.$.mainView.openView("discover");
+            this.navigateTo("discover");
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.$.mainView.openView("profile");
+            this.navigateTo("profile");
         } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
             // settings/
             // Open settings view
-            this.$.mainView.openView("settings");
+            this.navigateTo("settings");
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.$.mainView.openView("closet");
+            this.navigateTo("closet");
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
-            this.$.mainView.openView("goodies");
+            this.navigateTo("goodies");
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
-            var card;
-            if (obj) {
-                card = obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
-            }
-            this.$.mainView.openView("goodies", card);
+            obj = obj && obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
+            this.navigateTo("goodies", obj);
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
-            this.$.mainView.openView("notifications");
+            this.navigateTo("notifications");
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.$.mainView.composeChu();
+                this.navigateTo("compose");
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
-
-                if (obj) {
-                    // A chu object has been provided. So we can open it directly.
-                    var chu = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
-                    this.$.mainView.openView("chu", chu);
-                } else if (App.checkConnection()) {
-                    // We don't have a chu object, but we do have an id. Let's fetch it!
-                    var chu = new chuisy.models.Chu({id: match3[1], stub: true});
-                    this.$.mainView.openView("chu", chu);
-                }
+                obj = obj || new chuisy.models.Chu({id: match3[1], stub: true});
+                this.navigateTo("chu", obj);
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
-            if (obj) {
+            if (!obj && App.checkConnection()) {
                 // A user object has been provided. So we can open it directly.
-                var user = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
-                this.$.mainView.openView("user", user);
-            } else if (App.checkConnection()) {
-                var user = new chuisy.models.User({id: match2[1]});
-                user.fetch();
-                this.$.mainView.openView("user", user);
+                obj = new chuisy.models.User({id: match2[1]});
+                obj.fetch();
             }
+            this.navigateTo("user", obj);
         } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
-            // store/{store id}/
-            // This is the URI to a store
-            if (obj) {
-                // A user store has been provided. So we can open it directly.
-                var store = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
-                this.$.mainView.openView("store", store);
-            } else if (App.checkConnection()) {
-                var store = new chuisy.models.Store({id: match2[1]});
-                store.fetch();
-                this.$.mainView.openView("store", store);
+            // user/{user id}/
+            // This is the URI to a users profile
+            if (!obj && App.checkConnection()) {
+                // A user object has been provided. So we can open it directly.
+                obj = new chuisy.models.Store({id: match2[1]});
+                obj.fetch();
             }
+            this.navigateTo("store", obj);
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
             window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.$.mainView.openView("feed");
+            this.navigateTo("feed");
         }
+    },
+    navigateTo: function(view, obj, direct) {
+        switch (view) {
+            case "chu":
+                obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
+                this.updateHistory("chu/" + obj.id + "/", obj);
+                break;
+            case "gift":
+                this.updateHistory("gift/" + obj.id + "/", obj);
+                break;
+            case "user":
+                obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
+                this.updateHistory("user/" + obj.id + "/", obj);
+                break;
+            case "profile":
+                this.updateHistory("profile/");
+                var user = chuisy.accounts.getActiveUser();
+                if (user) {
+                    enyo.Signals.send("onShowGuide", {view: "profile"});
+                    user.fetch({remote: true});
+                }
+                break;
+            case "store":
+                obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
+                this.updateHistory("store/" + obj.id + "/", obj);
+                break;
+            default:
+                this.updateHistory(view + "/");
+                break;
+        }
+        this.$.mainView.openView(view, obj, direct);
     },
     /**
         Adds current context to navigation history.
     */
-    updateHistory: function(sender, event) {
-        this.history.push([event.uri, event.obj]);
-        window.location.hash = "!/" + event.uri;
+    updateHistory: function(uri, obj) {
+        this.history.push([uri, obj]);
+        window.location.hash = "!/" + uri;
+        // cube.send("navigate", {
+        //     from: this.history[this.history.length-1],
+        //     to: uri
+        // });
     },
     /**
         Removes the latest context from the history and opens the previous one
@@ -423,7 +435,7 @@ enyo.kind({
     back: function() {
         if (this.history.length > 1) {
             this.history.pop();
-            this.navigateTo.apply(this, this.history[this.history.length-1]);
+            this.navigateToUri.apply(this, this.history[this.history.length-1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
@@ -441,9 +453,6 @@ enyo.kind({
         // this.$.signInSlider.animateToMax();
         this.$.signInView.removeClass("showing");
     },
-    mainViewNavigateTo: function(sender, event) {
-        this.navigateTo(event.uri, event.obj);
-    },
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
@@ -452,7 +461,7 @@ enyo.kind({
     },
     showGuide: function(sender, event) {
         var viewsShown = JSON.parse(localStorage.getItem("chuisy.viewsShown") || "{}");
-        
+
         if (!viewsShown[event.view]) {
             this.$.guide.setView(event.view);
             this.$.guide.open();
@@ -469,8 +478,44 @@ enyo.kind({
     focusHandler: function(sender, event) {
         this.focusedInput = event.originator;
     },
+    composeChu: function(sender, event) {
+        this.navigateTo("compose");
+    },
+    showChu: function(sender, event) {
+        this.navigateTo("chu", event.chu);
+    },
+    showUser: function(sender, event) {
+        this.navigateTo("user", event.user);
+    },
+    showSettings: function() {
+        this.navigateTo("settings");
+    },
+    showInviteFriends: function() {
+        this.navigateTo("invite");
+    },
+    showStore: function(sender, event) {
+        this.navigateTo("store", event.store);
+    },
+    menuChanged: function(sender, event) {
+        this.navigateTo(event.value);
+    },
+    notificationSelected: function(sender, event) {
+        this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
+    },
+    chuViewDone: function(sender, event) {
+        this.navigateTo("feed", event.chu);
+    },
+    composeChuDone: function(sender, event) {
+        this.navigateTo("chu", event.chu);
+    },
+    getStartedDone: function() {
+        this.navigateTo("feed");
+    },
     components: [
-        {kind: "MainView", classes: "enyo-fill", onUpdateHistory: "updateHistory", onBack: "back", onNavigateTo: "mainViewNavigateTo"},
+        {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
+            onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
+            onShowInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
+            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone", onGetStartedDone: "getStartedDone"},
         // FACEBOOK SIGNIN
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
