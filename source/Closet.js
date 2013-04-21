@@ -70,7 +70,7 @@ enyo.kind({
             c.removeClass("deleted");
             if (chu) {
                 // Use local images over remote ones, thumbnails over full images
-                var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
+                var image = chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
                     chu.get("localImage") || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 c.applyStyle("visibility", "visible");

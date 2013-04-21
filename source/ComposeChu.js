@@ -33,7 +33,7 @@ enyo.kind({
         }
     },
     gotImage: function(uri) {
-        this.image = uri;
+        this.image = "";
         this.$.chuForm.setImage(this.image);
 
         var user = chuisy.accounts.getActiveUser();
@@ -107,12 +107,12 @@ enyo.kind({
         attrs.latitude = this.coordinates && this.coordinates.latitude;
         attrs.longitude = this.coordinates && this.coordinates.longitude;
         var chu = chuisy.closet.create(attrs, {at: 0});
-        chu.changeImage(this.image, enyo.bind(this, function() {
+        // chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
                 chuisy.closet.syncRecords();
             }
             this.doDone({chu: chu});
-        }));
+        // }));
         return true;
     },
     chuFormBack: function() {

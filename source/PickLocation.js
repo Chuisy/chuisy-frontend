@@ -31,7 +31,8 @@ enyo.kind({
     */
     getGeoLocation: function() {
         App.getGeoLocation(enyo.bind(this, function(position) {
-            this.coordinates = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            // this.coordinates = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+            this.coordinates = {latitude: 48.149817, longitude: 11.57726};
             this.placesUpdated();
             this.fetchPlaces();
         }), enyo.bind(this, function() {

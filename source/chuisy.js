@@ -865,15 +865,15 @@
             Backbone.Tastypie.Model.prototype.initialize.call(this, attributes, options);
             // Chus posted in this store
             this.chus = new chuisy.models.ChuCollection([], {
-                filters: _.bind(function() {
-                    return {store: this.id};
-                }, this)
+                // filters: _.bind(function() {
+                //     return {store: this.id};
+                // }, this)
             });
             // The stores followers
             this.followers = new chuisy.models.UserCollection([], {
-                url: _.bind(function() {
-                    return _.result(this, "url") + "followers/";
-                }, this)
+                // url: _.bind(function() {
+                //     return _.result(this, "url") + "followers/";
+                // }, this)
             });
         },
         /*

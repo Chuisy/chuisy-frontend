@@ -32,9 +32,9 @@ enyo.kind({
 	},
 	updateView: function() {
         this.$.name.setContent(this.store.get("name"));
-        this.$.chusCount.setContent(this.store.get("chu_count"));
+        this.$.chusCount.setContent(137);
         this.$.followButton.setContent(this.store.get("following") ? "unfollow" : "follow");
-        this.$.followersCount.setContent(this.store.get("follower_count"));
+        this.$.followersCount.setContent(533);
 
         var coverImage = this.store.get("cover_image") || this.coverPlaceholder;
         this.$.info.applyStyle("background-image", "url(" + coverImage + ")");
@@ -45,7 +45,7 @@ enyo.kind({
         this.$.followersSpinner.hide();
         var coll = this.store && this.store.followers;
         var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
-        this.$.followersCount.setContent(count);
+        // this.$.followersCount.setContent(count);
         this.$.followersPlaceholder.setShowing(!count);
     },
 	showChu: function(sender, event) {

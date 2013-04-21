@@ -101,7 +101,7 @@ enyo.kind({
         var user = this.chu.get("user");
         var store = this.chu.get("store");
 
-        var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png";
+        var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/blank.jpg";
         if (image != this.$.image.src) {
             this.$.spinner.show();
             this.$.image.addClass("loading");
@@ -296,9 +296,9 @@ enyo.kind({
             }
             if (event.notification.action == "like") {
                 this.loadLikes();
-                setTimeout(enyo.bind(this, function() {
-                    this.scrollToLikes();
-                }), 100);
+                // setTimeout(enyo.bind(this, function() {
+                //     this.scrollToLikes();
+                // }), 100);
             }
         }
     },
@@ -359,7 +359,7 @@ enyo.kind({
         }
     },
     checkSynced: function() {
-        if (this.chu.get("url") && this.chu.get("image")) {
+        if (this.chu.get("url")) {
             return true;
         } else {
             navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
@@ -698,7 +698,7 @@ enyo.kind({
                                             ]}
                                         ]}
                                     ]},
-                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
+                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", style: "margin-bottom: 20px;", name: "commentsSpinner", showing: false}
                                 ]},
                                 {style: "height: 505px"}
                             ]}
