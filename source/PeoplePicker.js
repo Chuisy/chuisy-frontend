@@ -66,6 +66,7 @@ enyo.kind({
             this.refreshList();
         } else {
             this.filteredItems = this.items;
+            this.refreshList();
         }
     },
     itemTap: function(sender, event) {
@@ -76,6 +77,7 @@ enyo.kind({
             this.deselectItem(item);
         }
         sender.addRemoveClass("selected", this.isSelected(item));
+        this.$.list.renderRow(event.index);
     },
     /**
         Select a specific _item_

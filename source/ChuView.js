@@ -344,6 +344,9 @@ enyo.kind({
         App.requireSignIn(enyo.bind(this, function() {
             var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
             this.chu.save({visibility: visibility});
+            if (visibility == "public") {
+                this.$.friendsSlider.animateToMax();
+            }
         }));
     },
     adjustShareControls: function() {
