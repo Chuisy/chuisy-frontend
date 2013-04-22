@@ -114,22 +114,37 @@ enyo.kind({
             }
         },
         sendCubeEvent: function(type, data) {
+            data = data || {};
             locString = localStorage.getItem("chuisy.lastKnownLocation");
             enyo.mixin(data, {
                 location: locString && JSON.parse(locString),
                 user: chuisy.accounts.getActiveUser(),
                 device: window.device,
-                version: App.version
+                version: App.version,
+                session_id: App.session.id
             });
             cube.send(type, data);
+        },
+        startSession: function() {
+            App.session = {
+                start: new Date(),
+                id: util.generateUuid()
+            };
+            App.sendCubeEvent("start_session");
+        },
+        endSession: function() {
+            var duration = new Date().getTime() - App.session.start.getTime();
+            App.sendCubeEvent("end_session", {duration: duration});
         }
     },
     history: [],
+    session: null,
     handlers: {
         ontap: "tapHandler",
         onfocus: "focusHandler"
     },
     create: function() {
+        this.createStart = new Date();
         this.inherited(arguments);
 
         // If app is running with Cordova, init will be called after the deviceready event
@@ -145,6 +160,10 @@ enyo.kind({
             navigator.splashscreen.hide();
         }, 1000);
     },
+    renderInto: function() {
+        this.renderStart = new Date();
+        this.inherited(arguments);
+    },
     rendered: function() {
         this.inherited(arguments);
 
@@ -152,6 +171,14 @@ enyo.kind({
         if (navigator.splashscreen) {
             this.hideSplashScreen();
         }
+        App.startSession();
+        var now = new Date();
+        App.sendCubeEvent("load_app", {
+            loading_time: now.getTime() - window.loadStart.getTime(),
+            scripts_loading_time: this.createStart.getTime() - window.loadStart.getTime(),
+            create_time: this.renderStart.getTime() - this.createStart.getTime(),
+            render_time: now.getTime() - this.renderStart.getTime()
+        });
     },
     deviceReady: function() {
         // Hide splash screen if the App has been rendered yet
@@ -302,7 +329,11 @@ enyo.kind({
         return true;
     },
     resume: function() {
+        App.startSession();
         this.checkPendingNotifications();
+    },
+    pause: function() {
+        App.endSession();
     },
     // hashChanged: function() {
     //     if (!window.ignoreHashChange) {
@@ -532,7 +563,7 @@ enyo.kind({
         // FACEBOOK SIGNIN
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
-        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume",
+        {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}
     ]
 });
