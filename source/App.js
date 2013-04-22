@@ -112,6 +112,16 @@ enyo.kind({
                     success: callback
                 });
             }
+        },
+        sendCubeEvent: function(type, data) {
+            locString = localStorage.getItem("chuisy.lastKnownLocation");
+            enyo.mixin(data, {
+                location: locString && JSON.parse(locString),
+                user: chuisy.accounts.getActiveUser(),
+                device: window.device,
+                version: App.version
+            });
+            cube.send(type, data);
         }
     },
     history: [],
@@ -171,8 +181,6 @@ enyo.kind({
         chuisy.init();
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
-
-        this.history = [["feed/"]];
 
         chuisy.notifications.on("reset", function() {
             if (App.isMobile()) {
@@ -422,12 +430,17 @@ enyo.kind({
         Adds current context to navigation history.
     */
     updateHistory: function(uri, obj) {
-        this.history.push([uri, obj]);
+        var last = this.history[this.history.length-1];
+        var now = new Date();
+        App.sendCubeEvent("navigate", {
+            from: last && last[0],
+            from_obj: last && last[1],
+            to: uri,
+            to_obj: obj,
+            duration: last && (now.getTime() - last[2].getTime())
+        });
+        this.history.push([uri, obj, now]);
         window.location.hash = "!/" + uri;
-        // cube.send("navigate", {
-        //     from: this.history[this.history.length-1],
-        //     to: uri
-        // });
     },
     /**
         Removes the latest context from the history and opens the previous one
