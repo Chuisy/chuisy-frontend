@@ -3,7 +3,6 @@ enyo.depends(
 	"$lib/layout",
 	"$lib/onyx",
 	"$lib/Base64.js",
-	"$lib/extra/phonegap",
 	"$lib/arrangers",
 	"$lib/g11n",
 	"$lib/jquery.js",
