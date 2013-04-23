@@ -115,10 +115,13 @@ enyo.kind({
         },
         sendCubeEvent: function(type, data) {
             data = data || {};
-            locString = localStorage.getItem("chuisy.lastKnownLocation");
+            var locString = localStorage.getItem("chuisy.lastKnownLocation");
+            var user = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().toJSON();
+            delete user.api_key;
+            delete user.fb_access_token;
             enyo.mixin(data, {
                 location: locString && JSON.parse(locString),
-                user: chuisy.accounts.getActiveUser(),
+                user: user,
                 device: window.device,
                 version: App.version,
                 session_id: App.session && App.session.id,
