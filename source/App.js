@@ -321,11 +321,13 @@ enyo.kind({
     online: function() {
         this.log("online");
         chuisy.setOnline(true);
+        App.sendCubeEvent("online");
         return true;
     },
     offline: function() {
         this.log("offline");
         chuisy.setOnline(false);
+        App.sendCubeEvent("offline");
         return true;
     },
     resume: function() {
