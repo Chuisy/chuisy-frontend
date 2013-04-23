@@ -560,7 +560,7 @@ enyo.kind({
     components: [
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
             onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
-            onShowInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
+            onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
             onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone", onGetStartedDone: "getStartedDone"},
         // FACEBOOK SIGNIN
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
