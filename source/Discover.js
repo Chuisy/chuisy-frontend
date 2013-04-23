@@ -83,7 +83,7 @@ enyo.kind({
             this.$.resultPanels.setIndex(event.originator.index);
         }
     },
-    searchInputChange: function() {
+    searchInputEnter: function() {
         var query = this.$.searchInput.getValue();
 
         if (query) {
@@ -91,6 +91,7 @@ enyo.kind({
             this.search("user", query);
             this.search("chu", query);
             this.search("store", query);
+            this.$.searchInput.blur();
         } else {
             this.searchInputCancel();
         }
@@ -209,7 +210,7 @@ enyo.kind({
     components: [
         // SEARCH INPUT
         {style: "padding: 5px; box-sizing: border-box;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onChange: "searchInputChange", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false, changeDelay: 500}
+            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false, changeDelay: 500}
         ]},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
