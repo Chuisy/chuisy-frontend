@@ -6,16 +6,17 @@ enyo.kind({
     },
     generatePage:function(inPageNo, inTarget) {
         this.inherited(arguments);
-        var n = inTarget.hasNode();
-        if(n) {
-            enyo.forEach(n.querySelectorAll("IMG"), function(img) {
-                img.style.opacity = 0;
-                enyo.dispatcher.listen(img, "load", function() {
-                    img.style["-webkit-animation"] = "fadein 0.5s";
-                    img.style.opacity = 1;
-                });
-            });
-        }
+        this.doGeneratePage({pageNumber: inPageNo});
+        // var n = inTarget.hasNode();
+        // if(n) {
+        //     enyo.forEach(n.querySelectorAll("IMG"), function(img) {
+        //         img.style.opacity = 0;
+        //         enyo.dispatcher.listen(img, "load", function() {
+        //             img.style["-webkit-animation"] = "fadein 0.5s";
+        //             img.style.opacity = 1;
+        //         });
+        //     });
+        // }
     }
 });
 
@@ -180,6 +181,21 @@ enyo.kind({
         this.$.feedList.updateMetrics();
         this.$.feedList.refresh();
     },
+    generatePage: function(sender, event) {
+        // var startIndex = (event.pageNumber - 2) * this.$.feedList.getRowsPerPage();
+        enyo.asyncMethod(this, function() {
+            var rows = this.$.feedList.getRowsPerPage();
+            var startIndex = event.pageNumber * rows;
+
+            var chus = chuisy.feed.slice(startIndex, startIndex + rows);
+            for (var i=0; i<chus.length; i++) {
+                App.sendCubeEvent("impression", {
+                    chu: chus[i],
+                    where: "feed/"
+                });
+            }
+        });
+    },
     components: [
         {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
@@ -191,8 +207,8 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "CssSpinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
-            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
+        {kind: "ex.List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy", onGeneratePage: "generatePage",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}

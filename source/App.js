@@ -121,7 +121,7 @@ enyo.kind({
                 user: chuisy.accounts.getActiveUser(),
                 device: window.device,
                 version: App.version,
-                session_id: App.session.id
+                session_id: App.session && App.session.id
             });
             cube.send(type, data);
         },
