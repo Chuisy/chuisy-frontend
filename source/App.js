@@ -291,6 +291,9 @@ enyo.kind({
             var notification = pending.notifications[0];
             if (notification) {
                 this.navigateToUri(notification.uri);
+                App.sendCubeEvent("open_push_notification", {
+                    notification: notification
+                });
             }
         }));
     },
