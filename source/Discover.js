@@ -92,6 +92,9 @@ enyo.kind({
             this.search("chu", query);
             this.search("store", query);
             this.$.searchInput.blur();
+            App.sendCubeEvent("search", {
+                query: query
+            });
         } else {
             this.searchInputCancel();
         }
