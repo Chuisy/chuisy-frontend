@@ -88,12 +88,16 @@ enyo.kind({
         },
         getGeoLocation: function(success, failure) {
             navigator.geolocation.getCurrentPosition(function(position) {
+                App.sendCubeEvent("geolocation_success");
                 localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
                 if (success) {
                     success(position);
                 }
             }, function(error) {
-                console.error("Failed to retrieve geolocation! " + JSON.stringify(error));
+                App.sendCubeEvent("geolocation_fail", {
+                    error: error
+                });
+                // console.warn("Failed to retrieve geolocation! " + JSON.stringify(error));
                 var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
                 lastPosition = lastPositionString ? JSON.parse(lastPositionString) : null;
                 if (lastPosition && success) {
