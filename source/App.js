@@ -117,8 +117,10 @@ enyo.kind({
             data = data || {};
             var locString = localStorage.getItem("chuisy.lastKnownLocation");
             var user = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().toJSON();
-            delete user.api_key;
-            delete user.fb_access_token;
+            if (user) {
+                delete user.api_key;
+                delete user.fb_access_token;
+            }
             enyo.mixin(data, {
                 location: locString && JSON.parse(locString),
                 user: user,
