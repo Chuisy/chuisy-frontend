@@ -118,7 +118,7 @@
 	/*border-top: solid 1px #ccc;*/
 	position: relative;
 	z-index: 10;
-	background-color: #fafafa;
+	background-color: rgb(241, 241, 241);
 }
 
 .chuview-commentinput-decorator {
@@ -144,6 +144,10 @@
 	height: auto;
 	height: 100%;
 	box-sizing: border-box;
+	font-weight: bold;
+	background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));
+	color: rgba(109, 109, 109, 0.5);
+	text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);
 }
 
 .chuview-more-comments {
