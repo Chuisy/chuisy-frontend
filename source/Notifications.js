@@ -26,6 +26,7 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
         var image = null;
+        var subject = null;
 
         if (item.get("text")) {
             this.$.text.setContent(item.get("text"));
@@ -43,34 +44,50 @@ enyo.kind({
                     connection = $L(" that you liked");
                 }
             }
+            var time = item.getTimeText();
+            this.$.subject.hide();
             switch (item.get("action")) {
                 case "like":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
                         .replace("{{ name }}", item.get("actor").first_name)
                         .replace("{{ connection }}", connection));
+                    subject = targetObj.image;
+                    this.$.subject.show();
                     break;
                 case "comment":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong>{{ connection }}.")
                         .replace("{{ name }}", item.get("actor").first_name)
                         .replace("{{ connection }}", connection));
+                    subject = targetObj.image;
+                    this.$.subject.show();
                     break;
                 case "follow":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.")
+                        .replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "share":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>Chu</strong> with you.").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>subject</strong> with you.")
+                        .replace("{{ name }}", item.get("actor").first_name));
+                    subject = targetObj.image;
+                    this.$.subject.show();
                     break;
                 case "join":
-                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!").replace("{{ name }}", item.get("actor").first_name));
+                    this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!")
+                        .replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "goody":
                     this.$.text.setContent($L("You have received a new goody! Check it out now on your Goodies Wall!"));
-                    image = "assets/images/goody_icon_small.png";
+                    image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
+                    subject = targetObj.cover_image;
+                    this.$.subject.show();
                     break;
             }
+            this.$.time.setContent(time);
         }
 
-        this.$.image.setSrc(image || item.get("thumbnail") || "");
+        this.$.image.applyStyle("background-image", "url(" + (image || item.get("thumbnail") || "") + ")");
+        this.$.subject.applyStyle("background-image", "url(" + (subject || item.get("thumbnail") || "") + ")");
+
         this.$.notification.addRemoveClass("read", item.get("read"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
@@ -125,12 +142,12 @@ enyo.kind({
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
-                {classes: "notifications-notification-header", components: [
-                    {classes: "notifications-notification-seperator"},
-                    {kind: "Image", classes: "notifications-notification-image", name: "image"},
-                    {classes: "notifications-notification-seperator"}
+                {classes: "notifications-notification-image", name: "image"},
+                {classes: "notifications-notification-content", components: [
+                    {classes: "notifications-notification-text", name: "text", allowHtml: true},
+                    {classes: "notifications-notification-time", name: "time", allowHtml: true}
                 ]},
-                {classes: "notifications-notification-text", name: "text", allowHtml: true}
+                {classes: "notifications-notification-subject", name: "subject"}
             ]},
             {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
