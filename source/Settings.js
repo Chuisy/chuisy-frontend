@@ -69,6 +69,7 @@ enyo.kind({
                 if (choice) {
                     chuisy.signOut();
                     this.doBack();
+                    App.sendCubeEvent("logout");
                 }
             }),
             [$L("Cancel"), $L("Logout")]
