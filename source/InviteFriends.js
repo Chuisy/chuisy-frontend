@@ -118,6 +118,13 @@ enyo.kind({
             if (response.request) {
                 // User did send the request
                 this.doBack();
+                App.sendCubeEvent("fb_invite", {
+                    ids: ids
+                });
+            } else {
+                App.sendCubeEvent("fb_invite_cancel", {
+                    ids: ids
+                });
             }
         }));
     },
