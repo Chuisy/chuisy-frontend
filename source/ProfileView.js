@@ -81,6 +81,10 @@ enyo.kind({
     },
     toggleFollow: function(sender, event) {
         this.user.toggleFollow();
+        App.sendCubeEvent(this.user.get("following") ? "follow" : "unfollow", {
+            target_user: this.user,
+            where: "profile"
+        });
         return true;
     },
     signIn: function() {
