@@ -125,7 +125,8 @@ enyo.kind({
                 device: window.device,
                 version: App.version,
                 session_id: App.session && App.session.id,
-                connection: navigator.connection && navigator.connection.type
+                connection: navigator.connection && navigator.connection.type,
+                screen_res: screen.width + "x" + screen.height
             });
             cube.send(type, data);
         },
