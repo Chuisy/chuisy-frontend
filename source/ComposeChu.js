@@ -50,6 +50,9 @@ enyo.kind({
                         if (choice) {
                             App.fbRequestPublishPermissions();
                         }
+                        App.sendCubeEvent(choice ? "fb_og_approve" : "fb_og_deny", {
+                            context: "post_chu"
+                        });
                     }),
                     [$L("No"), $L("Yes")]
                 );
