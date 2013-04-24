@@ -182,7 +182,7 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleLike));
+            App.requireSignIn(enyo.bind(this, this.toggleLike), "like");
         }
         return true;
     },
@@ -259,7 +259,7 @@ enyo.kind({
     },
     commentEnter: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.postComment));
+            App.requireSignIn(enyo.bind(this, this.postComment), "comment");
         }
         event.preventDefault();
         return true;
@@ -319,7 +319,9 @@ enyo.kind({
     showUser: function() {
         var userJSON = this.chu.get("user");
         if (!userJSON && !App.isSignedIn()) {
-            enyo.Signals.send("onRequestSignIn");
+            enyo.Signals.send("onRequestSignIn", {
+                context: "other"
+            });
         } else if (userJSON && App.checkConnection()) {
             var user = new chuisy.models.User(userJSON);
             this.doShowUser({user: user});
@@ -350,7 +352,7 @@ enyo.kind({
             App.sendCubeEvent("toggle_visibility", {
                 chu: this.chu
             });
-        }));
+        }), "toggle_visibility");
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -397,7 +399,7 @@ enyo.kind({
                     });
                 });
             }
-        }));
+        }), "share_facebook");
     },
     /**
         Open twitter share dialog
@@ -412,7 +414,7 @@ enyo.kind({
                     chu: this.chu
                 });
             }
-        }));
+        }), "share_twitter");
     },
     /**
         Open pinterest share dialog
@@ -427,7 +429,7 @@ enyo.kind({
                     chu: this.chu
                 });
             }
-        }));
+        }), "share_pinterest");
     },
     /**
         Open sms composer with message / link
@@ -442,7 +444,7 @@ enyo.kind({
                     });
                 });
             }
-        }));
+        }), "share_messenger");
         event.preventDefault();
         return true;
     },
@@ -456,12 +458,12 @@ enyo.kind({
                 var message = this.getMessage();
                 window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
             }
-        }));
+        }), "share_email");
     },
     toggleFriends: function() {
         App.requireSignIn(enyo.bind(this, function() {
             this.$.friendsSlider.toggleMinMax();
-        }));
+        }), "tag_friends");
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");

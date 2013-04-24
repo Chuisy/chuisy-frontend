@@ -56,7 +56,7 @@ enyo.kind({
     },
     facebookSignIn: function() {
         // Get facebook access token
-        enyo.Signals.send("onRequestSignIn", {});
+        enyo.Signals.send("onRequestSignIn", {context: "settings"});
     },
     /**
         Sign out. Simply calls _chuisy.signOut_

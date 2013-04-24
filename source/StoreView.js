@@ -155,7 +155,7 @@ enyo.kind({
 	},
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleFollow));
+            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow_store");
         }
     },
     toggleFollow: function(sender, event) {

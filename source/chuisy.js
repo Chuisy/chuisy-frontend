@@ -1371,7 +1371,9 @@
                     $L("There was a problem with your authentication credentials. Please log in again."),
                     function() {
                         chuisy.signOut();
-                        enyo.Signals.send("onRequestSignIn");
+                        enyo.Signals.send("onRequestSignIn", {
+                            context: "error"
+                        });
                     },
                     $L("Authentication Problem"),
                     $L("Ok")
@@ -1379,7 +1381,9 @@
             } else {
                 alert($L("There was a problem with your authentication credentials. Please log in again."));
                 chuisy.signOut();
-                enyo.Signals.send("onRequestSignIn");
+                enyo.Signals.send("onRequestSignIn", {
+                    context: "error"
+                });
             }
         }
         if (xhr.status == 500) {

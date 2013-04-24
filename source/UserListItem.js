@@ -21,7 +21,7 @@ enyo.kind({
 	},
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.doToggleFollow));
+            App.requireSignIn(enyo.bind(this, this.doToggleFollow), "follow");
         }
         return true;
     },

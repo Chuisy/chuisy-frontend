@@ -76,7 +76,7 @@ enyo.kind({
     },
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleFollow));
+            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow");
         }
     },
     toggleFollow: function(sender, event) {
@@ -100,6 +100,9 @@ enyo.kind({
                     }, $L("Authentication failed"), $L("OK")));
                 }));
             }));
+            App.sendCubeEvent("signin_tap", {
+                context: "profile"
+            });
         }
     },
     activate: function(obj) {

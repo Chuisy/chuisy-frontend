@@ -42,15 +42,26 @@ enyo.kind({
             Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
         */
         loginWithFacebook: function(callback) {
+            var scope = "user_birthday,user_location,user_about_me,user_website,email";
+            App.sendCubeEvent("fb_connect_open", {
+                scope: scope
+            });
             FB.login(function(response) {
                 if (response.status == "connected") {
                     callback(response.authResponse.accessToken);
+                    App.sendCubeEvent("fb_connect_success", {
+                        scope: scope
+                    });
                 } else {
                     console.log($L("Facebook signin failed!"));
                 }
-            }, {scope: "user_birthday,user_location,user_about_me,user_website,email"});
+            }, {scope: scope});
         },
         fbRequestPublishPermissions: function(success, failure) {
+            var scope = "publish_actions";
+            App.sendCubeEvent("fb_connect_open", {
+                scope: scope
+            });
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
                     FB.login(function(response) {
@@ -58,13 +69,16 @@ enyo.kind({
                             if (success) {
                                 success(response.authResponse.accessToken);
                             }
+                            App.sendCubeEvent("fb_connect_success", {
+                                scope: scope
+                            });
                         } else {
                             console.log($L("Facebook signin failed!"));
                             if (failure) {
                                 failure();
                             }
                         }
-                    }, {scope: "publish_actions"});
+                    }, {scope: scope});
                 }
             });
         },
@@ -103,13 +117,13 @@ enyo.kind({
                 callback(response);
             }
         },
-        requireSignIn: function(callback) {
+        requireSignIn: function(callback, context) {
             if (App.isSignedIn()) {
                 callback();
             } else {
-                // User is not signed in yet. Prompt him to do so before he can like something
                 enyo.Signals.send("onRequestSignIn", {
-                    success: callback
+                    success: callback,
+                    context: context
                 });
             }
         },
@@ -232,24 +246,17 @@ enyo.kind({
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
                 this.navigateTo("getstarted", null, true);
-                this.$.signInView.setCancelButtonLabel($L("Cancel"));
-                this.$.signInView.setText("secondary");
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
                 this.navigateTo("feed", null, true);
-                this.$.signInView.setCancelButtonLabel($L("Cancel"));
-                this.$.signInView.setText("secondary");
             }));
-            this.$.signInView.setCancelButtonLabel($L("Skip"));
-            this.$.signInView.setText("primary");
+            this.$.signInView.setContext("start");
             this.$.signInView.ready();
             // this.$.signInSlider.setValue(0);
         } else {
             this.recoverStateFromUri();
             this.signInViewDone();
             setTimeout(enyo.bind(this, function() {
-                this.$.signInView.setCancelButtonLabel($L("Cancel"));
-                this.$.signInView.setText("secondary");
                 this.$.signInView.ready();
             }), 500);
         }
@@ -502,6 +509,7 @@ enyo.kind({
     requestSignIn: function(sender, event) {
         this.$.signInView.setSuccessCallback(event ? event.success : null);
         this.$.signInView.setFailureCallback(event ? event.failure : null);
+        this.$.signInView.setContext(event.context);
         // this.$.signInSlider.animateToMin();
         this.$.signInView.addClass("showing");
     },
