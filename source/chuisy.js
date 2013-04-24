@@ -834,6 +834,9 @@
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
             this.set("actor", actor);
+        },
+        getTimeText: function() {
+            return util.timeToText(this.get("time"));
         }
     });
 
