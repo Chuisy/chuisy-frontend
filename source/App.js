@@ -90,6 +90,7 @@ enyo.kind({
             navigator.geolocation.getCurrentPosition(function(position) {
                 App.sendCubeEvent("geolocation_success");
                 localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
+                App.lastKnownLocation = position;
                 if (success) {
                     success(position);
                 }
@@ -98,9 +99,11 @@ enyo.kind({
                     error: error
                 });
                 // console.warn("Failed to retrieve geolocation! " + JSON.stringify(error));
-                var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
-                lastPosition = lastPositionString ? JSON.parse(lastPositionString) : null;
-                if (lastPosition && success) {
+                if (!App.lastKnownLocation) {
+                    var lastPositionString = localStorage.getItem("chuisy.lastKnownLocation");
+                    App.lastKnownLocation = lastPositionString ? JSON.parse(lastPositionString) : null;
+                }
+                if (App.lastKnownLocation && success) {
                     success(lastPosition);
                 } else if (failure) {
                     failure();
@@ -133,14 +136,13 @@ enyo.kind({
         },
         sendCubeEvent: function(type, data) {
             data = data || {};
-            var locString = localStorage.getItem("chuisy.lastKnownLocation");
             var user = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().toJSON();
             if (user) {
                 delete user.api_key;
                 delete user.fb_access_token;
             }
             enyo.mixin(data, {
-                location: locString && JSON.parse(locString),
+                location: App.lastKnownLocation,
                 user: user,
                 device: window.device,
                 version: App.version,
