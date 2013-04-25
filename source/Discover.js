@@ -42,6 +42,10 @@ enyo.kind({
         } else {
             this.$.chuNextPageSpacer.hide();
         }
+        App.sendCubeEvent("impression", {
+            chu: chu,
+            context: "discover"
+        });
         return true;
     },
     setupStore: function(sender, event) {
