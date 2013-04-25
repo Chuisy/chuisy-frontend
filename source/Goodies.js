@@ -278,8 +278,8 @@ enyo.kind({
         }
         if (App.isSignedIn()) {
             chuisy.cards.fetch({update: true, remove: false});
-            enyo.Signals.send("onShowGuide", {view: "goodies"});
         }
+        enyo.Signals.send("onShowGuide", {view: "goodies"});
     },
     deactivate: function() {
         this.$.stagePopup.hide();

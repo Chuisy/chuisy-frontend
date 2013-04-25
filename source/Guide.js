@@ -114,6 +114,7 @@ enyo.kind({
         this.$.panels.setIndex(0);
         this.applyStyle("z-index", 1000);
         this.addClass("open");
+        this.showTime = new Date();
     },
     close: function() {
         this.removeClass("open");
@@ -128,6 +129,13 @@ enyo.kind({
         } else {
             this.close();
         }
+        var now = new Date();
+        App.sendCubeEvent("show_guide", {
+            view: this.view,
+            index: currIndex,
+            duration: now.getTime() - this.showTime.getTime()
+        });
+        this.showTime = now;
     },
     getImagesPath: function() {
         var bounds = this.getBounds();
