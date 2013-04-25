@@ -22,9 +22,14 @@ enyo.kind({
         Opens the device's camera
     */
     getImage: function(callback) {
+        this.getImageTime = new Date();
         try {
-            navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function() {
+            navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function(message) {
                 this.warn("Getting image failed!");
+                App.sendCubeEvent("get_image_fail", {
+                    message: message,
+                    duration: new Date().getTime() - this.getImageTime.getTime()
+                });
                 this.doBack();
             }), {targetWidth: 612, targetHeight: 612, allowEdit: true, correctOrientation: true, quality: 49});
         } catch (e) {
@@ -33,6 +38,10 @@ enyo.kind({
         }
     },
     gotImage: function(uri) {
+        App.sendCubeEvent("get_image_success", {
+            duration: new Date().getTime() - this.getImageTime.getTime()
+        });
+
         this.image = uri;
         this.$.chuForm.setImage(this.image);
 
@@ -62,7 +71,7 @@ enyo.kind({
             }
         }
         this.$.pickLocation.initialize();
-
+        this.pickLocationTime = new Date();
 
         // if (App.isSignedIn() && navigator.notification) {
         //     if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
@@ -83,9 +92,14 @@ enyo.kind({
         // this.$.pickLocation.initialize();
     },
     locationPicked: function (sender, event) {
+        App.sendCubeEvent("pick_store", {
+            store: event.location,
+            duration: new Date().getTime() - this.pickLocationTime.getTime()
+        });
         this.location = event.location;
         this.coordinates = event.coordinates;
         this.$.chuForm.setLocation(this.location);
+        this.postChuTime = new Date();
         this.$.panels.setIndex(1);
         enyo.Signals.send("onShowGuide", {view: "compose"});
     },
@@ -116,9 +130,23 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
+
+        App.sendCubeEvent("post_chu", {
+            chu: chu,
+            duration: new Date().getTime() - this.postChuTime.getTime()
+        });
         return true;
     },
+    pickLocationBack: function() {
+        App.sendCubeEvent("pick_store_back", {
+            duration: new Date().getTime() - this.pickLocationTime.getTime()
+        });
+        this.doBack();
+    },
     chuFormBack: function() {
+        App.sendCubeEvent("post_chu_back", {
+            duration: new Date().getTime() - this.postChuTime.getTime()
+        });
         this.$.panels.setIndex(0);
         return true;
     },
@@ -134,7 +162,7 @@ enyo.kind({
     components: [
         {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
             // STAGE 1: Pick location/place from list
-            {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "doBack"},
+            {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "pickLocationBack"},
             // STAGE 2: Pick filter, price, category
             {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"}
             // STAGE 3: Change visibility, share
