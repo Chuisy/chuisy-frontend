@@ -148,5 +148,6 @@
     "There was a problem with your authentication credentials. Please log in again.": "Es gab ein Problem mit deinen Zugangsdaten. Bitte melde dich noch einmal an.",
     "Authentication Problem": "Authentifizierungsproblem",
     "Something went wrong. Don't worry, we're fixing it.": "Da lief was schief. Keine Sorge, wir arbeiten daran.",
-    "Server Problem": "Serverproblem"
+    "Server Problem": "Serverproblem",
+    "Search...": "Suchen..."
 }

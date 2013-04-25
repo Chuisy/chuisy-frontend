@@ -115,7 +115,6 @@ enyo.kind({
         this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
         this.$.store.setContent(store && store.name || "");
         this.$.storeButtonText.setContent(store && store.name || "");
-        this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
@@ -183,7 +182,7 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleLike));
+            App.requireSignIn(enyo.bind(this, this.toggleLike), "like");
         }
         return true;
     },
@@ -194,6 +193,9 @@ enyo.kind({
         if (this.checkSynced()) {
             this.chu.toggleLike();
             this.refreshLikes();
+            App.sendCubeEvent(this.chu.get("liked") ? "like" : "unlike", {
+                chu: this.chu
+            });
         }
     },
     refreshComments: function() {
@@ -257,7 +259,7 @@ enyo.kind({
     },
     commentEnter: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.postComment));
+            App.requireSignIn(enyo.bind(this, this.postComment), "comment");
         }
         event.preventDefault();
         return true;
@@ -271,7 +273,10 @@ enyo.kind({
                 text: this.$.commentInput.getValue(),
                 user: chuisy.accounts.getActiveUser().toJSON()
             };
-            this.chu.comments.create(attrs);
+            var comment = this.chu.comments.create(attrs);
+            App.sendCubeEvent("comment", {
+                comment: comment
+            });
             this.refreshComments();
 
             this.$.commentInput.setValue("");
@@ -309,18 +314,14 @@ enyo.kind({
         this.arrangeImage();
     },
     /**
-        Open this chus share view
-    */
-    share: function() {
-        this.doShare({chu: this.chu});
-    },
-    /**
         Open this chus authors profile
     */
     showUser: function() {
         var userJSON = this.chu.get("user");
         if (!userJSON && !App.isSignedIn()) {
-            enyo.Signals.send("onRequestSignIn");
+            enyo.Signals.send("onRequestSignIn", {
+                context: "other"
+            });
         } else if (userJSON && App.checkConnection()) {
             var user = new chuisy.models.User(userJSON);
             this.doShowUser({user: user});
@@ -347,7 +348,11 @@ enyo.kind({
             if (visibility == "public") {
                 this.$.friendsSlider.animateToMax();
             }
-        }));
+
+            App.sendCubeEvent("toggle_visibility", {
+                chu: this.chu
+            });
+        }), "toggle_visibility");
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -389,10 +394,12 @@ enyo.kind({
                     picture: this.chu.get("image")
                 };
                 FB.ui(params, function(obj) {
-                    console.log(obj);
+                    App.sendCubeEvent(obj && obj.post_id ? "fb_share" : "fb_share_cancel", {
+                        chu: this.chu
+                    });
                 });
             }
-        }));
+        }), "share_facebook");
     },
     /**
         Open twitter share dialog
@@ -403,8 +410,11 @@ enyo.kind({
                 var text = this.getMessage();
                 var url = this.getShareUrl();
                 window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+                App.sendCubeEvent("share_twitter", {
+                    chu: this.chu
+                });
             }
-        }));
+        }), "share_twitter");
     },
     /**
         Open pinterest share dialog
@@ -415,8 +425,11 @@ enyo.kind({
                 var url = this.getShareUrl();
                 var media = this.chu.get("image");
                 window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+                App.sendCubeEvent("share_pinterest", {
+                    chu: this.chu
+                });
             }
-        }));
+        }), "share_pinterest");
     },
     /**
         Open sms composer with message / link
@@ -425,9 +438,15 @@ enyo.kind({
         App.requireSignIn(enyo.bind(this, function() {
             if (this.checkSynced()) {
                 var message = this.getMessage();
-                window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+                window.plugins.smsComposer.showSMSComposer("", message + " " + this.getShareUrl(), function(result) {
+                    App.sendCubeEvent(result == 1 ? "share_messenger" : "share_messenger_cancel", {
+                        chu: this.chu
+                    });
+                });
             }
-        }));
+        }), "share_messenger");
+        event.preventDefault();
+        return true;
     },
     /**
         Open email composer with message / link
@@ -439,17 +458,20 @@ enyo.kind({
                 var message = this.getMessage();
                 window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
             }
-        }));
+        }), "share_email");
     },
     toggleFriends: function() {
         App.requireSignIn(enyo.bind(this, function() {
             this.$.friendsSlider.toggleMinMax();
-        }));
+        }), "tag_friends");
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
         this.$.peoplePicker.setSelectedItems(this.chu.get("friends") || []);
         this.$.doneButton.setContent($L("done"));
+        App.sendCubeEvent("open_friends_picker", {
+            chu: this.chu
+        });
     },
     friendsClosed: function() {
         this.$.friendsButton.removeClass("active");
@@ -466,6 +488,9 @@ enyo.kind({
                 chuisy.closet.syncRecords();
             }
             this.friendsChanged = false;
+            App.sendCubeEvent("tag_friends", {
+                chu: this.chu
+            });
         }
         this.buttonLabelChanged();
     },
@@ -621,10 +646,6 @@ enyo.kind({
                                 ]}
                             ]},
                             {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
-                        ]},
-                        {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
-                        {kind: "onyx.Button", classes: "share-button", ontap: "share", showing: false, components: [
-                            {classes: "share-button-icon"}
                         ]}
                     ]},
                     {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [

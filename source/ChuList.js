@@ -71,6 +71,10 @@ enyo.kind({
                 var image = chu.get("thumbnails") && chu.get("thumbnails")["100x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
+                App.sendCubeEvent("impression", {
+                    chu: chu,
+                    context: "other"
+                });
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }
