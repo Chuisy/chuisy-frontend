@@ -103,6 +103,10 @@ enyo.kind({
                 this.isAnimating = false;
             }), 500);
         });
+
+        App.sendCubeEvent("show_card", {
+            card: card
+        });
     },
     stageTapped: function(sender, event) {
         if (!event.originator.isDescendantOf(this.$.card)) {
@@ -134,6 +138,10 @@ enyo.kind({
                 this.isAnimating = false;
             }), 100);
         }), 500);
+
+        App.sendCubeEvent("hide_card", {
+            card: this.card
+        });
     },
     //* Whether or not the scroller is actively moving
     isScrolling: function() {
@@ -200,6 +208,10 @@ enyo.kind({
             this.$.card.addClass("notransition");
             this.isAnimating = false;
         }), 500);
+
+        App.sendCubeEvent("flip_card", {
+            card: this.card
+        });
     },
     getAbsolutePosition: function(con) {
         var elem = con.hasNode();
@@ -223,6 +235,11 @@ enyo.kind({
         this.$.redeemSpinner.show();
 
         var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
+
+        App.sendCubeEvent("redeem_coupon", {
+            coupon: coupon
+        });
+
         coupon.redeem({complete: enyo.bind(this, function(request, status) {
             if (request.status == 200) {
                 this.$.redeemSpinner.hide();
@@ -230,6 +247,9 @@ enyo.kind({
                 this.card.get("coupon").redeemed = true;
                 this.$.card.addClass("redeemed");
                 this.item.addClass("redeemed");
+                App.sendCubeEvent("redeem_coupon_success", {
+                    coupon: coupon
+                });
             } else {
                 var message = request.status == 400 && request.responseText ? $L(request.responseText) : $L('Something went wrong. Please try again later!');
                 if (navigator.notification) {
@@ -239,6 +259,11 @@ enyo.kind({
                 }
                 this.$.redeemSpinner.hide();
                 this.$.redeemButton.setDisabled(false);
+                App.sendCubeEvent("redeem_coupon_fail", {
+                    coupon: coupon,
+                    status_code: request.status,
+                    response_text: request.responseText
+                });
             }
         })});
     },
