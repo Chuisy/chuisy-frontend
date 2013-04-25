@@ -63,7 +63,7 @@ enyo.kind({
         this.refresh();
         App.sendCubeEvent(user.get("following") ? "follow" : "unfollow", {
             target_user: user,
-            where: "list"
+            context: "list"
         });
         return true;
     },
