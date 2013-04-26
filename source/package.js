@@ -12,7 +12,7 @@ enyo.depends(
 	"$lib/backbone-localstorage.js",
 	// "$lib/cube-emitter.js",
 	"$lib/spin.js",
-	"$lib/gmaps",
+	// "$lib/gmaps",
 	"util.js",
 	"fsShortcuts.js",
 	"chuisy.js",

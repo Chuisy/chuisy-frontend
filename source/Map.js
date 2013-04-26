@@ -15,9 +15,19 @@ enyo.kind({
     events: {
         onMarkerTap: ""
     },
+    statics: {
+        apiLoaded: function() {
+            enyo.load("$lib/gmaps", function() {
+                enyo.Signals.send("onLoadMapsApi");
+            });
+        }
+    },
     rendered: function() {
         this.inherited(arguments);
-        this.initialize();
+        this.markers = [];
+        if (typeof(google) != "undefined") {
+            this.initialize();
+        }
     },
     centerChanged: function () {
         if (this.map) {
@@ -26,6 +36,10 @@ enyo.kind({
         }
     },
     initialize: function() {
+        if (typeof(google) == "undefined") {
+            this.warn("Can not initialize map yet. Google api is not loaded!");
+            return;
+        }
         latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
 
         var options = {
@@ -39,6 +53,9 @@ enyo.kind({
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
 
         this.markers = [];
+    },
+    loadDependencies: function(callback) {
+        enyo.load(["$lib/gmaps"]);
     },
     panToCenter: function() {
         latlng = new google.maps.LatLng(this.center.latitude, this.center.longitude);
@@ -137,7 +154,22 @@ enyo.kind({
         marker.setMap(null);
         this.markers = _.without(this.markers, marker);
     },
+    apiLoaded: function() {
+        if (this.hasNode()) {
+            this.initialize();
+        }
+    },
     components: [
-        {classes: "enyo-fill", name: "map"}
+        {classes: "enyo-fill map-container", name: "map", components: [
+            {classes: "placeholder", name: "placeholder", components: [
+                {classes: "placeholder-image"},
+                {classes: "placeholder-text", content: $L("Sorry, the map could not be loaded. Please check your internet connection!")}
+            ]}
+        ]},
+        {kind: "Signals", onLoadMapsApi: "apiLoaded"}
     ]
+});
+
+$(document).ready(function() {
+    $.getScript("http://maps.googleapis.com/maps/api/js?sensor=true&callback=Map.apiLoaded");
 });

@@ -149,5 +149,6 @@
     "Authentication Problem": "Authentifizierungsproblem",
     "Something went wrong. Don't worry, we're fixing it.": "Da lief was schief. Keine Sorge, wir arbeiten daran.",
     "Server Problem": "Serverproblem",
-    "Search...": "Suchen..."
+    "Search...": "Suchen...",
+    "Sorry, the map could not be loaded. Please check your internet connection!": "Sorry, die Karte konnte nicht geladen werden. Bitte überprüfe deine Internetverbindung!"
 }
