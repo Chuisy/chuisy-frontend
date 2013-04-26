@@ -172,6 +172,11 @@ enyo.kind({
     },
     create: function() {
         this.createStart = new Date();
+
+        this.cachedUsers = new chuisy.models.UserCollection();
+        this.cachedChus = new chuisy.models.ChuCollection();
+        this.cachedStores = new chuisy.models.StoreCollection();
+
         this.inherited(arguments);
 
         // If app is running with Cordova, init will be called after the deviceready event
@@ -455,6 +460,8 @@ enyo.kind({
         switch (view) {
             case "chu":
                 obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
+                obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
+                this.cachedChus.add(obj);
                 this.updateHistory("chu/" + obj.id + "/", obj);
                 break;
             case "gift":
@@ -462,6 +469,8 @@ enyo.kind({
                 break;
             case "user":
                 obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
+                obj = this.cachedUsers.get(obj.id) || obj;
+                this.cachedUsers.add(obj);
                 this.updateHistory("user/" + obj.id + "/", obj);
                 break;
             case "profile":
@@ -474,6 +483,8 @@ enyo.kind({
                 break;
             case "store":
                 obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
+                obj = this.cachedStores.get(obj.id) || obj;
+                this.cachedStores.add(obj);
                 this.updateHistory("store/" + obj.id + "/", obj);
                 break;
             default:

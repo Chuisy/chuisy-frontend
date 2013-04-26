@@ -132,11 +132,10 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        var userJSON = chuisy.feed.at(event.index).get("user");
-        if (!userJSON && !App.isSignedIn()) {
+        var user = chuisy.feed.at(event.index).get("user");
+        if (!user && !App.isSignedIn()) {
             enyo.Signals.send("onRequestSignIn", {context: "other"});
-        } else if (userJSON) {
-            var user = new chuisy.models.User(userJSON);
+        } else if (user) {
             this.doShowUser({user: user});
         }
     },

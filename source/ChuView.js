@@ -317,25 +317,22 @@ enyo.kind({
         Open this chus authors profile
     */
     showUser: function() {
-        var userJSON = this.chu.get("user");
-        if (!userJSON && !App.isSignedIn()) {
+        var user = this.chu.get("user");
+        if (!user && !App.isSignedIn()) {
             enyo.Signals.send("onRequestSignIn", {
                 context: "other"
             });
-        } else if (userJSON && App.checkConnection()) {
-            var user = new chuisy.models.User(userJSON);
+        } else if (user && App.checkConnection()) {
             this.doShowUser({user: user});
         }
     },
     showCommentUser: function(sender, event) {
         if (App.checkConnection()) {
-            var user = new chuisy.models.User(this.chu.comments.at(event.index).get("user"));
-            this.doShowUser({user: user});
+            this.doShowUser({user: this.chu.comments.at(event.index).get("user")});
         }
     },
     showStore: function(sender, event) {
-        var store = new chuisy.models.Store(this.chu.get("store"));
-        this.doShowStore({store: store});
+        this.doShowStore({store: this.chu.get("store")});
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
