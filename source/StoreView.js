@@ -129,12 +129,12 @@ enyo.kind({
 		city += this.store.get("city") || "";
 		this.$.city.setContent(city);
 
-		// this.$.phone.setContent(this.store.get("phone") ?
-		// 	"<strong>" + $L("Phone: ") + "</strong><a href='tel:'" + this.store.get("phone") + "'>" + this.store.get("phone") + "</a>"
-		// 	: "");
 		this.$.phone.setContent(this.store.get("phone") ? "<strong>" + $L("Phone: ") + "</strong>" + this.store.get("phone") : "");
+        this.$.phoneContainer.setShowing(this.store.get("phone"));
 		this.$.website.setContent(this.store.get("website") ? "<strong>" + $L("Web: ") + "</strong>" + this.store.get("website") : "");
+        this.$.websiteContainer.setShowing(this.store.get("website"));
 		this.$.email.setContent(this.store.get("email") ? "<strong>" + $L("Email: ") + "</strong>" + this.store.get("email") : "");
+        this.$.emailContainer.setShowing(this.store.get("email"));
 
 		this.$.openingHours.setContent(this.store.get("opening_hours") && this.store.get("opening_hours").replace(/\n/g, "<br>"));
 		this.$.openingHoursContainer.setShowing(this.store.get("opening_hours"));
@@ -206,15 +206,19 @@ enyo.kind({
 					]},
 					{kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
 						{kind: "onyx.Button", name: "locationButton", ontap: "showMap", classes: "storeview-location-button"},
-						{classes: "storeview-info-block", components: [
-							{classes: "storeview-info-text", components: [
-								{name: "address"},
-								{name: "city"},
-								{name: "phone", allowHtml: true},
-								{name: "website", allowHtml: true},
-								{name: "email", allowHtml: true}
-							]}
-						]},
+                        {classes: "storeview-info-block", name: "addressContainer", components: [
+                            {classes: "storeview-info-text", name: "address"},
+                            {classes: "storeview-info-text", name: "city"}
+                        ]},
+                        {classes: "storeview-info-block", name: "phoneContainer", components: [
+                            {classes: "storeview-info-text", allowHtml: true, name: "phone"}
+                        ]},
+                        {classes: "storeview-info-block", name: "websiteContainer", components: [
+                            {classes: "storeview-info-text", allowHtml: true, name: "website"}
+                        ]},
+                        {classes: "storeview-info-block", name: "emailContainer", components: [
+                            {classes: "storeview-info-text", allowHtml: true, name: "email"}
+                        ]},
 						{classes: "storeview-info-block", name: "openingHoursContainer", components: [
 							{classes: "storeview-info-header", content: $L("Opening hours:")},
 							{classes: "storeview-info-text", allowHtml: true, name: "openingHours"}
