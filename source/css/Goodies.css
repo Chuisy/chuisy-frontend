@@ -251,12 +251,12 @@
 .goodies-card-text {
 	color: #555;
 	width: 100%;
-	padding: 40px;
+	padding: 40px 40px 20px 40px;
 	box-sizing: border-box;
 }
 
 .goodies-card.wide .goodies-card-text {
-	padding: 30px;
+	padding: 30px 30px 20px 30px;
 }
 
 .goodies-card-redeem {
@@ -317,4 +317,18 @@
 	top: 0;
 	bottom: 0;
 	margin: auto;
+}
+
+.goodies-card-close {
+	width: 36px;
+	height: 36px;
+	background: url(../../assets/images/cancel_stamped.png);
+	background-size: 36px 72px;
+	background-position: 0 0;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+.goodies-card-cancel:active:hover:not([disabled]) {
+	background-position: 0 -36px;
 }

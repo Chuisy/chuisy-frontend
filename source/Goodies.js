@@ -296,6 +296,10 @@ enyo.kind({
 
         return true;
     },
+    closeButtonTapped: function() {
+        this.hideCard();
+        return true;
+    },
     activate: function(card) {
         if (card) {
             chuisy.cards.unshift(card);
@@ -341,7 +345,7 @@ enyo.kind({
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},
-                        {}
+                        {classes: "goodies-card-close", ontap: "closeButtonTapped"}
                     ]}
                 ]}
             ]}
