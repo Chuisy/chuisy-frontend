@@ -17,12 +17,20 @@ enyo.kind({
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
         var coupon = card.get("coupon");
-        event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image_thumbnail") + ")");
         event.item.$.cardItem.addClass(card.get("format"));
         event.item.$.cardItem.addRemoveClass("coupon", coupon);
         event.item.$.cardItem.addRemoveClass("redeemed", coupon && coupon.redeemed);
         event.item.$.cardItem.addRemoveClass("expired", coupon && new Date(coupon.valid_until) < new Date());
+
+        this.preloadImages(card);
         return true;
+    },
+    preloadImages: function(card) {
+        var img1 = new Image();
+        img1.src = card.get("cover_image");
+        var img2 = new Image();
+        img2.src = card.get("content_image");
     },
     getCardCoords: function(item) {
         var ib = item.getBounds();
