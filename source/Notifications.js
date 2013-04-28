@@ -145,7 +145,7 @@ enyo.kind({
                 {classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-content", components: [
                     {classes: "notifications-notification-text", name: "text", allowHtml: true},
-                    {classes: "notifications-notification-time", name: "time", allowHtml: true}
+                    {classes: "notifications-notification-time", name: "time"}
                 ]},
                 {classes: "notifications-notification-subject", name: "subject"}
             ]},
