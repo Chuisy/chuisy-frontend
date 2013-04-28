@@ -464,7 +464,11 @@ enyo.kind({
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
-        this.$.peoplePicker.setSelectedItems(this.chu.get("friends") || []);
+        var friends = [];
+        for (var i=0; i<this.chu.get("friends").length; i++) {
+            friends.push(new chuisy.models.User(this.chu.get("friends")[i]));
+        }
+        this.$.peoplePicker.setSelectedItems(friends);
         this.$.doneButton.setContent($L("done"));
         App.sendCubeEvent("open_friends_picker", {
             chu: this.chu
