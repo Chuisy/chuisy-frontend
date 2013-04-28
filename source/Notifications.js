@@ -45,21 +45,16 @@ enyo.kind({
                 }
             }
             var time = item.getTimeText();
-            this.$.subject.hide();
             switch (item.get("action")) {
                 case "like":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
                         .replace("{{ name }}", item.get("actor").first_name)
                         .replace("{{ connection }}", connection));
-                    subject = targetObj.image;
-                    this.$.subject.show();
                     break;
                 case "comment":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>commented</strong> on a <strong>Chu</strong>{{ connection }}.")
                         .replace("{{ name }}", item.get("actor").first_name)
                         .replace("{{ connection }}", connection));
-                    subject = targetObj.image;
-                    this.$.subject.show();
                     break;
                 case "follow":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> is now <strong>following</strong> you.")
@@ -68,8 +63,6 @@ enyo.kind({
                 case "share":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>shared</strong> a <strong>subject</strong> with you.")
                         .replace("{{ name }}", item.get("actor").first_name));
-                    subject = targetObj.image;
-                    this.$.subject.show();
                     break;
                 case "join":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>joined Chuisy</strong>!")
@@ -78,15 +71,15 @@ enyo.kind({
                 case "goody":
                     this.$.text.setContent($L("You have received a new goody! Check it out now on your Goodies Wall!"));
                     image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
-                    subject = targetObj.cover_image;
-                    this.$.subject.show();
                     break;
             }
             this.$.time.setContent(time);
         }
 
         this.$.image.applyStyle("background-image", "url(" + (image || item.get("thumbnail") || "") + ")");
-        this.$.subject.applyStyle("background-image", "url(" + (subject || item.get("thumbnail") || "") + ")");
+
+        this.$.subject.applyStyle("background-image", "url(" + (item.get("subject_image") || "") + ")");
+        this.$.subject.setShowing(item.get("subject_image"));
 
         this.$.notification.addRemoveClass("read", item.get("read"));
 
