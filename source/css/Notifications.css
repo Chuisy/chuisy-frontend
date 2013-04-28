@@ -67,4 +67,5 @@
 
 .notifications .placeholder-image {
 	background-image: url(../../assets/images/notifications_placeholder.png);
+	margin: auto;
 }

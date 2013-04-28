@@ -13,6 +13,7 @@ enyo.kind({
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
         this.$.placeholder.setShowing(!chuisy.cards.length);
+        this.$.spinner.removeClass("rise");
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
@@ -314,6 +315,7 @@ enyo.kind({
             this.refresh();
         }
         if (App.isSignedIn()) {
+            this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
         enyo.Signals.send("onShowGuide", {view: "goodies"});
@@ -323,6 +325,7 @@ enyo.kind({
         this.hideCard();
     },
     components: [
+        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [

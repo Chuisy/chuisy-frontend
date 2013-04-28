@@ -127,11 +127,11 @@ enyo.kind({
         this.$.list.refresh();
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
-        {classes: "placeholder", name: "placeholder", components: [
-            {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
-        ]},
+        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},
+        // {classes: "placeholder", name: "placeholder", components: [
+            {name: "placeholder", classes: "placeholder-image absolute-center"},
+            // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
+        // ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
