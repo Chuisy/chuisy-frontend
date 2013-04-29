@@ -1391,40 +1391,40 @@
         }
     });
 
-    $(document).ajaxError(function(e, xhr, options) {
-        if (xhr.status == 401) {
-            if (navigator.notification) {
-                navigator.notification.alert(
-                    $L("There was a problem with your authentication credentials. Please log in again."),
-                    function() {
-                        chuisy.signOut();
-                        enyo.Signals.send("onRequestSignIn", {
-                            context: "error"
-                        });
-                    },
-                    $L("Authentication Problem"),
-                    $L("Ok")
-                );
-            } else {
-                alert($L("There was a problem with your authentication credentials. Please log in again."));
-                chuisy.signOut();
-                enyo.Signals.send("onRequestSignIn", {
-                    context: "error"
-                });
-            }
-        }
-        if (xhr.status == 500) {
-            if (navigator.notification) {
-                navigator.notification.alert(
-                    $L("Something went wrong. Don't worry, we're fixing it."),
-                    $L("Server Problem"),
-                    $L("Ok")
-                );
-            } else {
-                alert($L("Something went wrong. Don't worry, we're fixing it."));
-            }
-        }
-    });
+    // $(document).ajaxError(function(e, xhr, options) {
+    //     if (xhr.status == 401) {
+    //         if (navigator.notification) {
+    //             navigator.notification.alert(
+    //                 $L("There was a problem with your authentication credentials. Please log in again."),
+    //                 function() {
+    //                     chuisy.signOut();
+    //                     enyo.Signals.send("onRequestSignIn", {
+    //                         context: "error"
+    //                     });
+    //                 },
+    //                 $L("Authentication Problem"),
+    //                 $L("Ok")
+    //             );
+    //         } else {
+    //             alert($L("There was a problem with your authentication credentials. Please log in again."));
+    //             chuisy.signOut();
+    //             enyo.Signals.send("onRequestSignIn", {
+    //                 context: "error"
+    //             });
+    //         }
+    //     }
+    //     if (xhr.status == 500) {
+    //         if (navigator.notification) {
+    //             navigator.notification.alert(
+    //                 $L("Something went wrong. Don't worry, we're fixing it."),
+    //                 $L("Server Problem"),
+    //                 $L("Ok")
+    //             );
+    //         } else {
+    //             alert($L("Something went wrong. Don't worry, we're fixing it."));
+    //         }
+    //     }
+    // });
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
