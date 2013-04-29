@@ -108,7 +108,11 @@ enyo.kind({
     refresh: function() {
         var chuCount = this.chus && this.chus.length || 0;
         this.$.list.setCount(Math.ceil(chuCount / (this.cellCount || 1)));
-        this.$.list.refresh();
+        if (this.chus && this.chus.meta && this.chus.meta.offset) {
+            this.$.list.refresh();
+        } else {
+            this.$.list.reset();
+        }
         this.doRefresh();
     },
     chuTap: function(sender, event) {

@@ -130,7 +130,11 @@ enyo.kind({
 
             if (which == "chu" || which == "store") {
                 this.$[which + "List"].setCount(coll.length);
-                this.$[which + "List"].refresh();
+                if (coll.meta && coll.meta.offset) {
+                    this.$[which + "List"].refresh();
+                } else {
+                    this.$[which + "List"].reset();
+                }
             }
         }
     },

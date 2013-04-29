@@ -13,21 +13,20 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("reset", this.reset, this);
+        chuisy.notifications.on("reset", this.refresh, this);
         chuisy.notifications.on("request", this.showSpinner, this);
     },
     /**
         Refreshes notification list with loaded items
     */
-    reset: function() {
-        this.$.list.setCount(chuisy.notifications.length);
-        this.$.list.reset();
-        this.$.placeholder.setShowing(!chuisy.notifications.length);
-        this.hideSpinner();
-    },
     refresh: function() {
         this.$.list.setCount(chuisy.notifications.length);
-        this.$.list.refresh();
+        if (chuisy.notifications.meta && chuisy.notifications.meta.offset) {
+            this.$.list.refresh();
+        } else {
+            this.$.list.reset();
+        }
+        this.$.placeholder.setShowing(!chuisy.notifications.length);
         this.hideSpinner();
     },
     showSpinner: function() {
