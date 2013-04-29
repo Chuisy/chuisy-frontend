@@ -13,15 +13,30 @@ enyo.kind({
     },
     create: function() {
         this.inherited(arguments);
-        chuisy.notifications.on("sync reset", this.refresh, this);
+        chuisy.notifications.on("reset", this.reset, this);
+        chuisy.notifications.on("request", this.showSpinner, this);
     },
     /**
         Refreshes notification list with loaded items
     */
+    reset: function() {
+        this.$.list.setCount(chuisy.notifications.length);
+        this.$.list.reset();
+        this.$.placeholder.setShowing(!chuisy.notifications.length);
+        this.hideSpinner();
+    },
     refresh: function() {
         this.$.list.setCount(chuisy.notifications.length);
         this.$.list.refresh();
-        this.$.placeholder.setShowing(!chuisy.notifications.length);
+        this.hideSpinner();
+    },
+    showSpinner: function() {
+        setTimeout(enyo.bind(this, function() {
+            this.$.nextPageSpinner.addClass("rise");
+        }), 500);
+    },
+    hideSpinner: function() {
+        this.$.nextPageSpinner.removeClass("rise");
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
@@ -69,7 +84,7 @@ enyo.kind({
                         .replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "goody":
-                    this.$.text.setContent($L("You have received a new goody! Check it out now on your Goodies Wall!"));
+                    this.$.text.setContent($L("You have received a new goody!"));
                     image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
                     break;
             }
@@ -95,9 +110,8 @@ enyo.kind({
         return true;
     },
     nextPage: function() {
-        this.$.nextPageSpinner.addClass("rise");
         chuisy.notifications.fetchNext({success: enyo.bind(this, function() {
-            this.$.nextPageSpinner.removeClass("rise");
+            this.refresh();
         })});
     },
     notificationTapped: function(sender, event) {
@@ -132,7 +146,7 @@ enyo.kind({
             {name: "placeholder", classes: "placeholder-image absolute-center"},
             // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
         // ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 40, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-image", name: "image"},

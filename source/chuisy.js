@@ -1196,7 +1196,7 @@
             }
             this.meta = this.meta || {};
             this.meta.unseen_count = 0;
-            this.trigger("reset");
+            // this.trigger("reset");
         },
         /*
             Get number of unseen notifications
@@ -1213,6 +1213,12 @@
             return this.filter(function(el) {
                 return !el.get("read");
             }).length;
+        },
+        fetch: function(options) {
+            options = options || {};
+            options.data = options.data || {};
+            options.data.limit = options.data.limit || 40;
+            Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
         }
     });
 
