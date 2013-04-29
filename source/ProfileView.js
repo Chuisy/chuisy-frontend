@@ -71,7 +71,7 @@ enyo.kind({
         this.$[which + "Spinner"].hide();
         var coll = this.user && this.user[which];
         var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
-        this.$[which + "Count"].setContent(count);
+        // this.$[which + "Count"].setContent(count);
         this.$[which + "Placeholder"].setShowing(!count);
     },
     followButtonTapped: function() {
