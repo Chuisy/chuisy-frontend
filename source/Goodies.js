@@ -356,7 +356,7 @@ enyo.kind({
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},
-                        {classes: "goodies-card-close", ontap: "closeButtonTapped"}
+                        {classes: "goodies-card-tool-button close", ontap: "closeButtonTapped"}
                     ]}
                 ]}
             ]}

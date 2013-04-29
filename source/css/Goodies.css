@@ -319,16 +319,20 @@
 	margin: auto;
 }
 
-.goodies-card-close {
-	width: 36px;
-	height: 36px;
-	background: url(../../assets/images/cancel_stamped.png);
-	background-size: 36px 72px;
-	background-position: 0 0;
+.goodies-card-tool-button {
+	width: 32px;
+	height: 32px;
+	background: url() no-repeat 0 0;
+	background-size: 32px 64px;
 	display: inline-block;
 	margin-bottom: 10px;
+
 }
 
-.goodies-card-cancel:active:hover:not([disabled]) {
-	background-position: 0 -36px;
+.goodies-card-tool-button.close {
+	background-image: url(../../assets/images/cancel_stamped.png);
+}
+
+.goodies-card-tool-button:active:hover:not([disabled]) {
+	background-position: 0 -32px;
 }
