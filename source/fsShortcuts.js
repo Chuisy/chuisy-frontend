@@ -25,34 +25,29 @@ window.fsShortcuts = {
                 }
             }, options);
         } catch (e) {
-            console.error("Could not start file upload. " + e.message);
             if (failure) {
-                failure(e);
+                failure();
             }
         }
     },
     download: function(source, targetDir, targetFileName, success, failure) {
-        try {
-            fsShortcuts.getDir(targetDir, function(directory) {
-                var target = directory.fullPath + "/" + targetFileName;
-                var ft = new FileTransfer();
-                var uri = encodeURI(source);
+        fsShortcuts.getDir(targetDir, function(directory) {
+            var target = directory.fullPath + "/" + targetFileName;
+            var ft = new FileTransfer();
+            var uri = encodeURI(source);
 
-                ft.download(uri, target, function(entry) {
-                    console.log("Download complete: " + entry.fullPath);
-                    if (success) {
-                        success("file://" + entry.fullPath);
-                    }
-                }, function(error) {
-                    console.error("File download failed! " + error);
-                });
+            ft.download(uri, target, function(entry) {
+                console.log("Download complete: " + entry.fullPath);
+                if (success) {
+                    success("file://" + entry.fullPath);
+                }
+            }, function(error) {
+                console.log("File download failed! " + error);
             });
-        } catch (e) {
-            console.error("Could not start file download. " + e);
-        }
+        }, failure);
     },
     getDir: function(relPath, success, failure) {
-        try {
+        if (window.requestFileSystem) {
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {
                 fileSys.root.getDirectory(relPath, {create:true, exclusive: false}, function(directory) {
                     if (success) {
@@ -64,12 +59,12 @@ window.fsShortcuts = {
             }, function(error) {
                 console.error("Could not get file system. " + error);
             });
-        } catch (e) {
-            console.error("Could not get directory. " + e);
+        } else if (failure) {
+            failure();
         }
     },
     moveFile: function(source, targetDir, targetFileName, success, failure) {
-        try {
+        if (window.resolveLocalFileSystemURI) {
             window.resolveLocalFileSystemURI(source, function(entry) {
                 fsShortcuts.getDir(targetDir, function(directory) {
                     entry.copyTo(directory, targetFileName, function(entry) {
@@ -83,15 +78,12 @@ window.fsShortcuts = {
             }, function(error) {
                 console.error("Could not resolve source uri. " + JSON.stringify(error));
             });
-        } catch (e) {
-            console.error("Could not resolve source uri. " + e.message);
-            if (failure) {
-                failure(e);
-            }
+        } else if (failure) {
+            failure();
         }
     },
     saveImageFromData: function(data, relTargetPath, success, failure) {
-        try {
+        if (window.plugins && window.plugins.imageResizer) {
             var match = data.match(/^data:image\/(png|jpg);base64,(.+)$/);
             var format = match[1];
             var plainData = match[2];
@@ -102,12 +94,12 @@ window.fsShortcuts = {
             }, function(error) {
                 console.error("Could not save image. " + error);
             }, plainData, {filename: relTargetPath, format: format});
-        } catch(e) {
-            console.error("Could not save image. " + e);
+        } else if (failure) {
+            failure();
         }
     },
     removeFile: function(url, success, failure) {
-        try {
+        if (window.resolveLocalFileSystemURI) {
             window.resolveLocalFileSystemURI(url, function(entry) {
                 entry.remove(function() {
                     console.log("File removed successfully: " + entry.fullPath);
@@ -120,8 +112,8 @@ window.fsShortcuts = {
             }, function(error) {
                 console.error("Could not resolve url " + error);
             });
-        } catch(e) {
-            console.error("Failed to remove file at " + url + ". " + e);
+        } else if (failure) {
+            failure();
         }
     },
     existsFile: function(url, callback) {
