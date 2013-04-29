@@ -123,5 +123,16 @@ window.fsShortcuts = {
         } catch(e) {
             console.error("Failed to remove file at " + url + ". " + e);
         }
+    },
+    existsFile: function(url, callback) {
+        if (window.resolveLocalFileSystemURI) {
+            window.resolveLocalFileSystemURI(url, function() {
+                callback(true);
+            }, function() {
+                callback(false);
+            });
+        } else {
+            callback(false);
+        }
     }
 };

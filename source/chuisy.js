@@ -18,6 +18,7 @@
 
             if (!lightweight) {
                 chuisy.closet.fetch();
+                chuisy.closet.checkLocalFiles();
 
                 chuisy.feed.fetch();
                 chuisy.feed.fetch({remote: true, data: {limit: 20}});
@@ -1149,6 +1150,26 @@
             options.data = options.data || {};
             options.data.thumbnails = options.data.thumbnails || ["100x100"];
             return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
+        },
+        /*
+            Check if the locally saved images/thumbnails still exist. Redownload/create them if not
+        */
+        checkLocalFiles: function() {
+            this.each(function(model) {
+                fsShortcuts.existsFile(model.get("localImage"), function(yes) {
+                    if (!yes) {
+                        console.log("Found missing or corrupt local image. Downloading...");
+                        model.downloadImage();
+                    } else {
+                        fsShortcuts.existsFile(model.get("localThumbnail"), function(yes) {
+                            if (!yes) {
+                                console.log("Found missing or corrupt local thumbnail. Creating new one...");
+                                model.makeThumbnail();
+                            }
+                        });
+                    }
+                });
+            });
         }
     });
 
