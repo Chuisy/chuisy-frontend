@@ -115,11 +115,10 @@ enyo.kind({
         this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
         this.$.store.setContent(store && store.name || "");
         this.$.storeButtonText.setContent(store && store.name || "");
-        this.$.headerText.setContent("#" + this.chu.id);
         this.$.time.setContent(this.chu.getTimeText());
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
-        // this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
+        this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
         this.addRemoveClass("owned", this.isOwned());
 
@@ -183,7 +182,7 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleLike));
+            App.requireSignIn(enyo.bind(this, this.toggleLike), "like");
         }
         return true;
     },
@@ -194,6 +193,9 @@ enyo.kind({
         if (this.checkSynced()) {
             this.chu.toggleLike();
             this.refreshLikes();
+            App.sendCubeEvent(this.chu.get("liked") ? "like" : "unlike", {
+                chu: this.chu
+            });
         }
     },
     refreshComments: function() {
@@ -257,7 +259,7 @@ enyo.kind({
     },
     commentEnter: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.postComment));
+            App.requireSignIn(enyo.bind(this, this.postComment), "comment");
         }
         event.preventDefault();
         return true;
@@ -271,7 +273,10 @@ enyo.kind({
                 text: this.$.commentInput.getValue(),
                 user: chuisy.accounts.getActiveUser().toJSON()
             };
-            this.chu.comments.create(attrs);
+            var comment = this.chu.comments.create(attrs);
+            App.sendCubeEvent("comment", {
+                comment: comment
+            });
             this.refreshComments();
 
             this.$.commentInput.setValue("");
@@ -309,32 +314,25 @@ enyo.kind({
         this.arrangeImage();
     },
     /**
-        Open this chus share view
-    */
-    share: function() {
-        this.doShare({chu: this.chu});
-    },
-    /**
         Open this chus authors profile
     */
     showUser: function() {
-        var userJSON = this.chu.get("user");
-        if (!userJSON && !App.isSignedIn()) {
-            enyo.Signals.send("onRequestSignIn");
-        } else if (userJSON && App.checkConnection()) {
-            var user = new chuisy.models.User(userJSON);
+        var user = this.chu.get("user");
+        if (!user && !App.isSignedIn()) {
+            enyo.Signals.send("onRequestSignIn", {
+                context: "other"
+            });
+        } else if (user && App.checkConnection()) {
             this.doShowUser({user: user});
         }
     },
     showCommentUser: function(sender, event) {
         if (App.checkConnection()) {
-            var user = new chuisy.models.User(this.chu.comments.at(event.index).get("user"));
-            this.doShowUser({user: user});
+            this.doShowUser({user: this.chu.comments.at(event.index).get("user")});
         }
     },
     showStore: function(sender, event) {
-        var store = new chuisy.models.Store(this.chu.get("store"));
-        this.doShowStore({store: store});
+        this.doShowStore({store: this.chu.get("store")});
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
@@ -344,7 +342,14 @@ enyo.kind({
         App.requireSignIn(enyo.bind(this, function() {
             var visibility = this.chu.get("visibility") == "public" ? "private" : "public";
             this.chu.save({visibility: visibility});
-        }));
+            if (visibility == "public") {
+                this.$.friendsSlider.animateToMax();
+            }
+
+            App.sendCubeEvent("toggle_visibility", {
+                chu: this.chu
+            });
+        }), "toggle_visibility");
     },
     adjustShareControls: function() {
         this.$.visibilityButton.addRemoveClass("public", this.chu.get("visibility") == "public");
@@ -359,7 +364,15 @@ enyo.kind({
         }
     },
     checkSynced: function() {
-        if (this.chu.get("url") && this.chu.get("image")) {
+        if (this.chu.get("url")) {
+            return true;
+        } else {
+            navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            return false;
+        }
+    },
+    checkUploaded: function() {
+        if (this.chu.get("image")) {
             return true;
         } else {
             navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
@@ -378,7 +391,7 @@ enyo.kind({
     },
     facebook: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var params = {
                     method: "feed",
                     display: "popup",
@@ -386,67 +399,88 @@ enyo.kind({
                     picture: this.chu.get("image")
                 };
                 FB.ui(params, function(obj) {
-                    console.log(obj);
+                    App.sendCubeEvent(obj && obj.post_id ? "fb_share" : "fb_share_cancel", {
+                        chu: this.chu
+                    });
                 });
             }
-        }));
+        }), "share_facebook");
     },
     /**
         Open twitter share dialog
     */
     twitter: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var text = this.getMessage();
                 var url = this.getShareUrl();
                 window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+                App.sendCubeEvent("share_twitter", {
+                    chu: this.chu
+                });
             }
-        }));
+        }), "share_twitter");
     },
     /**
         Open pinterest share dialog
     */
     pinterest: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var url = this.getShareUrl();
                 var media = this.chu.get("image");
                 window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
+                App.sendCubeEvent("share_pinterest", {
+                    chu: this.chu
+                });
             }
-        }));
+        }), "share_pinterest");
     },
     /**
         Open sms composer with message / link
     */
     sms: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (this.checkSynced()) {
+            if (this.checkSynced() && this.checkUploaded()) {
                 var message = this.getMessage();
-                window.plugins.smsComposer.showSMSComposer(null, message + " " + this.getShareUrl());
+                window.plugins.smsComposer.showSMSComposer("", message + " " + this.getShareUrl(), function(result) {
+                    App.sendCubeEvent(result == 1 ? "share_messenger" : "share_messenger_cancel", {
+                        chu: this.chu
+                    });
+                });
             }
-        }));
+        }), "share_messenger");
+        event.preventDefault();
+        return true;
     },
     /**
         Open email composer with message / link
     */
     email: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (this.checkSynced()) {
+            if (this.checkSynced() && this.checkUploaded()) {
                 var subject = $L("Hi there!");
                 var message = this.getMessage();
                 window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
             }
-        }));
+        }), "share_email");
     },
     toggleFriends: function() {
         App.requireSignIn(enyo.bind(this, function() {
             this.$.friendsSlider.toggleMinMax();
-        }));
+        }), "tag_friends");
     },
     friendsOpened: function() {
         this.$.friendsButton.addClass("active");
-        this.$.peoplePicker.setSelectedItems(this.chu.get("friends") || []);
+        var friends = [];
+        for (var i=0; i<this.chu.get("friends").length; i++) {
+            friends.push(new chuisy.models.User(this.chu.get("friends")[i]));
+        }
+        this.$.peoplePicker.setSelectedItems(friends);
         this.$.doneButton.setContent($L("done"));
+        App.sendCubeEvent("open_friends_picker", {
+            chu: this.chu
+        });
     },
     friendsClosed: function() {
         this.$.friendsButton.removeClass("active");
@@ -463,6 +497,9 @@ enyo.kind({
                 chuisy.closet.syncRecords();
             }
             this.friendsChanged = false;
+            App.sendCubeEvent("tag_friends", {
+                chu: this.chu
+            });
         }
         this.buttonLabelChanged();
     },
@@ -618,10 +655,6 @@ enyo.kind({
                                 ]}
                             ]},
                             {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
-                        ]},
-                        {classes: "header-text", content: "chuisy", name: "headerText", showing: false},
-                        {kind: "onyx.Button", classes: "share-button", ontap: "share", showing: false, components: [
-                            {classes: "share-button-icon"}
                         ]}
                     ]},
                     {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
@@ -645,7 +678,7 @@ enyo.kind({
                                 // CATEGORY, PRICE, COMMENTS, LIKES
                                 {classes: "chuview-store-price", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
-                                    {classes: "chuview-price", name: "price", content: "35€"},
+                                    {classes: "chuview-price", name: "price"},
                                     {kind: "onyx.Button", classes: "chuview-store button", name: "storeButton", showing: false, ontap: "showStore", components: [
                                         {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
                                         {tag: "img", classes: "chuview-store-icon", attributes: {src: "assets/images/black_marker.png"}}

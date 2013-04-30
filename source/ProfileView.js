@@ -71,16 +71,20 @@ enyo.kind({
         this.$[which + "Spinner"].hide();
         var coll = this.user && this.user[which];
         var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
-        this.$[which + "Count"].setContent(count);
+        // this.$[which + "Count"].setContent(count);
         this.$[which + "Placeholder"].setShowing(!count);
     },
     followButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleFollow));
+            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow");
         }
     },
     toggleFollow: function(sender, event) {
         this.user.toggleFollow();
+        App.sendCubeEvent(this.user.get("following") ? "follow" : "unfollow", {
+            target_user: this.user,
+            context: "profile"
+        });
         return true;
     },
     signIn: function() {
@@ -96,6 +100,9 @@ enyo.kind({
                     }, $L("Authentication failed"), $L("OK")));
                 }));
             }));
+            App.sendCubeEvent("signin_tap", {
+                context: "profile"
+            });
         }
     },
     activate: function(obj) {

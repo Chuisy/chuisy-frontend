@@ -119,7 +119,7 @@
     "Uploading image": "Bild wird hochgel.",
     "Post failed": "Posten fehlgeschl.",
     "Upload failed": "Upload fehlgeschl.",
-    "You have received a new goody! Check it out on now your Goodies Wall!": "Du hast ein neues Goody bekommen! Schau es dir jetzt auf deiner Goody Wall an!",
+    "You have received a new goody!": "Du hast ein neues Goody bekommen!",
     "Redeem": "Einlösen",
     "Redeemed": "Eingelöst",
     "Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!": "Bist du dir sicher, dass du diesen Gutschein jetzt einlösen möchtest? Du solltest Gutscheine nie selbst entwerten sondern es von jemanden machen lassen, der ihn geltend machen kann! Ein Gutschein kann nur einmal eingelöst werden!",
@@ -144,5 +144,12 @@
     "Stores": "Geschäfte",
     "People": "Leute",
     "No Stores found.": "Keine Geschäfte gefunden.",
-    "Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!": "Melde dich an, um Chuisy uneingeschränkt zu nutzen! Keine Sorge, wir posten nichts in deinem Namen, ohne dich vorher zu fragen!"
+    "Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!": "Melde dich an, um Chuisy uneingeschränkt zu nutzen! Keine Sorge, wir posten nichts in deinem Namen, ohne dich vorher zu fragen!",
+    "There was a problem with your authentication credentials. Please log in again.": "Es gab ein Problem mit deinen Zugangsdaten. Bitte melde dich noch einmal an.",
+    "Authentication Problem": "Authentifizierungsproblem",
+    "Something went wrong. Don't worry, we're fixing it.": "Da lief was schief. Keine Sorge, wir arbeiten daran.",
+    "Server Problem": "Serverproblem",
+    "Search...": "Suchen...",
+    "Sorry, the map could not be loaded. Please check your internet connection!": "Sorry, die Karte konnte nicht geladen werden. Bitte überprüfe deine Internetverbindung!",
+    "You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!": "Du bist in einem Geschäft? Mach ein Foto von einem schönen Kleidungsstück und schau, ob du ein Geschenk dafür bekommst!"
 }

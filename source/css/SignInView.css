@@ -1,6 +1,7 @@
 .signinview {
 	background: url(../../assets/images/loading_screen.png) no-repeat center bottom;
 	background-size: 320px 568px;
+	z-index: 1000;
 }
 
 .signinview-spacer {

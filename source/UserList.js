@@ -55,12 +55,20 @@ enyo.kind({
     },
     refresh: function() {
         this.$.userList.setCount(this.users.length);
-        this.$.userList.refresh();
+        if (this.users && this.users.meta && this.users.meta.offset) {
+            this.$.userList.refresh();
+        } else {
+            this.$.userList.reset();
+        }
     },
     toggleFollow: function(sender, event) {
         var user = this.users.at(event.index);
         user.toggleFollow();
         this.refresh();
+        App.sendCubeEvent(user.get("following") ? "follow" : "unfollow", {
+            target_user: user,
+            context: "list"
+        });
         return true;
     },
     unfreeze: function() {

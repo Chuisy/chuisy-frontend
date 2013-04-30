@@ -3,7 +3,7 @@ enyo.kind({
     classes: "goodies",
     create: function() {
         this.inherited(arguments);
-        chuisy.cards.on("sync", this.refresh, this);
+        chuisy.cards.on("sync reset", this.refresh, this);
         this.dateFmt = new enyo.g11n.DateFmt();
     },
     /**
@@ -13,16 +13,25 @@ enyo.kind({
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
         this.$.placeholder.setShowing(!chuisy.cards.length);
+        this.$.spinner.removeClass("rise");
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
         var coupon = card.get("coupon");
-        event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image") + ")");
+        event.item.$.cardItemImage.applyStyle("background-image", "url(" + card.get("cover_image_thumbnail") + ")");
         event.item.$.cardItem.addClass(card.get("format"));
         event.item.$.cardItem.addRemoveClass("coupon", coupon);
         event.item.$.cardItem.addRemoveClass("redeemed", coupon && coupon.redeemed);
         event.item.$.cardItem.addRemoveClass("expired", coupon && new Date(coupon.valid_until) < new Date());
+
+        this.preloadImages(card);
         return true;
+    },
+    preloadImages: function(card) {
+        var img1 = new Image();
+        img1.src = card.get("cover_image");
+        var img2 = new Image();
+        img2.src = card.get("content_image");
     },
     getCardCoords: function(item) {
         var ib = item.getBounds();
@@ -103,6 +112,10 @@ enyo.kind({
                 this.isAnimating = false;
             }), 500);
         });
+
+        App.sendCubeEvent("show_card", {
+            card: card
+        });
     },
     stageTapped: function(sender, event) {
         if (!event.originator.isDescendantOf(this.$.card)) {
@@ -134,6 +147,10 @@ enyo.kind({
                 this.isAnimating = false;
             }), 100);
         }), 500);
+
+        App.sendCubeEvent("hide_card", {
+            card: this.card
+        });
     },
     //* Whether or not the scroller is actively moving
     isScrolling: function() {
@@ -200,6 +217,10 @@ enyo.kind({
             this.$.card.addClass("notransition");
             this.isAnimating = false;
         }), 500);
+
+        App.sendCubeEvent("flip_card", {
+            card: this.card
+        });
     },
     getAbsolutePosition: function(con) {
         var elem = con.hasNode();
@@ -223,6 +244,11 @@ enyo.kind({
         this.$.redeemSpinner.show();
 
         var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
+
+        App.sendCubeEvent("redeem_coupon", {
+            coupon: coupon
+        });
+
         coupon.redeem({complete: enyo.bind(this, function(request, status) {
             if (request.status == 200) {
                 this.$.redeemSpinner.hide();
@@ -230,6 +256,9 @@ enyo.kind({
                 this.card.get("coupon").redeemed = true;
                 this.$.card.addClass("redeemed");
                 this.item.addClass("redeemed");
+                App.sendCubeEvent("redeem_coupon_success", {
+                    coupon: coupon
+                });
             } else {
                 var message = request.status == 400 && request.responseText ? $L(request.responseText) : $L('Something went wrong. Please try again later!');
                 if (navigator.notification) {
@@ -239,6 +268,11 @@ enyo.kind({
                 }
                 this.$.redeemSpinner.hide();
                 this.$.redeemButton.setDisabled(false);
+                App.sendCubeEvent("redeem_coupon_fail", {
+                    coupon: coupon,
+                    status_code: request.status,
+                    response_text: request.responseText
+                });
             }
         })});
     },
@@ -271,12 +305,19 @@ enyo.kind({
 
         return true;
     },
+    closeButtonTapped: function() {
+        this.hideCard();
+        return true;
+    },
     activate: function(card) {
         if (card) {
             chuisy.cards.unshift(card);
             this.refresh();
         }
-        chuisy.cards.fetch({update: true, remove: false});
+        if (App.isSignedIn()) {
+            this.$.spinner.addClass("rise");
+            chuisy.cards.fetch({update: true, remove: false});
+        }
         enyo.Signals.send("onShowGuide", {view: "goodies"});
     },
     deactivate: function() {
@@ -284,6 +325,7 @@ enyo.kind({
         this.hideCard();
     },
     components: [
+        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
@@ -314,7 +356,7 @@ enyo.kind({
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},
-                        {}
+                        {classes: "goodies-card-tool-button close", ontap: "closeButtonTapped"}
                     ]}
                 ]}
             ]}

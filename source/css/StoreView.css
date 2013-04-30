@@ -101,15 +101,6 @@
 	display: none;
 }
 
-.storeview .placeholder {
-	padding-top: 20px;
-	padding-bottom: 30px;
-}
-
-.storeview .placeholder-image {
-	background-image: url(../../assets/images/profile_placeholder.png);
-}
-
 .storeview-list-placeholder {
 	position: absolute;
 	left: 0;

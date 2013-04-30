@@ -13,20 +13,16 @@ enyo.kind({
         successCallback: function() {},
         // Callback that gets called if the user taps the cancel button or something goes wrong
         failureCallback: function() {},
-        cancelButtonLabel: $L("Cancel"),
-        text: "primary"
+        context: "start"
     },
     create: function() {
         this.inherited(arguments);
-        this.cancelButtonLabelChanged();
-        this.textChanged();
+        this.contextChanged();
     },
-    cancelButtonLabelChanged: function() {
-        this.$.cancelButton.setContent(this.cancelButtonLabel);
-    },
-    textChanged: function() {
-        this.$.primaryText.setShowing(this.text == "primary");
-        this.$.secondaryText.setShowing(this.text == "secondary");
+    contextChanged: function() {
+        this.$.primaryText.setShowing(this.context == "start");
+        this.$.secondaryText.setShowing(this.context != "start");
+        this.$.cancelButton.setContent(this.context == "start" ? $L("Skip") : $L("Cancel"));
     },
     ready: function() {
         setTimeout(enyo.bind(this, function() {
@@ -55,6 +51,9 @@ enyo.kind({
                     navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), function() {}, $L("Authentication failed"), $L("OK"));
                 }));
             }));
+            App.sendCubeEvent("signin_tap", {
+                context: this.context
+            });
         } else {
             if (this.failureCallback) {
                 this.failureCallback();
@@ -78,6 +77,9 @@ enyo.kind({
         if (event) {
             event.preventDefault();
         }
+        App.sendCubeEvent("signin_cancel", {
+            context: this.context
+        });
     },
     components: [
         {classes: "signinview-scrim"},

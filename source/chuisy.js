@@ -18,6 +18,7 @@
 
             if (!lightweight) {
                 chuisy.closet.fetch();
+                chuisy.closet.checkLocalFiles();
 
                 chuisy.feed.fetch();
                 chuisy.feed.fetch({remote: true, data: {limit: 20}});
@@ -65,6 +66,8 @@
                 chuisy.accounts.stopPolling();
                 chuisy.closet.stopPolling();
                 chuisy.notifications.stopPolling();
+                chuisy.notifications.reset();
+                chuisy.cards.reset();
             }
         },
         /*
@@ -106,7 +109,9 @@
             Destroy the active user object locally and set the active user to null
         */
         signOut: function() {
-            chuisy.accounts.getActiveUser().destroy({nosync: true});
+            if (chuisy.accounts.getActiveUser()) {
+                chuisy.accounts.getActiveUser().destroy({nosync: true});
+            }
             chuisy.accounts.setActiveUser(null);
         }
     };
@@ -499,8 +504,7 @@
             var options = {
                 url: chuisy.apiRoot + chuisy.version + "/device/add/",
                 data: {token: deviceToken},
-                type: "POST",
-                contentType: "application/json"
+                type: "POST"
             };
             Backbone.Tastypie.addAuthentication("create", this, options);
             Backbone.ajax(options);
@@ -831,6 +835,9 @@
             }
             chuisy.models.OwnedModel.prototype.save.call(this, attributes, options);
             this.set("actor", actor);
+        },
+        getTimeText: function() {
+            return util.timeToText(this.get("time"));
         }
     });
 
@@ -1143,6 +1150,26 @@
             options.data = options.data || {};
             options.data.thumbnails = options.data.thumbnails || ["100x100"];
             return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
+        },
+        /*
+            Check if the locally saved images/thumbnails still exist. Redownload/create them if not
+        */
+        checkLocalFiles: function() {
+            this.each(function(model) {
+                fsShortcuts.existsFile(model.get("localImage"), function(yes) {
+                    if (!yes) {
+                        console.log("Found missing or corrupt local image. Downloading...");
+                        model.downloadImage();
+                    } else {
+                        fsShortcuts.existsFile(model.get("localThumbnail"), function(yes) {
+                            if (!yes) {
+                                console.log("Found missing or corrupt local thumbnail. Creating new one...");
+                                model.makeThumbnail();
+                            }
+                        });
+                    }
+                });
+            });
         }
     });
 
@@ -1169,7 +1196,7 @@
             }
             this.meta = this.meta || {};
             this.meta.unseen_count = 0;
-            this.trigger("reset");
+            // this.trigger("reset");
         },
         /*
             Get number of unseen notifications
@@ -1186,6 +1213,12 @@
             return this.filter(function(el) {
                 return !el.get("read");
             }).length;
+        },
+        fetch: function(options) {
+            options = options || {};
+            options.data = options.data || {};
+            options.data.limit = options.data.limit || 40;
+            Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
         }
     });
 
@@ -1357,6 +1390,41 @@
             return Backbone.Collection.prototype.fetch.call(this, options);
         }
     });
+
+    // $(document).ajaxError(function(e, xhr, options) {
+    //     if (xhr.status == 401) {
+    //         if (navigator.notification) {
+    //             navigator.notification.alert(
+    //                 $L("There was a problem with your authentication credentials. Please log in again."),
+    //                 function() {
+    //                     chuisy.signOut();
+    //                     enyo.Signals.send("onRequestSignIn", {
+    //                         context: "error"
+    //                     });
+    //                 },
+    //                 $L("Authentication Problem"),
+    //                 $L("Ok")
+    //             );
+    //         } else {
+    //             alert($L("There was a problem with your authentication credentials. Please log in again."));
+    //             chuisy.signOut();
+    //             enyo.Signals.send("onRequestSignIn", {
+    //                 context: "error"
+    //             });
+    //         }
+    //     }
+    //     if (xhr.status == 500) {
+    //         if (navigator.notification) {
+    //             navigator.notification.alert(
+    //                 $L("Something went wrong. Don't worry, we're fixing it."),
+    //                 $L("Server Problem"),
+    //                 $L("Ok")
+    //             );
+    //         } else {
+    //             alert($L("Something went wrong. Don't worry, we're fixing it."));
+    //         }
+    //     }
+    // });
 
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();

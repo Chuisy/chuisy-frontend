@@ -5,6 +5,7 @@
 enyo.kind({
     name: "SearchInput",
     kind: "onyx.InputDecorator",
+    tag: "form",
     classes: "searchinput",
     alwaysLooksFocused: true,
     published: {
@@ -14,13 +15,15 @@ enyo.kind({
         changeDelay: 100,
         // Set to true to disable input
         disabled: false,
-        placeholder: $L("Type to search...")
+        placeholder: $L("Search...")
     },
     events: {
         // User has tapped the x button
         onCancel: "",
         // Value has changed
-        onChange: ""
+        onChange: "",
+        // User has hit the Enter key
+        onEnter: ""
     },
     create: function() {
         this.inherited(arguments);
@@ -71,8 +74,15 @@ enyo.kind({
     blur: function() {
         this.$.input.hasNode().blur();
     },
+    keypress: function(sender, event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            this.doEnter();
+            return true;
+        }
+    },
     components: [
-        {kind: "onyx.Input", onkeyup: "inputKeyup"},
+        {kind: "onyx.Input", onkeyup: "inputKeyup", type: "search", onkeypress: "keypress", style: "-webkit-appearance: textfield"},
         {classes: "searchinput-icon", ontap: "cancel"}
     ]
 });

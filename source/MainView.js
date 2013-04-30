@@ -6,12 +6,13 @@ enyo.kind({
     classes: "mainview",
     kind: "FittableRows",
     events: {
-        // App context has changed.
-        onUpdateHistory: "",
         // User wants to go to the previous view
         onBack: "",
-        // Need to navigate to a specific context url
-        onNavigateTo: ""
+        // User has selected an item from the main menu
+        onMenuChanged: "",
+        onChuViewDone: "",
+        onComposeChuDone: "",
+        onGetStartedDone: ""
     },
     // Mapping between view and panel indexes
     views: {
@@ -40,57 +41,20 @@ enyo.kind({
             this.$.profile.setUser(user);
         }
     },
-    back: function() {
-        this.doBack();
-        return true;
-    },
-    composeChu: function(sender, event) {
-        this.openView("compose");
-    },
-    showChu: function(sender, event) {
-        this.$.chu.setButtonLabel($L("back"));
-        this.openView("chu", event.chu);
-    },
-    // shareChu: function(sender, event) {
-    //     this.openView("share", event.chu);
-    // },
-    showUser: function(sender, event) {
-        this.openView("user", event.user);
-    },
-    showSettings: function() {
-        this.openView("settings");
-    },
-    showGift: function(sender, event) {
-        this.openView("gift", event.gift);
-    },
-    showInviteFriends: function() {
-        this.openView("invite");
-    },
-    showStore: function(sender, event) {
-        this.openView("store", event.store);
-    },
-    notificationSelected: function(sender, event) {
-        this.doNavigateTo({uri: event.notification.get("uri"), obj: event.notification.get("target_obj")});
-    },
-    // shareViewDone: function(sender, event) {
-    //     this.openView("chu", sender.getChu());
-    // },
-    composeChuDone: function(sender, event) {
-        // this.openView("feed");
-        // this.$.feed.loadFeed();
-        // this.doUpdateHistory({uri: "feed/"});
-        this.$.chu.setButtonLabel($L("done"));
-        this.$.chu.isNew = true;
-        this.openView("chu", event.chu);
+    menuChanged: function(sender, event) {
+        this.doMenuChanged(event);
     },
     chuViewDone: function(sender, event) {
-        this.openView("feed", event.chu);
+        this.$.chu.setButtonLabel($L("back"));
+        this.doChuViewDone(event);
+    },
+    composeChuDone: function(sender, event) {
+        this.$.chu.setButtonLabel($L("done"));
+        this.$.chu.isNew = true;
+        this.doComposeChuDone(event);
     },
     getStartedDone: function() {
-        this.openView("feed");
-    },
-    menuChanged: function(sender, event) {
-        this.openView(event.value);
+        this.doGetStartedDone();
     },
     /**
         Trigger transition between views _from_ and _to_
@@ -114,11 +78,6 @@ enyo.kind({
         Shows panel assoziated with the key _view_ and updates the App history appropriately
     */
     openView: function(view, obj, direct) {
-        if (obj instanceof chuisy.models.Chu) {
-            // Take object from the closet if possible
-            obj = chuisy.closet.get(obj.id) || obj;
-        }
-
         if (!direct) {
             this.transition(this.currentView, view);
         }
@@ -136,33 +95,7 @@ enyo.kind({
                 this.$.primaryPanels.setIndex(indexes[1]);
             }
         }), direct ? 0 : 400);
-
-        switch (view) {
-            case "chu":
-                this.doUpdateHistory({uri: "chu/" + obj.id + "/", obj: obj});
-                break;
-            case "gift":
-                this.doUpdateHistory({uri: "gift/" + obj.id + "/", obj: obj});
-                break;
-            case "user":
-                this.doUpdateHistory({uri: "user/" + obj.id + "/", obj: obj});
-                break;
-            case "profile":
-                this.doUpdateHistory({uri: "profile/"});
-                var user = chuisy.accounts.getActiveUser();
-                if (user) {
-                    enyo.Signals.send("onShowGuide", {view: "profile"});
-                    user.fetch({remote: true});
-                }
-                break;
-            case "store":
-                this.doUpdateHistory({uri: "store/" + obj.id + "/", obj: obj});
-                break;
-            default:
-                this.doUpdateHistory({uri: view + "/"});
-                this.$.menu.selectItem(view);
-                break;
-        }
+        this.$.menu.selectItem(view);
     },
     components: [
         {kind: "Panels", name: "panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", components: [
@@ -173,39 +106,37 @@ enyo.kind({
                     // VIEWS THAT CAN BE REACHED VIA THE MENU BAR
                     {kind: "Panels", classes: "enyo-fill", arrangerKind: "CardArranger", animate: false, draggable: false, name: "primaryPanels", components: [
                         // CHU FEED
-                        {kind: "Feed", name: "feed", onShowChu: "showChu", onComposeChu: "composeChu", onShowUser: "showUser"},
+                        {kind: "Feed", name: "feed"},
                         // CHU BOX / CLOSET
-                        {kind: "Closet", name: "closet", onShowChu: "showChu", onComposeChu: "composeChu"},
+                        {kind: "Closet", name: "closet"},
                         // OWN PROFILE VIEW
-                        {kind: "ProfileView", name: "profile", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"},
+                        {kind: "ProfileView", name: "profile"},
                         // DISCOVER VIEW
-                        {kind: "Discover", name: "discover", onShowUser: "showUser", onShowChu: "showChu", onShowStore: "showStore"},
+                        {kind: "Discover", name: "discover"},
                         // GOODIES
                         {kind: "Goodies", name: "goodies"},
                         // NOTIFICATIONS
-                        {kind: "Notifications", name: "notifications", onNotificationSelected: "notificationSelected"}
+                        {kind: "Notifications", name: "notifications"}
                     ]},
                     {name: "primaryCrossover", classes: "fade-screen"}
                 ]}
             ]},
             // CREATE NEW CHU
-            {kind: "ComposeChu", name: "compose", onBack: "back", onDone: "composeChuDone"},
+            {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
             // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onShowStore: "showStore", onShowChu: "showChu", onShowUser: "showUser", onBack: "back", onDone: "chuViewDone", onInviteFriends: "showInviteFriends"},
-            // // SHARE CHU
-            // {kind: "ShareView", name: "share", onBack: "back", onDone: "back"},
+            {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
             // SETTINGS
-            {kind: "Settings", name: "settings", onBack: "back", onInviteFriends: "showInviteFriends"},
+            {kind: "Settings", name: "settings"},
             // PROFILE VIEW (for other profiles)
             {kind: "FittableRows", components: [
                 {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "back", classes: "back-button", content: $L("back")}
+                    {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
                 ]},
-                {kind: "ProfileView", name: "user", fit: true, onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings"}
+                {kind: "ProfileView", name: "user", fit: true}
             ]},
             // LOCATION VIEW
-            {kind: "StoreView", name: "store", fit: true, onShowChu: "showChu", onShowUser: "showUser", onBack: "back"},
-            {kind: "InviteFriends", name: "invite", onBack: "back"},
+            {kind: "StoreView", name: "store", fit: true},
+            {kind: "InviteFriends", name: "invite"},
             {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},
         {name: "crossover", classes: "fade-screen"}

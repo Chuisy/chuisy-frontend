@@ -6,16 +6,17 @@ enyo.kind({
     },
     generatePage:function(inPageNo, inTarget) {
         this.inherited(arguments);
-        var n = inTarget.hasNode();
-        if(n) {
-            enyo.forEach(n.querySelectorAll("IMG"), function(img) {
-                img.style.opacity = 0;
-                enyo.dispatcher.listen(img, "load", function() {
-                    img.style["-webkit-animation"] = "fadein 0.5s";
-                    img.style.opacity = 1;
-                });
-            });
-        }
+        this.doGeneratePage({pageNumber: inPageNo});
+        // var n = inTarget.hasNode();
+        // if(n) {
+        //     enyo.forEach(n.querySelectorAll("IMG"), function(img) {
+        //         img.style.opacity = 0;
+        //         enyo.dispatcher.listen(img, "load", function() {
+        //             img.style["-webkit-animation"] = "fadein 0.5s";
+        //             img.style.opacity = 1;
+        //         });
+        //     });
+        // }
     }
 });
 
@@ -86,6 +87,10 @@ enyo.kind({
         // } else {
         //     this.$.chuFeedItem.applyStyle("opacity", 1);
         // }
+        App.sendCubeEvent("impression", {
+            chu: item,
+            context: "feed"
+        });
 
         var isLastItem = event.index == chuisy.feed.length-1;
         if (isLastItem && chuisy.feed.hasNextPage()) {
@@ -127,11 +132,10 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        var userJSON = chuisy.feed.at(event.index).get("user");
-        if (!userJSON && !App.isSignedIn()) {
-            enyo.Signals.send("onRequestSignIn");
-        } else if (userJSON) {
-            var user = new chuisy.models.User(userJSON);
+        var user = chuisy.feed.at(event.index).get("user");
+        if (!user && !App.isSignedIn()) {
+            enyo.Signals.send("onRequestSignIn", {context: "other"});
+        } else if (user) {
             this.doShowUser({user: user});
         }
     },
@@ -180,6 +184,21 @@ enyo.kind({
         this.$.feedList.updateMetrics();
         this.$.feedList.refresh();
     },
+    // generatePage: function(sender, event) {
+    //     // var startIndex = (event.pageNumber - 2) * this.$.feedList.getRowsPerPage();
+    //     enyo.asyncMethod(this, function() {
+    //         var rows = this.$.feedList.getRowsPerPage();
+    //         var startIndex = event.pageNumber * rows;
+
+    //         var chus = chuisy.feed.slice(startIndex, startIndex + rows);
+    //         for (var i=0; i<chus.length; i++) {
+    //             App.sendCubeEvent("impression", {
+    //                 chu: chus[i],
+    //                 context: "feed"
+    //             });
+    //         }
+    //     });
+    // },
     components: [
         {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},

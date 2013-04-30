@@ -18,9 +18,10 @@ enyo.kind({
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
             {style: "background: url(assets/images/guide/bottom-left.png) no-repeat left bottom; background-size: 320px 568px;", components: [
-                {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
-                    $L("A fashion item or accessory discovered by a fashion enthusiast during 'window shopping'. " +
-                        "Often used to express style or get feedback from friends.")},
+                // {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
+                //     $L("A fashion item or accessory discovered by a fashion enthusiast during 'window shopping'. " +
+                //         "Often used to express style or get feedback from friends.")},
+                    {classes: "guide-centered", style: "height: 100px", content: $L("You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!")},
                     {classes: "guide-text", style: "width: 200px; position: absolute; bottom: 60px; left: 70px;", content: $L("You can post a Chu by pressing this button.")},
                 {classes: "guide-continue", content: $L("(tap to continue)")}
             ]},
@@ -114,6 +115,7 @@ enyo.kind({
         this.$.panels.setIndex(0);
         this.applyStyle("z-index", 1000);
         this.addClass("open");
+        this.showTime = new Date();
     },
     close: function() {
         this.removeClass("open");
@@ -128,6 +130,13 @@ enyo.kind({
         } else {
             this.close();
         }
+        var now = new Date();
+        App.sendCubeEvent("show_guide", {
+            view: this.view,
+            index: currIndex,
+            duration: now.getTime() - this.showTime.getTime()
+        });
+        this.showTime = now;
     },
     getImagesPath: function() {
         var bounds = this.getBounds();

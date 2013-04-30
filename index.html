@@ -7,13 +7,18 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf8"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <script>
+            window.loadStart = new Date();
+        </script>
 		<!-- css -->
 		<link href="build/enyo.css" rel="stylesheet"/>
 		<link href="build/app.css" rel="stylesheet"/>
+        <!-- emitter client for cube analytics -->
+        <script src="lib/cube-emitter.js"></script>
+        <!-- register handler for error tracking -->
+        <script src="source/track-errors.js"></script>
         <!-- cordova iOS -->
         <script type="text/javascript" src="lib/cordova-2.2.0.js"></script>
-        <!-- Google Maps -->
-        <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
        	<!-- cordova facebook connect plugin -->
         <script src="lib/cdv-plugin-fb-connect.js"></script>
         <script src="lib/facebook_js_sdk.js"></script>

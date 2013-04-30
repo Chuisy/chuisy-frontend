@@ -56,7 +56,7 @@ enyo.kind({
     },
     facebookSignIn: function() {
         // Get facebook access token
-        enyo.Signals.send("onRequestSignIn", {});
+        enyo.Signals.send("onRequestSignIn", {context: "settings"});
     },
     /**
         Sign out. Simply calls _chuisy.signOut_
@@ -69,6 +69,7 @@ enyo.kind({
                 if (choice) {
                     chuisy.signOut();
                     this.doBack();
+                    App.sendCubeEvent("logout");
                 }
             }),
             [$L("Cancel"), $L("Logout")]
