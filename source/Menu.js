@@ -12,7 +12,7 @@ enyo.kind({
 	},
 	create: function() {
 		this.inherited(arguments);
-		chuisy.notifications.on("reset", this.notificationsUpdated, this);
+		chuisy.notifications.on("reset seen", this.notificationsUpdated, this);
 	},
 	selectItem: function(name) {
 		if (this.$[name]) {

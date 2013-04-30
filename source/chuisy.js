@@ -1196,7 +1196,7 @@
             }
             this.meta = this.meta || {};
             this.meta.unseen_count = 0;
-            // this.trigger("reset");
+            this.trigger("seen");
         },
         /*
             Get number of unseen notifications
