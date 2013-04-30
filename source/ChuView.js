@@ -364,7 +364,15 @@ enyo.kind({
         }
     },
     checkSynced: function() {
-        if (this.chu.get("url") && this.chu.get("image")) {
+        if (this.chu.get("url")) {
+            return true;
+        } else {
+            navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
+            return false;
+        }
+    },
+    checkUploaded: function() {
+        if (this.chu.get("image")) {
             return true;
         } else {
             navigator.notification.alert($L("Hold on, your Chu is still being uploaded. Please try again in a moment!"), function() {}, $L("Hold your horses!"), $L("OK"));
@@ -383,7 +391,7 @@ enyo.kind({
     },
     facebook: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var params = {
                     method: "feed",
                     display: "popup",
@@ -403,7 +411,7 @@ enyo.kind({
     */
     twitter: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var text = this.getMessage();
                 var url = this.getShareUrl();
                 window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
@@ -418,7 +426,7 @@ enyo.kind({
     */
     pinterest: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (App.checkConnection() && this.checkSynced()) {
+            if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var url = this.getShareUrl();
                 var media = this.chu.get("image");
                 window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
@@ -433,7 +441,7 @@ enyo.kind({
     */
     sms: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (this.checkSynced()) {
+            if (this.checkSynced() && this.checkUploaded()) {
                 var message = this.getMessage();
                 window.plugins.smsComposer.showSMSComposer("", message + " " + this.getShareUrl(), function(result) {
                     App.sendCubeEvent(result == 1 ? "share_messenger" : "share_messenger_cancel", {
@@ -450,7 +458,7 @@ enyo.kind({
     */
     email: function() {
         App.requireSignIn(enyo.bind(this, function() {
-            if (this.checkSynced()) {
+            if (this.checkSynced() && this.checkUploaded()) {
                 var subject = $L("Hi there!");
                 var message = this.getMessage();
                 window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
