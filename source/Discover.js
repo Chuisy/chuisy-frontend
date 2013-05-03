@@ -31,10 +31,6 @@ enyo.kind({
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
         this.stores.on("sync", _.bind(this.synced, this, "store"));
         // this.chus.on("sync", _.bind(this.updateMap, this));
-        var data = {
-            center: App.getGeoLocation()
-        };
-        this.nearbyStores.fetch({data: data, success: enyo.bind(this, this.updateLocation)});
 
         this.currentOpenMarker = null;
     },
@@ -274,6 +270,12 @@ enyo.kind({
     isStoreWithFriendChus: function(store) {
         return false;
     },
+    apiLoaded: function() {
+        var data = {
+            center: App.getGeoLocation()
+        };
+        this.nearbyStores.fetch({data: data, success: enyo.bind(this, this.updateLocation)});
+    },
     components: [
         // SEARCH INPUT
         {style: "padding: 5px; box-sizing: border-box;", components: [
@@ -307,7 +309,8 @@ enyo.kind({
                 {classes: "discover-placeholder absolute-center", name: "placeholder"}
             ]},
             {classes: "discover-result-panel", components: [
-                {kind: "Map", classes: "enyo-fill", name: "map", onMapTap: "mapTapped", onMarkerTap: "markerTapped", onMapZoomChange: "mapZoomChanged"}
+                {kind: "Map", classes: "enyo-fill", name: "map", onMapTap: "mapTapped", onMarkerTap: "markerTapped", onMapZoomChange: "mapZoomChanged"},
+                {kind: "Signals", onLoadMapsApi: "apiLoaded"}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
