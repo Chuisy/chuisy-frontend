@@ -49,5 +49,6 @@ enyo.depends(
 	"Marker.js",
 	"Goodies.js",
 	"FittingTextContainer.js",
-	"StoreView.js"
+	"StoreView.js",
+	"StoreMarker.js"
 );

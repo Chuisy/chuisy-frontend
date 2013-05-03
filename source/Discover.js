@@ -18,9 +18,12 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
 
+        this.$.mapTab.setActive(true);
+
         this.users = new chuisy.models.UserCollection();
         this.chus = new chuisy.models.ChuCollection();
         this.stores = new chuisy.models.StoreCollection();
+        this.nearbyStores = new chuisy.models.StoreCollection();
 
         this.$.userList.setUsers(this.users);
 
@@ -28,6 +31,12 @@ enyo.kind({
         this.chus.on("sync", _.bind(this.synced, this, "chu"));
         this.stores.on("sync", _.bind(this.synced, this, "store"));
         // this.chus.on("sync", _.bind(this.updateMap, this));
+        var data = {
+            center: App.getGeoLocation()
+        };
+        this.nearbyStores.fetch({data: data, success: enyo.bind(this, this.updateLocation)});
+
+        this.currentOpenMarker = null;
     },
     setupChu: function(sender, event) {
         var chu = this.chus.at(event.index);
@@ -108,14 +117,15 @@ enyo.kind({
         this.users.reset();
         this.chus.reset();
         this.stores.reset();
+        this.nearbyStores.reset();
         this.users.meta = {};
         this.chus.meta = {};
         this.stores.meta = {};
         this.synced("user", null, null, null, true);
         this.synced("chu", null, null, null, true);
         this.synced("store", null, null, null, true);
-        this.$.resultPanels.setIndex(0);
-        this.$.resultTabs.setActive(null);
+        // this.$.resultPanels.setIndex(0);
+        // this.$.resultTabs.setActive(null);
     },
     synced: function(which, collection, response, request, force) {
         if (force || request && request.data && request.data.q == this.latestQuery) {
@@ -178,7 +188,7 @@ enyo.kind({
                 latitude: lat,
                 longitude: lng
             };
-            this.locMarker = this.$.map.addMarker(this.coords, null, null, null, true);
+            this.placeStoreMarkers();
         }));
     },
     updateMap: function(collection, response, request, force) {
@@ -187,29 +197,41 @@ enyo.kind({
             if(this.coords) {
                 this.locMarker = this.$.map.addMarker(this.coords, null, null, null, false);
             }
-            var chu;
-            var chuMarker;
-            var c = 0;
-            for(var i = 0; i < this.chus.length; i++) {
-                chu = this.chus.at(i);
-                if(chu.get("location") && chu.get("location").latitude) {
-                    var lat = chu.get("location").latitude;
-                    var lng = chu.get("location").longitude;
-                    var coords = {
-                        latitude: lat,
-                        longitude: lng
-                    };
-                    chuMarker = new ChuMarker();
-                    chuMarker.setChu(chu);
-                    this.$.map.addMarker(coords, chuMarker, null, chu, true);
-                }
-            }
-            this.$.mapLoadMoreButton.setShowing(this.chus.hasNextPage());
+            this.placeStoreMarkers();
         }
     },
     markerTapped: function(sender, event) {
+        if (event.markerControl && event.markerControl instanceof StoreMarker) {
+            var markerControl = event.markerControl;
+            if (this.currentOpenMarker) {
+                this.currentOpenMarker.removeClass("expanded");
+            }
+            if (this.currentOpenMarker == markerControl) {
+                this.currentOpenMarker = null;
+            } else {
+                markerControl.addClass("expanded");
+                this.currentOpenMarker = markerControl;
+            }
+            if (markerControl.node.className.indexOf("storemarker-button-tapped") > 0) {
+                markerControl.removeClass("storemarker-button-tapped");
+                this.doShowStore({store: markerControl.store});
+            }
+        }
+
         if (event.obj && event.obj instanceof chuisy.models.Chu) {
             this.doShowChu({chu: event.obj});
+        }
+    },
+    mapTapped: function(sender, event) {
+        if (this.currentOpenMarker && !event.markerControl) {
+            this.currentOpenMarker.removeClass("expanded");
+            this.currentOpenMarker = null;
+        }
+    },
+    mapZoomChanged: function(sender, event) {
+        if (this.currentOpenMarker) {
+            this.currentOpenMarker.removeClass("expanded");
+            this.currentOpenMarker = null;
         }
     },
     mapLoadMore: function() {
@@ -218,6 +240,40 @@ enyo.kind({
             this.chus.fetchNext();
         }
     },
+    placeStoreMarkers: function() {
+        var store = null;
+        var partnerMarkers = [];
+        for (var i = 0; i < this.nearbyStores.length; i++) {
+            store = this.nearbyStores.at(i);
+            if (store.get("location") && store.get("location").latitude) {
+                var coords = {
+                    latitude : store.get("location").latitude,
+                    longitude : store.get("location").longitude
+                };
+                var storeMarker = new StoreMarker();
+                var chuCount = store.get("chu_count");
+                storeMarker.setContent(store.get("name"), store.get("address"), store.get("zip_code"), store.get("city"));
+                storeMarker.setChuCount(chuCount);
+                storeMarker.setStore(store);
+                if (store.get("company")) {
+                    storeMarker.setType("partner");
+                    partnerMarkers.push({coords: coords, marker: storeMarker});
+                } else if (this.isStoreWithFriendChus(store)){
+                    storeMarker.setType("friends");
+                    this.$.map.addMarker(coords, storeMarker, null, null, true);
+                } else {
+                    storeMarker.setType("general");
+                    this.$.map.addMarker(coords, storeMarker, null, null, true);
+                }
+            }
+        }
+        for (var j = 0; j < partnerMarkers.length; j++) {
+            this.$.map.addMarker(partnerMarkers[j].coords, partnerMarkers[j].marker, null, null, true);
+        }
+    },
+    isStoreWithFriendChus: function(store) {
+        return false;
+    },
     components: [
         // SEARCH INPUT
         {style: "padding: 5px; box-sizing: border-box;", components: [
@@ -225,17 +281,20 @@ enyo.kind({
         ]},
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS
         {kind: "onyx.RadioGroup", name: "resultTabs", classes: "discover-tabs", onActivate: "radioGroupActivate", components: [
-            {index: 1, name: "chuTab", components: [
+            {index: 1, name: "mapTab", components: [
+                {classes: "discover-tab-caption", content: $L("Map")}
+            ]},
+            {index: 2, name: "chuTab", components: [
                 {classes: "discover-tab-caption", content: $L("Chus")},
                 {classes: "discover-tab-count", name: "chuCount"},
                 {classes: "onyx-spinner tiny", name: "chuSpinner", showing: false}
             ]},
-            {index: 2, name: "storeTab", components: [
+            {index: 3, name: "storeTab", components: [
                 {classes: "discover-tab-caption", content: $L("Stores")},
                 {classes: "discover-tab-count", name: "storeCount"},
                 {classes: "onyx-spinner tiny", name: "storeSpinner", showing: false}
             ]},
-            {index: 3, name: "userTab", components: [
+            {index: 4, name: "userTab", components: [
                 {classes: "discover-tab-caption", content: $L("People")},
                 {classes: "discover-tab-count", name: "userCount"},
                 {classes: "onyx-spinner tiny", name: "userSpinner", showing: false}
@@ -246,6 +305,9 @@ enyo.kind({
             // PLACEHOLDER
             {classes: "discover-result-panel", components: [
                 {classes: "discover-placeholder absolute-center", name: "placeholder"}
+            ]},
+            {classes: "discover-result-panel", components: [
+                {kind: "Map", classes: "enyo-fill", name: "map", onMapTap: "mapTapped", onMarkerTap: "markerTapped", onMapZoomChange: "mapZoomChanged"}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
@@ -262,7 +324,7 @@ enyo.kind({
                 ]},
                 {name: "chuNoResults", classes: "discover-no-results absolute-center", content: $L("No Chus found.")}
             ]},
-            // CHUS
+            // STORES
             {classes: "discover-result-panel", components: [
                 {kind: "CssSpinner", name: "storeNextPageSpinner", classes: "next-page-spinner"},
                 {kind: "List", classes: "enyo-fill", name: "storeList", onSetupItem: "setupStore", rowsPerPage: 20,
