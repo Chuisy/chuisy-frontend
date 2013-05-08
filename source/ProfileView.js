@@ -96,7 +96,7 @@ enyo.kind({
                     enyo.Signals.send("onShowGuide", {view: "profile"});
                 }), enyo.bind(this, function() {
                     this.$.spinner.hide();
-                    navigator.notification.alert($L("Hm, that didn't work. Please try it again later!"), enyo.bind(this, function() {
+                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
                     }, $L("Authentication failed"), $L("OK")));
                 }));
             }));
