@@ -61,11 +61,11 @@ enyo.kind({
         },
         fbRequestPublishPermissions: function(success, failure) {
             var scope = "publish_actions";
-            App.sendCubeEvent("fb_connect_open", {
-                scope: scope
-            });
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
+                    App.sendCubeEvent("fb_connect_open", {
+                        scope: scope
+                    });
                     FB.login({scope: scope}, function(response) {
                         if (response.authResponse) {
                             if (success) {
