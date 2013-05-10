@@ -226,8 +226,6 @@ enyo.kind({
     },
     init: function() {
         if (App.isMobile()) {
-            var toolbar = cordova.require('cordova/plugin/keyboard_toolbar_remover');
-            toolbar.hide();
             // init the FB JS SDK
             FB.init({
                 appId      : '180626725291316', // App ID from the App Dashboard
