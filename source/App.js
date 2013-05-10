@@ -46,7 +46,7 @@ enyo.kind({
             App.sendCubeEvent("fb_connect_open", {
                 scope: scope
             });
-            FB.login(function(response) {
+            FB.login({scope: scope}, function(response) {
                 if (response.status == "connected") {
                     callback(response.authResponse.accessToken);
                     App.sendCubeEvent("fb_connect_success", {
@@ -55,7 +55,9 @@ enyo.kind({
                 } else {
                     console.log($L("Facebook signin failed!"));
                 }
-            }, {scope: scope});
+            }, function(error) {
+                console.log("***** login fail ***** " + JSON.stringify(error));
+            });
         },
         fbRequestPublishPermissions: function(success, failure) {
             var scope = "publish_actions";
@@ -64,7 +66,7 @@ enyo.kind({
             });
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
-                    FB.login(function(response) {
+                    FB.login({scope: scope}, function(response) {
                         if (response.authResponse) {
                             if (success) {
                                 success(response.authResponse.accessToken);
@@ -78,7 +80,9 @@ enyo.kind({
                                 failure();
                             }
                         }
-                    }, {scope: scope});
+                    }, function(error) {
+                        console.log("***** login fail ***** " + JSON.stringify(error));
+                    });
                 }
             });
         },
