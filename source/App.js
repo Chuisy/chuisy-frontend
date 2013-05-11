@@ -188,14 +188,6 @@ enyo.kind({
             this.init();
         }
     },
-    /**
-        Hides the apps splash screen with a slight delay
-    */
-    hideSplashScreen: function() {
-        setTimeout(function() {
-            navigator.splashscreen.hide();
-        }, 1000);
-    },
     renderInto: function() {
         this.renderStart = new Date();
         this.inherited(arguments);
@@ -204,10 +196,11 @@ enyo.kind({
         this.inherited(arguments);
 
         // Hide splash screen if Cordova has been loaded yet
-        if (navigator.splashscreen) {
-            this.hideSplashScreen();
+        if (this.isDeviceReady) {
+            setTimeout(enyo.bind(this, function() {
+                this.raiseCurtain();
+            }), 1000);
         }
-        App.startSession();
         var now = new Date();
         App.sendCubeEvent("load_app", {
             loading_time: now.getTime() - window.loadStart.getTime(),
@@ -217,15 +210,19 @@ enyo.kind({
         });
     },
     deviceReady: function() {
+        this.isDeviceReady = true;
         // Hide splash screen if the App has been rendered yet
-        if (this.hasNode()) {
-            this.hideSplashScreen();
-        }
         // Check if the app has been intitialized yet. Necessary since deviceready event
         // seems to be fired multiple times
         if (!this.initialized) {
             this.init();
             this.initialized = true;
+        }
+
+        if (this.hasNode()) {
+            setTimeout(enyo.bind(this, function() {
+                this.raiseCurtain();
+            }), 1000);
         }
     },
     init: function() {
@@ -254,8 +251,10 @@ enyo.kind({
             this.initPushNotifications();
         }
 
-        // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
-
+        // Update the version number in localstorage
+        localStorage.setItem("chuisy.version", App.version);
+    },
+    raiseCurtain: function() {
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
                 this.navigateTo("getstarted", null, true);
@@ -267,15 +266,14 @@ enyo.kind({
             this.$.signInView.ready();
             // this.$.signInSlider.setValue(0);
         } else {
-            this.recoverStateFromUri();
             this.signInViewDone();
             setTimeout(enyo.bind(this, function() {
                 this.$.signInView.ready();
             }), 500);
+            this.recoverStateFromUri();
         }
-
-        // Update the version number in localstorage
-        localStorage.setItem("chuisy.version", App.version);
+        navigator.splashscreen.hide();
+        App.startSession();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -509,7 +507,9 @@ enyo.kind({
             duration: last && (now.getTime() - last[2].getTime())
         });
         this.history.push([uri, obj, now]);
-        window.location.hash = "!/" + uri;
+        if (!App.isMobile()) {
+            window.location.hash = "!/" + uri;
+        }
     },
     /**
         Removes the latest context from the history and opens the previous one
@@ -595,12 +595,12 @@ enyo.kind({
         this.navigateTo("feed");
     },
     components: [
+        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
             onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
             onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
             onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone", onGetStartedDone: "getStartedDone"},
         // FACEBOOK SIGNIN
-        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}
