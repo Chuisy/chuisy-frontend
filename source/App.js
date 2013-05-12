@@ -380,56 +380,56 @@ enyo.kind({
         var match, hash = window.location.hash;
         if ((match = hash.match(/^#!\/(.+)/))) {
             this.updateHistory("feed");
-            this.navigateToUri(match[1]);
+            this.navigateToUri(match[1], null, true);
         } else {
-            this.navigateTo("feed");
+            this.navigateTo("feed", null, true);
         }
     },
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateToUri: function(uri, obj) {
+    navigateToUri: function(uri, obj, direct) {
         if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.navigateTo("feed");
+            this.navigateTo("feed", obj, direct);
         } else if (uri.match(/^discover\/$/)) {
             // discover/
             // Lets discover some stuff!
-            this.navigateTo("discover");
+            this.navigateTo("discover", obj, direct);
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("profile");
+            this.navigateTo("profile", obj, direct);
         } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
             // settings/
             // Open settings view
-            this.navigateTo("settings");
+            this.navigateTo("settings", obj, direct);
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("closet");
+            this.navigateTo("closet", obj, direct);
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
-            this.navigateTo("goodies");
+            this.navigateTo("goodies", obj, direct);
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
             obj = obj && obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
-            this.navigateTo("goodies", obj);
+            this.navigateTo("goodies", obj, direct);
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
-            this.navigateTo("notifications");
+            this.navigateTo("notifications", obj, direct);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.navigateTo("compose");
+                this.navigateTo("compose", obj, direct);
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
                 obj = obj || new chuisy.models.Chu({id: match3[1], stub: true});
-                this.navigateTo("chu", obj);
+                this.navigateTo("chu", obj, direct);
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // user/{user id}/
@@ -439,7 +439,7 @@ enyo.kind({
                 obj = new chuisy.models.User({id: match2[1]});
                 obj.fetch();
             }
-            this.navigateTo("user", obj);
+            this.navigateTo("user", obj, direct);
         } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
@@ -448,14 +448,14 @@ enyo.kind({
                 obj = new chuisy.models.Store({id: match2[1]});
                 obj.fetch();
             }
-            this.navigateTo("store", obj);
+            this.navigateTo("store", obj, direct);
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
             window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.navigateTo("feed");
+            this.navigateTo("feed", obj, direct);
         }
     },
     navigateTo: function(view, obj, direct) {
