@@ -196,7 +196,7 @@ enyo.kind({
         this.inherited(arguments);
 
         // Hide splash screen if Cordova has been loaded yet
-        if (this.isDeviceReady) {
+        if (this.isDeviceReady || !App.isMobile()) {
             setTimeout(enyo.bind(this, function() {
                 this.raiseCurtain();
             }), 1000);
