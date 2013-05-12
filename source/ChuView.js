@@ -394,7 +394,6 @@ enyo.kind({
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var params = {
                     method: "feed",
-                    display: "popup",
                     link: this.getShareUrl(),
                     picture: this.chu.get("image")
                 };

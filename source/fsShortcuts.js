@@ -117,7 +117,7 @@ window.fsShortcuts = {
         }
     },
     existsFile: function(url, callback) {
-        if (window.resolveLocalFileSystemURI) {
+        if (window.resolveLocalFileSystemURI && url) {
             window.resolveLocalFileSystemURI(url, function() {
                 callback(true);
             }, function() {
