@@ -53,13 +53,19 @@ enyo.kind({
                         scope: scope
                     });
                 } else {
-                    console.log($L("Facebook signin failed!"));
+                    navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                        function() {}, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
-                console.log("***** login fail ***** " + JSON.stringify(error));
+                // console.log("***** login fail ***** " + JSON.stringify(error));
+                navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                    function() {}, $L("Facebook signin failed!"), $L("OK"));
             });
         },
         fbRequestPublishPermissions: function(success, failure) {
+            if (!App.isMobile()) {
+                return;
+            }
             var scope = "publish_actions";
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
@@ -81,7 +87,7 @@ enyo.kind({
                             }
                         }
                     }, function(error) {
-                        console.log("***** login fail ***** " + JSON.stringify(error));
+                        // console.log("***** login fail ***** " + JSON.stringify(error));
                     });
                 }
             });
