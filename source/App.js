@@ -272,7 +272,9 @@ enyo.kind({
             }), 500);
             this.recoverStateFromUri();
         }
-        navigator.splashscreen.hide();
+        if (navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
         App.startSession();
     },
     /**
