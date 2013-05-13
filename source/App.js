@@ -194,6 +194,8 @@ enyo.kind({
                     }
                 }), [$L("No"), $L("Yes")]);
                 localStorage.setItem("chuisy.optInPrompts." + setting, new Date().getTime());
+            } else {
+                callback(user.profile.get(setting));
             }
         }
     },
