@@ -192,12 +192,12 @@ enyo.kind({
                 } else {
                     App.optInSetting("fb_og_share_likes", $L("Share on Facebook"),
                         $L("Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! " +
-                            "You can change this later in your settings."), 20000, function(choice) {
+                            "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, enyo.bind(this, function(choice) {
                             if (choice) {
                                 App.fbRequestPublishPermissions();
                             }
                             this.toggleLike();
-                        });
+                        }));
                 }
             }), "like");
         }

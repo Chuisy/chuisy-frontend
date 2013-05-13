@@ -277,31 +277,33 @@ enyo.kind({
         })});
     },
     redeemButtonTapped: function() {
-        App.confirm(
-            $L("Redeem Coupon"),
-            $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
-            enyo.bind(this, function(choice) {
-                if (choice) {
-                    this.redeemCoupon();
-                }
-            }),
-            [$L("Cancel"), $L("Redeem")]
-        );
-
-
-        // if (navigator.notification) {
-        //     navigator.notification.confirm(
-        //         $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
-        //         enyo.bind(this, function(choice) {
-        //             if (choice == 2) {
-        //                 this.redeemCoupon();
-        //             }
-        //         }),
-        //         $L("Redeem Coupon"), [$L("Cancel"), $L("Redeem")].join(",")
-        //     );
-        // } else {
-        //     this.redeemCoupon();
-        // }
+        var redeem = enyo.bind(this, function() {
+            App.confirm(
+                $L("Redeem Coupon"),
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+                enyo.bind(this, function(choice) {
+                    if (choice) {
+                        this.redeemCoupon();
+                    }
+                }),
+                [$L("Cancel"), $L("Redeem")]
+            );
+        });
+        var user = chuisy.accounts.getActiveUser();
+        // If user has activated sharing redeemed goodies, make sure that we have publishing permissions.
+        // If not, ask him again (if a certain period of time has passed)
+        if (user && user.profile.get("fb_og_share_redeems")) {
+            App.fbRequestPublishPermissions();
+            setTimeout(redeem, 500);
+        } else {
+            App.optInSetting("fb_og_share_redeems", $L("Share on Facebook"),
+                $L("Do you want to share redeemed goodies on Facebook? You can change this later in your settings."), 20000, function(choice) {
+                    if (choice) {
+                        App.fbRequestPublishPermissions();
+                    }
+                    setTimeout(redeem, 500);
+                });
+        }
 
         return true;
     },
