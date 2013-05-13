@@ -297,7 +297,7 @@ enyo.kind({
             setTimeout(redeem, 500);
         } else {
             App.optInSetting("fb_og_share_redeems", $L("Share on Facebook"),
-                $L("Do you want to share redeemed goodies on Facebook? You can change this later in your settings."), 20000, function(choice) {
+                $L("Do you want to share redeemed goodies on Facebook? You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, function(choice) {
                     if (choice) {
                         App.fbRequestPublishPermissions();
                     }
