@@ -102,11 +102,10 @@ enyo.kind({
         this.updateUser();
     },
     toggleShare: function(sender, event) {
-        console.log(sender.getValue());
+        this.updateUser();
         if (sender.getValue()) {
             App.fbRequestPublishPermissions();
         }
-        this.updateUser();
     },
     activate: function() {},
     deactivate: function() {},
@@ -142,15 +141,15 @@ enyo.kind({
                     // FACEBOOK
                     {classes: "settings-item", components: [
                         {content: $L("Share posts"), classes: "settings-item-text"},
-                        {kind: "onyx.ToggleButton", name: "sharePostsButton", onChange: "toggleShare"}
+                        {kind: "onyx.ToggleButton", name: "sharePostsButton", ontap: "toggleShare"}
                     ]},
                     {classes: "settings-item", components: [
                         {content: $L("Share likes"), classes: "settings-item-text"},
-                        {kind: "onyx.ToggleButton", name: "shareLikesButton", onChange: "toggleShare"}
+                        {kind: "onyx.ToggleButton", name: "shareLikesButton", ontap: "toggleShare"}
                     ]},
                     {classes: "settings-item", components: [
                         {content: $L("Share redeemed Goodies"), classes: "settings-item-text"},
-                        {kind: "onyx.ToggleButton", name: "shareRedeemsButton", onChange: "toggleShare"}
+                        {kind: "onyx.ToggleButton", name: "shareRedeemsButton", ontap: "toggleShare"}
                     ]}
                 ]},
                 {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},

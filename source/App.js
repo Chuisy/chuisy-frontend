@@ -127,8 +127,7 @@ enyo.kind({
                 }
                 navigator.notification.confirm(text, function(choice) {
                     callback(choice == 2);
-                },
-                title, buttonLabels.join(","));
+                }, title, buttonLabels);
             } else {
                 var response = confirm(text);
                 callback(response);
@@ -172,6 +171,30 @@ enyo.kind({
         endSession: function() {
             var duration = new Date().getTime() - App.session.start.getTime();
             App.sendCubeEvent("end_session", {duration: duration});
+        },
+        optInSetting: function(setting, title, message, interval, callback) {
+            var user = chuisy.accounts.getActiveUser();
+            if (!user) {
+                return;
+            }
+
+            var hasAsked = localStorage.getItem("chuisy.optInPrompts." + setting);
+            var timePassed = hasAsked && interval && new Date().getTime() - parseInt(hasAsked, 10);
+            // Ask once for the first time and, if user says no, ask again after a certain period of time
+            if (!hasAsked || interval && timePassed > interval) {
+                App.confirm(title, message, enyo.bind(this, function(choice) {
+                    user.profile.set(setting, choice);
+                    user.save();
+                    chuisy.accounts.syncActiveUser();
+                    App.sendCubeEvent("ask_opt_in", {
+                        choice: choice
+                    });
+                    if (callback) {
+                        callback(choice);
+                    }
+                }), [$L("No"), $L("Yes")]);
+                localStorage.setItem("chuisy.optInPrompts." + setting, new Date().getTime());
+            }
         }
     },
     history: [],
