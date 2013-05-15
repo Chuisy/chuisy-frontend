@@ -92,7 +92,9 @@
     "Sorry, we couldn't upload your Chu just now. Please try again later!": "Dein Chu konnte gerade nicht hochgeladen werden. Versuch es später noch einmal!",
     "Try again": "Versuch's nochmal",
     "Upload failed": "Upload fehlgeschlagen",
-    "Do you want to post your actions on Facebook? Some gifts can only be received if you share your stories. You can change this later in your settings.": "Willst du deine Aktionen auf Facebook posten? Manche Geschenke kannst du nur bekommen, wenn du Dinge mit anderen teilst. Du kannst das später noch in deinen Einstellungen ändern.",
+    "Do you want to share your Chus on Facebook? Some goodies can only be received if you share your stories! You can change this later in your settings.": "Willst du deine Chus auf Facebook teilen? Manche Goodies kannst du nur bekommen, wenn du Dinge mit anderen teilst. Du kannst das später noch in deinen Einstellungen ändern.",
+    "Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! You can change this later in your settings.": "Willst du deine Likes auf Facebook teilen? Manche Goodies kannst du nur bekommen, wenn du Dinge mit anderen teilst. Du kannst das später noch in deinen Einstellungen ändern.",
+    "Do you want to share redeemed goodies on Facebook? You can change this later in your settings.": "Willst du eingelöste Goodies auf Facebook teilen? Du kannst das später noch in deinen Einstellungen ändern.",
     "Share on Facebook": "Auf Facebook teilen",
     "Yes": "Ja",
     "No": "Nein",
@@ -151,5 +153,9 @@
     "Server Problem": "Serverproblem",
     "Search...": "Suchen...",
     "Sorry, the map could not be loaded. Please check your internet connection!": "Sorry, die Karte konnte nicht geladen werden. Bitte überprüfe deine Internetverbindung!",
-    "You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!": "Du bist in einem Geschäft? Mach ein Foto von einem schönen Kleidungsstück und schau, ob du ein Geschenk dafür bekommst!"
+    "You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!": "Du bist in einem Geschäft? Mach ein Foto von einem schönen Kleidungsstück und schau, ob du ein Geschenk dafür bekommst!",
+    "Share posts": "Posts teilen",
+    "Share likes": "Likes teilen",
+    "Share redeemed Goodies": "Eingelöste Goodies teilen",
+    "Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!": "Chuisy konnte sich nicht mit deinem Facebook-Account verbinden. Bitte überprüfe deine Facebook-Einstellungen und versuche es noch einmal!"
 }

@@ -53,13 +53,19 @@ enyo.kind({
                         scope: scope
                     });
                 } else {
-                    console.log($L("Facebook signin failed!"));
+                    navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                        function() {}, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
-                console.log("***** login fail ***** " + JSON.stringify(error));
+                // console.log("***** login fail ***** " + JSON.stringify(error));
+                navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                    function() {}, $L("Facebook signin failed!"), $L("OK"));
             });
         },
         fbRequestPublishPermissions: function(success, failure) {
+            if (!App.isMobile()) {
+                return;
+            }
             var scope = "publish_actions";
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
@@ -81,7 +87,7 @@ enyo.kind({
                             }
                         }
                     }, function(error) {
-                        console.log("***** login fail ***** " + JSON.stringify(error));
+                        // console.log("***** login fail ***** " + JSON.stringify(error));
                     });
                 }
             });
@@ -121,8 +127,7 @@ enyo.kind({
                 }
                 navigator.notification.confirm(text, function(choice) {
                     callback(choice == 2);
-                },
-                title, buttonLabels.join(","));
+                }, title, buttonLabels);
             } else {
                 var response = confirm(text);
                 callback(response);
@@ -166,6 +171,32 @@ enyo.kind({
         endSession: function() {
             var duration = new Date().getTime() - App.session.start.getTime();
             App.sendCubeEvent("end_session", {duration: duration});
+        },
+        optInSetting: function(setting, title, message, interval, callback) {
+            var user = chuisy.accounts.getActiveUser();
+            if (!user) {
+                return;
+            }
+
+            var hasAsked = localStorage.getItem("chuisy.optInPrompts." + setting);
+            var timePassed = hasAsked && interval && new Date().getTime() - parseInt(hasAsked, 10);
+            // Ask once for the first time and, if user says no, ask again after a certain period of time
+            if (!hasAsked || interval && timePassed > interval) {
+                App.confirm(title, message, enyo.bind(this, function(choice) {
+                    user.profile.set(setting, choice);
+                    user.save();
+                    chuisy.accounts.syncActiveUser();
+                    App.sendCubeEvent("ask_opt_in", {
+                        choice: choice
+                    });
+                    if (callback) {
+                        callback(choice);
+                    }
+                }), [$L("No"), $L("Yes")]);
+                localStorage.setItem("chuisy.optInPrompts." + setting, new Date().getTime());
+            } else {
+                callback(user.profile.get(setting));
+            }
         }
     },
     history: [],
