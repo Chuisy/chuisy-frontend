@@ -211,12 +211,21 @@ enyo.kind({
     //     });
     // },
     dismissNotice: function() {
+        App.sendCubeEvent("dismiss_notice", {
+            context: "feed",
+            notice: this.notice
+        });
         localStorage.setItem("chuisy.dismissed_notices." + this.notice.get("key"), true);
         this.notice = null;
         this.feedLoaded();
     },
     confirmNotice: function() {
         this.doNoticeConfirmed({notice: this.notice});
+
+        App.sendCubeEvent("confirm_notice", {
+            context: "feed",
+            notice: this.notice
+        });
     },
     components: [
         {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
