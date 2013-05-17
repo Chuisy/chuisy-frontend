@@ -450,6 +450,9 @@ enyo.kind({
             // chubox/
             // Whats new? Let's check out the notifications
             this.navigateTo("notifications", obj, direct);
+        } else if (uri.match(/^invite\/$/)) {
+            // invite/
+            this.navigateTo("invite", obj, direct);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
@@ -632,12 +635,16 @@ enyo.kind({
     getStartedDone: function() {
         this.navigateTo("feed");
     },
+    noticeConfirmed: function(sender, event) {
+        this.navigateToUri(event.notice.get("uri"));
+    },
     components: [
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
             onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
             onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
-            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone", onGetStartedDone: "getStartedDone"},
+            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
+            onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed"},
         // FACEBOOK SIGNIN
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
