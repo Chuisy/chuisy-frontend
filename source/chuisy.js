@@ -416,6 +416,7 @@
             // Serialize nested profile resource into user JSON to make sure it is stored locally along with the user
             var json = Backbone.Tastypie.Model.prototype.toJSON.apply(this, arguments);
             json.profile = this.profile.toJSON();
+            delete json.profile.fb_og_share_actions;
             return json;
         },
         // save: function(attributes, options) {
