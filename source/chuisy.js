@@ -17,6 +17,10 @@
             chuisy.accounts.trigger("change:active_user");
 
             if (!lightweight) {
+                chuisy.notices.fetch({data: {
+                    language: navigator.language.split("-")[0]
+                }});
+
                 chuisy.closet.fetch();
                 chuisy.closet.checkLocalFiles();
 
@@ -1427,11 +1431,28 @@
     //     }
     // });
 
+    /*
+        A notice
+    */
+    chuisy.models.Notice = Backbone.Tastypie.Model.extend({
+        urlRoot: chuisy.apiRoot + chuisy.version + "/notice/"
+    });
+
+    /*
+        A collection of _Notice_ models
+    */
+    chuisy.models.NoticeCollection = Backbone.Tastypie.Collection.extend({
+        model: chuisy.models.Notice,
+        url: chuisy.apiRoot + chuisy.version + "/notice/"
+    });
+
+
     chuisy.accounts = new chuisy.models.Accounts();
     chuisy.closet = new chuisy.models.Closet();
     chuisy.feed = new chuisy.models.Feed();
     chuisy.notifications = new chuisy.models.Notifications();
     chuisy.venues = new chuisy.models.Venues();
     chuisy.cards = new chuisy.models.CardCollection();
+    chuisy.notices = new chuisy.models.NoticeCollection();
 
 })(window.$, window._, window.Backbone, window.enyo);
