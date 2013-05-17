@@ -445,7 +445,6 @@ enyo.kind({
             this.navigateTo("goodies", obj, direct);
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
-            obj = obj && obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
             this.navigateTo("goodies", obj, direct);
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
@@ -519,6 +518,12 @@ enyo.kind({
                 obj = this.cachedStores.get(obj.id) || obj;
                 this.cachedStores.add(obj);
                 this.updateHistory("store/" + obj.id + "/", obj);
+                break;
+            case "goodies":
+                if (obj && !(obj instanceof chuisy.models.Card)) {
+                    obj = new chuisy.models.Card(obj);
+                }
+                this.updateHistory("goodies");
                 break;
             default:
                 this.updateHistory(view + "/");
