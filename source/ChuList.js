@@ -9,7 +9,7 @@ enyo.kind({
     published: {
         // A _chuisy.models.ChuCollection_ object
         chus: null,
-        chusPerPage: 60
+        chusPerPage: 30
     },
     events: {
         //* A chu has been selected
