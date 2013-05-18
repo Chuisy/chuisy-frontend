@@ -182,14 +182,31 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleLike), "like");
+            App.requireSignIn(enyo.bind(this, function() {
+                var user = chuisy.accounts.getActiveUser();
+                // If user has activated sharing likes, make sure that we have publishing permissions.
+                // If not, ask him again (if a certain period of time has passed)
+                if (user && user.profile.get("fb_og_share_likes")) {
+                    App.fbRequestPublishPermissions();
+                    this.toggleLike();
+                } else {
+                    App.optInSetting("fb_og_share_likes", $L("Share on Facebook"),
+                        $L("Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! " +
+                            "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, enyo.bind(this, function(choice) {
+                            if (choice) {
+                                App.fbRequestPublishPermissions();
+                            }
+                            this.toggleLike();
+                        }));
+                }
+            }), "like");
         }
         return true;
     },
     /**
         Like / unlike chu depending on current status
     */
-    toggleLike: function(sender, event) {
+    toggleLike: function() {
         if (this.checkSynced()) {
             this.chu.toggleLike();
             this.refreshLikes();
@@ -394,7 +411,6 @@ enyo.kind({
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 var params = {
                     method: "feed",
-                    display: "popup",
                     link: this.getShareUrl(),
                     picture: this.chu.get("image")
                 };

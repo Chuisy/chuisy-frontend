@@ -46,55 +46,27 @@ enyo.kind({
         this.$.chuForm.setImage(this.image);
 
         var user = chuisy.accounts.getActiveUser();
-
-        if(App.isSignedIn()) {
-            if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
-                App.confirm(
-                    $L("Share on Facebook"),
-                    $L("Do you want to post your actions on Facebook? Some gifts can only be received if you share your stories. You can change this later in your settings."),
-                    enyo.bind(this, function(choice) {
-                        user.profile.set("fb_og_share_actions", choice);
-                        user.save();
-                        chuisy.accounts.syncActiveUser();
-                        if (choice) {
-                            App.fbRequestPublishPermissions();
-                        }
-                        App.sendCubeEvent(choice ? "fb_og_approve" : "fb_og_deny", {
-                            context: "post_chu"
-                        });
-                    }),
-                    [$L("No"), $L("Yes")]
-                );
-                localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
-            } else if (user.profile.get("fb_og_share_actions")) {
-                App.fbRequestPublishPermissions();
-            }
+        // If user has activated sharing posts, make sure that we have publishing permissions.
+        // If not, ask him again (if a certain period of time has passed)
+        if (user && user.profile.get("fb_og_share_posts")) {
+            App.fbRequestPublishPermissions();
+        } else {
+            App.optInSetting("fb_og_share_posts", $L("Share on Facebook"),
+                $L("Do you want to share your Chus on Facebook? Some goodies can only be received if you share your stories! " +
+                    "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, function(choice) {
+                    if (choice) {
+                        App.fbRequestPublishPermissions();
+                    }
+                });
         }
+
         this.$.pickLocation.initialize();
         this.pickLocationTime = new Date();
-
-        // if (App.isSignedIn() && navigator.notification) {
-        //     if (!localStorage.getItem("chuisy.hasAskedForOgShare")) {
-        //         navigator.notification.confirm($L("Do you want Chuisy to post your actions on Facebook? You can change this later in your settings."), enyo.bind(this, function(choice) {
-        //             var share = choice == 1 ? false : true;
-        //             user.profile.set("fb_og_share_actions", share);
-        //             user.save();
-        //             chuisy.accounts.syncActiveUser();
-        //             if (share) {
-        //                 App.fbRequestPublishPermissions();
-        //             }
-        //         }), $L("Share on Facebook"), [$L("No"), $L("Yes")].join(","));
-        //         localStorage.setItem("chuisy.hasAskedForOgShare", new Date().getTime());
-        //     } else if (user.profile.get("fb_og_share_actions")) {
-        //         App.fbRequestPublishPermissions();
-        //     }
-        // }
-        // this.$.pickLocation.initialize();
     },
     locationPicked: function (sender, event) {
         App.sendCubeEvent("pick_store", {
             store: event.location,
-            duration: new Date().getTime() - this.pickLocationTime.getTime()
+            duration: this.pickLocation ? new Date().getTime() - this.pickLocationTime.getTime() : undefined
         });
         this.location = event.location;
         this.coordinates = event.coordinates;

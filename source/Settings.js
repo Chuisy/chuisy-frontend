@@ -35,7 +35,9 @@ enyo.kind({
         this.$.website.setValue(user.profile.get("website"));
         var avatar = user.get("localAvatar") || user.profile.get("avatar");
         this.$.avatar.applyStyle("background-image", "url(" + avatar + ")");
-        this.$.ogActionsButton.setValue(user.profile.get("fb_og_share_actions"));
+        this.$.sharePostsButton.setValue(user.profile.get("fb_og_share_posts"));
+        this.$.shareLikesButton.setValue(user.profile.get("fb_og_share_likes"));
+        this.$.shareRedeemsButton.setValue(user.profile.get("fb_og_share_redeems"));
         this.$.pushLikeIcon.addRemoveClass("active", user.profile.get("push_like"));
         this.$.emailLikeIcon.addRemoveClass("active", user.profile.get("email_like"));
         this.$.pushCommentIcon.addRemoveClass("active", user.profile.get("push_comment"));
@@ -46,7 +48,9 @@ enyo.kind({
     updateUser: function() {
         var user = chuisy.accounts.getActiveUser();
         user.profile.set("website", this.$.website.getValue());
-        user.profile.set("fb_og_share_actions", this.$.ogActionsButton.getValue());
+        user.profile.set("fb_og_share_posts", this.$.sharePostsButton.getValue());
+        user.profile.set("fb_og_share_likes", this.$.shareLikesButton.getValue());
+        user.profile.set("fb_og_share_redeems", this.$.shareRedeemsButton.getValue());
         user.save({
             first_name: this.$.firstName.getValue(),
             last_name: this.$.lastName.getValue()
@@ -97,11 +101,11 @@ enyo.kind({
         user.profile.set(prop, !user.profile.get(prop));
         this.updateUser();
     },
-    toggleOgActions: function() {
-        if (this.$.ogActionsButton.getValue()) {
+    toggleShare: function(sender, event) {
+        this.updateUser();
+        if (sender.getValue()) {
             App.fbRequestPublishPermissions();
         }
-        this.updateUser();
     },
     activate: function() {},
     deactivate: function() {},
@@ -136,8 +140,16 @@ enyo.kind({
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
                     {classes: "settings-item", components: [
-                        {content: $L("Post actions"), classes: "settings-item-text"},
-                        {kind: "onyx.ToggleButton", name: "ogActionsButton", onChange: "toggleOgActions"}
+                        {content: $L("Share posts"), classes: "settings-item-text"},
+                        {kind: "onyx.ToggleButton", name: "sharePostsButton", ontap: "toggleShare"}
+                    ]},
+                    {classes: "settings-item", components: [
+                        {content: $L("Share likes"), classes: "settings-item-text"},
+                        {kind: "onyx.ToggleButton", name: "shareLikesButton", ontap: "toggleShare"}
+                    ]},
+                    {classes: "settings-item", components: [
+                        {content: $L("Share redeemed Goodies"), classes: "settings-item-text"},
+                        {kind: "onyx.ToggleButton", name: "shareRedeemsButton", ontap: "toggleShare"}
                     ]}
                 ]},
                 {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},

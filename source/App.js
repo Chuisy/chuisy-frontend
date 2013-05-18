@@ -8,7 +8,7 @@ enyo.kind({
     fit: true,
     classes: "app",
     statics: {
-        version: "1.2.1",
+        version: "1.3.0",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
@@ -46,25 +46,33 @@ enyo.kind({
             App.sendCubeEvent("fb_connect_open", {
                 scope: scope
             });
-            FB.login(function(response) {
+            FB.login({scope: scope}, function(response) {
                 if (response.status == "connected") {
                     callback(response.authResponse.accessToken);
                     App.sendCubeEvent("fb_connect_success", {
                         scope: scope
                     });
                 } else {
-                    console.log($L("Facebook signin failed!"));
+                    navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                        function() {}, $L("Facebook signin failed!"), $L("OK"));
                 }
-            }, {scope: scope});
+            }, function(error) {
+                // console.log("***** login fail ***** " + JSON.stringify(error));
+                navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
+                    function() {}, $L("Facebook signin failed!"), $L("OK"));
+            });
         },
         fbRequestPublishPermissions: function(success, failure) {
+            if (!App.isMobile()) {
+                return;
+            }
             var scope = "publish_actions";
-            App.sendCubeEvent("fb_connect_open", {
-                scope: scope
-            });
             FB.api('/me/permissions', function (response) {
                 if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
-                    FB.login(function(response) {
+                    App.sendCubeEvent("fb_connect_open", {
+                        scope: scope
+                    });
+                    FB.login({scope: scope}, function(response) {
                         if (response.authResponse) {
                             if (success) {
                                 success(response.authResponse.accessToken);
@@ -78,7 +86,9 @@ enyo.kind({
                                 failure();
                             }
                         }
-                    }, {scope: scope});
+                    }, function(error) {
+                        // console.log("***** login fail ***** " + JSON.stringify(error));
+                    });
                 }
             });
         },
@@ -117,8 +127,7 @@ enyo.kind({
                 }
                 navigator.notification.confirm(text, function(choice) {
                     callback(choice == 2);
-                },
-                title, buttonLabels.join(","));
+                }, title, buttonLabels);
             } else {
                 var response = confirm(text);
                 callback(response);
@@ -162,6 +171,32 @@ enyo.kind({
         endSession: function() {
             var duration = new Date().getTime() - App.session.start.getTime();
             App.sendCubeEvent("end_session", {duration: duration});
+        },
+        optInSetting: function(setting, title, message, interval, callback) {
+            var user = chuisy.accounts.getActiveUser();
+            if (!user) {
+                return;
+            }
+
+            var hasAsked = localStorage.getItem("chuisy.optInPrompts." + setting);
+            var timePassed = hasAsked && interval && new Date().getTime() - parseInt(hasAsked, 10);
+            // Ask once for the first time and, if user says no, ask again after a certain period of time
+            if (!hasAsked || interval && timePassed > interval) {
+                App.confirm(title, message, enyo.bind(this, function(choice) {
+                    user.profile.set(setting, choice);
+                    user.save();
+                    chuisy.accounts.syncActiveUser();
+                    App.sendCubeEvent("ask_opt_in", {
+                        choice: choice
+                    });
+                    if (callback) {
+                        callback(choice);
+                    }
+                }), [$L("No"), $L("Yes")]);
+                localStorage.setItem("chuisy.optInPrompts." + setting, new Date().getTime());
+            } else {
+                callback(user.profile.get(setting));
+            }
         }
     },
     history: [],
@@ -184,14 +219,6 @@ enyo.kind({
             this.init();
         }
     },
-    /**
-        Hides the apps splash screen with a slight delay
-    */
-    hideSplashScreen: function() {
-        setTimeout(function() {
-            navigator.splashscreen.hide();
-        }, 1000);
-    },
     renderInto: function() {
         this.renderStart = new Date();
         this.inherited(arguments);
@@ -200,10 +227,11 @@ enyo.kind({
         this.inherited(arguments);
 
         // Hide splash screen if Cordova has been loaded yet
-        if (navigator.splashscreen) {
-            this.hideSplashScreen();
+        if (this.isDeviceReady || !App.isMobile()) {
+            setTimeout(enyo.bind(this, function() {
+                this.raiseCurtain();
+            }), 1000);
         }
-        App.startSession();
         var now = new Date();
         App.sendCubeEvent("load_app", {
             loading_time: now.getTime() - window.loadStart.getTime(),
@@ -213,21 +241,23 @@ enyo.kind({
         });
     },
     deviceReady: function() {
+        this.isDeviceReady = true;
         // Hide splash screen if the App has been rendered yet
-        if (this.hasNode()) {
-            this.hideSplashScreen();
-        }
         // Check if the app has been intitialized yet. Necessary since deviceready event
         // seems to be fired multiple times
         if (!this.initialized) {
             this.init();
             this.initialized = true;
         }
+
+        if (this.hasNode()) {
+            setTimeout(enyo.bind(this, function() {
+                this.raiseCurtain();
+            }), 1000);
+        }
     },
     init: function() {
         if (App.isMobile()) {
-            var toolbar = cordova.require('cordova/plugin/keyboard_toolbar_remover');
-            toolbar.hide();
             // init the FB JS SDK
             FB.init({
                 appId      : '180626725291316', // App ID from the App Dashboard
@@ -252,8 +282,10 @@ enyo.kind({
             this.initPushNotifications();
         }
 
-        // var firstLaunched = localStorage.getItem("chuisy.firstLaunched");
-
+        // Update the version number in localstorage
+        localStorage.setItem("chuisy.version", App.version);
+    },
+    raiseCurtain: function() {
         if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
                 this.navigateTo("getstarted", null, true);
@@ -265,15 +297,16 @@ enyo.kind({
             this.$.signInView.ready();
             // this.$.signInSlider.setValue(0);
         } else {
-            this.recoverStateFromUri();
             this.signInViewDone();
             setTimeout(enyo.bind(this, function() {
                 this.$.signInView.ready();
             }), 500);
+            this.recoverStateFromUri();
         }
-
-        // Update the version number in localstorage
-        localStorage.setItem("chuisy.version", App.version);
+        if (navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
+        App.startSession();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -378,56 +411,58 @@ enyo.kind({
         var match, hash = window.location.hash;
         if ((match = hash.match(/^#!\/(.+)/))) {
             this.updateHistory("feed");
-            this.navigateToUri(match[1]);
+            this.navigateToUri(match[1], null, true);
         } else {
-            this.navigateTo("feed");
+            this.navigateTo("feed", null, true);
         }
     },
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateToUri: function(uri, obj) {
+    navigateToUri: function(uri, obj, direct) {
         if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.navigateTo("feed");
+            this.navigateTo("feed", obj, direct);
         } else if (uri.match(/^discover\/$/)) {
             // discover/
             // Lets discover some stuff!
-            this.navigateTo("discover");
+            this.navigateTo("discover", obj, direct);
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("profile");
+            this.navigateTo("profile", obj, direct);
         } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
             // settings/
             // Open settings view
-            this.navigateTo("settings");
+            this.navigateTo("settings", obj, direct);
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("closet");
+            this.navigateTo("closet", obj, direct);
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
-            this.navigateTo("goodies");
+            this.navigateTo("goodies", obj, direct);
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
-            obj = obj && obj instanceof chuisy.models.Card ? obj : new chuisy.models.Card(obj);
-            this.navigateTo("goodies", obj);
+            this.navigateTo("goodies", obj, direct);
         } else if (uri.match(/^notifications\/$/)) {
             // chubox/
             // Whats new? Let's check out the notifications
-            this.navigateTo("notifications");
+            this.navigateTo("notifications", obj, direct);
+        } else if (uri.match(/^invite\/$/)) {
+            // invite/
+            this.navigateTo("invite", obj, direct);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.navigateTo("compose");
+                this.navigateTo("compose", obj, direct);
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
                 obj = obj || new chuisy.models.Chu({id: match3[1], stub: true});
-                this.navigateTo("chu", obj);
+                this.navigateTo("chu", obj, direct);
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // user/{user id}/
@@ -437,7 +472,7 @@ enyo.kind({
                 obj = new chuisy.models.User({id: match2[1]});
                 obj.fetch();
             }
-            this.navigateTo("user", obj);
+            this.navigateTo("user", obj, direct);
         } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
@@ -446,14 +481,14 @@ enyo.kind({
                 obj = new chuisy.models.Store({id: match2[1]});
                 obj.fetch();
             }
-            this.navigateTo("store", obj);
+            this.navigateTo("store", obj, direct);
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
             window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.navigateTo("feed");
+            this.navigateTo("feed", obj, direct);
         }
     },
     navigateTo: function(view, obj, direct) {
@@ -487,6 +522,12 @@ enyo.kind({
                 this.cachedStores.add(obj);
                 this.updateHistory("store/" + obj.id + "/", obj);
                 break;
+            case "goodies":
+                if (obj && !(obj instanceof chuisy.models.Card)) {
+                    obj = new chuisy.models.Card(obj);
+                }
+                this.updateHistory("goodies");
+                break;
             default:
                 this.updateHistory(view + "/");
                 break;
@@ -507,7 +548,9 @@ enyo.kind({
             duration: last && (now.getTime() - last[2].getTime())
         });
         this.history.push([uri, obj, now]);
-        window.location.hash = "!/" + uri;
+        if (!App.isMobile()) {
+            window.location.hash = "!/" + uri;
+        }
     },
     /**
         Removes the latest context from the history and opens the previous one
@@ -592,13 +635,17 @@ enyo.kind({
     getStartedDone: function() {
         this.navigateTo("feed");
     },
+    noticeConfirmed: function(sender, event) {
+        this.navigateToUri(event.notice.get("uri"));
+    },
     components: [
+        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
             onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
             onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
-            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone", onGetStartedDone: "getStartedDone"},
+            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
+            onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed"},
         // FACEBOOK SIGNIN
-        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}

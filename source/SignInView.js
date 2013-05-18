@@ -25,9 +25,9 @@ enyo.kind({
         this.$.cancelButton.setContent(this.context == "start" ? $L("Skip") : $L("Cancel"));
     },
     ready: function() {
-        setTimeout(enyo.bind(this, function() {
+        // setTimeout(enyo.bind(this, function() {
             this.addClass("ready");
-        }), 500);
+        // }), 500);
     },
     /**
         Gets a facebook access token and exchanges it for Chuisy api authentication credentials

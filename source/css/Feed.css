@@ -8,3 +8,31 @@
 .feed-item-added {
 	-webkit-transition: opacity 1s linear 0.5s;
 }
+
+.feed-info-box {
+    box-sizing: border-box;
+    margin: 8px 8px;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px #888;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.feed-info-box-text {
+    padding: 0 5px 10px 5px;
+}
+
+.feed-info-box-button {
+    width: 49%;
+}
+
+.feed-info-box-button.dismiss {
+    margin-right: 1%;
+}
+
+.feed-info-box-button.confirm {
+    margin-left: 1%;
+    background-color: #ddd;
+}

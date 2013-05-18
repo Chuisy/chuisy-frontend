@@ -33,7 +33,8 @@ enyo.kind({
         // User has tapped the plus button
         onComposeChu: "",
         // User has tapped the avatar or name of a user
-        onShowUser: ""
+        onShowUser: "",
+        onNoticeConfirmed: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -48,6 +49,9 @@ enyo.kind({
         this.setPulled(true);
     },
     feedLoaded: function() {
+        this.notice = chuisy.notices && chuisy.notices.filter(function(notice) {
+            return !localStorage.getItem("chuisy.dismissed_notices." + notice.get("key"));
+        })[0];
         this.$.feedList.setCount(chuisy.feed.length);
         this.setPulled(!chuisy.feed.length);
         if (this.hasNode()) {
@@ -100,6 +104,13 @@ enyo.kind({
             this.$.nextPageSpacer.show();
         } else {
             this.$.nextPageSpacer.hide();
+        }
+
+        if (this.notice && event.index === 0) {
+            this.$.feedInfoText.setContent(this.notice.get("text"));
+            this.$.feedInfoBox.show();
+        } else {
+            this.$.feedInfoBox.hide();
         }
 
         return true;
@@ -199,6 +210,23 @@ enyo.kind({
     //         }
     //     });
     // },
+    dismissNotice: function() {
+        App.sendCubeEvent("dismiss_notice", {
+            context: "feed",
+            notice: this.notice
+        });
+        localStorage.setItem("chuisy.dismissed_notices." + this.notice.get("key"), true);
+        this.notice = null;
+        this.feedLoaded();
+    },
+    confirmNotice: function() {
+        this.doNoticeConfirmed({notice: this.notice});
+
+        App.sendCubeEvent("confirm_notice", {
+            context: "feed",
+            notice: this.notice
+        });
+    },
     components: [
         {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
@@ -213,6 +241,11 @@ enyo.kind({
         {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+            {name: "feedInfoBox", classes: "feed-info-box", components: [
+                {name: "feedInfoText", classes: "feed-info-box-text"},
+                {kind: "onyx.Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                {kind: "onyx.Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+            ]},
             {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}

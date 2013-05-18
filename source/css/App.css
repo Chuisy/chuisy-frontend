@@ -73,7 +73,7 @@ body {
 	height: 60px;
 	width: 100%;
 	position: absolute;
-	z-index: 100;
+	/*z-index: 100;*/
 	left: 0;
 	right: 0;
 	bottom: 0;
