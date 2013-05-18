@@ -98,7 +98,8 @@ enyo.kind({
     */
     refreshList: function() {
         this.$.list.setCount(this.filteredItems.length);
-        this.$.list.render();
+        // this.$.list.render();
+        this.$.list.build();
     },
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
