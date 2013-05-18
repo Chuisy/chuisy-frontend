@@ -511,7 +511,7 @@
                 data: {token: deviceToken},
                 type: "POST"
             };
-            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.Tastypie.addAuthentication(options);
             Backbone.ajax(options);
         },
         /*
@@ -537,7 +537,7 @@
                 data: {follow: following},
                 type: "POST"
             };
-            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.Tastypie.addAuthentication(options);
             Backbone.ajax(options);
         },
         /*
@@ -720,7 +720,7 @@
                 type: "POST"
             };
             // Add authentication so the server knows who want to like/unlike
-            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.Tastypie.addAuthentication(options);
             Backbone.ajax(options);
         },
         /*
@@ -908,7 +908,7 @@
                 data: {follow: following},
                 type: "POST"
             };
-            Backbone.Tastypie.addAuthentication("create", this, options);
+            Backbone.Tastypie.addAuthentication(options);
             Backbone.ajax(options);
         },
         /*
@@ -957,7 +957,7 @@
                 }
             }, this);
             // Need to add authentication so the backend knows who this came from
-            Backbone.Tastypie.addAuthentication("read", this, options);
+            Backbone.Tastypie.addAuthentication(options);
             Backbone.ajax(options);
         }
     });
@@ -1196,7 +1196,7 @@
                 this.each(function(el) {
                     el.set("seen", true);
                 });
-                Backbone.Tastypie.addAuthentication("read", this, options);
+                Backbone.Tastypie.addAuthentication(options);
                 Backbone.ajax(options);
             }
             this.meta = this.meta || {};
