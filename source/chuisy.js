@@ -117,6 +117,26 @@
                 chuisy.accounts.getActiveUser().destroy({nosync: true});
             }
             chuisy.accounts.setActiveUser(null);
+        },
+        createInvites: function(requestId, recipientIds) {
+            var objects = [];
+            for (var i=0; i<recipientIds.length; i++) {
+                objects.push({
+                    request_id: requestId,
+                    recipient_id: recipientIds[i]
+                });
+            }
+
+            var options = {
+                url: chuisy.apiRoot + chuisy.version + "/invite/",
+                method: "patch",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    objects: objects
+                })
+            };
+            Backbone.Tastypie.addAuthentication(options);
+            Backbone.ajax(options);
         }
     };
 

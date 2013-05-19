@@ -116,6 +116,7 @@ enyo.kind({
             to: ids
         }, enyo.bind(this, function(response) {
             if (response.request) {
+                chuisy.createInvites(response.request, ids);
                 // User did send the request
                 this.doBack();
                 App.sendCubeEvent("fb_invite", {
