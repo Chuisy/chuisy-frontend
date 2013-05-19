@@ -638,6 +638,14 @@ enyo.kind({
     noticeConfirmed: function(sender, event) {
         this.navigateToUri(event.notice.get("uri"));
     },
+    handleOpenUrl: function(sender, event) {
+        // The app was opened on iOS via a custom url sheme. See if there is a uri to a chuisy object
+        // embedded and if true navigate to that uri
+        var match = event.url.match(/chuisy.com\/((\w+\/?)*)(\?|$)/);
+        if (match) {
+            this.navigateToUri(match[1]);
+        }
+    },
     components: [
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
@@ -648,6 +656,6 @@ enyo.kind({
         // FACEBOOK SIGNIN
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
-            onRequestSignIn: "requestSignIn", onShowGuide: "showGuide"}
+            onRequestSignIn: "requestSignIn", onShowGuide: "showGuide", onHandleOpenUrl: "handleOpenUrl"}
     ]
 });

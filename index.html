@@ -50,7 +50,13 @@
 				// alert('No application build found, redirecting to debug.html.');
 				location = 'debug.html';
 			}
-	        
+            
+            // Used to handle launches via custom url shemes in phonegap
+            function handleOpenURL(url) {
+                setTimeout(function () {
+                    enyo.Signals.send("onHandleOpenUrl", {url: url});  
+                }, 10);
+            }
 			new App().renderInto(document.body);
 		</script>
 	</body>
