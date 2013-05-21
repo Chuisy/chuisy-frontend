@@ -409,16 +409,30 @@ enyo.kind({
     facebook: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                var params = {
-                    method: "feed",
-                    link: this.getShareUrl(),
-                    picture: this.chu.get("image")
-                };
-                FB.ui(params, function(obj) {
-                    App.sendCubeEvent(obj && obj.post_id ? "fb_share" : "fb_share_cancel", {
-                        chu: this.chu
-                    });
-                });
+                window.plugins.social.available("facebook", enyo.bind(this, function(available) {
+                    if (available) {
+                        window.plugins.social.facebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"), enyo.bind(this, function() {
+                            App.sendCubeEvent("share_facebook_success", {
+                                chu: this.chu
+                            });
+                        }), enyo.bind(this, function() {
+                            App.sendCubeEvent("share_facebook_fail", {
+                                chu: this.chu
+                            });
+                        }));
+                    } else {
+                        var params = {
+                            method: "feed",
+                            link: this.getShareUrl(),
+                            picture: this.chu.get("image")
+                        };
+                        FB.ui(params, function(obj) {
+                            App.sendCubeEvent(obj && obj.post_id ? "share_facebook_success" : "share_facebook_fail", {
+                                chu: this.chu
+                            });
+                        });
+                    }
+                }));
             }
         }), "share_facebook");
     },
@@ -428,12 +442,25 @@ enyo.kind({
     twitter: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                var text = this.getMessage();
-                var url = this.getShareUrl();
-                window.location = this.twitterUrl + "?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
-                App.sendCubeEvent("share_twitter", {
-                    chu: this.chu
-                });
+                window.plugins.social.available("twitter", enyo.bind(this, function(available) {
+                    if (available) {
+                        window.plugins.social.twitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"), enyo.bind(this, function() {
+                            App.sendCubeEvent("share_twitter_success", {
+                                chu: this.chu
+                            });
+                        }), enyo.bind(this, function() {
+                            App.sendCubeEvent("share_twitter_fail", {
+                                chu: this.chu
+                            });
+                        }));
+                    } else {
+                        var url = this.twitterUrl + "?text=" + encodeURIComponent(this.getMessage()) + "&url=" + encodeURIComponent(this.getShareUrl()) + "&via=Chuisy";
+                        window.open(url, "_blank");
+                        App.sendCubeEvent("share_twitter_web", {
+                            chu: this.chu
+                        });
+                    }
+                }));
             }
         }), "share_twitter");
     },
@@ -460,7 +487,7 @@ enyo.kind({
             if (this.checkSynced() && this.checkUploaded()) {
                 var message = this.getMessage();
                 window.plugins.smsComposer.showSMSComposer("", message + " " + this.getShareUrl(), function(result) {
-                    App.sendCubeEvent(result == 1 ? "share_messenger" : "share_messenger_cancel", {
+                    App.sendCubeEvent(result == 1 ? "share_messenger_success" : "share_messenger_cancel", {
                         chu: this.chu
                     });
                 });
