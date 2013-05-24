@@ -49,6 +49,24 @@ window.util = {
         };
         img.src = imgSrc;
     },
+    watermark: function(imgSrc, callback) {
+        var canvas = document.createElement("canvas");
+        canvas.width = 612;
+        canvas.height = 612;
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        var watermark = new Image();
+
+        img.onload = function() {
+            watermark.src = "assets/images/watermark.png";
+        };
+        watermark.onload = function() {
+            context.drawImage(img, 0, 0, 612, 612);
+            context.drawImage(watermark, 0, 0, 612, 612);
+            callback(canvas.toDataURL());
+        };
+        img.src = imgSrc;
+    },
     generateUuid: function() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);

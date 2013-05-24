@@ -391,6 +391,10 @@
 	background-image: url(../../assets/images/header_pinterest.png);
 }
 
+.chuview-header-button.instagram {
+	background-image: url(../../assets/images/header_instagram.png);
+}
+
 .chuview-header-button.friends.active {
 	background-position: 0 -40px;
 }

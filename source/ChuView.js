@@ -480,6 +480,19 @@ enyo.kind({
         }), "share_pinterest");
     },
     /**
+        Share image via instagram
+    */
+    instagram: function() {
+        var start = new Date();
+        util.watermark(this.chu.get("image"), enyo.bind(this, function(dataUrl) {
+            Instagram.share(dataUrl, this.getMessage(), function(err) {
+                App.sendCubeEvent(err ? "share_instagram_fail" : "share_instagram_success", {
+                    chu: this.chu
+                });
+            });
+        }));
+    },
+    /**
         Open sms composer with message / link
     */
     sms: function() {
@@ -694,7 +707,7 @@ enyo.kind({
                                     {classes: "chuview-header-button messaging", ontap: "sms"},
                                     {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
                                     {classes: "chuview-header-button twitter", ontap: "twitter"},
-                                    {classes: "chuview-header-button pinterest", ontap: "pinterest"}
+                                    {classes: "chuview-header-button instagram", ontap: "instagram"}
                                 ]}
                             ]},
                             {classes: "chuview-visibility", name: "visibilityButton", ontap: "toggleVisibility"}
