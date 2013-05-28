@@ -163,7 +163,8 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
-        // this.updateLocation();
+        this.updateLocation();
+        this.placeStoreMarkers();
     },
     unfreeze: function() {
         this.$.chuList.updateMetrics();
@@ -171,20 +172,10 @@ enyo.kind({
     },
     updateLocation: function() {
         App.getGeoLocation(enyo.bind(this, function(position) {
-            if (this.locMarker) {
-                this.$.map.removeMarker(this.locMarker);
-            }
             this.$.map.setCenter({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
             });
-            var lat = this.$.map.getCenter().latitude;
-            var lng = this.$.map.getCenter().longitude;
-            this.coords = {
-                latitude: lat,
-                longitude: lng
-            };
-            this.placeStoreMarkers();
         }));
     },
     updateMap: function(collection, response, request, force) {
@@ -198,83 +189,48 @@ enyo.kind({
     },
     markerTapped: function(sender, event) {
         if (event.markerControl && event.markerControl instanceof StoreMarker) {
-            var markerControl = event.markerControl;
-            if (this.currentOpenMarker) {
-                this.currentOpenMarker.removeClass("expanded");
-            }
-            if (this.currentOpenMarker == markerControl) {
-                this.currentOpenMarker = null;
+            if (event.markerControl.buttonTapped) {
+                event.markerControl.buttonTapped = false;
+                this.doShowStore({store: event.obj});
             } else {
-                markerControl.addClass("expanded");
-                this.currentOpenMarker = markerControl;
+                var markerControl = event.markerControl;
+                if (this.currentOpenMarker && this.currentOpenMarker != markerControl) {
+                    this.currentOpenMarker.removeClass("expand");
+                }
+                markerControl.addRemoveClass("expand", !markerControl.hasClass("expand"));
+                this.currentOpenMarker = markerControl.hasClass("expand") ? markerControl : null;
             }
-            if (markerControl.node.className.indexOf("storemarker-button-tapped") > 0) {
-                markerControl.removeClass("storemarker-button-tapped");
-                this.doShowStore({store: markerControl.store});
-            }
-        }
-
-        if (event.obj && event.obj instanceof chuisy.models.Chu) {
-            this.doShowChu({chu: event.obj});
         }
     },
     mapTapped: function(sender, event) {
         if (this.currentOpenMarker && !event.markerControl) {
-            this.currentOpenMarker.removeClass("expanded");
+            this.currentOpenMarker.removeClass("expand");
             this.currentOpenMarker = null;
         }
     },
     mapZoomChanged: function(sender, event) {
         if (this.currentOpenMarker) {
-            this.currentOpenMarker.removeClass("expanded");
+            this.currentOpenMarker.removeClass("expand");
             this.currentOpenMarker = null;
         }
     },
-    mapLoadMore: function() {
-        if (this.chus.hasNextPage()) {
-            this.$.chuNextPage.show();
-            this.chus.fetchNext();
-        }
-    },
     placeStoreMarkers: function() {
-        var store = null;
-        var partnerMarkers = [];
-        for (var i = 0; i < this.nearbyStores.length; i++) {
-            store = this.nearbyStores.at(i);
-            if (store.get("location") && store.get("location").latitude) {
-                var coords = {
-                    latitude : store.get("location").latitude,
-                    longitude : store.get("location").longitude
-                };
-                var storeMarker = new StoreMarker();
-                var chuCount = store.get("chu_count");
-                storeMarker.setContent(store.get("name"), store.get("address"), store.get("zip_code"), store.get("city"));
-                storeMarker.setChuCount(chuCount);
-                storeMarker.setStore(store);
-                if (store.get("company")) {
-                    storeMarker.setType("partner");
-                    partnerMarkers.push({coords: coords, marker: storeMarker});
-                } else if (this.isStoreWithFriendChus(store)){
-                    storeMarker.setType("friends");
-                    this.$.map.addMarker(coords, storeMarker, null, null, true);
-                } else {
-                    storeMarker.setType("general");
-                    this.$.map.addMarker(coords, storeMarker, null, null, true);
+        this.nearbyStores.fetch({data: {limit: 100}, success: enyo.bind(this, function() {
+            this.$.map.clearMarkers();
+            // this.updateLocation();
+            for (var i = 0; i < this.nearbyStores.length; i++) {
+                store = this.nearbyStores.at(i);
+                if (store.get("latitude")) {
+                    var coords = {
+                        latitude : store.get("latitude"),
+                        longitude : store.get("longitude")
+                    };
+                    var storeMarker = new StoreMarker();
+                    storeMarker.setStore(store);
+                    this.$.map.addMarker(coords, storeMarker, null, store, true);
                 }
             }
-        }
-        for (var j = 0; j < partnerMarkers.length; j++) {
-            this.$.map.addMarker(partnerMarkers[j].coords, partnerMarkers[j].marker, null, null, true);
-        }
-    },
-    isStoreWithFriendChus: function(store) {
-        return false;
-    },
-    apiLoaded: function() {
-        var data = {
-            center: App.getGeoLocation()
-        };
-        this.nearbyStores.fetch({data: data, success: enyo.bind(this, this.updateLocation)});
+        })});
     },
     components: [
         // SEARCH INPUT
@@ -309,8 +265,7 @@ enyo.kind({
                 {classes: "discover-placeholder absolute-center", name: "placeholder"}
             ]},
             {classes: "discover-result-panel", components: [
-                {kind: "Map", classes: "enyo-fill", name: "map", onMapTap: "mapTapped", onMarkerTap: "markerTapped", onMapZoomChange: "mapZoomChanged"},
-                {kind: "Signals", onLoadMapsApi: "apiLoaded"}
+                {kind: "Map", classes: "enyo-fill", name: "map", onMapTap: "mapTapped", onMarkerTap: "markerTapped", onMapZoomChange: "mapZoomChanged"}
             ]},
             // CHUS
             {classes: "discover-result-panel", components: [
