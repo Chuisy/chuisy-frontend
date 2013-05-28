@@ -108,3 +108,7 @@
 	font-size: 10pt;
 	padding-top: 2px;
 }
+
+.discover.marker-open .storemarker:not(.expand) {
+	display: none;
+}

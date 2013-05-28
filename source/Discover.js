@@ -197,7 +197,9 @@ enyo.kind({
                 if (this.currentOpenMarker && this.currentOpenMarker != markerControl) {
                     this.currentOpenMarker.removeClass("expand");
                 }
-                markerControl.addRemoveClass("expand", !markerControl.hasClass("expand"));
+                var expand = !markerControl.hasClass("expand");
+                markerControl.addRemoveClass("expand", expand);
+                this.addRemoveClass("marker-open", expand);
                 this.currentOpenMarker = markerControl.hasClass("expand") ? markerControl : null;
             }
         }
@@ -205,12 +207,14 @@ enyo.kind({
     mapTapped: function(sender, event) {
         if (this.currentOpenMarker && !event.markerControl) {
             this.currentOpenMarker.removeClass("expand");
+            this.removeClass("marker-open");
             this.currentOpenMarker = null;
         }
     },
     mapZoomChanged: function(sender, event) {
         if (this.currentOpenMarker) {
             this.currentOpenMarker.removeClass("expand");
+            this.removeClass("marker-open");
             this.currentOpenMarker = null;
         }
     },
