@@ -49,7 +49,14 @@ enyo.kind({
             minZoom: this.minZoom,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true
+            disableDefaultUI: true,
+            styles: [{
+                featureType: "poi.business",
+                elementType: "labels",
+                stylers: [{
+                    visibility: "off"
+                }]
+            }]
         };
 
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
