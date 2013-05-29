@@ -27,8 +27,11 @@ enyo.kind({
         settings: [3, null],
         user: [4, null],
         store: [5, null],
-        invite: [6, null],
-        getstarted: [7, null]
+        discoverChus: [6, null],
+        discoverUsers: [7, null],
+        discoverStores: [8, null],
+        invite: [9, null],
+        getstarted: [10, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -135,7 +138,11 @@ enyo.kind({
                 {kind: "ProfileView", name: "user", fit: true}
             ]},
             // LOCATION VIEW
-            {kind: "StoreView", name: "store", fit: true},
+            {kind: "StoreView", name: "store"},
+            // DISCOVER CHUS
+            {kind: "DiscoverChus", name: "discoverChus"},
+            {kind: "DiscoverUsers", name: "discoverUsers"},
+            {kind: "DiscoverStores", name: "discoverStores"},
             {kind: "InviteFriends", name: "invite"},
             {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
         ]},

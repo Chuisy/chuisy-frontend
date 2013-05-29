@@ -1,0 +1,15 @@
+.storemap.marker-open .storemarker:not(.expand) {
+    display: none;
+}
+
+.storemap-searchinput-wrapper {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.storemap-searchinput-wrapper > .searchinput {
+    width: 100%;
+}

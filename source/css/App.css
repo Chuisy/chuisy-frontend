@@ -138,6 +138,7 @@ body {
 	box-sizing: border-box;
 	position: relative;
 	z-index: 99;
+	text-align: center;
 }
 
 .header-text {
@@ -145,6 +146,7 @@ body {
 	font-size: 14pt;
 	padding: 10px;
 	box-sizing: border-box;
+	display: inline-block;
 }
 
 .header-logo {
