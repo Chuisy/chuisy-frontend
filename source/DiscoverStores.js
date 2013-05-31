@@ -94,9 +94,9 @@ enyo.kind({
             {classes: "header-text", content: $L("Discover Stores")}
         ]},
         // SEARCH INPUT
-        {style: "padding: 5px; box-sizing: border-box; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); position: relative; z-index: 10;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel", style: "width: 100%;", disabled: false}
-        ]},
+        // {style: "padding: 5px; box-sizing: border-box; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); position: relative; z-index: 10;", components: [
+            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel", disabled: false},
+        // ]},
         {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Chus found."), showing: false},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
