@@ -33,18 +33,6 @@ body {
 	z-index: 100;
 }
 
-/* Small box for error messages */
-.error-box {
-	text-align: center;
-	padding: 10px;
-	background-color: #C30F26;
-}
-
-.error-text {
-	display: inline-block;
-	color: #FFFFFF;
-}
-
 /* Button for posting chus */
 .post-chu-button {
 	width: 48px;
