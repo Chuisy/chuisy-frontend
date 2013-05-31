@@ -114,8 +114,8 @@ enyo.kind({
                     App.lastKnownLocation = lastPositionString ? JSON.parse(lastPositionString) : null;
                 }
                 if (App.lastKnownLocation && success) {
-                    success(lastPosition);
-                } else if (failure) {
+                    success(App.lastKnownLocation);
+                } else if (!App.lastKnownLocation && failure) {
                     failure();
                 }
             });
