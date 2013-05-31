@@ -14,8 +14,7 @@ enyo.kind({
     },
     activate: function() {
         enyo.Signals.send("onShowGuide", {view: "discover"});
-        this.$.storeMap.updateLocation();
-        this.$.storeMap.placeStoreMarkers();
+        this.$.storeMap.loadStores();
     },
     components: [
         // TABS FOR SWITCHING BETWEEN CHUS AND USERS

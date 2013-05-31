@@ -539,3 +539,79 @@ body {
 .enyo-thumb {
 	display: none;
 }
+
+/* LOADING SCRIM */
+
+.loading-scrim {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.7);
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	opacity: 0;
+	-webkit-transition: opacity 0.5s;
+}
+
+.loading-scrim-inner {
+	color: #eee;
+	position: absolute;
+	text-align: center;
+	height: 20px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	font-family: Muli;
+}
+
+.loading-scrim-spinner {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.loading-scrim-text {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.loading-scrim-dismiss {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	color: #eee;
+	font-size: 9pt;
+	text-align: center;
+}
+
+.loading-scrim.show {
+	opacity: 1;
+}
+
+/* ALERT */
+
+.alert {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    width: 100%;
+    /*height: 30px;*/
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: white;
+    opacity: 0.9;
+    text-align: center;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    -webkit-transform: translateY(-40px);
+    -webkit-transition: -webkit-transform 0.5s;
+}
+
+.alert.error {
+    background-color: #C30F26;
+    color: white;
+}
+
+.alert.show {
+    -webkit-transform: translateY(0);
+}

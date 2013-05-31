@@ -13,3 +13,21 @@
 .storemap-searchinput-wrapper > .searchinput {
     width: 100%;
 }
+
+.storemap .placeholder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 200px;
+}
+
+.storemap .placeholder-text {
+    padding: 10px;
+}
+
+.storemap .placeholder-image {
+    background-image: url(../../assets/images/map_placeholder.png);
+}

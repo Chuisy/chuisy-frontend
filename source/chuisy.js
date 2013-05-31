@@ -987,16 +987,20 @@
     */
     chuisy.models.SearchableCollection = Backbone.Tastypie.Collection.extend({
         fetch: function(options) {
-            if (options && options.searchQuery) {
+            if (options && (options.searchQuery || options.center && options.radius)) {
                 this.searchQuery = options.searchQuery;
+                this.center = options.center;
+                this.radius = options.radius;
             }
 
-            if (this.searchQuery) {
+            if (this.searchQuery || this.center && this.radius) {
                 var url = _.result(this, "url") + "search/";
                 options = options || {};
                 options.url = url;
                 options.data = options.data || {};
                 options.data.q = this.searchQuery;
+                options.data.center = this.center;
+                options.data.radius = this.radius;
             }
 
             Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
