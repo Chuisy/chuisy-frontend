@@ -51,7 +51,7 @@ enyo.kind({
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
             styles: [{
-                featureType: "poi.business",
+                featureType: "poi",
                 elementType: "labels",
                 stylers: [{
                     visibility: "off"
