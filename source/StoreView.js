@@ -117,7 +117,7 @@ enyo.kind({
         var popup = "<strong>" + name + "</strong>" + "<span style='font-size: 14px'>" + (address || "") + (zipcode || "") + (city || "") + "</span>";
 
         this.$.map.clearMarkers();
-        this.$.map.addMarker(coords, null, popup, null, true);
+        this.$.map.addMarker(coords, null, popup, null, true, null);
 
         this.$.map.setCenter(coords);
     },

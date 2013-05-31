@@ -13,7 +13,9 @@ enyo.kind({
         ondrag: "preventPropagation"
     },
     events: {
-        onMarkerTap: ""
+        onMarkerTap: "",
+        onMapZoomChange: "",
+        onMapTap: ""
     },
     statics: {
         apiLoaded: function() {
@@ -47,10 +49,24 @@ enyo.kind({
             minZoom: this.minZoom,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true
+            disableDefaultUI: true,
+            styles: [{
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{
+                    visibility: "off"
+                }]
+            }]
         };
 
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
+        google.maps.event.addListener(this.map, "zoom_changed", enyo.bind(this, function() {
+            this.doMapZoomChange();
+        }));
+        google.maps.event.addListener(this.map, "click", enyo.bind(this, function() {
+            this.doMapTap({markerControl: this.markerControl});
+            this.markerControl = null;
+        }));
 
         this.markers = [];
     },
@@ -67,12 +83,12 @@ enyo.kind({
             this.panToCenter();
         }
     },
-    addMarker: function(coords, markerControl, popupContent, obj, animate) {
+    addMarker: function(coords, markerControl, popupContent, obj, animate, markerType) {
         var marker;
         var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
-        var image = "./assets/images/marker-pink96x96.png";
+        var image = null;
         if (markerControl) {
-            markerControl.addRemoveClass("drop", animate);
+            // markerControl.addRemoveClass("drop", animate);
             marker = new RichMarker({
                 position: latlng,
                 map: this.map,
@@ -80,9 +96,11 @@ enyo.kind({
                 flat: true
             });
             google.maps.event.addListener(marker, "click", enyo.bind(this, function() {
-                this.doMarkerTap({obj: obj});
+                this.markerControl = markerControl;
+                this.doMarkerTap({obj: obj, markerControl: markerControl});
             }));
         } else {
+            image = "./assets/images/marker-pink96x96.png";
             marker = new google.maps.Marker({
                 position: latlng,
                 map: this.map,

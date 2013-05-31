@@ -18,7 +18,7 @@ enyo.kind({
     },
     usersChanged: function() {
         this.stopListening();
-        this.refresh();
+        this.refresh(null, null, null, true);
         this.listenTo(this.users, "sync", this.refresh);
     },
     rowsPerPageChanged: function() {
@@ -53,9 +53,9 @@ enyo.kind({
         this.doShowUser({user: this.users.at(event.index)});
         event.preventDefault();
     },
-    refresh: function() {
+    refresh: function(coll, response, request, forceReset) {
         this.$.userList.setCount(this.users.length);
-        if (this.users && this.users.meta && this.users.meta.offset) {
+        if (!forceReset && this.users && this.users.meta && this.users.meta.offset) {
             this.$.userList.refresh();
         } else {
             this.$.userList.reset();

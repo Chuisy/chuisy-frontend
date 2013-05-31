@@ -134,12 +134,11 @@ enyo.kind({
         event.preventDefault();
     },
     online: function() {
-        this.$.errorBox.hide();
-        // this.loadFeed();
+        this.$.noInternet.removeClass("show");
         return true;
     },
     offline: function() {
-        this.$.errorBox.show();
+        this.$.noInternet.addClass("show");
         return true;
     },
     userTapped: function(sender, event) {
@@ -231,9 +230,7 @@ enyo.kind({
         {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
-        {classes: "error-box", name: "errorBox", showing: false, components: [
-            {classes: "error-text", content: $L("No internet connection available!")}
-        ]},
+        {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
         {name: "pulldown", classes: "pulldown", components: [
             {classes: "pulldown-arrow"},
             {kind: "CssSpinner", classes: "pulldown-spinner"}

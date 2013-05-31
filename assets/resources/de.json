@@ -121,7 +121,7 @@
     "Uploading image": "Bild wird hochgel.",
     "Post failed": "Posten fehlgeschl.",
     "Upload failed": "Upload fehlgeschl.",
-    "You have received a new goody!": "Du hast ein neues Goody bekommen!",
+    "You have received a new goody! Check it out now on your Goodies Wall!": "Du hast ein neues Goody bekommen! Schau es dir jetzt auf deiner Goody Wall an!",
     "Redeem": "Einlösen",
     "Redeemed": "Eingelöst",
     "Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!": "Bist du dir sicher, dass du diesen Gutschein jetzt einlösen möchtest? Du solltest Gutscheine nie selbst entwerten sondern es von jemanden machen lassen, der ihn geltend machen kann! Ein Gutschein kann nur einmal eingelöst werden!",
@@ -159,5 +159,9 @@
     "Share redeemed Goodies": "Eingelöste Goodies teilen",
     "Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!": "Chuisy konnte sich nicht mit deinem Facebook-Account verbinden. Bitte überprüfe deine Facebook-Einstellungen und versuche es noch einmal!",
     "No Thanks": "Nein Danke",
-    "Let's Go": "Los Gehts"
+    "Let's Go": "Los Gehts",
+    "Go To Store": "Zum Geschäft",
+    "Discover Chus": "Chus Entdecken",
+    "Discover People": "Leute Entdecken",
+    "Discover Stores": "Geschäfte Entdecken"
 }

@@ -114,8 +114,8 @@ enyo.kind({
                     App.lastKnownLocation = lastPositionString ? JSON.parse(lastPositionString) : null;
                 }
                 if (App.lastKnownLocation && success) {
-                    success(lastPosition);
-                } else if (failure) {
+                    success(App.lastKnownLocation);
+                } else if (!App.lastKnownLocation && failure) {
                     failure();
                 }
             });
@@ -453,6 +453,15 @@ enyo.kind({
         } else if (uri.match(/^invite\/$/)) {
             // invite/
             this.navigateTo("invite", obj, direct);
+        } else if (uri.match(/^discoverChus\/$/)) {
+            // invite/
+            this.navigateTo("discoverChus", obj, direct);
+        } else if (uri.match(/^discoverUsers\/$/)) {
+            // invite/
+            this.navigateTo("discoverUsers", obj, direct);
+        } else if (uri.match(/^discoverStores\/$/)) {
+            // invite/
+            this.navigateTo("discoverStores", obj, direct);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
@@ -558,7 +567,8 @@ enyo.kind({
     back: function() {
         if (this.history.length > 1) {
             this.history.pop();
-            this.navigateToUri.apply(this, this.history[this.history.length-1]);
+            var last = this.history[this.history.length-1];
+            this.navigateToUri(last[0], last[1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
@@ -620,6 +630,15 @@ enyo.kind({
     showStore: function(sender, event) {
         this.navigateTo("store", event.store);
     },
+    showDiscoverChus: function(sender, event) {
+        this.navigateTo("discoverChus");
+    },
+    showDiscoverUsers: function(sender, event) {
+        this.navigateTo("discoverUsers");
+    },
+    showDiscoverStores: function(sender, event) {
+        this.navigateTo("discoverStores");
+    },
     menuChanged: function(sender, event) {
         this.navigateTo(event.value);
     },
@@ -652,7 +671,8 @@ enyo.kind({
             onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
             onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
             onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
-            onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed"},
+            onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
+            onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores"},
         // FACEBOOK SIGNIN
         {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
