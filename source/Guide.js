@@ -59,47 +59,46 @@ enyo.kind({
     components: [
         {classes: "header", components: [
             // {kind: "Button", name: "backButton", content: "zurück", ontap: "previous", classes: "header-button left"},
-            {classes: "header-text", content: "So funktioniert's"}
+            {classes: "header-text", content: $L("How it works")}
             // {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
         ]},
         {kind: "Panels", arrangerKind: "CarouselArranger", onTransitionStart: "panelsTransitionStart", fit: true, ontap: "flip", components: [
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: "Mode entdecken"},
-                    {classes: "guide-card-text", content: "Entdecke die schönsten und aktuellsten Modeartikel in den Geschäften deiner Stadt. Sieh, wo andere shoppen gehen und lass dich inspirieren.", style: "padding: 0px 30px 15px 30px;"},
+                    {classes: "guide-card-title", content: $L("Discover fashion")},
+                    {classes: "guide-card-text", content: $L("Discover the newest and prettiest fashion items in the stores of your city. Find out where others go shopping and gain inspiration for your own shopping trips."), allowHtml: true, style: "padding: 0px 30px 15px 30px;"},
                     {kind: "Image", src: "assets/images/guide_front_1.png", style: "width: 220px;"}
                 ]},
                 {classes: "guide-card-side"}
             ]},
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: "Fotos machen"},
-                    {classes: "guide-card-text", content: "Fotografiere die Produkte die dir am besten gefallen, wenn du shoppen gehst. Du kannst selbst entschieden ob du deine Entdeckungen für dich behältst oder mit Freunden und Familie teilst."},
-                    {kind: "Image", src: "assets/images/guide_front_2.png", style: "width: 125px; border-radius: 200px; border: solid 2px rgba(0, 0, 0, 0.2)"},
-                    {classes: "post-chu-button"}
+                    {classes: "guide-card-title", content: $L("Snap fashion items")},
+                    {classes: "guide-card-text", content: $L("Take pictures of fashion items you adore. You decide whether you want to share your discoveries with your friends or keep them to yourself.")},
+                    {kind: "Image", src: "assets/images/guide_front_2.png", style: "width: 100px; margin: 12px;"}
                 ]},
                 {classes: "guide-card-side"}
             ]},
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: "Geschenke sammeln"},
-                    {classes: "guide-card-text", content: "Wenn du Entdeckungen mit Chuisy teilst, kannst du individuelle Geschenke sammeln. Bekomme Rabatte auf genau die Produkte, die du haben willst und sammle Badges und viele andere kleine Geschenke!"},
+                    {classes: "guide-card-title", content: $L("Collect gifts")},
+                    {classes: "guide-card-text", content: $L("You can receive unique gifts by posting products on Chuisy. Collect discounts on your favourite pieces and get many other small goodies!")},
                     {kind: "Image", src: "assets/images/guide_front_3.png", style: "width: 250px;"}
                 ]},
                 {classes: "guide-card-side"}
             ]},
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: "Jetzt loslegen"},
-                    {classes: "guide-card-text", style: "padding-top: 10px;", content: "Wenn du dich mit Facebook anmeldest, kannst du dich mit deinen Freunden verbinden und uneingeschränkt Geschenke sammeln. Deine Daten sind sicher und wir posten nicht, ohne dich zu fragen."},
+                    {classes: "guide-card-title", content: $L("Join now")},
+                    {classes: "guide-card-text", style: "padding: 10px 25px;", content: $L("You can only connect with your friends and collect unlimited goodies if you sign in. Your data is safe with us and we won't post anything without asking you!")},
                     {style: "display: inline-block; position: relative; margin-top: 20px;", components: [
                         {kind: "Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
                             {classes: "facebook-button-icon"},
-                            {classes: "facebook-button-caption", content: "Mit Facebook anmelden"}
+                            {classes: "facebook-button-caption", content: $L("Sign in with Facebook")}
                         ]},
                         {name: "facebookSpinner", kind: "CssSpinner", classes: "absolute-center", showing: false}
                     ]},
-                    {kind: "Button", classes: "btn", content: "Erstmal stöbern", style: "width: 255px; margin-top: 8px;"}
+                    {kind: "Button", classes: "btn", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;"}
                 ]},
                 {classes: "guide-card-side"}
             ]}
