@@ -34,5 +34,6 @@ enyo.depends(
 	"StoreView.css",
 	"StoreMarker.css",
 	"StoreMap.css",
+	"Card.css",
 	"AnimatedPanels.css"
 );

@@ -55,5 +55,6 @@ enyo.depends(
 	"DiscoverChus.js",
 	"DiscoverUsers.js",
 	"DiscoverStores.js",
+	"Card.js",
 	"AnimatedPanels.js"
 );
