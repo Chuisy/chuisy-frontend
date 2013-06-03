@@ -2,10 +2,6 @@
 	padding: 0;
 }
 
-.notransition {
- 	-webkit-transition: none !important;
-}
-
 .goodies-item {
 	width: 100px;
 	height: 100px;

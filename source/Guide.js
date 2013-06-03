@@ -1,148 +1,111 @@
 enyo.kind({
     name: "Guide",
-    classes: "guide",
-    published: {
-        view: ""
-    },
-    handlers: {
-        ontap: "next"
-    },
-    views: {
-        "feed": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 250px", components: [
-                    {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Use the Chu Flow to follow your friends shopping experiences and discover nice things from people with taste.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/bottom-left.png) no-repeat left bottom; background-size: 320px 568px;", components: [
-                // {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
-                //     $L("A fashion item or accessory discovered by a fashion enthusiast during 'window shopping'. " +
-                //         "Often used to express style or get feedback from friends.")},
-                    {classes: "guide-centered", style: "height: 100px", content: $L("You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!")},
-                    {classes: "guide-text", style: "width: 200px; position: absolute; bottom: 60px; left: 70px;", content: $L("You can post a Chu by pressing this button.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/menu.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "width: 230px; margin: 100px auto;", content: $L("This is the menu bar. Use it to move around.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "closet": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Your closet that never ends")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can find all your Chus. Be chuisy and fill it while shopping!")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "profile": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Hey, self!")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("This is your profile, the place where your followers and friends can visit you.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/settings.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; top: 150px; right: 80px; width: 160px;", content: $L("You can also find your settings here.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "chu": [
-            {style: "background: url(assets/images/guide/top-right.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: $L("Share your discovery or keep it a secret. It's your choice.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/share.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: $L("Let friends become part of the moment and share your shopping experiences.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "notifications": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 130px", components: [
-                    {classes: "guide-header", content: $L("Your affairs")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Come here to see what's hot and new.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "discover": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Discover")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Find the coolest people, products and stores.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "goodies": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Your Goodies")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can collect little gifts, badges and coupons while using Chuisy.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ]
-    },
-    create: function() {
-        this.inherited(arguments);
-        this.$.panels.getAnimator().setDuration(800);
-    },
-    viewChanged: function() {
-        this.$.panels.destroyClientControls();
-        var screens = this.views[this.view];
-        if (screens) {
-            for (var i=0; i<screens.length; i++) {
-                this.$.panels.createComponent(screens[i]);
-            }
-            this.$.panels.render();
-        } else {
-            this.close();
-        }
-    },
-    open: function() {
-        this.$.panels.setIndex(0);
-        this.applyStyle("z-index", 1000);
-        this.addClass("open");
-        this.showTime = new Date();
-    },
-    close: function() {
-        this.removeClass("open");
-        setTimeout(enyo.bind(this, function() {
-            this.applyStyle("z-index", -1000);
-        }), 500);
-    },
+    kind: "FittableRows",
     next: function() {
-        var currIndex = this.$.panels.getIndex();
-        if (currIndex < this.$.panels.getPanels().length-1) {
-            this.$.panels.setIndex(currIndex + 1);
-        } else {
-            this.close();
-        }
-        var now = new Date();
-        App.sendCubeEvent("show_guide", {
-            view: this.view,
-            index: currIndex,
-            duration: now.getTime() - this.showTime.getTime()
-        });
-        this.showTime = now;
+        this.goToStep(this.$.animatedPanels.getSelectedPanelIndex() + 1);
+        return true;
     },
-    getImagesPath: function() {
-        var bounds = this.getBounds();
-        return bounds.width/bounds.height >= 2/3 ? "assets/images/guide/2to3/" : "assets/images/guide/9to16/";
+    previous: function() {
+        this.goToStep(this.$.animatedPanels.getSelectedPanelIndex() - 1);
+        return true;
+    },
+    flip: function() {
+        this.$.animatedPanels.getSelectedPanel().flip();
+        return true;
+    },
+    goToStep: function(step) {
+        if (step < this.$.animatedPanels.getSelectedPanelIndex()) {
+            this.$.animatedPanels.selectByIndex(step, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+        } else {
+            this.$.animatedPanels.selectByIndex(step);
+        }
+        var ghost = this.$.ghosts.getClientControls()[step];
+        if (ghost) {
+            ghost.setActive(true);
+        }
+        this.$.forwardButton.setShowing(step < 3);
+        this.$.backButton.setShowing(step > 0);
+        return true;
+    },
+    stepSelected: function(sender, event) {
+        if (event.originator.getActive()) {
+            this.goToStep(event.originator.value);
+        }
+    },
+    signIn: function() {
+        this.$.facebookButton.setDisabled(true);
+        this.$.facebookSpinner.setShowing(true);
+        App.sendCubeEvent("signin_tap", {
+            context: "guide"
+        });
+        if (App.checkConnection()) {
+            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
+                chuisy.signIn(accessToken, enyo.bind(this, function() {
+                    this.$.facebookButton.setDisabled(false);
+                    this.$.facebookSpinner.setShowing(false);
+                }), enyo.bind(this, function() {
+                    this.$.facebookButton.setDisabled(false);
+                    this.$.facebookSpinner.setShowing(false);
+                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
+                    }, $L("Authentication failed"), $L("OK")));
+                }));
+            }));
+        }
+        return true;
     },
     components: [
-        {kind: "Panels", classes: "enyo-fill guide-panels"}
+        {classes: "header", components: [
+            {kind: "Button", name: "backButton", content: "zurück", ontap: "previous", classes: "header-button left"},
+            {classes: "header-text", content: "So funktioniert's"},
+            {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
+        ]},
+        {kind: "AnimatedPanels", fit: true, ontap: "flip", components: [
+            {kind: "Card", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: "Mode entdecken"},
+                    {classes: "guide-card-text", content: "Entdecke die schönsten und aktuellsten Modeartikel in den Geschäften deiner Stadt. Sieh, wo andere shoppen gehen und lass dich inspirieren.", style: "padding: 0px 30px 15px 30px;"},
+                    {kind: "Image", src: "assets/images/guide_front_1.png", style: "width: 220px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: "Photos machen"},
+                    {classes: "guide-card-text", content: "Fotografiere die Produkte die dir am besten gefallen, wenn du shoppen gehst. Du kannst selbst entschieden ob du deine Entdeckungen für dich behältst oder mit Freunden und Familie teilst."},
+                    {kind: "Image", src: "assets/images/guide_front_2.png", style: "width: 125px; border-radius: 200px; border: solid 2px rgba(0, 0, 0, 0.2)"},
+                    {classes: "post-chu-button"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: "Geschenke sammeln"},
+                    {classes: "guide-card-text", content: "Wenn du Entdeckungen mit Chuisy teilst, kannst du individuelle Geschenke sammeln. Bekomme Rabatte auf genau die Produkte, die du haben willst und sammle Badges und viele andere kleine Geschenke!"},
+                    {kind: "Image", src: "assets/images/guide_front_3.png", style: "width: 250px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: "Jetzt loslegen"},
+                    {classes: "guide-card-text", style: "padding-top: 10px;", content: "Wenn du dich mit Facebook anmeldest, kannst du dich mit deinen Freunden verbinden und uneingeschränkt Geschenke sammeln. Deine Daten sind sicher und wir posten nicht, ohne dich zu fragen."},
+                    {style: "display: inline-block; position: relative; margin-top: 20px;", components: [
+                        {kind: "Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
+                            {classes: "facebook-button-icon"},
+                            {classes: "facebook-button-caption", content: "Mit Facebook anmelden"}
+                        ]},
+                        {name: "facebookSpinner", kind: "CssSpinner", classes: "absolute-center", showing: false}
+                    ]},
+                    {kind: "Button", classes: "btn", content: "Erstmal stöbern", style: "width: 255px; margin-top: 8px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]}
+        ]},
+        {kind: "Group", name: "ghosts", classes: "guide-card-ghost", onActivate: "stepSelected", style: "margin-bottom: 15px;", components: [
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 0, active: true},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 1},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 2},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 3}
+        ]}
     ]
 });
