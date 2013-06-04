@@ -1,6 +1,9 @@
 enyo.kind({
     name: "Guide",
     kind: "FittableRows",
+    events: {
+        onDone: ""
+    },
     create: function() {
         this.inherited(arguments);
         this.$.panels.getAnimator().setDuration(500);
@@ -26,27 +29,6 @@ enyo.kind({
             this.goToStep(event.originator.value);
         }
     },
-    signIn: function() {
-        this.$.facebookButton.setDisabled(true);
-        this.$.facebookSpinner.setShowing(true);
-        App.sendCubeEvent("signin_tap", {
-            context: "guide"
-        });
-        if (App.checkConnection()) {
-            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-                chuisy.signIn(accessToken, enyo.bind(this, function() {
-                    this.$.facebookButton.setDisabled(false);
-                    this.$.facebookSpinner.setShowing(false);
-                }), enyo.bind(this, function() {
-                    this.$.facebookButton.setDisabled(false);
-                    this.$.facebookSpinner.setShowing(false);
-                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
-                    }, $L("Authentication failed"), $L("OK")));
-                }));
-            }));
-        }
-        return true;
-    },
     panelsTransitionStart: function(sender, event) {
         var step = event.toIndex;
         var ghost = this.$.ghosts.getClientControls()[step];
@@ -56,13 +38,15 @@ enyo.kind({
         // this.$.forwardButton.setShowing(step < 3);
         // this.$.backButton.setShowing(step > 0);
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
         {classes: "header", components: [
             // {kind: "Button", name: "backButton", content: "zurück", ontap: "previous", classes: "header-button left"},
             {classes: "header-text", content: $L("How it works")}
             // {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
         ]},
-        {kind: "Panels", arrangerKind: "CarouselArranger", onTransitionStart: "panelsTransitionStart", fit: true, ontap: "flip", components: [
+        {kind: "Panels", arrangerKind: "CarouselArranger", onTransitionStart: "panelsTransitionStart", fit: true, components: [
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
                     {classes: "guide-card-title", content: $L("Discover fashion")},
@@ -91,14 +75,8 @@ enyo.kind({
                 {classes: "guide-card-side", components: [
                     {classes: "guide-card-title", content: $L("Join now")},
                     {classes: "guide-card-text", style: "padding: 10px 25px;", content: $L("You can only connect with your friends and collect unlimited goodies if you sign in. Your data is safe with us and we won't post anything without asking you!")},
-                    {style: "display: inline-block; position: relative; margin-top: 20px;", components: [
-                        {kind: "Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                            {classes: "facebook-button-icon"},
-                            {classes: "facebook-button-caption", content: $L("Sign in with Facebook")}
-                        ]},
-                        {name: "facebookSpinner", kind: "CssSpinner", classes: "absolute-center", showing: false}
-                    ]},
-                    {kind: "Button", classes: "btn", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;"}
+                    {kind: "SignInButton", onSignInSuccess: "doDone", onSignInFail: "doDone", style: "margin-top: 20px;"},
+                    {kind: "Button", classes: "btn", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;", ontap: "doDone"}
                 ]},
                 {classes: "guide-card-side"}
             ]}

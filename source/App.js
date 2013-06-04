@@ -54,12 +54,12 @@ enyo.kind({
                     });
                 } else {
                     navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                        function() {}, $L("Facebook signin failed!"), $L("OK"));
+                        fail, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
                 // console.log("***** login fail ***** " + JSON.stringify(error));
                 navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                    function() {}, $L("Facebook signin failed!"), $L("OK"));
+                    fail, $L("Facebook signin failed!"), $L("OK"));
             });
         },
         fbRequestPublishPermissions: function(success, failure) {
