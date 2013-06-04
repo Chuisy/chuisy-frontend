@@ -696,7 +696,7 @@ enyo.kind({
                 {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
                     // HEADER
                     {classes: "header", components: [
-                        {kind: "onyx.Button", ontap: "done", classes: "back-button", name: "doneButton"},
+                        {kind: "Button", name: "doneButton", ontap: "done", classes: "header-button left"},
                         {classes: "chuview-share-controls", components: [
                             {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
                                 {classes: "enyo-fill", components: [
@@ -819,7 +819,7 @@ enyo.kind({
             ]},
             {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
                 {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
+                    {kind: "Button", ontap: "likesBack", classes: "header-button left", content: $L("back")}
                 ]},
                 {kind: "UserList", name: "likesList", fit: true}
             ]}

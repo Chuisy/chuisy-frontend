@@ -165,7 +165,7 @@ enyo.kind({
 	components: [
         {kind: "FittableRows", classes: "enyo-fill", components: [
 			{classes: "header", components: [
-				{kind: "onyx.Button", ontap: "back", classes: "back-button", content: $L("back")}
+                {kind: "Button", ontap: "back", classes: "header-button left", content: $L("back")}
 			]},
 			{kind: "FittableRows", fit: true, components: [
 				{kind: "Map", name: "map", classes: "storeview-map", zoom: 17},

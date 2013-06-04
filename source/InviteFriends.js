@@ -140,8 +140,8 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
-            {kind: "onyx.Button", ontap: "invite", classes: "done-button", content: $L("invite")}
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {kind: "Button", ontap: "invite", classes: "header-button right", content: $L("invite")}
         ]},
         {kind: "FbFriendsPicker", fit: true}
     ]

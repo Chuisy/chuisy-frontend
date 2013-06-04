@@ -192,12 +192,12 @@ enyo.kind({
     components: [
         // HEADER
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
             // {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
             //     {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
             //     {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
             // ]},
-            {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: $L("next"), name: "doneButton"}
+            {kind: "Button", ontap: "doDone", classes: "header-button right", content: $L("next"), name: "doneButton"}
         ]},
         {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
             {kind: "Image", name: "image", classes: "chuform-image"},

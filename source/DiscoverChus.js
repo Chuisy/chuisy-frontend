@@ -95,8 +95,8 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
-            {classes: "header-text", content: $L("Discover Chus")}
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-text", content: $L("Chus")}
         ]},
         // SEARCH INPUT
         // {style: "padding: 5px; box-sizing: border-box;", components: [
