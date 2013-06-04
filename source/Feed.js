@@ -150,7 +150,7 @@ enyo.kind({
         }
     },
     activate: function(newChu) {
-        enyo.Signals.send("onShowGuide", {view: "feed"});
+        // enyo.Signals.send("onShowGuide", {view: "feed"});
         this.newChu = newChu;
         if (newChu) {
             newChu.added = true;

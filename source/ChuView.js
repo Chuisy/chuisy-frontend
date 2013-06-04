@@ -596,9 +596,9 @@ enyo.kind({
         if (user) {
             user.friends.fetch();
         }
-        if (this.isNew) {
-            enyo.Signals.send("onShowGuide", {view: "chu"});
-        }
+        // if (this.isNew) {
+        //     enyo.Signals.send("onShowGuide", {view: "chu"});
+        // }
         enyo.asyncMethod(this, function() {
             this.$.contentScroller.scrollToTop();
         });

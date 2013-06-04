@@ -13,7 +13,7 @@ enyo.kind({
     deactivate: function() {
     },
     activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "discover"});
+        // enyo.Signals.send("onShowGuide", {view: "discover"});
         this.$.storeMap.loadStores();
     },
     components: [
