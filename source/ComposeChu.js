@@ -59,23 +59,26 @@ enyo.kind({
                     }
                 });
         }
-
-        this.$.pickLocation.initialize();
-        this.pickLocationTime = new Date();
-    },
-    locationPicked: function (sender, event) {
-        App.sendCubeEvent("pick_store", {
-            store: event.location,
-            duration: this.pickLocation ? new Date().getTime() - this.pickLocationTime.getTime() : undefined
-        });
-        this.location = event.location;
-        this.coordinates = event.coordinates;
-        this.$.chuForm.setLocation(this.location);
         this.postChuTime = new Date();
-        this.$.panels.setIndex(1);
-        // enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
+        // this.$.panels.setIndex(1);
+        this.$.panels.select(this.$.pickStore);
+        this.pickStoreTime = new Date();
+        return true;
+    },
+    storePicked: function (sender, event) {
+        App.sendCubeEvent("pick_store", {
+            store: event.store,
+            duration: this.pickStore ? new Date().getTime() - this.pickStoreTime.getTime() : undefined
+        });
+        this.store = event.store;
+        this.coordinates = event.coordinates;
+        this.$.panels.select(this.$.postView);
+        // this.$.chuForm.setStore(this.store);
+        // enyo.Signals.send("onShowGuide", {view: "compose"});
+    },
+    postChu: function() {
         if (this.postingChu) {
             return true;
         }
@@ -103,41 +106,59 @@ enyo.kind({
             this.doDone({chu: chu});
         }));
 
-        App.sendCubeEvent("post_chu", {
-            chu: chu,
-            duration: new Date().getTime() - this.postChuTime.getTime()
-        });
+        // App.sendCubeEvent("post_chu", {
+        //     chu: chu,
+        //     duration: new Date().getTime() - this.postChuTime.getTime()
+        // });
         return true;
     },
-    pickLocationBack: function() {
+    pickStoreBack: function() {
         App.sendCubeEvent("pick_store_back", {
-            duration: new Date().getTime() - this.pickLocationTime.getTime()
+            duration: new Date().getTime() - this.pickStoreTime.getTime()
         });
-        this.doBack();
+        // this.$.panels.setIndex(0);
+        this.$.panels.select(this.$.chuForm, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+        if (event) {
+            event.preventDefault();
+        }
+        return true;
     },
     chuFormBack: function() {
         App.sendCubeEvent("post_chu_back", {
             duration: new Date().getTime() - this.postChuTime.getTime()
         });
-        this.$.panels.setIndex(0);
+        this.doBack();
+        if (event) {
+            event.preventDefault();
+        }
         return true;
+    },
+    postViewBack: function() {
+        this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+        this.$.pickStore.initialize();
     },
     activate: function() {
         this.chu = null;
         this.postingChu = false;
-        this.$.panels.setIndex(0);
-        this.$.pickLocation.initialize();
+        // this.$.panels.setIndex(0);
+        this.$.pickStore.initialize();
         this.$.chuForm.clear();
         this.getImage();
     },
     deactivate: function() {},
     components: [
-        {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
-            // STAGE 1: Pick location/place from list
-            {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "pickLocationBack"},
-            // STAGE 2: Pick filter, price, category
-            {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"}
-            // STAGE 3: Change visibility, share
+        {kind: "AnimatedPanels", name: "panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
+            // STEP 1: Pick filter, price, category
+            {kind: "ChuForm", onDone: "chuFormDone", onBack: "chuFormBack"},
+            // STEP 2: Pick location/place from list
+            {kind: "PickStore", onStorePicked: "storePicked", onBack: "pickStoreBack"},
+            // STEP 3: Change visibility, share
+            {name: "postView", components: [
+                {classes: "header", components: [
+                    {kind: "Button", ontap: "postViewBack", classes: "header-button left", content: $L("back")},
+                    {kind: "Button", ontap: "postViewDone", classes: "header-button right", content: $L("next")}
+                ]}
+            ]}
             // {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
         ]}
     ]
