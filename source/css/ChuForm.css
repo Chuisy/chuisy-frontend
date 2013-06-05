@@ -1,10 +1,3 @@
-/*.chuform-imagecontainer {
-	position: relative;
-	background: none no-repeat center top;
-	background-size: cover;
-	background-color: Gray;
-}*/
-
 .chuform-image-wrapper {
 	position: relative;
 	width: 100%;
@@ -47,17 +40,6 @@
 	-webkit-transition-duration: 0.3s;
 }
 
-.chuform-location {
-	/*font-size: 8pt;*/
-	position: absolute;
-	right: 20px;
-	bottom: 20px;
-	text-shadow: 0 0 5px #000;
-	color: white;
-	text-align: right;
-	max-width: 150px;
-}
-
 .chuform.adjusting-price .chuform-price {
 	-webkit-transform: scale(1.5);
 }
@@ -74,41 +56,6 @@
 	font-size: 17pt;
 	box-sizing: border-box;
 }
-
-/*.chuform-category-picker {
-	position: absolute;
-	z-index: 10;
-	right: 10px;
-	bottom: 10px;
-	width: 36px;
-	height: 36px;
-}*/
-
-/*.chuform-category-icon {
-	opacity: 0;
-	position: absolute;
-	-webkit-transition-property: bottom, right, opacity;
-	-webkit-transition-duration: 0.3s;
-}
-
-.chuform-category-icon.selected,
-.chuform-category-picker.open > .chuform-category-icon {
-	opacity: 1;
-}*/
-
-/*.chuform-drag-indicator {
-	position: absolute;
-	width: 100%;
-	bottom: 130px;
-	text-align: center;
-	opacity: 0;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.5s;
-}
-
-.chuform.adjusting-price .chuform-drag-indicator {
-	opacity: 1;
-}*/
 
 .chuform-drag-indicator {
 	width: 100%;
