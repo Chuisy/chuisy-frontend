@@ -176,7 +176,7 @@ enyo.kind({
 					{classes: "storeview-info", name: "info", components: [
 						{classes: "storeview-fullname", name: "name"},
 						{classes: "storeview-settings-button", ontap: "doShowSettings"},
-						{kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "storeview-follow-button follow-button"}
+						{kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "storeview-follow-button follow-button"}
 					]}
 				]},
 				{kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "storeview-menu", components: [
@@ -205,7 +205,7 @@ enyo.kind({
 						{kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
 					]},
 					{kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
-						{kind: "onyx.Button", name: "locationButton", ontap: "showMap", classes: "storeview-location-button"},
+						{kind: "Button", name: "locationButton", ontap: "showMap", classes: "storeview-location-button"},
                         {classes: "storeview-info-block", name: "addressContainer", components: [
                             {classes: "storeview-info-text", name: "address"},
                             {classes: "storeview-info-text", name: "city"}

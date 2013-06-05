@@ -240,8 +240,8 @@ enyo.kind({
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {name: "feedInfoBox", classes: "feed-info-box", components: [
                 {name: "feedInfoText", classes: "feed-info-box-text"},
-                {kind: "onyx.Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                {kind: "onyx.Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+                {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
             ]},
             {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}

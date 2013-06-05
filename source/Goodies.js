@@ -351,7 +351,7 @@ enyo.kind({
                             {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
                         ]},
                         {classes: "goodies-card-redeem", components: [
-                            {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
+                            {kind: "Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
                                 {content: $L("Redeem")}
                             ]},
                             {kind: "CssSpinner", name: "redeemSpinner", classes: "absolute-center", showing: false},

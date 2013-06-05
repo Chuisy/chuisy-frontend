@@ -76,7 +76,7 @@ enyo.kind({
                     {classes: "guide-card-title", content: $L("Join now")},
                     {classes: "guide-card-text", style: "padding: 10px 25px;", content: $L("You can only connect with your friends and collect unlimited goodies if you sign in. Your data is safe with us and we won't post anything without asking you!")},
                     {kind: "SignInButton", onSignInSuccess: "doDone", onSignInFail: "doDone", style: "margin-top: 20px;"},
-                    {kind: "Button", classes: "btn", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;", ontap: "doDone"}
+                    {kind: "Button", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;", ontap: "doDone"}
                 ]},
                 {classes: "guide-card-side"}
             ]}

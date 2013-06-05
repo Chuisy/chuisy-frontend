@@ -3,7 +3,7 @@
 	/*border: #ccc solid 1px;*/
 	/*margin: 10px;*/
 	/*height: 336px;*/
-	margin: 4px 8px;
+	margin: 8px;
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 4px;
@@ -32,7 +32,9 @@
 	vertical-align: top;
 	font-size: 11pt;
 	padding: 0 0;
-	max-width: 150px
+	max-width: 150px;
+	font-weight: bold;
+	line-height: 18px;
 }
 
 .chufeeditem-place {
@@ -90,7 +92,7 @@
 	display: inline-block;
 	vertical-align: top;
 	padding: 0 3px 0 4px;
-	line-height: 14pt;
+	line-height: 17px;
 }
 
 .chufeeditem-likes-icon,

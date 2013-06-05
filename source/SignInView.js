@@ -73,7 +73,7 @@ enyo.kind({
                 {name: "secondaryText", classes: "signinview-text", style: "font-size: 13pt;", showing: false,
                     content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
                 {kind: "SignInButton", onSignInSuccess: "signInSuccess", onSignInFail: "signInFail", style: "display: block; margin: 0 auto;"},
-                {kind: "Button", name: "cancelButton", classes: "btn", style: "width: 240px; display: block; margin: 5px auto;", ontap: "cancel"},
+                {kind: "Button", name: "cancelButton", style: "width: 240px; display: block; margin: 5px auto;", ontap: "cancel"},
                 {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
             ]},
             {classes: "signinview-spacer"}

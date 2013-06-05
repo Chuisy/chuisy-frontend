@@ -134,7 +134,7 @@ enyo.kind({
                     {classes: "profileview-info", name: "info", components: [
                         {classes: "profileview-fullname", name: "fullName"},
                         {classes: "profileview-settings-button", ontap: "doShowSettings"},
-                        {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
+                        {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
                     ]}
                 ]},
                 {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [

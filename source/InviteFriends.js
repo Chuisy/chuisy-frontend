@@ -87,7 +87,7 @@ enyo.kind({
         this.$.list.refresh();
     },
     components: [
-        {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "SearchInput", classes: "discover-searchinput", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
         {kind: "CssSpinner", name: "spinner", classes: "fbfriendspicker-spinner", showing: false},
         {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
@@ -95,7 +95,7 @@ enyo.kind({
                 {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
                 {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
                 {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "onyx.Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
+                {kind: "Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
             ]}
         ]}
     ]
