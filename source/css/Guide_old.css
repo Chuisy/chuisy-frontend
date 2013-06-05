@@ -1,0 +1,58 @@
+.guide {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: #eee;
+	text-align: center;
+	opacity: 0;
+	-webkit-transition: opacity 0.5s;
+	z-index: -1000;
+	/*font-weight: 200;*/
+}
+
+.guide.open {
+	opacity: 1;
+}
+
+.guide-centered {
+	position: absolute;
+	width: 230px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+.guide-header {
+	font-size: 22pt;
+	line-height: 1.3em;
+}
+
+.guide-separator {
+	width: 150px;
+	display: inline-block;
+	border-top: solid 1px rgb(100, 100, 100);
+	height: 0;
+	margin: 15px 0 10px 0;
+}
+
+.guide-dictionary {
+	font-family: Muli;
+	font-size: 10pt;
+	height: 150px;
+}
+
+.guide-text {
+	line-height: 1.5em;
+}
+
+.guide-continue {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	color: #eee;
+	font-size: 9pt;
+}

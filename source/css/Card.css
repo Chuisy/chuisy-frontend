@@ -1,0 +1,126 @@
+.card-stage {
+    position: absolute;
+    -webkit-perspective: 1000px;
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-transition: background-color 0.5s;
+}
+
+.card-stage.scrim {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: inline-block;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+    border-radius: 15px;
+    -webkit-transform: rotateX(0) rotateY(0);
+}
+
+.card.elastic {
+    -webkit-transition: -webkit-transform 0.5s;
+    -webkit-transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/*.card.small {
+    width: 300px;
+    height: 300px;
+    border-radius: 15px;
+}
+
+.card.small .card-side.front,
+.card.small .card-side.back {
+    border-radius: 15px;
+}
+
+.card.big {
+    width: 300px;
+    height: 300px;
+}
+
+.card.big .card-side.front,
+.card.big .card-side.back {
+    border-radius: 7px;
+}
+
+.card.wide {
+    width: 300px;
+    height: 147px;
+    border-radius: 7px;
+}
+
+.card.wide .card-side.front,
+.card.wide .card-side.back {
+    border-radius: 7px;
+}
+
+.card.tall {
+    height: 300px;
+    width: 147px;
+}
+
+.card.tall .card-side.front,
+.card.tall .card-side.back {
+    border-radius: 7px;
+}
+
+.card.panorama {
+    width: 300px;
+    height: 97px;
+}
+
+.card.panorama .card-side.front,
+.card.panorama .card-side.back {
+    border-radius: 5px;
+}
+
+.card.coupon .card-side.back {
+    width: 300px;
+    height: 400px;
+}*/
+
+.card-side {
+    position: absolute;
+    -webkit-backface-visibility: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    box-shadow: 0 0 5px #888;
+    width: 300px;
+    height: 400px;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.card-side.front {
+}
+
+.card-side.back {
+    -webkit-transform: rotateY(180deg);
+}
+
+/*.card-tool-button {
+    width: 32px;
+    height: 32px;
+    background: url() no-repeat 0 0;
+    background-size: 32px 64px;
+    display: inline-block;
+    margin-bottom: 10px;
+
+}
+
+.card-tool-button.close {
+    background-image: url(../../assets/images/cancel_stamped.png);
+}
+
+.card-tool-button:active:hover:not([disabled]) {
+    background-position: 0 -32px;
+}*/

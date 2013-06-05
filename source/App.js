@@ -41,7 +41,7 @@ enyo.kind({
         /**
             Retrieves a facebook access token from the appropriate sdk and calls _callback_ with the result
         */
-        loginWithFacebook: function(callback) {
+        loginWithFacebook: function(callback, fail) {
             var scope = "user_birthday,user_location,user_about_me,user_website,email";
             App.sendCubeEvent("fb_connect_open", {
                 scope: scope
@@ -54,12 +54,12 @@ enyo.kind({
                     });
                 } else {
                     navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                        function() {}, $L("Facebook signin failed!"), $L("OK"));
+                        fail, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
                 // console.log("***** login fail ***** " + JSON.stringify(error));
                 navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                    function() {}, $L("Facebook signin failed!"), $L("OK"));
+                    fail, $L("Facebook signin failed!"), $L("OK"));
             });
         },
         fbRequestPublishPermissions: function(success, failure) {
@@ -286,22 +286,28 @@ enyo.kind({
         localStorage.setItem("chuisy.version", App.version);
     },
     raiseCurtain: function() {
-        if (!App.isSignedIn()) {
+        var guideSeen = localStorage.getItem("chuisy.guideSeen");
+        if (!guideSeen) {
+            this.navigateTo("guide", null, true);
+            setTimeout(enyo.bind(this, function() {
+                this.$.signInView.ready();
+            }), 500);
+            this.signInViewDone();
+        } else if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.navigateTo("getstarted", null, true);
+                this.navigateTo("feed", null, true);
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
                 this.navigateTo("feed", null, true);
             }));
             this.$.signInView.setContext("start");
             this.$.signInView.ready();
-            // this.$.signInSlider.setValue(0);
         } else {
-            this.signInViewDone();
+            this.recoverStateFromUri();
             setTimeout(enyo.bind(this, function() {
                 this.$.signInView.ready();
             }), 500);
-            this.recoverStateFromUri();
+            this.signInViewDone();
         }
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
@@ -462,6 +468,9 @@ enyo.kind({
         } else if (uri.match(/^discoverStores\/$/)) {
             // invite/
             this.navigateTo("discoverStores", obj, direct);
+        } else if (uri.match(/^guide\/$/)) {
+            // invite/
+            this.navigateTo("guide", obj, direct);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
@@ -521,7 +530,7 @@ enyo.kind({
                 this.updateHistory("profile/");
                 var user = chuisy.accounts.getActiveUser();
                 if (user) {
-                    enyo.Signals.send("onShowGuide", {view: "profile"});
+                    // enyo.Signals.send("onShowGuide", {view: "profile"});
                     user.fetch({remote: true});
                 }
                 break;
@@ -594,14 +603,7 @@ enyo.kind({
         }
     },
     showGuide: function(sender, event) {
-        var viewsShown = JSON.parse(localStorage.getItem("chuisy.viewsShown") || "{}");
-
-        if (!viewsShown[event.view]) {
-            this.$.guide.setView(event.view);
-            this.$.guide.open();
-            viewsShown[event.view] = true;
-            localStorage.setItem("chuisy.viewsShown", JSON.stringify(viewsShown));
-        }
+        this.navigateTo("guide");
     },
     tapHandler: function(sender, event) {
         if (this.focusedInput && !(event.originator instanceof enyo.Input)) {
@@ -665,6 +667,10 @@ enyo.kind({
             this.navigateToUri(match[1]);
         }
     },
+    guideDone: function(sender, event) {
+        this.navigateTo("feed");
+        localStorage.setItem("chuisy.guideSeen", true);
+    },
     components: [
         {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
         {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
@@ -672,10 +678,10 @@ enyo.kind({
             onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
             onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
             onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
-            onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores"},
+            onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
+            onGuideDone: "guideDone"},
         // FACEBOOK SIGNIN
-        {kind: "Guide"},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
-            onRequestSignIn: "requestSignIn", onShowGuide: "showGuide", onHandleOpenUrl: "handleOpenUrl"}
+            onRequestSignIn: "requestSignIn", onHandleOpenUrl: "handleOpenUrl"}
     ]
 });

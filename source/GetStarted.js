@@ -63,7 +63,7 @@ enyo.kind({
             {kind: "FittableRows", name: "suggestedUsersPanel", classes: "enyo-fill", components: [
                 {classes: "header", components: [
                     {classes: "header-text getstarted-header-text", content: $L("Interesting People")},
-                    {kind: "onyx.Button", ontap: "suggestedUsersContinue", classes: "done-button", content: $L("continue")}
+                    {kind: "Button", ontap: "suggestedUsersContinue", classes: "done-button", content: $L("continue")}
                 ]},
                 {kind: "CssSpinner", classes: "getstarted-suggestedusers-spinner", name: "suggestedUsersSpinner"},
                 {kind: "UserList", name: "suggestedUsersList", fit: true}
@@ -71,8 +71,8 @@ enyo.kind({
             {kind: "FittableRows", name: "inviteFriendsPanel", classes: "enyo-fill", components: [
                 {classes: "header", components: [
                     {classes: "header-text getstarted-header-text", content: $L("Invite Friends")},
-                    // {kind: "onyx.Button", ontap: "inviteFriendsBack", classes: "back-button", content: $L("back")},
-                    {kind: "onyx.Button", ontap: "inviteFriendsContinue", classes: "done-button", content: $L("done")}
+                    // {kind: "Button", ontap: "inviteFriendsBack", classes: "back-button", content: $L("back")},
+                    {kind: "Button", ontap: "inviteFriendsContinue", classes: "done-button", content: $L("done")}
                 ]},
                 {kind: "FbFriendsPicker", fit: true, buttonLabel: $L("invite")}
             ]}

@@ -111,7 +111,7 @@ enyo.kind({
     deactivate: function() {},
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
         ]},
         {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "settings-content", components: [
@@ -120,7 +120,7 @@ enyo.kind({
                 {kind: "onyx.Groupbox", components: [
                     // AVATAR
                     {name: "avatar", classes: "settings-avatar", components: [
-                        {kind: "onyx.Button", classes: "settings-change-avatar", content: $L("Change"), ontap: "changeAvatar"}
+                        {kind: "Button", classes: "settings-change-avatar", content: $L("Change"), ontap: "changeAvatar"}
                     ]},
                     // FIRST NAME
                     {kind: "onyx.InputDecorator", components: [
@@ -152,7 +152,7 @@ enyo.kind({
                         {kind: "onyx.ToggleButton", name: "shareRedeemsButton", ontap: "toggleShare"}
                     ]}
                 ]},
-                {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},
+                {kind: "Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},
                 // NOTIFICATION SETTINGS
                 {classes: "settings-section-header", content: $L("Notifications")},
                 {kind: "onyx.Groupbox", components: [
@@ -175,7 +175,7 @@ enyo.kind({
                         {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}
                 ]},
-                {kind: "onyx.Button", style: "width: 100%; margin-top: 20px;", content: $L("Logout"), ontap: "signOut"}
+                {kind: "Button", style: "width: 100%; margin-top: 20px;", content: $L("Logout"), ontap: "signOut"}
             ]}
         ]}
     ]

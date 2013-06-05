@@ -73,7 +73,7 @@ enyo.kind({
         this.$.chuForm.setLocation(this.location);
         this.postChuTime = new Date();
         this.$.panels.setIndex(1);
-        enyo.Signals.send("onShowGuide", {view: "compose"});
+        // enyo.Signals.send("onShowGuide", {view: "compose"});
     },
     chuFormDone: function() {
         if (this.postingChu) {

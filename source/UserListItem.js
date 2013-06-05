@@ -28,6 +28,6 @@ enyo.kind({
 	components: [
         {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
         {classes: "userlistitem-fullname ellipsis", name: "fullName"},
-        {kind: "onyx.Button", content: $L("follow"), ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
+        {kind: "Button", content: $L("follow"), ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });

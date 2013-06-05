@@ -73,6 +73,7 @@
 	font-size: 11pt;
 	max-width: 150px;
 	padding-top: 2px;
+	font-weight: bold;
 }
 
 .chuview-comment-time {
@@ -125,29 +126,27 @@
 	padding: 0;
 	display: block;
 	-webkit-box-flex: 1;
-	height: 100%;
 	box-sizing: border-box;
 }
 
 .chuview-commentinput-decorator > .enyo-input {
 	display: block;
 	min-height: 0;
-	height: 100%;
 	width: 100%;
-	padding: 7px 5px;
+	padding: 6px 5px;
 	box-sizing: border-box;
 }
 
 .chuview-commentinput-button {
 	display: block;
 	margin-left: 4px;
-	height: auto;
-	height: 100%;
 	box-sizing: border-box;
-	font-weight: bold;
-	background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));
-	color: rgba(109, 109, 109, 0.5);
-	text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);
+	border-radius: 4px;
+	margin-top: -1px;
+	/*font-weight: bold;*/
+	/*background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));*/
+	/*color: rgba(109, 109, 109, 0.5);*/
+	/*text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);*/
 }
 
 .chuview-more-comments {
@@ -235,7 +234,7 @@
 }
 
 .chuview-store-price {
-	padding: 8px 0 4px 4px;
+	padding: 8px 4px 4px 4px;
 }
 
 .chuview-avatar {
@@ -254,6 +253,7 @@
 	padding: 0 0;
 	max-width: 200px;
 	width: auto;
+	font-weight: bold;
 }
 
 .chuview-time {
@@ -268,24 +268,28 @@
 	float: right;
 	max-width: 120px;
 	text-align: right;
-	max-height: 35px;
-	overflow: hidden;
+	/*line-height: 16px;*/
 }
 
-.chuview-store.button {
+.chuview-store-button {
+	float: right;
 	margin-top: -4px;
-	padding: 2px 1px 2px 6px;
-	height: auto;
+	margin-right: -4px;
+	padding: 2px 4px 2px 7px;
 }
 
 .chuview-store-button-text {
+	vertical-align: middle;
 	max-width: 75px;
+	font-size: 11pt;
+	line-height: 18px;
 }
 
 .chuview-store-icon {
 	width: 13px;
 	height: 13px;
 	margin: -2px 0 0 2px;
+	vertical-align: middle;
 }
 
 .chuview-likes-comments {

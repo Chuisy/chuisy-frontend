@@ -1,148 +1,91 @@
 enyo.kind({
     name: "Guide",
-    classes: "guide",
-    published: {
-        view: ""
-    },
-    handlers: {
-        ontap: "next"
-    },
-    views: {
-        "feed": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 250px", components: [
-                    {classes: "guide-header", content: $L("Welcome to the Chu Flow")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Use the Chu Flow to follow your friends shopping experiences and discover nice things from people with taste.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/bottom-left.png) no-repeat left bottom; background-size: 320px 568px;", components: [
-                // {classes: "guide-centered guide-dictionary", allowHtml: true, content: $L("Chu • [tʃuː], n") + "<br>" +
-                //     $L("A fashion item or accessory discovered by a fashion enthusiast during 'window shopping'. " +
-                //         "Often used to express style or get feedback from friends.")},
-                    {classes: "guide-centered", style: "height: 100px", content: $L("You're in a store? Take a picture of a beautiful piece of fashion and maybe you will get a gift!")},
-                    {classes: "guide-text", style: "width: 200px; position: absolute; bottom: 60px; left: 70px;", content: $L("You can post a Chu by pressing this button.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/menu.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "width: 230px; margin: 100px auto;", content: $L("This is the menu bar. Use it to move around.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "closet": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Your closet that never ends")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can find all your Chus. Be chuisy and fill it while shopping!")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "profile": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Hey, self!")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("This is your profile, the place where your followers and friends can visit you.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/settings.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; top: 150px; right: 80px; width: 160px;", content: $L("You can also find your settings here.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "chu": [
-            {style: "background: url(assets/images/guide/top-right.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 200px; top: 60px; right: 40px;", content: $L("Share your discovery or keep it a secret. It's your choice.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]},
-            {style: "background: url(assets/images/guide/share.png) no-repeat right top; background-size: 320px 568px;", components: [
-                {classes: "guide-text", style: "position: absolute; width: 240px; top: 70px; right: 15px;", content: $L("Let friends become part of the moment and share your shopping experiences.")},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "notifications": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 130px", components: [
-                    {classes: "guide-header", content: $L("Your affairs")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Come here to see what's hot and new.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "discover": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Discover")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Find the coolest people, products and stores.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ],
-        "goodies": [
-            {style: "background: url(assets/images/guide/blank.png) no-repeat center top; background-size: 320px 568px;", components: [
-                {classes: "guide-centered", style: "height: 150px", components: [
-                    {classes: "guide-header", content: $L("Your Goodies")},
-                    {classes: "guide-separator"},
-                    {classes: "guide-text", content: $L("Here you can collect little gifts, badges and coupons while using Chuisy.")}
-                ]},
-                {classes: "guide-continue", content: $L("(tap to continue)")}
-            ]}
-        ]
+    kind: "FittableRows",
+    events: {
+        onDone: ""
     },
     create: function() {
         this.inherited(arguments);
-        this.$.panels.getAnimator().setDuration(800);
-    },
-    viewChanged: function() {
-        this.$.panels.destroyClientControls();
-        var screens = this.views[this.view];
-        if (screens) {
-            for (var i=0; i<screens.length; i++) {
-                this.$.panels.createComponent(screens[i]);
-            }
-            this.$.panels.render();
-        } else {
-            this.close();
-        }
-    },
-    open: function() {
-        this.$.panels.setIndex(0);
-        this.applyStyle("z-index", 1000);
-        this.addClass("open");
-        this.showTime = new Date();
-    },
-    close: function() {
-        this.removeClass("open");
-        setTimeout(enyo.bind(this, function() {
-            this.applyStyle("z-index", -1000);
-        }), 500);
+        this.$.panels.getAnimator().setDuration(500);
     },
     next: function() {
-        var currIndex = this.$.panels.getIndex();
-        if (currIndex < this.$.panels.getPanels().length-1) {
-            this.$.panels.setIndex(currIndex + 1);
-        } else {
-            this.close();
+        this.goToStep(this.$.panels.getIndex() + 1);
+        return true;
+    },
+    previous: function() {
+        this.goToStep(this.$.panels.getIndex() - 1);
+        return true;
+    },
+    flip: function() {
+        this.$.panels.getClientControls()[this.$.panels.getIndex()].flip();
+        return true;
+    },
+    goToStep: function(step) {
+        this.$.panels.setIndex(step);
+        return true;
+    },
+    stepSelected: function(sender, event) {
+        if (event.originator.getActive()) {
+            this.goToStep(event.originator.value);
         }
-        var now = new Date();
-        App.sendCubeEvent("show_guide", {
-            view: this.view,
-            index: currIndex,
-            duration: now.getTime() - this.showTime.getTime()
-        });
-        this.showTime = now;
     },
-    getImagesPath: function() {
-        var bounds = this.getBounds();
-        return bounds.width/bounds.height >= 2/3 ? "assets/images/guide/2to3/" : "assets/images/guide/9to16/";
+    panelsTransitionStart: function(sender, event) {
+        var step = event.toIndex;
+        var ghost = this.$.ghosts.getClientControls()[step];
+        if (ghost) {
+            ghost.setActive(true);
+        }
+        // this.$.forwardButton.setShowing(step < 3);
+        // this.$.backButton.setShowing(step > 0);
     },
+    activate: function() {},
+    deactivate: function() {},
     components: [
-        {kind: "Panels", classes: "enyo-fill guide-panels"}
+        {classes: "header", components: [
+            // {kind: "Button", name: "backButton", content: "zurück", ontap: "previous", classes: "header-button left"},
+            {classes: "header-text", content: $L("How it works")}
+            // {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
+        ]},
+        {kind: "Panels", arrangerKind: "CarouselArranger", onTransitionStart: "panelsTransitionStart", fit: true, components: [
+            {kind: "Card", classes: "enyo-fill", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: $L("Discover fashion")},
+                    {classes: "guide-card-text", content: $L("Discover the newest and prettiest fashion items in the stores of your city. Find out where others go shopping and gain inspiration for your own shopping trips."), allowHtml: true, style: "padding: 0px 30px 15px 30px;"},
+                    {kind: "Image", src: "assets/images/guide_front_1.png", style: "width: 220px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", classes: "enyo-fill", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: $L("Snap fashion items")},
+                    {classes: "guide-card-text", content: $L("Take pictures of fashion items you adore. You decide whether you want to share your discoveries with your friends or keep them to yourself.")},
+                    {kind: "Image", src: "assets/images/guide_front_2.png", style: "width: 100px; margin: 12px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", classes: "enyo-fill", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: $L("Collect gifts")},
+                    {classes: "guide-card-text", content: $L("You can receive unique gifts by posting products on Chuisy. Collect discounts on your favourite pieces and get many other small goodies!")},
+                    {kind: "Image", src: "assets/images/guide_front_3.png", style: "width: 250px;"}
+                ]},
+                {classes: "guide-card-side"}
+            ]},
+            {kind: "Card", classes: "enyo-fill", components: [
+                {classes: "guide-card-side", components: [
+                    {classes: "guide-card-title", content: $L("Join now")},
+                    {classes: "guide-card-text", style: "padding: 10px 25px;", content: $L("You can only connect with your friends and collect unlimited goodies if you sign in. Your data is safe with us and we won't post anything without asking you!")},
+                    {kind: "SignInButton", onSignInSuccess: "doDone", onSignInFail: "doDone", style: "margin-top: 20px;"},
+                    {kind: "Button", content: $L("Browse anonymously"), style: "width: 240px; margin-top: 8px;", ontap: "doDone"}
+                ]},
+                {classes: "guide-card-side"}
+            ]}
+        ]},
+        {kind: "Group", name: "ghosts", classes: "guide-card-ghost", ontap: "stepSelected", style: "margin-bottom: 15px;", components: [
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 0, active: true},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 1},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 2},
+            {kind: "Button", classes: "guide-card-ghost-bullet", value: 3}
+        ]}
     ]
 });

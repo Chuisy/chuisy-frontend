@@ -22,4 +22,6 @@
 .userlistitem-follow-button {
 	float: right;
 	width: 85px;
+	padding-left: 0;
+	padding-right: 0;
 }

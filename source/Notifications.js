@@ -131,7 +131,7 @@ enyo.kind({
         chuisy.notifications.seen();
     },
     activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "notifications"});
+        // enyo.Signals.send("onShowGuide", {view: "notifications"});
         this.seen();
     },
     deactivate: function() {},

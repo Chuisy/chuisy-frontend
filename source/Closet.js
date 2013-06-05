@@ -174,7 +174,7 @@ enyo.kind({
     //     this.$.contextMenu.applyStyle("left", x + "px");
     // },
     activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "closet"});
+        // enyo.Signals.send("onShowGuide", {view: "closet"});
     },
     deactivate: function() {
         this.finishEditing();

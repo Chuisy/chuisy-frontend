@@ -9,9 +9,7 @@ enyo.kind({
     published: {
         //* The path to the captured image
         image: "",
-        price: 0,
-        location: null
-        // category: "head"
+        price: 0
     },
     events: {
         //* Submit button has been tapped
@@ -117,104 +115,28 @@ enyo.kind({
     imageChanged: function() {
         this.$.image.setSrc(this.image);
     },
-    // categoryChanged: function() {
-    //     var categoryIcons = this.$.categoryPicker.getClientControls();
-    //     for (var i=0; i<categoryIcons.length; i++) {
-    //         categoryIcons[i].addRemoveClass("selected", categoryIcons[i].value == this.category);
-    //     }
-    // },
-    locationChanged: function() {
-        if (this.location) {
-            this.$.location.setContent(this.location.get("name") || "");
-            var locale = this.location.get("location").cc;
-            this.currencyFormat = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, locale: locale && locale.toLowerCase()});
-            this.priceChanged();
-        }
-    },
     priceChanged: function() {
         this.$.price.setContent(this.currencyFormat.format(this.price));
     },
     getPrice: function() {
         return Math.floor(this.price);
     },
-    // tap: function(sender, event) {
-    //     if (!event.originator.isDescendantOf(this.$.categoryPicker) && this.$.categoryPicker.hasClass("open")) {
-    //         this.closeCategoryPicker();
-    //         return true;
-    //     }
-    // },
-    // /**
-    //     Toggles the category picker
-    // */
-    // toggleCategoryPicker: function() {
-    //     if (this.$.categoryPicker.hasClass("open")) {
-    //         this.closeCategoryPicker();
-    //     } else {
-    //         this.openCategoryPicker();
-    //     }
-    // },
-    // /**
-    //     Opens the category picker by spreading out the category icons
-    // */
-    // openCategoryPicker: function() {
-    //     this.$.categoryPicker.addClass("open");
-    //     var categoryIcons = this.$.categoryPicker.getClientControls();
-
-    //     for (var i=0; i<categoryIcons.length; i++) {
-    //         categoryIcons[i].applyStyle("bottom", 60*i + "px");
-    //         categoryIcons[i].applyStyle("right", (2*i*i) + "px");
-    //     }
-    // },
-    // /**
-    //     Closes the category picker
-    // */
-    // closeCategoryPicker: function() {
-    //     this.$.categoryPicker.removeClass("open");
-    //     var categoryIcons = this.$.categoryPicker.getClientControls();
-
-    //     for (var i=0; i<categoryIcons.length; i++) {
-    //         categoryIcons[i].applyStyle("bottom", "0");
-    //         categoryIcons[i].applyStyle("right", "0");
-    //     }
-    // },
-    // /**
-    //     Select a category from the category picker
-    // */
-    // selectCategory: function(sender, event) {
-    //     this.setCategory(sender.value);
-    // },
-    // // visibilityChanged: function(sender, event) {
-    // //     sender.setActive(true);
-    // // },
     setDoneButtonDisabled: function(disabled) {
         this.$.doneButton.setDisabled(disabled);
     },
     components: [
         // HEADER
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
-            // {kind: "Group", name: "visibilityPicker", classes: "visibility-picker", components: [
-            //     {kind: "GroupItem", classes: "private-button", name: "privateButton", ontap: "visibilityChanged", value: "private"},
-            //     {kind: "GroupItem", classes: "public-button", name: "publicButton", ontap: "visibilityChanged", value: "public"}
-            // ]},
-            {kind: "onyx.Button", ontap: "doDone", classes: "done-button", content: $L("next"), name: "doneButton"}
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {kind: "Button", ontap: "doDone", classes: "header-button right", content: $L("next"), name: "doneButton"}
         ]},
         {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [
             {kind: "Image", name: "image", classes: "chuform-image"},
             {classes: "chuform-price", name: "price", ontap: "priceTapped"},
-            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!"), showing: false},
-            {classes: "chuform-location ellipsis", name: "location", ontap: "doBack"}
+            {classes: "chuform-price-hint", name: "priceHint", content: $L("Drag on the image to adjust the price!"), showing: false}
         ]},
         {classes: "chuform-price-hint2", content: $L("Drag on the image to adjust the price!")},
         {kind: "ScrollMath", onScrollStart: "scrollMathStart", onScroll: "scrollMathScroll", onScrollStop: "scrollMathStop",
             leftBoundary: 100000, rightBoundary: 0, vertical: false, horizontal: true, kFrictionDamping: 0.95}
-        //CATEGORY
-        // {classes: "chuform-category-picker", name: "categoryPicker", ontap: "toggleCategoryPicker", components: [
-        //     {classes: "category-icon chuform-category-icon feet", value: "feet", ontap: "selectCategory"},
-        //     {classes: "category-icon chuform-category-icon legs", value: "legs", ontap: "selectCategory"},
-        //     {classes: "category-icon chuform-category-icon torso", value: "torso", ontap: "selectCategory"},
-        //     {classes: "category-icon chuform-category-icon accessoires", value: "accessoires", ontap: "selectCategory"},
-        //     {classes: "category-icon chuform-category-icon head selected", value: "head", ontap: "selectCategory"}
-        // ]},
     ]
 });

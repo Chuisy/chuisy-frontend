@@ -12,7 +12,8 @@ enyo.kind({
         onMenuChanged: "",
         onChuViewDone: "",
         onComposeChuDone: "",
-        onGetStartedDone: ""
+        onGetStartedDone: "",
+        onGuideDone: ""
     },
     // Mapping between view and panel indexes
     views: {
@@ -31,7 +32,8 @@ enyo.kind({
         discoverUsers: [7, null],
         discoverStores: [8, null],
         invite: [9, null],
-        getstarted: [10, null]
+        getstarted: [10, null],
+        guide: [11, null]
     },
     create: function() {
         this.inherited(arguments);
@@ -100,6 +102,9 @@ enyo.kind({
         }), direct ? 0 : 400);
         this.$.menu.selectItem(view);
     },
+    guideDone: function() {
+        this.doGuideDone();
+    },
     components: [
         {kind: "Panels", name: "panels", arrangerKind: "CardArranger", animate: false, draggable: false, classes: "enyo-fill", components: [
             {kind: "FittableRows", components: [
@@ -133,7 +138,7 @@ enyo.kind({
             // PROFILE VIEW (for other profiles)
             {kind: "FittableRows", components: [
                 {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
+                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
                 ]},
                 {kind: "ProfileView", name: "user", fit: true}
             ]},
@@ -144,7 +149,8 @@ enyo.kind({
             {kind: "DiscoverUsers", name: "discoverUsers"},
             {kind: "DiscoverStores", name: "discoverStores"},
             {kind: "InviteFriends", name: "invite"},
-            {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"}
+            {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
+            {kind: "Guide", name: "guide", onDone: "guideDone"}
         ]},
         {name: "crossover", classes: "fade-screen"}
     ]

@@ -36,7 +36,6 @@ enyo.kind({
     },
     updateView: function() {
         this.$.panels1.setIndex(0);
-        this.$.spinner.hide();
         this.$.chusCount.setContent(this.user.get("chu_count"));
         this.$.followersCount.setContent(this.user.get("follower_count"));
         this.$.followingCount.setContent(this.user.get("following_count"));
@@ -87,23 +86,8 @@ enyo.kind({
         });
         return true;
     },
-    signIn: function() {
-        if (App.checkConnection()) {
-            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-                this.$.spinner.show();
-                chuisy.signIn(accessToken, enyo.bind(this, function() {
-                    this.activate();
-                    enyo.Signals.send("onShowGuide", {view: "profile"});
-                }), enyo.bind(this, function() {
-                    this.$.spinner.hide();
-                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
-                    }, $L("Authentication failed"), $L("OK")));
-                }));
-            }));
-            App.sendCubeEvent("signin_tap", {
-                context: "profile"
-            });
-        }
+    signInSuccess: function() {
+        this.activate();
     },
     activate: function(obj) {
         if (obj) {
@@ -150,7 +134,7 @@ enyo.kind({
                     {classes: "profileview-info", name: "info", components: [
                         {classes: "profileview-fullname", name: "fullName"},
                         {classes: "profileview-settings-button", ontap: "doShowSettings"},
-                        {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
+                        {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
                     ]}
                 ]},
                 {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
@@ -199,12 +183,8 @@ enyo.kind({
                     {classes: "placeholder-image"},
                     {classes: "placeholder-text", content: $L("Here you can see your profile as soon as you log in!")}
                 ]},
-                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                    {classes: "facebook-button-icon"},
-                    {content: $L("Sign in with Facebook")}
-                ]},
-                {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")},
-                {kind: "CssSpinner", name: "spinner", classes: "profileview-login-spinner", showing: false}
+                {kind: "SignInButton", context: "profile", onSignInSuccess: "signInSuccess", style: "display: block; margin: 0 auto;"},
+                {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
             ]}
         ]}
     ]

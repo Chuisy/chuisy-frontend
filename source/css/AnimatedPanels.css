@@ -1,0 +1,105 @@
+.animatedpanels {
+    position: relative;
+    -webkit-perspective: 1000px;
+}
+
+.animatedpanels > * {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: none;
+    /*-webkit-transform: translate3d(100%, 0, 0);*/
+}
+
+@-webkit-keyframes slideInFromRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideOutToLeft {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(-100%, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideInFromTop {
+    from {
+        -webkit-transform: translate3d(0, 100%, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideOutToBottom {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, -100%, 0);
+    }
+}
+
+@-webkit-keyframes slideInFromLeft {
+    from {
+        -webkit-transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideOutToRight {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(100%, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideInFromBottom {
+    from {
+        -webkit-transform: translate3d(0, -100%, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes slideOutToTop {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 100%, 0);
+    }
+}
+
+@-webkit-keyframes flipIn {
+    from {
+        -webkit-transform: rotateY(180deg);
+    }
+    to {
+        -webkit-transform: rotateY(0);
+    }
+}
+
+@-webkit-keyframes flipOut {
+    from {
+        -webkit-transform: rotateY(0);
+    }
+    to {
+        -webkit-transform: rotateY(-180deg);
+    }
+}

@@ -596,9 +596,9 @@ enyo.kind({
         if (user) {
             user.friends.fetch();
         }
-        if (this.isNew) {
-            enyo.Signals.send("onShowGuide", {view: "chu"});
-        }
+        // if (this.isNew) {
+        //     enyo.Signals.send("onShowGuide", {view: "chu"});
+        // }
         enyo.asyncMethod(this, function() {
             this.$.contentScroller.scrollToTop();
         });
@@ -696,7 +696,7 @@ enyo.kind({
                 {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
                     // HEADER
                     {classes: "header", components: [
-                        {kind: "onyx.Button", ontap: "done", classes: "back-button", name: "doneButton"},
+                        {kind: "Button", name: "doneButton", ontap: "done", classes: "header-button left"},
                         {classes: "chuview-share-controls", components: [
                             {kind: "Panels", name: "sharePanels", draggable: false, classes: "chuview-share-panels", arrangerKind: "CarouselArranger", components: [
                                 {classes: "enyo-fill", components: [
@@ -735,7 +735,7 @@ enyo.kind({
                                 {classes: "chuview-store-price", components: [
                                     // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
                                     {classes: "chuview-price", name: "price"},
-                                    {kind: "onyx.Button", classes: "chuview-store button", name: "storeButton", showing: false, ontap: "showStore", components: [
+                                    {kind: "Button", classes: "chuview-store-button", name: "storeButton", showing: false, ontap: "showStore", components: [
                                         {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
                                         {tag: "img", classes: "chuview-store-icon", attributes: {src: "assets/images/black_marker.png"}}
                                     ]},
@@ -802,7 +802,7 @@ enyo.kind({
                                 {style: "padding: 80px 8px;", components: [
                                     {classes: "placeholder-image chuview-friends-placeholder-image"},
                                     {classes: "chuview-friends-hint", style: "padding: 20px 40px;", content: $L("You don't have any friends on Chuisy yet! Friends are people you follow that follow you back.")},
-                                    {kind: "onyx.Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
+                                    {kind: "Button", content: $L("Invite Friends"), style: "width: 100%", ontap: "doInviteFriends"}
                                 ]}
                             ]}
                         ]}
@@ -812,14 +812,14 @@ enyo.kind({
                         {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
                             {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Comment..."), onkeydown: "commentInputKeydown"}
                         ]},
-                        {kind: "onyx.Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
+                        {kind: "Button", classes: "chuview-commentinput-button", content: $L("send"), ontap: "commentEnter"}
                     ]}
                 ]},
                 {kind: "Signals", onUserChanged: "userChanged", ononline: "online", onoffline: "offline", onPushNotification: "pushNotification"}
             ]},
             {kind: "FittableRows", classes: "enyo-fill", style: "overflow: hidden", components: [
                 {classes: "header", components: [
-                    {kind: "onyx.Button", ontap: "likesBack", classes: "back-button", content: $L("back")}
+                    {kind: "Button", ontap: "likesBack", classes: "header-button left", content: $L("back")}
                 ]},
                 {kind: "UserList", name: "likesList", fit: true}
             ]}
