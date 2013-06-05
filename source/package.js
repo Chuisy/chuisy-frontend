@@ -27,7 +27,7 @@ enyo.depends(
 	"ProfileView.js",
 	"Settings.js",
 	"ComposeChu.js",
-	"PickLocation.js",
+	"PickStore.js",
 	"ChuForm.js",
 	"UserListItem.js",
 	"Discover.js",
@@ -57,5 +57,6 @@ enyo.depends(
 	"DiscoverStores.js",
 	"Card.js",
 	"AnimatedPanels.js",
-	"SignInButton.js"
+	"SignInButton.js",
+	"PostView.js"
 );

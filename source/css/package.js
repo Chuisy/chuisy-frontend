@@ -10,7 +10,7 @@ enyo.depends(
 	"PeoplePicker.css",
 	"ProfileView.css",
 	"ComposeChu.css",
-	"PickLocation.css",
+	"PickStore.css",
 	"ChuForm.css",
 	"UserListItem.css",
 	"Discover.css",
@@ -36,5 +36,6 @@ enyo.depends(
 	"StoreMap.css",
 	"Card.css",
 	"AnimatedPanels.css",
-	"SignInButton.css"
+	"SignInButton.css",
+	"PostView.css"
 );
