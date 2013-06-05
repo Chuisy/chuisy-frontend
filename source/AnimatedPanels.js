@@ -23,7 +23,8 @@ enyo.kind({
     },
     animationEnd: function() {
         // this.newPanel.applyStyle("-webkit-transform", "translate3d(0, 0, 0)");
-        this.newPanel.applyStyle("-webkit-transform", "");
+        // this.newPanel.applyStyle("-webkit-transform", "");
+        // this.newPanel.applyStyle("opacity", 1);
         this.currentPanel.applyStyle("display", "none");
         this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.animationEndHandler, false);
         this.currentPanel = this.newPanel;
@@ -46,16 +47,18 @@ enyo.kind({
             this.animationEnd();
         }
         this.newPanel = panel;
-        this.newPanel.applyStyle("-webkit-transform", "translate3d(100%, 0, 0)");
-        enyo.asyncMethod(this, function() {
-            this.newPanel.applyStyle("display", "block");
+        // this.newPanel.applyStyle("-webkit-transform", "translate3d(100%, 0, 0)");
+        this.newPanel.applyStyle("opacity", 0);
+        this.newPanel.applyStyle("display", "block");
+        // enyo.asyncMethod(this, function() {
             this.animating = true;
             this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
             enyo.asyncMethod(this, function() {
                 this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
                 this.newPanel.applyStyle("-webkit-animation", inAnim + " 0.5s");
+                this.newPanel.applyStyle("opacity", 1);
             });
-        });
+        // });
     },
     selectByIndex: function(index, inAnim, outAnim) {
         this.select(this.getClientControls()[index], inAnim, outAnim);
@@ -66,4 +69,20 @@ enyo.kind({
     getSelectedPanelIndex: function() {
         return this.getClientControls().indexOf(this.currentPanel);
     }
+});
+
+enyo.kind({
+    name: "AnimatedPanelsTest",
+    next: function() {
+        this.$.animatedPanels.select(this.$.second);
+    },
+    previous: function() {
+        this.$.animatedPanels.select(this.$.first, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+    },
+    components: [
+        {kind: "AnimatedPanels", classes: "enyo-fill", components: [
+            {name: "first", style: "background-color: blue", ontap: "next"},
+            {name: "second", style: "background-color: red", ontap: "previous"}
+        ]}
+    ]
 });
