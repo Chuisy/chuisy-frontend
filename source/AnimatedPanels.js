@@ -9,7 +9,8 @@ enyo.kind({
         SLIDE_IN_FROM_LEFT: "slideInFromLeft",
         SLIDE_OUT_TO_RIGHT: "slideOutToRight",
         SLIDE_IN_FROM_BOTTOM: "slideInFromBottom",
-        SLIDE_OUT_TO_TOP: "slideOutToTop"
+        SLIDE_OUT_TO_TOP: "slideOutToTop",
+        NONE: "none"
     },
     events: {
         onAnimationEnd: ""

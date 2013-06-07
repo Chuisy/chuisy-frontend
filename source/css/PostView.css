@@ -66,6 +66,7 @@ textarea.postview-comment-input {
     vertical-align: middle;
     line-height: 13px;
     font-size: 11pt;
+    max-width: 210px;
 }
 
 .postview-store-icon {

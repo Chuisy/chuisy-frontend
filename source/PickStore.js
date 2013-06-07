@@ -87,7 +87,7 @@ enyo.kind({
         this.selected = place;
         this.$.placesList.renderRow(event.index);
         
-        this.doStorePicked({location: place, coordinates: this.coordinates});
+        this.doStorePicked({store: place, coordinates: this.coordinates});
     },
     searchInputEnter: function(sender, event) {
         // User has pressed enter. Select custom location
@@ -104,8 +104,7 @@ enyo.kind({
             return;
         }
         var store = new chuisy.models.Venue({
-            name: this.$.searchInput.getValue(),
-            location: {}
+            name: this.$.searchInput.getValue()
         });
         this.doStorePicked({store: store, coordinates: this.coordinates});
     },
