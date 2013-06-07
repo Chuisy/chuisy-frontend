@@ -9,7 +9,7 @@ enyo.kind({
         store: null,
         image: "",
         visibility: "public",
-        shareFacebook: true
+        shareFacebook: false
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -34,13 +34,17 @@ enyo.kind({
     },
     shareFacebookChanged: function() {
         this.$.facebookButton.addRemoveClass("active", this.shareFacebook);
+        if (this.shareFacebook) {
+            App.fbRequestPublishPermissions(null, enyo.bind(this, function() {
+                this.setShareFacebook(false);
+            }));
+        }
     },
     toggleFacebook: function() {
         // this.$.facebookButton.setActive(!this.$.facebookButton.getActive());
         this.setShareFacebook(!this.shareFacebook);
     },
     openPeoplePicker: function() {
-        this.setupFriends();
         this.$.panels.select(this.$.peoplePicker, AnimatedPanels.SLIDE_IN_FROM_BOTTOM, AnimatedPanels.NONE);
         this.$.peoplePicker.resized();
         event.preventDefault();
@@ -60,6 +64,17 @@ enyo.kind({
     },
     getFriends: function() {
         return this.$.peoplePicker.getSelectedItems();
+    },
+    clear: function() {
+        this.setVisibility("public");
+        this.$.peoplePicker.setSelectedItems([]);
+        this.$.shareCount.setContent("");
+        this.setupFriends();
+        this.setStore(null);
+        this.setShareFacebook(false);
+        App.fbHasPublishPermissions(enyo.bind(this, function(yes) {
+            this.setShareFacebook(yes);
+        }));
     },
     components: [
         {kind: "AnimatedPanels", name: "panels", classes: "enyo-fill", components: [

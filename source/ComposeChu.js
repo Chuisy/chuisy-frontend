@@ -163,6 +163,7 @@ enyo.kind({
         this.$.panels.select(this.$.chuForm);
         this.$.pickStore.initialize();
         this.$.chuForm.clear();
+        this.$.postView.clear();
         this.getImage();
     },
     deactivate: function() {},

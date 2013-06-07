@@ -62,13 +62,18 @@ enyo.kind({
                     fail, $L("Facebook signin failed!"), $L("OK"));
             });
         },
+        fbHasPublishPermissions: function(callback) {
+            FB.api('/me/permissions', function (response) {
+                callback(response && response.data && response.data[0] && response.data[0].publish_actions);
+            });
+        },
         fbRequestPublishPermissions: function(success, failure) {
             if (!App.isMobile()) {
                 return;
             }
             var scope = "publish_actions";
-            FB.api('/me/permissions', function (response) {
-                if (response && response.data && response.data[0] && !response.data[0].publish_actions) {
+            App.fbHasPublishPermissions(function(yes) {
+                if (!yes) {
                     App.sendCubeEvent("fb_connect_open", {
                         scope: scope
                     });
@@ -81,14 +86,17 @@ enyo.kind({
                                 scope: scope
                             });
                         } else {
-                            console.log($L("Facebook signin failed!"));
                             if (failure) {
                                 failure();
                             }
                         }
                     }, function(error) {
-                        // console.log("***** login fail ***** " + JSON.stringify(error));
+                        if (failure) {
+                            failure();
+                        }
                     });
+                } else if (success) {
+                    success();
                 }
             });
         },
