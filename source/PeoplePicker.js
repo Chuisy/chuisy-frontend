@@ -11,7 +11,8 @@ enyo.kind({
     },
     events: {
         // Is sent whenever a person is selected or unselected
-        onChange: ""
+        onChange: "",
+        onDone: ""
     },
     create: function() {
         this.inherited(arguments);
@@ -104,16 +105,23 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
         event.item.$.avatar.setSrc(item.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
-        event.item.$.avatar.addRemoveClass("selected", this.isSelected(item));
+        event.item.$.fullName.setContent(item.get("first_name") + " " + item.get("last_name"));
+        event.item.$.item.addRemoveClass("selected", this.isSelected(item));
         return true;
     },
     components: [
-        {kind: "onyx.InputDecorator", classes: "peoplepicker-filter-input", components: [
-            {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: $L("Type to filter...")}
+        {classes: "header", components: [
+            {kind: "Button", ontap: "doDone", classes: "header-button right", content: $L("done")}
         ]},
+        // SEARCH INPUT
+        {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", onCancel: "searchInputCancel", onkeyup: "keyupHandler"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", thumb: false, fit: true, components: [
-            {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
-                {kind: "Image", name: "avatar", classes: "peoplepicker-avatar", ontap: "itemTap"}
+            {kind: "Repeater", name: "list", onSetupItem: "setupItem", ontap: "itemTap", components: [
+                {classes: "peoplepicker-item", name: "item", components: [
+                    {kind: "Image", classes: "peoplepicker-item-avatar", name: "avatar"},
+                    {classes: "peoplepicker-item-fullname ellipsis", name: "fullName"},
+                    {classes: "peoplepicker-item-light"}
+                ]}
             ]}
         ]}
     ]
