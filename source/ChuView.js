@@ -737,7 +737,7 @@ enyo.kind({
                                     {classes: "chuview-price", name: "price"},
                                     {kind: "Button", classes: "chuview-store-button", name: "storeButton", showing: false, ontap: "showStore", components: [
                                         {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
-                                        {tag: "img", classes: "chuview-store-icon", attributes: {src: "assets/images/black_marker.png"}}
+                                        {kind: "Image", classes: "chuview-store-icon", src: "assets/images/black_marker.png"}
                                     ]},
                                     {name: "store", classes: "chuview-store ellipsis", showing: false},
                                     {classes: "chuview-likes-comments", showing: false, components: [
