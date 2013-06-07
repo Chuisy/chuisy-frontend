@@ -53,11 +53,11 @@ enyo.kind({
         // enyo.asyncMethod(this, function() {
             this.animating = true;
             this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
-            enyo.asyncMethod(this, function() {
+            // enyo.asyncMethod(this, function() {
                 this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
                 this.newPanel.applyStyle("-webkit-animation", inAnim + " 0.5s");
                 this.newPanel.applyStyle("opacity", 1);
-            });
+            // });
         // });
     },
     selectByIndex: function(index, inAnim, outAnim) {

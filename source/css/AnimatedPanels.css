@@ -34,7 +34,7 @@
 
 @-webkit-keyframes slideInFromTop {
     from {
-        -webkit-transform: translate3d(0, 100%, 0);
+        -webkit-transform: translate3d(0, -100%, 0);
     }
     to {
         -webkit-transform: translate3d(0, 0, 0);
@@ -46,7 +46,7 @@
         -webkit-transform: translate3d(0, 0, 0);
     }
     to {
-        -webkit-transform: translate3d(0, -100%, 0);
+        -webkit-transform: translate3d(0, 100%, 0);
     }
 }
 
@@ -70,7 +70,7 @@
 
 @-webkit-keyframes slideInFromBottom {
     from {
-        -webkit-transform: translate3d(0, -100%, 0);
+        -webkit-transform: translate3d(0, 100%, 0);
     }
     to {
         -webkit-transform: translate3d(0, 0, 0);
@@ -82,7 +82,7 @@
         -webkit-transform: translate3d(0, 0, 0);
     }
     to {
-        -webkit-transform: translate3d(0, 100%, 0);
+        -webkit-transform: translate3d(0, -100%, 0);
     }
 }
 
@@ -101,5 +101,62 @@
     }
     to {
         -webkit-transform: rotateY(-180deg);
+    }
+}
+
+@-webkit-keyframes tiltOut {
+    from {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(0);
+        /*-webkit-transform: translateZ(0);*/
+    }
+    to {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(15deg);
+        /*-webkit-transform: translateZ(-20px);*/
+    }
+}
+
+@-webkit-keyframes tiltIn {
+    from {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(15deg);
+        /*-webkit-transform: translateZ(-20px);*/
+    }
+    to {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(0);
+        /*-webkit-transform: translateZ(0);*/
+    }
+}
+
+@-webkit-keyframes tiltOut {
+    from {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(0);
+        /*-webkit-transform: translateZ(0);*/
+    }
+    to {
+        -webkit-transform-origin: 50% 100%;
+        -webkit-transform: rotateX(15deg);
+        /*-webkit-transform: translateZ(-20px);*/
+    }
+}
+
+@-webkit-keyframes shiftOut {
+    from {
+        -webkit-transform: translateZ(0);
+    }
+    to {
+        -webkit-transform: translateZ(-50px);
+    }
+}
+
+@-webkit-keyframes shiftIn {
+    from {
+        -webkit-transform: translateZ(-50px);
+    }
+    to {
+        -webkit-transform: translateZ(0);
     }
 }
