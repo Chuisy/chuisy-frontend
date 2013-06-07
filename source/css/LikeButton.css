@@ -1,0 +1,38 @@
+.like-button {
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+    -webkit-transition: -webkit-transform 0.5s;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+}
+
+.like-button, .like-button:active:hover:not([disabled]) {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.like-button-side {
+    position: absolute;
+    -webkit-backface-visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url() no-repeat 0 0;
+    background-size: cover;
+}
+
+.like-button-side.front {
+    background-image: url(../../assets/images/like_button_front.png);
+}
+
+.like-button-side.back {
+    background-image: url(../../assets/images/like_button_back.png);
+    -webkit-transform: rotateX(180deg);
+}
+
+.like-button.active {
+    -webkit-transform: rotateX(180deg);
+}

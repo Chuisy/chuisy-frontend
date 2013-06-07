@@ -58,5 +58,6 @@ enyo.depends(
 	"Card.js",
 	"AnimatedPanels.js",
 	"SignInButton.js",
-	"PostView.js"
+	"PostView.js",
+	"LikeButton.js"
 );

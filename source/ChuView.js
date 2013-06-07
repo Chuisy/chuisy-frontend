@@ -178,7 +178,7 @@ enyo.kind({
     },
     likedChanged: function() {
         this.addRemoveClass("liked", this.liked);
-        this.$.likeButton.addRemoveClass("active", this.liked);
+        this.$.likeButton.setActive(this.liked);
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
@@ -720,10 +720,7 @@ enyo.kind({
                             {classes: "chuview-spacer", ontap: "hideControls"},
                             // LIKE BAR
                             {classes: "chuview-likebar", components: [
-                                {classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped", components: [
-                                    {classes: "chuview-like-button-side back"},
-                                    {classes: "chuview-like-button-side front"}
-                                ]},
+                                {kind: "LikeButton", classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"},
                                 {classes: "chuview-status", name: "syncStatus", ontap: "syncStatusTapped", components: [
                                     {classes: "chuview-status-error-icon", name: "statusErrorIcon", showing: false},
                                     {kind: "CssSpinner", name: "statusSpinner", classes: "chuview-status-spinner"},

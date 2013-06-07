@@ -63,6 +63,9 @@ enyo.kind({
             });
         },
         fbHasPublishPermissions: function(callback) {
+            if (!App.isMobile()) {
+                return;
+            }
             FB.api('/me/permissions', function (response) {
                 callback(response && response.data && response.data[0] && response.data[0].publish_actions);
             });

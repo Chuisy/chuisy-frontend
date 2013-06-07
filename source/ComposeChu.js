@@ -105,7 +105,6 @@ enyo.kind({
     },
     postViewBack: function() {
         this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
-        this.$.pickStore.initialize();
         return true;
     },
     postViewDone: function() {
@@ -133,6 +132,7 @@ enyo.kind({
         var store = this.store.toLocJSON();
         var latitude = this.coordinates && this.coordinates.latitude;
         var longitude = this.coordinates && this.coordinates.longitude;
+        var like = this.$.postView.getLike();
 
         var chu = chuisy.closet.create({
             user: user,
@@ -142,7 +142,8 @@ enyo.kind({
             price_currency: currency,
             store: store,
             latitude: latitude,
-            longitude: longitude
+            longitude: longitude,
+            like: like
         }, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {

@@ -9,7 +9,8 @@ enyo.kind({
         store: null,
         image: "",
         visibility: "public",
-        shareFacebook: false
+        shareFacebook: false,
+        like: false
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -40,9 +41,16 @@ enyo.kind({
             }));
         }
     },
+    likeChanged: function() {
+        this.$.likeButton.setActive(this.like);
+    },
     toggleFacebook: function() {
         // this.$.facebookButton.setActive(!this.$.facebookButton.getActive());
         this.setShareFacebook(!this.shareFacebook);
+    },
+    toggleLike: function() {
+        this.setLike(!this.like);
+        return true;
     },
     openPeoplePicker: function() {
         this.$.panels.select(this.$.peoplePicker, AnimatedPanels.SLIDE_IN_FROM_BOTTOM, AnimatedPanels.NONE);
@@ -93,7 +101,7 @@ enyo.kind({
                         {classes: "postview-store-like", components: [
                             {kind: "Image", classes: "postview-store-icon", src: "assets/images/black_marker.png"},
                             {name: "store", classes: "postview-store ellipsis"},
-                            {style: "width: 50px; height: 50px; background: url(assets/images/like_button.png) no-repeat 0 0; background-size: cover; position: absolute; right: 10px; top: -25px;"}
+                            {kind: "LikeButton", classes: "postview-like-button", ontap: "toggleLike"}
                         ]}
                     ]},
                     {kind: "Group", classes: "postview-section", components: [
