@@ -118,13 +118,15 @@ button {
 	text-shadow: 0px 1px 0px rgba(255,255,255,0.59);
 	padding: 6px 15px 7px 15px;
 	background: #ececec;
-	border: 1px solid #d8d8d8;
-	border-bottom: none;
+	/*border: 1px solid #d8d8d8;*/
+	/*border-bottom: none;*/
+	border: none;
 	border-radius: 5px;
 	line-height: 1.1em;
-	box-shadow: 0px 1px 1px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.69), inset 0px -1px 0px rgba(0,0,0,0.0187), inset 0px 15px 14px rgba(255,255,255,0.57);
+	/*box-shadow: 0px 1px 1px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.69), inset 0px -1px 0px rgba(0,0,0,0.0187), inset 0px 15px 14px rgba(255,255,255,0.57);*/
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0px 15px 14px rgba(255,255,255,0.57);
 	box-sizing: border-box;
-    -webkit-transition: all 0s linear 0.4s;
+    -webkit-transition: all 0.3s linear 0.4s;
     margin: 0;
 }
 
@@ -133,10 +135,10 @@ button:active:hover:not([disabled]) {
 	/*text-shadow: 0px 1px 0px rgba(255,255,255,0.53);*/
 	-webkit-transition: none;
 	background-color: #ddd;
-	border: 1px solid #bbb;
-	border-bottom: none;
+	/*border: 1px solid #bbb;*/
+	/*border-bottom: none;*/
 	/*border-bottom: 1px solid #bbb;*/
-	box-shadow: 0px 1px 1px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.1), inset 0px -1px 0px rgba(0,0,0,0.0187), inset 0px 15px 14px rgba(255,255,255,0.2);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3), inset 0px 15px 14px rgba(255,255,255,0.2);
 	/*border: 1px solid #d2d2d2;*/
 	/*border-bottom: 1px solid #d8d8d8;*/
 	/*-webkit-box-shadow: 0px 1px 0px rgba(255,255,255,0.58), inset 0px 1px 6px rgba(0,0,0,0.07), inset 0px -15px 14px rgba(255,255,255,0.20);*/
@@ -297,8 +299,8 @@ button:active:hover:not([disabled]) {
 
 .onyx-groupbox {
 	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
+	border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .onyx-groupbox > * {
