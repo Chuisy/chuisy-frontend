@@ -153,12 +153,7 @@ enyo.kind({
             // STEP 2: Pick location/place from list
             {kind: "PickStore", onStorePicked: "storePicked", onBack: "pickStoreBack"},
             // STEP 3: Change visibility, share
-            {name: "postView", components: [
-                {classes: "header", components: [
-                    {kind: "Button", ontap: "postViewBack", classes: "header-button left", content: $L("back")},
-                    {kind: "Button", ontap: "postViewDone", classes: "header-button right", content: $L("next")}
-                ]}
-            ]}
+            {kind: "PostView"}
             // {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
         ]}
     ]
