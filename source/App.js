@@ -130,6 +130,7 @@ enyo.kind({
                     failure();
                 }
             });
+            localStorage.setItem("chuisy.hasAskedForGeolocation", true);
         },
         confirm: function(title, text, callback, buttonLabels) {
             if (navigator.notification) {

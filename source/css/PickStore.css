@@ -1,20 +1,22 @@
 .pickstore {
+    /*background-color: #f1f1f1;*/
 }
 
 .pickstore-inner {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
+	/*display: -webkit-box;
+	-webkit-box-orient: vertical;*/
 }
 
 .pickstore-scroller {
-	-webkit-box-flex: 1;
-	background-color: #ffffff;
+	/*-webkit-box-flex: 1;
+	background-color: #fcfcfc;*/
 }
 
 .pickstore-item {
 	padding: 8px;
 	/*border-top: solid 1px #E6E6E6;*/
 	border-bottom: solid 1px #f1f1f1;
+    background-color: #ffffff;
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.01)));
 }
 
@@ -52,4 +54,72 @@
 	padding: 10px;
 	box-sizing: border-box;
 	color: red;
+}
+
+.pickstore-location-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /*background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+    background-size: 100px 100px;*/
+    background-color: #f1f1f1;
+    z-index: 50;
+}
+
+.pickstore-location-message-card {
+    background-image: url(../../assets/images/lightpaperfibers.png);
+    background-size: 500px 300px;
+    background-color: white;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    height: 300px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.pickstore-location-message-image {
+    width: 128px;
+    height: 128px;
+    display: block;
+    margin: 10px auto;
+}
+
+.pickstore-location-message-text {
+    padding: 0 20px 10px 20px;
+    font-size: 12pt;
+    line-height: 1.4em;
+    color: #555;
+    -webkit-box-flex: 1;
+}
+
+.pickstore-location-button {
+    display: block;
+    width: 100%;
+    padding: 10px 10px 12px 10px;
+    font-weight: bold;
+    box-shadow: none;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: solid 1px #e0e0e0;
+    /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.02)), to(rgba(0, 0, 0, 0.08)));
+    padding: 6px 10px 8px 10px;
+    position: relative;*/
+}
+
+.pickstore-location-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.pickstore-location-button-caption {
+    vertical-align: middle;
+    font-size: 12pt;
 }

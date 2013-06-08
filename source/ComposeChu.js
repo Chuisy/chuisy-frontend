@@ -65,6 +65,7 @@ enyo.kind({
     chuFormDone: function() {
         // this.$.panels.setIndex(1);
         this.$.panels.select(this.$.pickStore);
+        this.$.pickStore.resized();
         this.pickStoreTime = new Date();
         return true;
     },
