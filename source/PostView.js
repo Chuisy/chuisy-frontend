@@ -80,9 +80,13 @@ enyo.kind({
         this.setupFriends();
         this.setStore(null);
         this.setShareFacebook(false);
+        this.$.commentInput.setValue("");
         App.fbHasPublishPermissions(enyo.bind(this, function(yes) {
             this.setShareFacebook(yes);
         }));
+    },
+    getComment: function() {
+        return this.$.commentInput.getValue();
     },
     components: [
         {kind: "AnimatedPanels", name: "panels", classes: "enyo-fill", components: [

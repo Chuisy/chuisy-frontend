@@ -134,6 +134,7 @@ enyo.kind({
         var latitude = this.coordinates && this.coordinates.latitude;
         var longitude = this.coordinates && this.coordinates.longitude;
         var like = this.$.postView.getLike();
+        var comment = this.$.postView.getComment();
 
         var chu = chuisy.closet.create({
             user: user,
@@ -144,7 +145,8 @@ enyo.kind({
             store: store,
             latitude: latitude,
             longitude: longitude,
-            like: like
+            like: like,
+            comment: comment
         }, {at: 0});
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
