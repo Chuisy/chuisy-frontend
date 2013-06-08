@@ -21,7 +21,7 @@ enyo.kind({
         this.visibilityChanged();
     },
     storeChanged: function() {
-        this.$.store.setContent(this.store.get("name"));
+        this.$.store.setContent(this.store ? this.store.get("name") : "");
     },
     imageChanged: function() {
         this.$.image.setSrc(this.image);
@@ -81,6 +81,7 @@ enyo.kind({
         this.setStore(null);
         this.setShareFacebook(false);
         this.$.commentInput.setValue("");
+        this.setLike(false);
         App.fbHasPublishPermissions(enyo.bind(this, function(yes) {
             this.setShareFacebook(yes);
         }));

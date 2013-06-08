@@ -145,9 +145,15 @@ enyo.kind({
             store: store,
             latitude: latitude,
             longitude: longitude,
-            like: like,
+            liked: like,
             comment: comment
         }, {at: 0});
+        if (comment) {
+            chu.comments.add(new chuisy.models.ChuComment({
+                user: user.toJSON(),
+                text: comment
+            }));
+        }
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
                 chuisy.closet.syncRecords();
