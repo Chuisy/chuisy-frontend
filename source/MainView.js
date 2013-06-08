@@ -54,8 +54,8 @@ enyo.kind({
         this.doChuViewDone(event);
     },
     composeChuDone: function(sender, event) {
-        this.$.chu.setButtonLabel($L("done"));
-        this.$.chu.isNew = true;
+        // this.$.chu.setButtonLabel($L("done"));
+        // this.$.chu.isNew = true;
         this.doComposeChuDone(event);
     },
     getStartedDone: function() {

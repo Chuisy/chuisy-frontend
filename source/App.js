@@ -663,7 +663,7 @@ enyo.kind({
         this.navigateTo("feed", event.chu);
     },
     composeChuDone: function(sender, event) {
-        this.navigateTo("chu", event.chu);
+        this.navigateTo("feed", event.chu);
     },
     getStartedDone: function() {
         this.navigateTo("feed");
