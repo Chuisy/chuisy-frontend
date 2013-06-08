@@ -5,9 +5,10 @@ body {
 	padding: 0;
 	margin: 0;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
 	line-height: normal;
-	background-size: 100px 100px;
+	/*background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;*/
+	background-color: #f1f1f1;
 }
 
 * {
