@@ -1,5 +1,5 @@
 .chufeeditem {
-	box-sizing: border-box;
+	/*box-sizing: border-box;*/
 	/*border: #ccc solid 1px;*/
 	/*margin: 10px;*/
 	/*height: 336px;*/
@@ -7,11 +7,12 @@
 	border-radius: 2px;
 	box-shadow: 0 1px 1px #888;
 	padding: 4px;
-	position: relative;
+	/*position: relative;*/
 	overflow: hidden;
-	-webkit-transform: translate3d(0, 0, 0);
-	background: #ffffff url('../../assets/images/chu_placeholder.png') no-repeat center 4px;
-	background-size: 300px 300px;
+	background-color: #ffffff;
+	/*-webkit-transform: translate3d(0, 0, 0);*/
+	/*background: #ffffff url('../../assets/images/chu_placeholder.png') no-repeat center 4px;*/
+	/*background-size: 300px 300px;*/
 }
 
 /* Is applied when item is highlighted via onyx list tap highlighting */
@@ -70,7 +71,7 @@
 	opacity: 0;
 }
 
-.chufeeditem-likes-comments {
+.chufeeditem-likes-comments-time {
 	float: right;
 	margin-right: 2px;
 	/*margin: 10px 5px;*/
@@ -79,10 +80,9 @@
 .chufeeditem-time {
 	color: #555;
 	font-size: 10pt;
-	position: absolute;
-	right: 6px;
-	bottom: 4px;
 	max-width: 100px;
+	text-align: right;
+	padding: 2px;
 }
 
 .chufeeditem-likes-count,

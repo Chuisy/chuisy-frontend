@@ -37,13 +37,13 @@ enyo.kind({
             // {kind: "onyx.Spinner", classes: "chufeeditem-image-spinner absolute-center"},
             {kind: "Image", name: "image", classes: "chufeeditem-image"},
         // ]},
-        {classes: "chufeeditem-likes-comments", components: [
+        {classes: "chufeeditem-likes-comments-time", components: [
             {classes: "chufeeditem-likes-count", name: "likesCount"},
             {classes: "chufeeditem-likes-icon"},
             {classes: "chufeeditem-comments-count", name: "commentsCount"},
-            {classes: "chufeeditem-comments-icon"}
+            {classes: "chufeeditem-comments-icon"},
+            {classes: "chufeeditem-time ellipsis", name: "time"}
         ]},
-        {classes: "chufeeditem-time  ellipsis", name: "time"},
         {kind: "Image", classes: "chufeeditem-avatar", name: "avatar", ontap: "showUser"},
         {classes: "chufeeditem-fullname ellipsis", name: "fullName", ontap: "showUser"},
         {classes: "chufeeditem-place", name: "place"}
