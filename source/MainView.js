@@ -135,13 +135,8 @@ enyo.kind({
             {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
             // SETTINGS
             {kind: "Settings", name: "settings"},
-            // PROFILE VIEW (for other profiles)
-            {kind: "FittableRows", components: [
-                {classes: "header", components: [
-                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
-                ]},
-                {kind: "ProfileView", name: "user", fit: true}
-            ]},
+            // USER VIEW
+            {kind: "UserView", name: "user"},
             // LOCATION VIEW
             {kind: "StoreView", name: "store"},
             // DISCOVER CHUS

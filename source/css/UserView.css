@@ -1,0 +1,94 @@
+.userview {
+}
+
+.userview-window {
+    height: 150px;
+    position: relative;
+    background: url() no-repeat center center;
+    background-size: cover;
+    box-shadow: inset 0 -50px 100px rgba(0, 0, 0, 0.1);
+}
+
+.userview-fullname {
+    font-size: 15pt;
+    color: White;
+    text-shadow: 0 0 5px #000;
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    max-width: 200px;
+    text-align: left;
+}
+
+.userview-follow-button {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 85px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.userview-tabs {
+    position: relative;
+    z-index: 10;
+    height: 45px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    display: -webkit-box;
+}
+
+.userview-tab {
+    display: block;
+    -webkit-box-flex: 1;
+    font-size: 10pt;
+    padding: 0;
+    width: 0;
+    border: none;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.05)));
+}
+
+.userview-tab, .userview-tab:active:hover:not([disabled]) {
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.userview-tab:not(:last-child) {
+    border-right: 1px solid #d8d8d8;
+}
+
+.userview-tab:not(:first-child) {
+    /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
+}
+
+.userview-box {
+    background-color: White;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.05);
+    margin: 10px;
+    line-height: 0;
+    white-space: nowrap;
+    padding: 8px;
+}
+
+.userview-box > * {
+    display: inline-block;
+}
+
+.userview-box-label {
+    width: 65px;
+    height: 65px;
+    margin-right: 8px;
+}
+
+.userview-box-image {
+    width: 65px;
+    height: 65px;
+    margin-right: 8px;
+    border-radius: 2px;
+    /*box-shadow: inset 0 0 5px rgba(0, 0, 0, 1);*/
+}
+
+.userview-box-label-text {
+    font-size: 10pt;
+    color: #555;
+}

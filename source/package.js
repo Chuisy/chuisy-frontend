@@ -59,5 +59,6 @@ enyo.depends(
 	"AnimatedPanels.js",
 	"SignInButton.js",
 	"PostView.js",
-	"LikeButton.js"
+	"LikeButton.js",
+	"UserView.js"
 );
