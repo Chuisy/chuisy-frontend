@@ -94,7 +94,7 @@ enyo.kind({
             {name: "formView", components: [
                 {classes: "header", components: [
                     {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
-                    {kind: "Button", ontap: "doDone", classes: "header-button right", content: $L("next")}
+                    {kind: "Button", ontap: "doDone", classes: "header-button right primary", content: $L("post")}
                 ]},
                 {classes: "postview-scroller-inner", components: [
                     {classes: "postview-section", components: [
@@ -129,7 +129,7 @@ enyo.kind({
                         {classes: "postview-share-header-text", content: $L("Share")},
                         {classes: "postview-share-header-count", name: "shareCount"}
                     ]},
-                    {kind: "Button", content: $L("Share with selected friends"), classes: "postview-add-friends", ontap: "openPeoplePicker"},
+                    {kind: "Button", content: $L("Share with selected friends"), classes: "postview-section postview-add-friends", ontap: "openPeoplePicker"},
                     {classes: "postview-section", components: [
                         {kind: "Button", name: "facebookButton", ontap: "toggleFacebook", classes: "postview-share-button facebook", components: [
                             {classes: "postview-share-icon"},
