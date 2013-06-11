@@ -177,11 +177,11 @@ enyo.kind({
                             {classes: "userview-tab-caption", content: $L("Followers")}
                         ]},
                         {kind: "Button", classes: "userview-tab", ontap: "showInfo", components: [
-                            {kind: "Image", src: "assets/images/info.png", style: "width: 13px; height: 13px; margin-top: -3px; margin-bottom: 1px;"},
+                            {classes: "storeview-tab-icon info"},
                             {classes: "userview-tab-caption", content: $L("Info")}
                         ]},
                         {kind: "Button", classes: "userview-tab", ontap: "showMap", name: "mapButton", components: [
-                            {kind: "Image", src: "assets/images/black_marker.png", style: "width: 13px; height: 13px; margin-top: -3px; margin-bottom: 1px;"},
+                            {classes: "storeview-tab-icon map"},
                             {classes: "userview-tab-caption", content: $L("Map")}
                         ]}
                     ]},

@@ -30,25 +30,20 @@
 	text-align: right;
 }
 
-.storeview-info-block {
-	padding: 15px 15px 0 15px;
-	line-height: 1.3em;
-	font-size: 11pt;
+.storeview-tab-icon {
+    width: 16px;
+    height: 15px;
+    overflow: visible;
+    background: url() no-repeat center center;
+    background-size: 16px 16px;
+    margin-top: -2px;
+    margin-bottom: -1px;
 }
 
-.storeview-info-block:last-child {
-	padding-bottom: 15px;
+.storeview-tab-icon.info {
+	background-image: url(../../assets/images/tab_icon_info.png);
 }
 
-.storeview-info-header {
-	margin-bottom: 5px;
-	font-weight: bold;
-}
-
-.storeview-location-button {
-	float: right;
-	margin: 15px;
-	width: 50px; height: 50px;
-	background: url() no-repeat center center;
-	background-size: 50px 50px;
+.storeview-tab-icon.map {
+	background-image: url(../../assets/images/tab_icon_map.png);
 }
