@@ -327,7 +327,7 @@ enyo.kind({
         this.hideCard();
     },
     components: [
-        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
@@ -354,7 +354,7 @@ enyo.kind({
                             {kind: "Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
                                 {content: $L("Redeem")}
                             ]},
-                            {kind: "CssSpinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
+                            {kind: "Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},

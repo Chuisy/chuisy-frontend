@@ -163,7 +163,7 @@ enyo.kind({
             {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", placeholder: $L("Search or create store..."), onEnter: "searchInputEnter", onChange: "searchInputChange", onCancel: "searchInputCancel", searchEnterButton: false},
             {kind: "Scroller", fit: true, classes: "pickstore-scroller", strategyKind: "TransitionScrollStrategy", thumb: false, components: [
                 // {classes: "pickstore-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
-                {kind: "CssSpinner", classes: "pickstore-spinner", name: "spinner", showing: false},
+                {kind: "Spinner", classes: "pickstore-spinner", name: "spinner", showing: false},
                 {name: "customPlace", ontap: "createCustomStore", classes: "pickstore-item", showing: false, components: [
                     {classes: "pickstore-item-title", name: "customPlaceName"},
                     {classes: "pickstore-item-description", content: "Create custom store"}

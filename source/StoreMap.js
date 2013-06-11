@@ -106,7 +106,7 @@ enyo.kind({
     components: [
         {name: "loadingScrim", classes: "loading-scrim", showing: false, components: [
             {classes: "loading-scrim-inner", components: [
-                {kind: "CssSpinner", name: "loadingSpinner", classes: "loading-scrim-spinner", color: "#fff"},
+                {kind: "Spinner", name: "loadingSpinner", classes: "loading-scrim-spinner", light: true},
                 {content: $L("Loading nearby stores..."), classes: "loading-scrim-text"}
             ]}
         ]},

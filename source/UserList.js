@@ -82,7 +82,7 @@ enyo.kind({
         this.$.userList.refresh();
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
+        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy", thumb: false, rowsPerPage: 20, components: [
             {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}

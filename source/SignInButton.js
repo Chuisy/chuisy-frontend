@@ -44,6 +44,6 @@ enyo.kind({
             {classes: "facebook-button-icon"},
             {classes: "facebook-button-caption", content: $L("Sign in with Facebook")}
         ]},
-        {name: "spinner", kind: "CssSpinner", classes: "absolute-center", showing: false}
+        {name: "spinner", kind: "Spinner", classes: "absolute-center", showing: false}
     ]
 });

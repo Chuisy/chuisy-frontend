@@ -157,22 +157,22 @@ enyo.kind({
                 ]},
                 {kind: "Panels", name: "panels", fit: true, draggable: false, components: [
                     {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
+                        {kind: "Spinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
                         {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
                         {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]},
                     {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "chusSpinner", showing: false},
+                        {kind: "Spinner", classes: "profileview-tab-spinner", name: "chusSpinner", showing: false},
                         {name: "chusPlaceholder", classes: "profileview-list-placeholder chus"},
                         {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
                     ]},
                     {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "followingSpinner", showing: false},
+                        {kind: "Spinner", classes: "profileview-tab-spinner", name: "followingSpinner", showing: false},
                         {name: "followingPlaceholder", classes: "profileview-list-placeholder following"},
                         {kind: "UserList", name: "followingList", classes: "enyo-fill", rowsPerPage: 20}
                     ]},
                     {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "followersSpinner", showing: false},
+                        {kind: "Spinner", classes: "profileview-tab-spinner", name: "followersSpinner", showing: false},
                         {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
                         {kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
                     ]}

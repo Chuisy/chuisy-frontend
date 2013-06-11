@@ -32,9 +32,9 @@
 }
 
 .chuview-content {
-	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
-	background-size: 100px 100px;
-	background-color: #eee;
+	/*background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;*/
+	background-color: #f1f1f1;
 	padding: 5px;
 	box-shadow: 0 0 20px #000000;
 }

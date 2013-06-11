@@ -680,7 +680,7 @@ enyo.kind({
             {classes: "enyo-fill", components: [
                 {name: "loadingPanel", classes: "chuview-loading-panel", showing: false, ontap: "hideLoadingPanel", components: [
                     {classes: "chuview-loading-content", components: [
-                        {kind: "CssSpinner", name: "loadingSpinner", classes: "chuview-loading-spinner", color: "#fff"},
+                        {kind: "Spinner", name: "loadingSpinner", classes: "chuview-loading-spinner", light: true},
                         {content: $L("Loading..."), classes: "chuview-loading-text"}
                     ]},
                     {classes: "chuview-loading-dismiss", content: $L("(tap to dismiss)")}
@@ -688,7 +688,7 @@ enyo.kind({
                 // IMAGEVIEW
                 {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
                     {classes: "chuview-image-container", components: [
-                        {kind: "CssSpinner", name: "spinner", classes: "absolute-center"},
+                        {kind: "Spinner", name: "spinner", classes: "absolute-center"},
                         {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
                     ]}
                 ]},
@@ -723,7 +723,7 @@ enyo.kind({
                                 {kind: "LikeButton", classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"},
                                 {classes: "chuview-status", name: "syncStatus", ontap: "syncStatusTapped", components: [
                                     {classes: "chuview-status-error-icon", name: "statusErrorIcon", showing: false},
-                                    {kind: "CssSpinner", name: "statusSpinner", classes: "chuview-status-spinner"},
+                                    {kind: "Spinner", name: "statusSpinner", classes: "chuview-status-spinner"},
                                     {name: "statusText", classes: "chuview-status-text"}
                                 ]}
                             ]},
@@ -756,7 +756,7 @@ enyo.kind({
                                         {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
                                         {classes: "chuview-separator-line"}
                                     ]},
-                                    {kind: "CssSpinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                                    {kind: "Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
                                     {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
                                         {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
                                     ]},
@@ -769,7 +769,7 @@ enyo.kind({
                                         {classes: "chuview-separator-line"}
                                     ]},
                                     {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
-                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
+                                    {kind: "Spinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
                                     // COMMENTS
                                     {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
                                         {classes: "chuview-comment", name: "comment", components: [
@@ -784,7 +784,7 @@ enyo.kind({
                                             ]}
                                         ]}
                                     ]},
-                                    {kind: "CssSpinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
+                                    {kind: "Spinner", classes: "chuview-comments-spinner", name: "commentsSpinner", showing: false}
                                 ]},
                                 {style: "height: 505px"}
                             ]}

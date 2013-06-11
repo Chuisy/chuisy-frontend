@@ -70,7 +70,7 @@ enyo.kind({
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
             {classes: "header-text", content: $L("Stores")}
         ]},
-        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {name: "store", ontap: "storeTap", classes: "discover-store", components: [
