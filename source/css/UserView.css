@@ -40,7 +40,6 @@
 .userview-tab {
     display: block;
     -webkit-box-flex: 1;
-    font-size: 10pt;
     padding: 0;
     width: 0;
     border: none;
@@ -58,6 +57,17 @@
 
 .userview-tab:not(:first-child) {
     /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
+}
+
+.userview-tab-caption {
+    display: block;
+    font-size: 10pt;
+}
+
+.userview-tab-count {
+    display: block;
+    font-size: 12pt;
+    font-weight: bold;
 }
 
 .userview-box {
@@ -78,17 +88,82 @@
     width: 65px;
     height: 65px;
     margin-right: 8px;
+    background: url() no-repeat center center;
+    background-size: cover;
+}
+
+.userview-box-label.hearts {
+    background-image: url(../../assets/images/profile_hearts.png);
+}
+
+.userview-box-label.chus {
+    background-image: url(../../assets/images/profile_chus.png);
+}
+
+.userview-box-label.goodies {
+    background-image: url(../../assets/images/profile_goodies.png);
+}
+
+.userview-box-label.stores {
+    background-image: url(../../assets/images/profile_stores.png);
 }
 
 .userview-box-image {
+    display: inline-block;
     width: 65px;
     height: 65px;
     margin-right: 8px;
     border-radius: 2px;
-    /*box-shadow: inset 0 0 5px rgba(0, 0, 0, 1);*/
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    background: url() no-repeat center center;
+    background-size: cover;
+    position: relative;
 }
 
 .userview-box-label-text {
     font-size: 10pt;
     color: #555;
+}
+
+.userview-store-name {
+    font-size: 8pt;
+    color: White;
+    line-height: normal;
+    text-shadow: 0 0 2px #000;
+    position: absolute;
+    bottom: 0;
+    padding: 2px 4px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.userview-box.followers {
+    padding: 0;
+}
+
+.userview-followers-button {
+    display: block;
+    box-shadow: none;
+    background-color: white;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.02)), to(rgba(0, 0, 0, 0.08)));
+    width: 100%;
+    border-radius: 0;
+    border: none;
+    padding: 13px;
+}
+
+.userview-followers-button > strong {
+    margin-top: -3px;
+}
+
+.userview-followers-button:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.userview-followers-button:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }

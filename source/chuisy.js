@@ -421,6 +421,18 @@
                     return _.result(this, "url") + "likes/";
                 }, this)
             });
+            //Liked Chus by this user
+            this.goodies = new chuisy.models.CardCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "goodies/";
+                }, this)
+            });
+            //Liked Chus by this user
+            this.followedStores = new chuisy.models.StoreCollection([], {
+                url: _.bind(function() {
+                    return _.result(this, "url") + "stores/";
+                }, this)
+            });
             // This users facebook friends
             this.fbFriends = new chuisy.models.FbFriendsCollection([], {
                 url: _.bind(function() {
@@ -584,6 +596,12 @@
             } else {
                 return null;
             }
+        },
+        getFullName: function() {
+            var name = "";
+            name += this.get("first_name") ? this.get("first_name") + " " : "";
+            name += this.get("last_name") || "";
+            return name;
         }
     });
 
