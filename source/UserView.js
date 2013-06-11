@@ -87,6 +87,7 @@ enyo.kind({
     },
     activate: function(obj) {
         this.setUser(obj);
+        this.$.scroller.scrollToTop();
     },
     deactivate: function() {
     },

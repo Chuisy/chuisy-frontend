@@ -96,6 +96,7 @@ enyo.kind({
         event.item.$.storeName.setContent(store.get("name"));
     },
     activate: function() {
+        this.$.scroller.scrollToTop();
     },
     deactivate: function() {
     },
