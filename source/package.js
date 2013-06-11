@@ -63,5 +63,6 @@ enyo.depends(
 	"UserView.js",
 	"ChuListView.js",
 	"UserListView.js",
-	"StoreListView.js"
+	"StoreListView.js",
+	"Spinner.js"
 );

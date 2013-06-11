@@ -39,5 +39,6 @@ enyo.depends(
 	"SignInButton.css",
 	"PostView.css",
 	"LikeButton.css",
-	"UserView.css"
+	"UserView.css",
+	"Spinner.css"
 );
