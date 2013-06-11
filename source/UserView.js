@@ -25,19 +25,19 @@ enyo.kind({
         // Refresh collections associated with this user. Fetch from server if necessary
         this.refreshHearts();
         if (!this.user.likedChus.meta.total_count) {
-            this.user.likedChus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshHearts)});
+            this.loadHearts();
         }
         this.refreshChus();
-        if (!this.user.chus.length.total_count) {
-            this.user.chus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshChus)});
+        if (!this.user.chus.meta.total_count) {
+            this.loadChus();
         }
         this.refreshGoodies();
         if (!this.user.goodies.meta.total_count) {
-            this.user.goodies.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshGoodies)});
+            this.loadGoodies();
         }
         this.refreshStores();
         if (!this.user.followedStores.length.total_count) {
-            this.user.followedStores.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshStores)});
+            this.loadStores();
         }
     },
     updateView: function() {
@@ -54,29 +54,57 @@ enyo.kind({
 
         this.$.followButton.setContent(this.user.get("following") ? $L("unfollow") : $L("follow"));
     },
+    loadHearts: function() {
+        this.$.heartsEmpty.hide();
+        this.$.heartsSpinner.show();
+        this.user.likedChus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshHearts)});
+    },
     refreshHearts: function() {
+        this.$.heartsSpinner.hide();
         this.$.heartsRepeater.setCount(Math.min(this.user.likedChus.length, 3));
+        this.$.heartsEmpty.setShowing(!this.user.likedChus.length);
     },
     setupHeart: function(sender, event) {
         var heart = this.user && this.user.likedChus.at(event.index);
         event.item.$.image.applyStyle("background-image", "url(" + heart.get("thumbnails")["100x100"] + ")");
     },
+    loadChus: function() {
+        this.$.chusEmpty.hide();
+        this.$.chusSpinner.show();
+        this.user.chus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshChus)});
+    },
     refreshChus: function() {
+        this.$.chusSpinner.hide();
         this.$.chusRepeater.setCount(Math.min(this.user.chus.length, 3));
+        this.$.chusEmpty.setShowing(!this.user.chus.length);
     },
     setupChu: function(sender, event) {
         var chu = this.user && this.user.chus.at(event.index);
         event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
     },
+    loadGoodies: function() {
+        this.$.goodiesEmtpy.hide();
+        this.$.goodiesSpinner.show();
+        this.user.goodies.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshGoodies)});
+    },
     refreshGoodies: function() {
+        this.$.goodiesSpinner.hide();
         this.$.goodiesRepeater.setCount(Math.min(this.user.goodies.length, 3));
+        this.$.goodiesEmtpy.setShowing(!this.user.goodies.length);
     },
     setupGoody: function(sender, event) {
         var goody = this.user && this.user.goodies.at(event.index);
         event.item.$.image.applyStyle("background-image", "url(" + goody.get("cover_image_thumbnail") + ")");
     },
+    loadStores: function() {
+        this.$.storesEmpty.hide();
+        this.$.storesSpinner.show();
+        this.user.followedStores.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshStores)});
+    },
     refreshStores: function() {
+        this.$.storesSpinner.hide();
         this.$.storesRepeater.setCount(Math.min(this.user.followedStores.length, 3));
+        this.$.storesEmpty.setShowing(!this.user.followedStores.length);
     },
     setupStore: function(sender, event) {
         var store = this.user && this.user.followedStores.at(event.index);
@@ -150,13 +178,17 @@ enyo.kind({
                 {classes: "userview-box-label hearts"},
                 {kind: "Repeater", style: "display: inline-block;", name: "heartsRepeater", onSetupItem: "setupHeart", components: [
                     {name: "image", classes: "userview-box-image"}
-                ]}
+                ]},
+                {kind: "CssSpinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
+                {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
             ]},
             {classes: "userview-box", ontap: "chusTapped", components: [
                 {classes: "userview-box-label chus"},
                 {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
                     {name: "image", classes: "userview-box-image"}
-                ]}
+                ]},
+                {kind: "CssSpinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
             ]},
             // {classes: "userview-box followers", components: [
             //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "<strong>21</strong> people follow Martin"},
@@ -166,7 +198,9 @@ enyo.kind({
                 {classes: "userview-box-label goodies"},
                 {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [
                     {name: "image", classes: "userview-box-image"}
-                ]}
+                ]},
+                {kind: "CssSpinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
+                {name: "goodiesEmtpy", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
             ]},
             {classes: "userview-box", ontap: "storesTapped", components: [
                 {classes: "userview-box-label stores"},
@@ -174,7 +208,9 @@ enyo.kind({
                     {name: "image", classes: "userview-box-image", components: [
                         {classes: "userview-store-name ellipsis", name: "storeName"}
                     ]}
-                ]}
+                ]},
+                {kind: "CssSpinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
+                {name: "storesEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
             ]},
             {style: "height: 5px;"}
         ]}

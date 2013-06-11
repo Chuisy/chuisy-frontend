@@ -85,6 +85,7 @@
 
 .userview-box > * {
     display: inline-block;
+    vertical-align: middle;
 }
 
 .userview-box-label {
@@ -139,6 +140,17 @@
     width: 100%;
     box-sizing: border-box;
     text-align: left;
+}
+
+.userview-box-empty {
+    color: #999;
+    padding: 32px 10px;
+    width: 190px;
+    text-align: center;
+}
+
+.userview-box-spinner {
+    margin: 10px;
 }
 
 .userview-box.followers {
