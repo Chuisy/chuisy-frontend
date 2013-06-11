@@ -31,6 +31,12 @@ enyo.kind({
         this.refresh();
         if (this.chus) {
             this.listenTo(this.chus, "sync", this.refresh);
+            if (!this.chus.meta.total_count) {
+                this.$.nextPageSpinner.addClass("rise");
+                this.chus.fetch({success: enyo.bind(this, function() {
+                    this.$.nextPageSpinner.removeClass("rise");
+                })});
+            }
         }
     },
     rendered: function() {
@@ -98,6 +104,7 @@ enyo.kind({
             success: enyo.bind(this, function() {
                 this.$.nextPageSpinner.removeClass("rise");
             }), data: {
+                limit: 21,
                 thumbnails: ["100x100"]
             }
         });
