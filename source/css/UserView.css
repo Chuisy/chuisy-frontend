@@ -27,6 +27,9 @@
     width: 85px;
     padding-left: 0;
     padding-right: 0;
+    background-color: rgba(236, 236, 236, 0.7);
+    border: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .userview-tabs {
