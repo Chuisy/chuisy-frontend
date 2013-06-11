@@ -131,7 +131,7 @@ enyo.kind({
         return this.$.list.getScrollTop();
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
+        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
             strategyKind: "TransitionScrollStrategy", components: [
             {name: "listClient", classes: "chulist-row"},

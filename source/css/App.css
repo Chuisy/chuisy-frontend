@@ -58,20 +58,20 @@ body {
 	height: 60px;
 }
 
-.next-page-spinner {
-	height: 60px;
-	width: 100%;
+.spinner.next-page-spinner {
 	position: absolute;
-	/*z-index: 100;*/
+	bottom: 20px;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	margin: 0 auto;
 	-webkit-transform: translate3d(0, 100px, 0);
 	-webkit-transition: -webkit-transform 0.5s;
+	/*display: none;*/
 }
 
-.next-page-spinner.rise {
+.spinner.next-page-spinner.rise {
 	-webkit-transform: translate3d(0, 0, 0);
+	/*display: block;*/
 }
 
 .fade-screen {
@@ -420,11 +420,14 @@ button[disabled] {
 }
 
 .pulldown-spinner {
-	/*display: none;*/
-	height: 50px;
-	width: 100%;
+	position: absolute;
+	top: 20px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
 	-webkit-transform: translate3d(0, -100px, 0);
 	-webkit-transition: -webkit-transform 0.5s;
+	/*display: none;*/
 }
 
 .pulldown.pulled .pulldown-spinner {

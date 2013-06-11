@@ -171,7 +171,7 @@ enyo.kind({
 				{kind: "Map", name: "map", classes: "storeview-map", zoom: 17},
 				{classes: "storeview-window", name: "window", components: [
 					{classes: "storeview-info storeview-cover-placeholder", components: [
-                        {kind: "CssSpinner", classes: "absolute-center"}
+                        {kind: "Spinner", classes: "absolute-center"}
                     ]},
 					{classes: "storeview-info", name: "info", components: [
 						{classes: "storeview-fullname", name: "name"},
@@ -195,12 +195,12 @@ enyo.kind({
 				]},
 				{kind: "Panels", name: "panels", fit: true, draggable: false, components: [
 					{classes: "enyo-fill", components: [
-						{kind: "CssSpinner", classes: "storeview-tab-spinner", name: "chusSpinner", showing: false},
+						{kind: "Spinner", classes: "storeview-tab-spinner", name: "chusSpinner", showing: false},
 						{name: "chusPlaceholder", classes: "storeview-list-placeholder chus"},
 						{kind: "ChuList", name: "chuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
 					]},
 					{classes: "enyo-fill", components: [
-						{kind: "CssSpinner", classes: "storeview-tab-spinner", name: "followersSpinner", showing: false},
+						{kind: "Spinner", classes: "storeview-tab-spinner", name: "followersSpinner", showing: false},
 						{name: "followersPlaceholder", classes: "storeview-list-placeholder followers"},
 						{kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
 					]},

@@ -173,7 +173,7 @@ enyo.kind({
                     {kind: "Repeater", style: "display: inline-block;", name: "heartsRepeater", onSetupItem: "setupHeart", components: [
                         {name: "image", classes: "userview-box-image"}
                     ]},
-                    {kind: "CssSpinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
                     {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                 ]},
                 {classes: "userview-box", ontap: "chusTapped", components: [
@@ -181,7 +181,7 @@ enyo.kind({
                     {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
                         {name: "image", classes: "userview-box-image"}
                     ]},
-                    {kind: "CssSpinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
                     {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                 ]},
                 // {classes: "userview-box followers", components: [
@@ -193,7 +193,7 @@ enyo.kind({
                     {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [
                         {name: "image", classes: "userview-box-image"}
                     ]},
-                    {kind: "CssSpinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
                     {name: "goodiesEmtpy", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                 ]},
                 {classes: "userview-box", ontap: "storesTapped", components: [
@@ -203,7 +203,7 @@ enyo.kind({
                             {classes: "userview-store-name ellipsis", name: "storeName"}
                         ]}
                     ]},
-                    {kind: "CssSpinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
                     {name: "storesEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                 ]},
                 {style: "height: 5px;"}

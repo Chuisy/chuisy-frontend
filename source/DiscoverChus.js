@@ -102,7 +102,7 @@ enyo.kind({
         // {style: "padding: 5px; box-sizing: border-box;", components: [
             {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel"},
         // ]},
-        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Chus found."), showing: false},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupChu", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [

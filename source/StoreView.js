@@ -194,7 +194,7 @@ enyo.kind({
                         {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
                             {name: "image", classes: "userview-box-image"}
                         ]},
-                        {kind: "CssSpinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                        {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
                         {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                     ]},
                     {name: "infoAncor"},

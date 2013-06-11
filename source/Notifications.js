@@ -140,7 +140,7 @@ enyo.kind({
         this.$.list.refresh();
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},
         // {classes: "placeholder", name: "placeholder", components: [
             {name: "placeholder", classes: "placeholder-image absolute-center"},
             // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}

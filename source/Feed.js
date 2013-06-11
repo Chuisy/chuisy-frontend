@@ -227,13 +227,13 @@ enyo.kind({
         });
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
+        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
         {name: "pulldown", classes: "pulldown", components: [
             {classes: "pulldown-arrow"},
-            {kind: "CssSpinner", classes: "pulldown-spinner"}
+            {kind: "Spinner", classes: "pulldown-spinner"}
         ]},
         {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
