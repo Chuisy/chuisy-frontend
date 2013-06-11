@@ -1,97 +1,118 @@
 enyo.kind({
-	name: "StoreView",
-	classes: "storeview",
-	published: {
-		store: null
-	},
-	events: {
-		onShowChu: "",
-		onShowUser: "",
-		onBack: ""
-	},
-	listenTo: Backbone.Events.listenTo,
+    name: "StoreView",
+    classes: "userview storeview",
+    published: {
+        store: null
+    },
+    events: {
+        onBack: "",
+        onShowChuList: "",
+        onShowUserList: ""
+    },
+    listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
-	storeChanged: function() {
-		this.$.chusMenuButton.setActive(true);
-		this.$.panels.setIndex(0);
-
-        var rand = Math.ceil(Math.random()*2);
-        this.coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
-        this.$.info.applyStyle("background-image", "url()");
-
+    storeChanged: function() {
+        // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
+        this.$.avatarWindow.applyStyle("background-image", "url()");
         this.updateView();
 
+        // Bind the user model to this view
         this.stopListening();
         this.listenTo(this.store, "change", this.updateView);
 
-        this.$.followersList.setUsers(this.store.followers);
-        this.refreshFollowers();
-        this.listenTo(this.store.followers, "sync", this.refreshFollowers);
-
-        this.$.chuList.setChus(this.store.chus);
-	},
-	updateView: function() {
+        this.refreshChus();
+        if (!this.store.chus.meta.total_count) {
+            this.loadChus();
+        }
+    },
+    updateView: function() {
         this.$.name.setContent(this.store.get("name"));
-        this.$.chusCount.setContent(this.store.get("chu_count"));
+        this.$.chusCount.setContent(this.store.get("chu_count") || 0);
         this.$.followButton.setContent(this.store.get("following") ? "unfollow" : "follow");
-        this.$.followersCount.setContent(this.store.get("follower_count"));
+        this.$.followersCount.setContent(this.store.get("follower_count") || 0);
 
-        var coverImage = this.store.get("cover_image") || this.coverPlaceholder;
-        this.$.info.applyStyle("background-image", "url(" + coverImage + ")");
+        var rand = Math.ceil(Math.random()*2);
+        var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
+        var coverImage = this.store.get("cover_image") || coverPlaceholder;
+        this.$.avatarWindow.applyStyle("background-image", "url(" + coverImage + ")");
+
+        var hasLocation = this.store.get("latitude") && this.store.get("longitude");
+
+        if (hasLocation) {
+            // Update location tile
+            var url = "http://maps.googleapis.com/maps/api/staticmap?markers=" + this.store.get("latitude") + "," + this.store.get("longitude") + "&zoom=17&size=420x180&scale=1&sensor=false";
+            this.$.locationTile.applyStyle("background-image", "url(" + url + ")");
+        }
+
+        this.$.locationBox.setShowing(hasLocation);
+        this.$.mapButton.setDisabled(!hasLocation);
 
         this.updateInfoText();
     },
-    refreshFollowers: function() {
-        this.$.followersSpinner.hide();
-        var coll = this.store && this.store.followers;
-        var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
-        this.$.followersCount.setContent(count);
-        this.$.followersPlaceholder.setShowing(!count);
+    updateInfoText: function() {
+        var address = this.store.get("address") ? (this.store.get("address") + "<br>") : "";
+        address += this.store.get("zip_code") ? (this.store.get("zip_code") + " ") : "";
+        address += this.store.get("city") || "";
+        this.$.address.setContent(address);
+        this.$.addressSection.setShowing(address);
+        this.$.phone.setContent(this.store.get("phone"));
+        this.$.phoneSection.setShowing(this.store.get("phone"));
+        this.$.website.setContent(this.store.get("website"));
+        this.$.websiteSection.setShowing(this.store.get("website"));
+        this.$.email.setContent(this.store.get("email"));
+        this.$.emailSection.setShowing(this.store.get("email"));
+        var openingHours = this.store.get("opening_hours") && this.store.get("opening_hours").replace(/\n/g, "<br>");
+        this.$.openingHours.setContent(openingHours);
+        this.$.openingHoursSection.setShowing(openingHours);
+        var moreInfo = this.store.get("info") && this.store.get("info").replace(/\n/g, "<br>");
+        this.$.moreInfo.setContent(moreInfo);
+        this.$.moreInfoSection.setShowing(moreInfo);
     },
-	showChu: function(sender, event) {
-		if (App.checkConnection()) {
-            this.doShowChu(event);
-        }
-        return true;
+    loadChus: function() {
+        this.$.chusEmpty.hide();
+        this.$.chusSpinner.show();
+        this.store.chus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshChus)});
     },
-	menuItemSelected: function(sender, event) {
-        if (event.originator.getActive()) {
-            this.$.panels.setIndex(event.originator.value);
-        }
+    refreshChus: function() {
+        this.$.chusSpinner.hide();
+        this.$.chusRepeater.setCount(Math.min(this.store.chus.length, 3));
+        this.$.chusEmpty.setShowing(!this.store.chus.length);
+    },
+    setupChu: function(sender, event) {
+        var chu = this.store && this.store.chus.at(event.index);
+        event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
     },
     activate: function(obj) {
-		if (obj) {
-			this.setStore(obj);
-		}
-
-		if(this.store) {
-            this.$.followersSpinner.setShowing(!this.store.followers.length);
-            this.store.followers.fetch();
-
-			this.$.chusSpinner.setShowing(!this.store.chus.length);
-			this.$.chusPlaceholder.setShowing(!this.store || !this.store.chus.length);
-			// this.$.followersSpinner.setShowing(!) <-- Spinner
-			this.store.chus.fetch({data: {limit: this.$.chuList.getChusPerPage(), thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
-				this.$.chusSpinner.hide();
-				this.$.chuList.setChus(this.store.chus);
-				this.$.chusPlaceholder.setShowing(!this.store || !this.store.chus.length);
-			})});
-		}
+        this.setStore(obj);
+        this.$.scroller.scrollToTop();
     },
-    deactivate: function() {},
-    back: function() {
-		if (this.$.map.hasClass("showing")) {
-			this.$.map.removeClass("showing");
-		} else {
-			this.doBack();
-		}
+    deactivate: function() {
+    },
+    chusTapped: function() {
+        this.doShowChuList({chus: this.store.chus});
+    },
+    followersTapped: function() {
+        this.doShowUserList({users: this.store.followers});
+    },
+    followButtonTapped: function() {
+        if (App.checkConnection()) {
+            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow_store");
+        }
+    },
+    toggleFollow: function(sender, event) {
+        this.store.toggleFollow();
+        return true;
     },
     showMap: function() {
-		if (this.store && this.store.get("latitude")) {
-			this.$.map.addClass("showing");
-			this.$.map.initialize();
-			this.setLocationMarker();
-		}
+        if (this.store.get("latitude") && this.store.get("longitude")) {
+            this.$.panels.select(this.$.mapPanel, AnimatedPanels.SLIDE_IN_FROM_BOTTOM, AnimatedPanels.NONE);
+            this.$.mapPanel.resized();
+            this.setLocationMarker();
+        }
+    },
+    hideMap: function() {
+        this.$.panels.select(this.$.storePanel, AnimatedPanels.NONE, AnimatedPanels.SLIDE_OUT_TO_BOTTOM);
+        this.$.storePanel.resized();
     },
     setLocationMarker: function() {
         //add marker
@@ -121,115 +142,95 @@ enyo.kind({
 
         this.$.map.setCenter(coords);
     },
-    updateInfoText: function() {
-		this.$.address.setContent(this.store.get("address") || "");
-
-		var zipCode = this.store.get("zip_code");
-		var city = zipCode ? zipCode + " " : "";
-		city += this.store.get("city") || "";
-		this.$.city.setContent(city);
-
-		this.$.phone.setContent(this.store.get("phone") ? "<strong>" + $L("Phone: ") + "</strong>" + this.store.get("phone") : "");
-        this.$.phoneContainer.setShowing(this.store.get("phone"));
-		this.$.website.setContent(this.store.get("website") ? "<strong>" + $L("Web: ") + "</strong>" + this.store.get("website") : "");
-        this.$.websiteContainer.setShowing(this.store.get("website"));
-		this.$.email.setContent(this.store.get("email") ? "<strong>" + $L("Email: ") + "</strong>" + this.store.get("email") : "");
-        this.$.emailContainer.setShowing(this.store.get("email"));
-
-		this.$.openingHours.setContent(this.store.get("opening_hours") && this.store.get("opening_hours").replace(/\n/g, "<br>"));
-		this.$.openingHoursContainer.setShowing(this.store.get("opening_hours"));
-
-		this.$.moreInfo.setContent(this.store.get("info") && this.store.get("info").replace(/\n/g, "<br>"));
-		this.$.moreInfoContainer.setShowing(this.store.get("info"));
-
-		var lat = this.store.get("latitude");
-		var lng = this.store.get("longitude");
-
-		if (lat && lng) {
-			var url = "http://maps.googleapis.com/maps/api/staticmap?markers=" + this.store.get("latitude") + "," + this.store.get("longitude") + "&zoom=17&size=75x75&scale=1.5&sensor=false";
-			this.$.locationButton.applyStyle("background-image", "url(" + url + ")");
-			this.$.locationButton.show();
-		} else {
-			this.$.locationButton.hide();
-		}
-	},
-    followButtonTapped: function() {
-        if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow_store");
-        }
+    openPhone: function() {
+        window.open("tel://" + this.store.get("phone"));
     },
-    toggleFollow: function(sender, event) {
-        this.store.toggleFollow();
-        return true;
+    openEmail: function() {
+        window.open("mailto://" + this.store.get("email"));
     },
-	components: [
-        {kind: "FittableRows", classes: "enyo-fill", components: [
-			{classes: "header", components: [
-                {kind: "Button", ontap: "back", classes: "header-button left", content: $L("back")}
-			]},
-			{kind: "FittableRows", fit: true, components: [
-				{kind: "Map", name: "map", classes: "storeview-map", zoom: 17},
-				{classes: "storeview-window", name: "window", components: [
-					{classes: "storeview-info storeview-cover-placeholder", components: [
-                        {kind: "CssSpinner", classes: "absolute-center"}
+    openWebsite: function() {
+        window.open(this.store.get("website"), "_system");
+    },
+    showInfo: function() {
+        var s = this.$.scroller.getStrategy();
+        s.scrollTop = this.$.infoAncor.getBounds().top;
+        s.start();
+    },
+    components: [
+        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
+            {kind: "FittableRows", name: "storePanel", components: [
+                {classes: "header", components: [
+                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
+                ]},
+                {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", components: [
+                    {classes: "userview-window", name: "avatarWindow", components: [
+                        {classes: "userview-fullname", name: "name"},
+                        {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"}
                     ]},
-					{classes: "storeview-info", name: "info", components: [
-						{classes: "storeview-fullname", name: "name"},
-						{classes: "storeview-settings-button", ontap: "doShowSettings"},
-						{kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "storeview-follow-button follow-button"}
-					]}
-				]},
-				{kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "storeview-menu", components: [
-					{classes: "storeview-menu-button", value: 0, name: "chusMenuButton", components: [
-						{classes: "storeview-menu-button-caption", content: $L("Chus")},
-						{classes: "storeview-menu-button-count", name: "chusCount"}
-					]},
-					{classes: "storeview-menu-button", value: 1, name: "followersMenuButton", components: [
-						{classes: "storeview-menu-button-caption", content: $L("Follower")},
-						{classes: "storeview-menu-button-count", name: "followersCount"}
-					]},
-					{classes: "storeview-menu-button", value: 2, name: "infoMenuButton", components: [
-						{classes: "storeview-menu-button-caption", content: $L("Info")},
-						{kind: "Image", src: "assets/images/info.png", style: "width: 13px; height: 13px; margin-top: -5px;"}
-					]}
-				]},
-				{kind: "Panels", name: "panels", fit: true, draggable: false, components: [
-					{classes: "enyo-fill", components: [
-						{kind: "CssSpinner", classes: "storeview-tab-spinner", name: "chusSpinner", showing: false},
-						{name: "chusPlaceholder", classes: "storeview-list-placeholder chus"},
-						{kind: "ChuList", name: "chuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
-					]},
-					{classes: "enyo-fill", components: [
-						{kind: "CssSpinner", classes: "storeview-tab-spinner", name: "followersSpinner", showing: false},
-						{name: "followersPlaceholder", classes: "storeview-list-placeholder followers"},
-						{kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
-					]},
-					{kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
-						{kind: "Button", name: "locationButton", ontap: "showMap", classes: "storeview-location-button"},
-                        {classes: "storeview-info-block", name: "addressContainer", components: [
-                            {classes: "storeview-info-text", name: "address"},
-                            {classes: "storeview-info-text", name: "city"}
+                    {classes: "userview-tabs", components: [
+                        {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
+                            {classes: "userview-tab-count", name: "chusCount", content: "0"},
+                            {classes: "userview-tab-caption", content: $L("Chus")}
                         ]},
-                        {classes: "storeview-info-block", name: "phoneContainer", components: [
-                            {classes: "storeview-info-text", allowHtml: true, name: "phone"}
+                        {kind: "Button", classes: "userview-tab", ontap: "followersTapped", components: [
+                            {classes: "userview-tab-count", name: "followersCount", content: "0"},
+                            {classes: "userview-tab-caption", content: $L("Followers")}
                         ]},
-                        {classes: "storeview-info-block", name: "websiteContainer", components: [
-                            {classes: "storeview-info-text", allowHtml: true, name: "website"}
+                        {kind: "Button", classes: "userview-tab", ontap: "showInfo", components: [
+                            {kind: "Image", src: "assets/images/info.png", style: "width: 13px; height: 13px; margin-top: -3px; margin-bottom: 1px;"},
+                            {classes: "userview-tab-caption", content: $L("Info")}
                         ]},
-                        {classes: "storeview-info-block", name: "emailContainer", components: [
-                            {classes: "storeview-info-text", allowHtml: true, name: "email"}
+                        {kind: "Button", classes: "userview-tab", ontap: "showMap", name: "mapButton", components: [
+                            {kind: "Image", src: "assets/images/black_marker.png", style: "width: 13px; height: 13px; margin-top: -3px; margin-bottom: 1px;"},
+                            {classes: "userview-tab-caption", content: $L("Map")}
+                        ]}
+                    ]},
+                    {classes: "userview-box", name: "locationBox", ontap: "showMap", components: [
+                        {classes: "userview-box-label stores"},
+                        {classes: "userview-box-image storeview-location-tile", name: "locationTile"}
+                    ]},
+                    {classes: "userview-box", ontap: "chusTapped", components: [
+                        {classes: "userview-box-label chus"},
+                        {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
+                            {name: "image", classes: "userview-box-image"}
                         ]},
-						{classes: "storeview-info-block", name: "openingHoursContainer", components: [
-							{classes: "storeview-info-header", content: $L("Opening hours:")},
-							{classes: "storeview-info-text", allowHtml: true, name: "openingHours"}
-						]},
-						{classes: "storeview-info-block", name: "moreInfoContainer", components: [
-							{classes: "storeview-info-header", content: $L("Additional Info:")},
-							{classes: "storeview-info-text", allowHtml: true, name: "moreInfo"}
-						]}
-					]}
-				]}
-			]}
+                        {kind: "CssSpinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                        {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                    ]},
+                    {name: "infoAncor"},
+                    {classes: "storeview-info-section", name: "addressSection", ontap: "showMap", components: [
+                        {classes: "storeview-info-label", content: $L("Address")},
+                        {classes: "storeview-info-text", name: "address", allowHtml: true}
+                    ]},
+                    {classes: "storeview-info-section", name: "phoneSection", ontap: "openPhone", components: [
+                        {classes: "storeview-info-label", content: $L("Phone")},
+                        {classes: "storeview-info-text", name: "phone"}
+                    ]},
+                    {classes: "storeview-info-section", name: "websiteSection", ontap: "openWebsite", components: [
+                        {classes: "storeview-info-label", content: $L("Website")},
+                        {classes: "storeview-info-text", name: "website"}
+                    ]},
+                    {classes: "storeview-info-section", name: "emailSection", ontap: "openEmail", components: [
+                        {classes: "storeview-info-label", content: $L("Email")},
+                        {classes: "storeview-info-text", name: "email"}
+                    ]},
+                    {classes: "storeview-info-section", name: "openingHoursSection", components: [
+                        {classes: "storeview-info-label", content: $L("Opening hours")},
+                        {classes: "storeview-info-text", name: "openingHours", allowHtml: true}
+                    ]},
+                    {classes: "storeview-info-section", name: "moreInfoSection", components: [
+                        {classes: "storeview-info-label", content: $L("More info")},
+                        {classes: "storeview-info-text", name: "moreInfo", allowHtml: true}
+                    ]},
+                    {style: "height: 5px;"}
+                ]}
+            ]},
+            {kind: "FittableRows", name: "mapPanel", style: "z-index: 100", components: [
+                {classes: "header", components: [
+                    {kind: "Button", ontap: "hideMap", classes: "header-button right", content: $L("done")}
+                ]},
+                {kind: "Map", fit: true}
+            ]}
         ]}
     ]
 });
