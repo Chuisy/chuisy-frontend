@@ -542,7 +542,6 @@ enyo.kind({
                 this.updateHistory("profile/");
                 var user = chuisy.accounts.getActiveUser();
                 if (user) {
-                    // enyo.Signals.send("onShowGuide", {view: "profile"});
                     user.fetch({remote: true});
                 }
                 break;
@@ -653,6 +652,15 @@ enyo.kind({
     showDiscoverStores: function(sender, event) {
         this.navigateTo("discoverStores");
     },
+    showChuList: function(sender, event) {
+        this.navigateTo("chuList", event.chus);
+    },
+    showUserList: function(sender, event) {
+        this.navigateTo("userList", event.users);
+    },
+    showStoreList: function(sender, event) {
+        this.navigateTo("storeList", event.stores);
+    },
     menuChanged: function(sender, event) {
         this.navigateTo(event.value);
     },
@@ -691,7 +699,7 @@ enyo.kind({
             onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
             onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
             onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
-            onGuideDone: "guideDone"},
+            onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList"},
         // FACEBOOK SIGNIN
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "requestSignIn", onHandleOpenUrl: "handleOpenUrl"}

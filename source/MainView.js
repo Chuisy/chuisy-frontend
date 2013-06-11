@@ -33,18 +33,10 @@ enyo.kind({
         discoverStores: [8, null],
         invite: [9, null],
         getstarted: [10, null],
-        guide: [11, null]
-    },
-    create: function() {
-        this.inherited(arguments);
-        this.updateProfile();
-        chuisy.accounts.on("change:active_user", this.updateProfile, this);
-    },
-    updateProfile: function() {
-        var user = chuisy.accounts.getActiveUser();
-        if (user) {
-            this.$.profile.setUser(user);
-        }
+        guide: [11, null],
+        chuList: [12, null],
+        userList: [13, null],
+        storeList: [14, null]
     },
     menuChanged: function(sender, event) {
         this.doMenuChanged(event);
@@ -135,13 +127,8 @@ enyo.kind({
             {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
             // SETTINGS
             {kind: "Settings", name: "settings"},
-            // PROFILE VIEW (for other profiles)
-            {kind: "FittableRows", components: [
-                {classes: "header", components: [
-                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
-                ]},
-                {kind: "ProfileView", name: "user", fit: true}
-            ]},
+            // USER VIEW
+            {kind: "UserView", name: "user"},
             // LOCATION VIEW
             {kind: "StoreView", name: "store"},
             // DISCOVER CHUS
@@ -150,7 +137,10 @@ enyo.kind({
             {kind: "DiscoverStores", name: "discoverStores"},
             {kind: "InviteFriends", name: "invite"},
             {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
-            {kind: "Guide", name: "guide", onDone: "guideDone"}
+            {kind: "Guide", name: "guide", onDone: "guideDone"},
+            {kind: "ChuListView", name: "chuList"},
+            {kind: "UserListView", name: "userList"},
+            {kind: "StoreListView", name: "storeList"}
         ]},
         {name: "crossover", classes: "fade-screen"}
     ]
