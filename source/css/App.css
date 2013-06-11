@@ -119,6 +119,10 @@ button:active:hover:not([disabled]) {
 	background-color: #ddd;
 }
 
+button[disabled] {
+	opacity: 0.5;
+}
+
 /* HEADER */
 
 .header {
