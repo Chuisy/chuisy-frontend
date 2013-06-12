@@ -641,16 +641,19 @@ enyo.kind({
         this.$.discoverStores.resized();
     },
     showChuList: function(sender, event) {
-        this.$.panels.select(this.$.chuListView);
-        this.$.chuListView.setChus(event.chus);
+        this.$.panels.select(this.$.chuList);
+        this.$.chuList.setChus(event.chus);
+        this.$.chuList.resized();
     },
     showUserList: function(sender, event) {
-        this.$.panels.select(this.$.userListView);
-        this.$.userListView.setUsers(event.users);
+        this.$.panels.select(this.$.userList);
+        this.$.userList.setUsers(event.users);
+        this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
-        this.$.panels.select(this.$.storeListView);
-        this.$.storeListView.setStores(event.stores);
+        this.$.panels.select(this.$.storeList);
+        this.$.storeList.setStores(event.stores);
+        this.$.storeList.resized();
     },
     showFeed: function(sender, event) {
         this.updateHistory("feed/");
