@@ -443,99 +443,108 @@ enyo.kind({
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateToUri: function(uri, obj, direct) {
+    navigateToUri: function(uri, params, direct) {
         if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.showFeed();
+            this.showFeed(this, params);
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
-            this.showProfile();
+            this.showProfile(this, params);
         } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
             // settings/
             // Open settings view
-            this.showSettings();
+            this.showSettings(this, params);
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
             // this.navigateTo("closet", obj, direct);
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
-            this.showGoodies();
+            this.showGoodies(this, params);
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
-            this.showGoodies();
+            this.showGoodies(this, params);
         } else if (uri.match(/^notifications\/$/)) {
             // notifications/
             // Whats new? Let's check out the notifications
-            this.showNotifications();
+            this.showNotifications(this, params);
         } else if (uri.match(/^invite\/$/)) {
             // invite/
-            this.showInviteFriends();
+            this.showInviteFriends(this, params);
         } else if (uri.match(/^discoverChus\/$/)) {
             // discoverChus/
-            this.showDiscoverChus();
+            this.showDiscoverChus(this, params);
         } else if (uri.match(/^discoverUsers\/$/)) {
             // discoverUsers/
-            this.showDiscoverUsers();
+            this.showDiscoverUsers(this, params);
         } else if (uri.match(/^discoverStores\/$/)) {
             // discoverStores/
-            this.showDiscoverStores();
+            this.showDiscoverStores(this, params);
+        } else if (uri.match(/^chus\/$/)) {
+            // chus/
+            this.showChuList(this, params);
+        } else if (uri.match(/^users\/$/)) {
+            // users/
+            this.showUserList(this, params);
+        } else if (uri.match(/^stores\/$/)) {
+            // stores/
+            this.showStoreList(this, params);
         } else if (uri.match(/^guide\/$/)) {
             // guide/
-            this.showGuide();
+            this.showGuide(this, params);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.composeChu();
+                this.composeChu(this, params);
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
-                obj = obj || new chuisy.models.Chu({id: match3[1], stub: true});
-                this.showChu(this, {obj: obj});
+                params.obj = params.obj || new chuisy.models.Chu({id: match3[1], stub: true});
+                this.showChu(this, params);
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
-            if (!obj && App.checkConnection()) {
+            if (!params.obj && App.checkConnection()) {
                 // A user object has been provided. So we can open it directly.
-                obj = new chuisy.models.User({id: match2[1]});
-                obj.fetch();
+                params.obj = new chuisy.models.User({id: match2[1]});
+                params.obj.fetch();
             }
-            this.showUser(this, {obj: obj});
+            this.showUser(this, params);
         } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
-            if (!obj && App.checkConnection()) {
+            if (!params.obj && App.checkConnection()) {
                 // A user object has been provided. So we can open it directly.
-                obj = new chuisy.models.Store({id: match2[1]});
-                obj.fetch();
+                params.obj = new chuisy.models.Store({id: match2[1]});
+                params.obj.fetch();
             }
-            this.showStore(this, {obj: obj});
+            this.showStore(this, params);
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
             window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.showFeed();
+            this.showFeed(this, params);
         }
     },
     /**
         Adds current context to navigation history.
     */
-    updateHistory: function(uri, obj) {
+    updateHistory: function(uri, params) {
         var last = this.history[this.history.length-1];
         var now = new Date();
         App.sendCubeEvent("navigate", {
             from: last && last[0],
             from_obj: last && last[1],
             to: uri,
-            to_obj: obj,
+            params: params,
             duration: last && (now.getTime() - last[2].getTime())
         });
-        this.history.push([uri, obj, now]);
+        this.history.push([uri, params, now]);
         if (!App.isMobile()) {
             window.location.hash = "!/" + uri;
         }
@@ -595,7 +604,7 @@ enyo.kind({
         obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
         obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
         this.cachedChus.add(obj);
-        this.updateHistory("chu/" + obj.id + "/", obj);
+        this.updateHistory("chu/" + obj.id + "/", event);
         this.$.chu.setChu(obj);
         this.$.panels.select(this.$.chu);
         this.$.chu.resized();
@@ -605,12 +614,13 @@ enyo.kind({
         obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
         obj = this.cachedUsers.get(obj.id) || obj;
         this.cachedUsers.add(obj);
-        this.updateHistory("user/" + obj.id + "/", obj);
+        this.updateHistory("user/" + obj.id + "/", event);
         this.$.user.setUser(obj);
         this.$.panels.select(this.$.user);
         this.$.user.resized();
     },
     showSettings: function() {
+        this.updateHistory("settings/");
         this.$.panels.select(this.$.settings);
         this.$.settings.resized();
     },
@@ -623,34 +633,40 @@ enyo.kind({
         obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
         obj = this.cachedStores.get(obj.id) || obj;
         this.cachedStores.add(obj);
-        this.updateHistory("store/" + obj.id + "/", obj);
+        this.updateHistory("store/" + obj.id + "/", event);
         this.$.store.setStore(obj);
         this.$.panels.select(this.$.store);
         this.$.store.resized();
     },
     showDiscoverChus: function(sender, event) {
+        this.updateHistory("discoverStores/");
         this.$.panels.select(this.$.discoverChus);
         this.$.discoverChus.resized();
     },
     showDiscoverUsers: function(sender, event) {
+        this.updateHistory("discoverUsers/");
         this.$.panels.select(this.$.discoverUsers);
         this.$.discoverUsers.resized();
     },
     showDiscoverStores: function(sender, event) {
+        this.updateHistory("discoverStores/");
         this.$.panels.select(this.$.discoverStores);
         this.$.discoverStores.resized();
     },
     showChuList: function(sender, event) {
+        this.updateHistory("chus/", event);
         this.$.panels.select(this.$.chuList);
         this.$.chuList.setChus(event.chus);
         this.$.chuList.resized();
     },
     showUserList: function(sender, event) {
+        this.updateHistory("users/", event);
         this.$.panels.select(this.$.userList);
         this.$.userList.setUsers(event.users);
         this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
+        this.updateHistory("stores/", event);
         this.$.panels.select(this.$.storeList);
         this.$.storeList.setStores(event.stores);
         this.$.storeList.resized();
