@@ -656,6 +656,7 @@ enyo.kind({
     showChuList: function(sender, event) {
         this.updateHistory("chus/", event);
         this.$.panels.select(this.$.chuList);
+        this.$.chuList.setTitle(event.title);
         this.$.chuList.setChus(event.chus);
         this.$.chuList.resized();
     },
@@ -663,12 +664,14 @@ enyo.kind({
         this.updateHistory("users/", event);
         this.$.panels.select(this.$.userList);
         this.$.userList.setUsers(event.users);
+        this.$.userList.setTitle(event.title);
         this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
         this.updateHistory("stores/", event);
         this.$.panels.select(this.$.storeList);
         this.$.storeList.setStores(event.stores);
+        this.$.chuList.setTitle(event.title);
         this.$.storeList.resized();
     },
     showFeed: function(sender, event) {

@@ -135,10 +135,10 @@ enyo.kind({
         this.doShowChuList({chus: this.user.chus, title: this.user.get("first_name") + "'s Chus"});
     },
     followersTapped: function() {
-        this.doShowUserList({users: this.user.followers});
+        this.doShowUserList({users: this.user.followers, title: this.user.get("first_name") + "'s Followers"});
     },
     followingTapped: function() {
-        this.doShowUserList({users: this.user.following});
+        this.doShowUserList({users: this.user.following, title: "Following " + this.user.get("first_name")});
     },
     storesTapped: function() {
         this.doShowStoreList({stores: this.user.followedStores});
