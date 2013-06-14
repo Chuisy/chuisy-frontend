@@ -303,34 +303,31 @@ enyo.kind({
         localStorage.setItem("chuisy.version", App.version);
     },
     raiseCurtain: function() {
-        // var guideSeen = localStorage.getItem("chuisy.guideSeen");
-        // if (!guideSeen) {
-        //     this.navigateTo("guide", null, true);
-        //     setTimeout(enyo.bind(this, function() {
-        //         this.$.signInView.ready();
-        //     }), 500);
-        //     this.signInViewDone();
-        // } else if (!App.isSignedIn()) {
-        //     this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-        //         this.navigateTo("feed", null, true);
-        //     }));
-        //     this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-        //         this.navigateTo("feed", null, true);
-        //     }));
-        //     this.$.signInView.setContext("start");
-        //     this.$.signInView.ready();
-        // } else {
-        //     this.recoverStateFromUri();
-        //     setTimeout(enyo.bind(this, function() {
-        //         this.$.signInView.ready();
-        //     }), 500);
-        //     this.signInViewDone();
-        // }
-        // if (navigator.splashscreen) {
-        //     navigator.splashscreen.hide();
-        // }
-        // App.startSession();
-        this.showFeed();
+        var guideSeen = localStorage.getItem("chuisy.guideSeen");
+        if (!guideSeen) {
+            this.showGuide();
+            setTimeout(enyo.bind(this, function() {
+                this.$.signInView.ready();
+            }), 500);
+        } else if (!App.isSignedIn()) {
+            this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
+                this.showFeed();
+            }));
+            this.$.signInView.setFailureCallback(enyo.bind(this, function() {
+                this.showFeed();
+            }));
+            this.$.signInView.setContext("start");
+            this.$.signInView.ready();
+        } else {
+            this.recoverStateFromUri();
+            setTimeout(enyo.bind(this, function() {
+                this.$.signInView.ready();
+            }), 500);
+        }
+        if (navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
+        App.startSession();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -553,31 +550,27 @@ enyo.kind({
         Removes the latest context from the history and opens the previous one
     */
     back: function() {
+        // if (this.history.length > 1) {
+        //     var current = this.history[this.history.length-1];
+        //     var last = this.history[this.history.length-2];
+        //     this.history.pop();
+        //     var params = last[1];
+        //     params.inAnim = current[1].outAnim || AnimatedPanels.SLIDE_IN_FROM_LEFT;
+        //     params.outAnim = current[1].inAnim || AnimatedPanels.SLIDE_OUT_TO_RIGHT;
+        //     this.navigateToUri(last[0], params);
+        //     // This view is already in the history so we gotta remove it or it will be there twice
+        //     this.history.pop();
+        // }
         if (this.history.length > 1) {
-            var current = this.history[this.history.length-1];
-            var last = this.history[this.history.length-2];
             this.history.pop();
+            var last = this.history[this.history.length-1];
             var params = last[1];
-            params.inAnim = current[1].outAnim || AnimatedPanels.SLIDE_IN_FROM_LEFT;
-            params.outAnim = current[1].inAnim || AnimatedPanels.SLIDE_OUT_TO_RIGHT;
-            this.navigateToUri(last[0], params);
+            params.inAnim = AnimatedPanels.SLIDE_IN_FROM_LEFT;
+            params.outAnim = AnimatedPanels.SLIDE_OUT_TO_RIGHT;
+            this.navigateToUri(last[0], last[1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
-    },
-    /**
-        Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
-    */
-    requestSignIn: function(sender, event) {
-        this.$.signInView.setSuccessCallback(event ? event.success : null);
-        this.$.signInView.setFailureCallback(event ? event.failure : null);
-        this.$.signInView.setContext(event.context);
-        // this.$.signInSlider.animateToMin();
-        this.$.signInView.addClass("showing");
-    },
-    signInViewDone: function() {
-        // this.$.signInSlider.animateToMax();
-        this.$.signInView.removeClass("showing");
     },
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
@@ -695,7 +688,7 @@ enyo.kind({
     showFeed: function(sender, event) {
         event = event || {};
         this.updateHistory("feed/", event);
-        this.$.mainView.showFeed(event && event.chu);
+        this.$.mainView.showFeed(event.chu);
         this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
     showProfile: function(sender, event) {
@@ -715,6 +708,14 @@ enyo.kind({
         this.updateHistory("notifications/", event);
         this.$.mainView.showNotifications();
         this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+    },
+    showSignIn: function(sender, event) {
+        event = event || {};
+        this.updateHistory("signin/", event);
+        this.$.signInView.setSuccessCallback(event ? event.success : null);
+        this.$.signInView.setFailureCallback(event ? event.failure : null);
+        this.$.signInView.setContext(event.context);
+        this.$.panels.select(this.$.signInView, event.inAnim, event.outAnim);
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
@@ -750,7 +751,7 @@ enyo.kind({
     components: [
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
             // FACEBOOK SIGNIN
-            {kind: "SignInView", onDone: "signInViewDone"},
+            {kind: "SignInView", onDone: "back"},
             {kind: "MainView", name: "mainView"},
             // CREATE NEW CHU
             {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
@@ -774,6 +775,6 @@ enyo.kind({
             {kind: "StoreListView", name: "storeList"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
-            onRequestSignIn: "requestSignIn", onHandleOpenUrl: "handleOpenUrl"}
+            onRequestSignIn: "showSignIn", onHandleOpenUrl: "handleOpenUrl"}
     ]
 });
