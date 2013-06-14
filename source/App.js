@@ -730,7 +730,7 @@ enyo.kind({
         this.$.panels.select(this.$.signInView, event.inAnim, event.outAnim);
     },
     notificationSelected: function(sender, event) {
-        this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
+        this.navigateToUri(event.notification.get("uri"), {obj: event.notification.get("target_obj")});
     },
     chuViewDone: function(sender, event) {
         this.showFeed(sender, {chu: event.chu});
