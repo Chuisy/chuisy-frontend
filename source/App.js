@@ -553,11 +553,14 @@ enyo.kind({
         Removes the latest context from the history and opens the previous one
     */
     back: function() {
-        this.log("***** back *****");
         if (this.history.length > 1) {
+            var current = this.history[this.history.length-1];
+            var last = this.history[this.history.length-2];
             this.history.pop();
-            var last = this.history[this.history.length-1];
-            this.navigateToUri(last[0], last[1]);
+            var params = last[1];
+            params.inAnim = current[1].outAnim || AnimatedPanels.SLIDE_IN_FROM_LEFT;
+            params.outAnim = current[1].inAnim || AnimatedPanels.SLIDE_OUT_TO_RIGHT;
+            this.navigateToUri(last[0], params);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
@@ -592,109 +595,126 @@ enyo.kind({
         this.focusedInput = event.originator;
     },
     composeChu: function(sender, event) {
-        this.updateHistory("chu/new/");
+        event = event || {};
+        this.updateHistory("chu/new/", event);
         this.$.compose.activate();
-        this.$.panels.select(this.$.compose);
+        this.$.panels.select(this.$.compose, event.inAnim, event.outAnim);
         this.$.compose.resized();
     },
     showGuide: function(sender, event) {
-        this.$.panels.select(this.$.guide);
+        event = event || {};
+        this.updateHistory("guide/", event);
+        this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
         this.$.guide.resized();
     },
     showChu: function(sender, event) {
+        event = event || {};
         var obj = event.chu || event.obj;
         obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
         obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
         this.cachedChus.add(obj);
         this.updateHistory("chu/" + obj.id + "/", event);
         this.$.chu.setChu(obj);
-        this.$.panels.select(this.$.chu);
+        this.$.panels.select(this.$.chu, event.inAnim, event.outAnim);
         this.$.chu.resized();
     },
     showUser: function(sender, event) {
+        event = event || {};
         var obj = event.user || event.obj;
         obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
         obj = this.cachedUsers.get(obj.id) || obj;
         this.cachedUsers.add(obj);
         this.updateHistory("user/" + obj.id + "/", event);
         this.$.user.setUser(obj);
-        this.$.panels.select(this.$.user);
+        this.$.panels.select(this.$.user, event.inAnim, event.outAnim);
         this.$.user.resized();
     },
-    showSettings: function() {
-        this.updateHistory("settings/");
-        this.$.panels.select(this.$.settings);
+    showSettings: function(sender, event) {
+        event = event || {};
+        this.updateHistory("settings/", event);
+        this.$.panels.select(this.$.settings, event.inAnim, event.outAnim);
         this.$.settings.resized();
     },
-    showInviteFriends: function() {
-        this.$.panels.select(this.$.invite);
+    showInviteFriends: function(sender, event) {
+        this.$.panels.select(this.$.invite, event.inAnim, event.outAnim);
         this.$.invite.resized();
     },
     showStore: function(sender, event) {
+        event = event || {};
         var obj = event.store || event.obj;
         obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
         obj = this.cachedStores.get(obj.id) || obj;
         this.cachedStores.add(obj);
         this.updateHistory("store/" + obj.id + "/", event);
         this.$.store.setStore(obj);
-        this.$.panels.select(this.$.store);
+        this.$.panels.select(this.$.store, event.inAnim, event.outAnim);
         this.$.store.resized();
     },
     showDiscoverChus: function(sender, event) {
-        this.updateHistory("discoverStores/");
-        this.$.panels.select(this.$.discoverChus);
+        event = event || {};
+        this.updateHistory("discoverStores/", event);
+        this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
         this.$.discoverChus.resized();
     },
     showDiscoverUsers: function(sender, event) {
-        this.updateHistory("discoverUsers/");
-        this.$.panels.select(this.$.discoverUsers);
+        event = event || {};
+        this.updateHistory("discoverUsers/", event);
+        this.$.panels.select(this.$.discoverUsers, event.inAnim, event.outAnim);
         this.$.discoverUsers.resized();
     },
     showDiscoverStores: function(sender, event) {
-        this.updateHistory("discoverStores/");
-        this.$.panels.select(this.$.discoverStores);
+        event = event || {};
+        this.updateHistory("discoverStores/", event);
+        this.$.panels.select(this.$.discoverStores, event.inAnim, event.outAnim);
         this.$.discoverStores.resized();
     },
     showChuList: function(sender, event) {
+        event = event || {};
         this.updateHistory("chus/", event);
-        this.$.panels.select(this.$.chuList);
+        this.$.panels.select(this.$.chuList, event.inAnim, event.outAnim);
         this.$.chuList.setTitle(event.title);
         this.$.chuList.setChus(event.chus);
         this.$.chuList.resized();
     },
     showUserList: function(sender, event) {
+        event = event || {};
         this.updateHistory("users/", event);
-        this.$.panels.select(this.$.userList);
+        this.$.panels.select(this.$.userList, event.inAnim, event.outAnim);
         this.$.userList.setUsers(event.users);
         this.$.userList.setTitle(event.title);
         this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
+        event = event || {};
         this.updateHistory("stores/", event);
-        this.$.panels.select(this.$.storeList);
+        this.$.panels.select(this.$.storeList, event.inAnim, event.outAnim);
         this.$.storeList.setStores(event.stores);
         this.$.chuList.setTitle(event.title);
         this.$.storeList.resized();
     },
     showFeed: function(sender, event) {
-        this.updateHistory("feed/");
+        event = event || {};
+        this.updateHistory("feed/", event);
         this.$.mainView.showFeed(event && event.chu);
-        this.$.panels.select(this.$.mainView);
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
     showProfile: function(sender, event) {
-        this.updateHistory("profile/");
+        event = event || {};
+        this.updateHistory("profile/", event);
         this.$.mainView.showProfile();
-        this.$.panels.select(this.$.mainView);
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
     showGoodies: function(sender, event) {
-        this.updateHistory("goodies/");
+        event = event || {};
+        this.updateHistory("goodies/", event);
         this.$.mainView.showGoodies();
-        this.$.panels.select(this.$.mainView);
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
-    showNotifications: function() {
-        this.updateHistory("notifications/");
+    showNotifications: function(sender, event) {
+        event = event || {};
+        this.updateHistory("notifications/", event);
         this.$.mainView.showNotifications();
-        this.$.panels.select(this.$.mainView);
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
