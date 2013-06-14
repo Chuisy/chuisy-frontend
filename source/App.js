@@ -220,7 +220,8 @@ enyo.kind({
         onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
         onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
         onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
-        onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList"
+        onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList",
+        onShowCloset: "showCloset"
     },
     create: function() {
         this.createStart = new Date();
@@ -709,6 +710,12 @@ enyo.kind({
         this.$.mainView.showNotifications();
         this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
     },
+    showCloset: function(sender, event) {
+        event = event || {};
+        this.updateHistory("closet/", event);
+        this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
+        this.$.closet.resized();
+    },
     showSignIn: function(sender, event) {
         event = event || {};
         this.updateHistory("signin/", event);
@@ -763,12 +770,13 @@ enyo.kind({
             {kind: "UserView", name: "user"},
             // LOCATION VIEW
             {kind: "StoreView", name: "store"},
+            {kind: "Closet", name: "closet"},
             // DISCOVER CHUS
             {kind: "DiscoverChus", name: "discoverChus"},
             {kind: "DiscoverUsers", name: "discoverUsers"},
             {kind: "DiscoverStores", name: "discoverStores"},
             {kind: "InviteFriends", name: "invite"},
-            {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
+            // {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
             {kind: "Guide", name: "guide", onDone: "guideDone"},
             {kind: "ChuListView", name: "chuList"},
             {kind: "UserListView", name: "userList"},

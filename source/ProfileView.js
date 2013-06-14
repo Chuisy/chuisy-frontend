@@ -9,7 +9,8 @@ enyo.kind({
         onShowChuList: "",
         onShowUserList: "",
         onShowSettings: "",
-        onShowStoreList: ""
+        onShowStoreList: "",
+        onShowCloset: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -155,7 +156,7 @@ enyo.kind({
                         {classes: "userview-tab-count", name: "heartsCount", content: "0"},
                         {classes: "userview-tab-caption", content: $L("Hearts")}
                     ]},
-                    {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
+                    {kind: "Button", classes: "userview-tab", ontap: "doShowCloset", components: [
                         {classes: "userview-tab-count", name: "chusCount", content: "0"},
                         {classes: "userview-tab-caption", content: $L("Chus")}
                     ]},

@@ -91,6 +91,14 @@
 	padding: 0 2px;
 }
 
+.closet-done-button, .closet.editing .closet-edit-button {
+ 	display: none;
+}
+
+.closet.editing .closet-done-button {
+	display: block;
+}
+
 /*
 .closet-contextmenu {
 	position: absolute;

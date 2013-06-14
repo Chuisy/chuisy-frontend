@@ -8,12 +8,9 @@ enyo.kind({
     events: {
         //* Gets fired when a chu is selected by tapping in it
         onShowChu: "",
-        //* The user has tapped on the menu button
-        onToggleMenu: "",
         //* The user has tapped the create chu button
         onComposeChu: "",
-        //* The user has tapped the notification button
-        onShowNotifications: ""
+        onBack: ""
     },
     handlers: {
         onpostresize: "postResize",
@@ -180,7 +177,7 @@ enyo.kind({
         this.finishEditing();
     },
     components: [
-        {classes: "closet-edit-hint", components: [
+        {showing: false, classes: "closet-edit-hint", components: [
             {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}
         ]},
         {kind: "Signals", onClosetUpdated: "refresh"},
@@ -192,6 +189,12 @@ enyo.kind({
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
             {classes: "placeholder-text", content: $L("Your closet is still empty? Fill it while shopping!")}
+        ]},
+        {classes: "header", components: [
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-text", content: $L("Your Closet")},
+            {kind: "Button", ontap: "startEditing", classes: "header-button right closet-edit-button", content: $L("edit")},
+            {kind: "Button", ontap: "finishEditing", classes: "header-button right closet-done-button", content: $L("done")}
         ]},
         // LIST
         {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [
