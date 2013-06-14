@@ -592,6 +592,8 @@ enyo.kind({
         this.focusedInput = event.originator;
     },
     composeChu: function(sender, event) {
+        this.updateHistory("chu/new/");
+        this.$.compose.activate();
         this.$.panels.select(this.$.compose);
         this.$.compose.resized();
     },
