@@ -170,12 +170,6 @@ enyo.kind({
     //     this.$.contextMenu.applyStyle("top", y + "px");
     //     this.$.contextMenu.applyStyle("left", x + "px");
     // },
-    activate: function() {
-        // enyo.Signals.send("onShowGuide", {view: "closet"});
-    },
-    deactivate: function() {
-        this.finishEditing();
-    },
     components: [
         {showing: false, classes: "closet-edit-hint", components: [
             {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}

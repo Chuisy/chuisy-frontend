@@ -632,6 +632,7 @@ enyo.kind({
     showInviteFriends: function(sender, event) {
         this.$.panels.select(this.$.invite, event.inAnim, event.outAnim);
         this.$.invite.resized();
+        this.$.invite.activate();
     },
     showStore: function(sender, event) {
         event = event || {};
@@ -649,18 +650,21 @@ enyo.kind({
         this.updateHistory("discoverStores/", event);
         this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
         this.$.discoverChus.resized();
+        this.$.discoverChus.loadTrending();
     },
     showDiscoverUsers: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverUsers/", event);
         this.$.panels.select(this.$.discoverUsers, event.inAnim, event.outAnim);
         this.$.discoverUsers.resized();
+        this.$.discoverUsers.loadTrending();
     },
     showDiscoverStores: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverStores/", event);
         this.$.panels.select(this.$.discoverStores, event.inAnim, event.outAnim);
         this.$.discoverStores.resized();
+        this.$.discoverStores.loadTrending();
     },
     showChuList: function(sender, event) {
         event = event || {};
@@ -713,6 +717,7 @@ enyo.kind({
     showCloset: function(sender, event) {
         event = event || {};
         this.updateHistory("closet/", event);
+        this.$.closet.finishEditing();
         this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
         this.$.closet.resized();
     },

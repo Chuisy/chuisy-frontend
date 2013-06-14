@@ -136,8 +136,6 @@ enyo.kind({
             user.fbFriends.fetchAll();
         }
     },
-    deactivate: function() {
-    },
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},

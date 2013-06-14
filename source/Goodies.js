@@ -312,6 +312,8 @@ enyo.kind({
         return true;
     },
     activate: function(card) {
+        this.$.stagePopup.hide();
+        this.hideCard();
         if (card) {
             chuisy.cards.unshift(card);
             this.refresh();
@@ -320,11 +322,6 @@ enyo.kind({
             this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
-        // enyo.Signals.send("onShowGuide", {view: "goodies"});
-    },
-    deactivate: function() {
-        this.$.stagePopup.hide();
-        this.hideCard();
     },
     components: [
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},

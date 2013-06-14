@@ -148,23 +148,12 @@ enyo.kind({
             this.doShowUser({user: user});
         }
     },
-    activate: function(newChu) {
-        // enyo.Signals.send("onShowGuide", {view: "feed"});
-        this.newChu = newChu;
+    addChu: function(newChu) {
         if (newChu) {
             newChu.added = true;
             chuisy.feed.add(newChu, {at: 0});
             this.$.feedList.setCount(chuisy.feed.length);
             this.$.feedList.reset();
-            enyo.asyncMethod(this, function() {
-                newChu.added = false;
-            });
-        }
-    },
-    deactivate: function() {
-        if (this.newChu) {
-            this.newChu.added = false;
-            this.newChu = null;
         }
     },
     scrollHandler: function() {

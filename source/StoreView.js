@@ -24,6 +24,7 @@ enyo.kind({
         if (!this.store.chus.meta.total_count) {
             this.loadChus();
         }
+        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         this.$.name.setContent(this.store.get("name"));
@@ -81,12 +82,6 @@ enyo.kind({
     setupChu: function(sender, event) {
         var chu = this.store && this.store.chus.at(event.index);
         event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
-    },
-    activate: function(obj) {
-        this.setStore(obj);
-        this.$.scroller.scrollToTop();
-    },
-    deactivate: function() {
     },
     chusTapped: function() {
         this.doShowChuList({chus: this.store.chus});

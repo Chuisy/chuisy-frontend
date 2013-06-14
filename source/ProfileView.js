@@ -54,6 +54,8 @@ enyo.kind({
         } else {
             this.$.panels.setIndex(1);
         }
+        
+        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         if (this.user) {
@@ -123,11 +125,6 @@ enyo.kind({
         var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
         event.item.$.image.applyStyle("background-image", "url(" + (store.get("cover_image") || coverPlaceholder) + ")");
         event.item.$.storeName.setContent(store.get("name"));
-    },
-    activate: function() {
-        this.$.scroller.scrollToTop();
-    },
-    deactivate: function() {
     },
     heartsTapped: function() {
         this.doShowChuList({chus: this.user.likedChus, title: this.user.get("first_name") + "'s Hearts"});

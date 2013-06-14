@@ -8,15 +8,18 @@ enyo.kind({
         onMenuChanged: ""
     },
     showFeed: function(chu) {
+        this.$.feed.addChu(chu);
         this.$.panels.selectDirect(this.$.feed);
     },
     showProfile: function() {
         this.$.panels.selectDirect(this.$.profile);
     },
     showGoodies: function(chu) {
+        this.$.goodies.activate();
         this.$.panels.selectDirect(this.$.goodies);
     },
     showNotifications: function(chu) {
+        this.$.notifications.seen();
         this.$.panels.selectDirect(this.$.notifications);
     },
     menuChanged: function(sender, event) {

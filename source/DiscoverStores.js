@@ -78,11 +78,8 @@ enyo.kind({
         this.stores.meta = {};
         this.refresh(this.trendingStores, null, null, true);
     },
-    activate: function() {
+    loadTrending: function() {
         this.trendingStores.fetch({success: enyo.bind(this, this.refresh)});
-    },
-    deactivate: function() {
-        this.$.searchInput.blur();
     },
     unfreeze: function() {
         this.$.list.updateMetrics();

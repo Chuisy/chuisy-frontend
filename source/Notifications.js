@@ -130,11 +130,6 @@ enyo.kind({
     seen: function() {
         chuisy.notifications.seen();
     },
-    activate: function() {
-        // enyo.Signals.send("onShowGuide", {view: "notifications"});
-        this.seen();
-    },
-    deactivate: function() {},
     unfreeze: function() {
         this.$.list.updateMetrics();
         this.$.list.refresh();
