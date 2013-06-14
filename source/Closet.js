@@ -180,15 +180,15 @@ enyo.kind({
             {classes: "closet-contextmenu-left"},
             {classes: "closet-contextmenu-right"}
         ]},
-        {classes: "placeholder", name: "placeholder", components: [
-            {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("Your closet is still empty? Fill it while shopping!")}
-        ]},
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
             {classes: "header-text", content: $L("Your Closet")},
             {kind: "Button", ontap: "startEditing", classes: "header-button right closet-edit-button", content: $L("edit")},
             {kind: "Button", ontap: "finishEditing", classes: "header-button right closet-done-button", content: $L("done")}
+        ]},
+        {classes: "placeholder", name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("Your closet is still empty? Fill it while shopping!")}
         ]},
         // LIST
         {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [
