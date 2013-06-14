@@ -693,8 +693,8 @@ enyo.kind({
     showFeed: function(sender, event) {
         event = event || {};
         this.updateHistory("feed/", event);
-        this.$.mainView.showFeed(event.chu);
         this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+        this.$.mainView.showFeed(event.chu);
     },
     showProfile: function(sender, event) {
         event = event || {};

@@ -11,6 +11,7 @@ enyo.kind({
         this.$.menu.selectItem("feed");
         this.$.feed.addChu(chu);
         this.$.panels.selectDirect(this.$.feed);
+        this.$.feed.resized();
     },
     showProfile: function() {
         this.$.menu.selectItem("profile");

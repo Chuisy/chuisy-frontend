@@ -25,6 +25,7 @@ enyo.kind({
 */
 enyo.kind({
     name: "Feed",
+    kind: "FittableRows",
     classes: "feed",
     events: {
         // User has tapped a chu
@@ -33,7 +34,10 @@ enyo.kind({
         onComposeChu: "",
         // User has tapped the avatar or name of a user
         onShowUser: "",
-        onNoticeConfirmed: ""
+        onNoticeConfirmed: "",
+        onShowDiscoverChus: "",
+        onShowDiscoverStores: "",
+        onShowDiscoverUsers: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -218,21 +222,37 @@ enyo.kind({
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
-        {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
-        {name: "pulldown", classes: "pulldown", components: [
-            {classes: "pulldown-arrow"},
-            {kind: "Spinner", classes: "pulldown-spinner"}
-        ]},
-        {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
-            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
-            preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-            {name: "feedInfoBox", classes: "feed-info-box", components: [
-                {name: "feedInfoText", classes: "feed-info-box-text"},
-                {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+        {classes: "feed-tabs", style: "position: relative; z-index: 50", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "heartsTapped", components: [
+                {classes: "feed-tab-caption", content: $L("Nearby")}
             ]},
-            {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverChus", components: [
+                {classes: "feed-tab-caption", content: $L("Popular")}
+            ]},
+            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverStores", components: [
+                {classes: "feed-tab-caption", content: $L("Stores")}
+            ]},
+            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverUsers", components: [
+                {classes: "feed-tab-caption", content: $L("People")}
+            ]}
+        ]},
+        {fit: true, style: "position: relative", components: [
+            {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
+            {name: "pulldown", classes: "pulldown", components: [
+                {classes: "pulldown-arrow"},
+                {kind: "Spinner", classes: "pulldown-spinner"}
+            ]},
+            {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+                loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
+                preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+                {name: "feedInfoBox", classes: "feed-info-box", components: [
+                    {name: "feedInfoText", classes: "feed-info-box-text"},
+                    {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                    {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+                ]},
+                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
+                {name: "nextPageSpacer", classes: "next-page-spacer"}
+            ]}
         ]}
     ]
 });
