@@ -678,27 +678,23 @@ enyo.kind({
     },
     showFeed: function(sender, event) {
         this.updateHistory("feed/");
-        this.$.panels.select(this.$.mainView);
-        this.$.mainView.resized();
         this.$.mainView.showFeed(event && event.chu);
+        this.$.panels.select(this.$.mainView);
     },
     showProfile: function(sender, event) {
         this.updateHistory("profile/");
-        this.$.panels.select(this.$.mainView);
-        this.$.mainView.resized();
         this.$.mainView.showProfile();
+        this.$.panels.select(this.$.mainView);
     },
     showGoodies: function(sender, event) {
         this.updateHistory("goodies/");
-        this.$.panels.select(this.$.mainView);
-        this.$.mainView.resized();
         this.$.mainView.showGoodies();
+        this.$.panels.select(this.$.mainView);
     },
     showNotifications: function() {
         this.updateHistory("notifications/");
-        this.$.panels.select(this.$.mainView);
-        this.$.mainView.resized();
         this.$.mainView.showNotifications();
+        this.$.panels.select(this.$.mainView);
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
@@ -726,6 +722,10 @@ enyo.kind({
     guideDone: function(sender, event) {
         this.showFeed();
         localStorage.setItem("chuisy.guideSeen", true);
+    },
+    menuChanged: function(sender, event) {
+        var viewName = event.value.charAt(0).toUpperCase() + event.value.slice(1);
+        this["show" + viewName]();
     },
     components: [
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [

@@ -4,34 +4,37 @@
 enyo.kind({
     name: "MainView",
     classes: "mainview",
-    kind: "FittableRows",
-    menuChanged: function(sender, event) {
-        // this.log("selecting " + event.value);
-        this.$.panels.select(this.$[event.value]);
+    events: {
+        onMenuChanged: ""
     },
     showFeed: function(chu) {
-        this.$.panels.select(this.$.feed);
+        this.$.panels.selectDirect(this.$.feed);
     },
     showProfile: function() {
-        this.$.panels.select(this.$.profile);
+        this.$.panels.selectDirect(this.$.profile);
     },
     showGoodies: function(chu) {
-        this.$.panels.select(this.$.goodies);
+        this.$.panels.selectDirect(this.$.goodies);
     },
     showNotifications: function(chu) {
-        this.$.panels.select(this.$.notifications);
+        this.$.panels.selectDirect(this.$.notifications);
+    },
+    menuChanged: function(sender, event) {
+        this.doMenuChanged(event);
     },
     components: [
-        {kind: "Menu", onChange: "menuChanged"},
-        {kind: "AnimatedPanels", fit: true, name: "panels", components: [
-            // CHU FEED
-            {kind: "Feed", name: "feed"},
-            // OWN PROFILE VIEW
-            {kind: "ProfileView", name: "profile"},
-            // GOODIES
-            {kind: "Goodies", name: "goodies"},
-            // NOTIFICATIONS
-            {kind: "Notifications", name: "notifications"}
+        {classes: "mainview-inner enyo-fill", components: [
+            {kind: "Menu", onChange: "menuChanged"},
+            {kind: "AnimatedPanels", classes: "mainview-panels", name: "panels", components: [
+                // CHU FEED
+                {kind: "Feed", name: "feed"},
+                // OWN PROFILE VIEW
+                {kind: "ProfileView", name: "profile"},
+                // GOODIES
+                {kind: "Goodies", name: "goodies"},
+                // NOTIFICATIONS
+                {kind: "Notifications", name: "notifications"}
+            ]}
         ]}
     ]
 });
