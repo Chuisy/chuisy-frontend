@@ -8,17 +8,21 @@ enyo.kind({
         onMenuChanged: ""
     },
     showFeed: function(chu) {
+        this.$.menu.selectItem("feed");
         this.$.feed.addChu(chu);
         this.$.panels.selectDirect(this.$.feed);
     },
     showProfile: function() {
+        this.$.menu.selectItem("profile");
         this.$.panels.selectDirect(this.$.profile);
     },
     showGoodies: function(chu) {
+        this.$.menu.selectItem("goodies");
         this.$.goodies.activate();
         this.$.panels.selectDirect(this.$.goodies);
     },
     showNotifications: function(chu) {
+        this.$.menu.selectItem("notifications");
         this.$.notifications.seen();
         this.$.panels.selectDirect(this.$.notifications);
     },
