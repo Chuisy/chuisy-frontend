@@ -1,46 +1,43 @@
 .menu {
-	text-align: center;
+	text-align: left;
 }
 
 .menu-item {
 	display: inline-block;
-	width: 40px;
-	height: 40px;
+	width: 44px;
+	height: 44px;
 	background: url() no-repeat center center;
-	background-size: 40px 80px;
+	background-size: 44px 88px;
 	background-position: 0 0;
-	margin: 2px 6px;
+	margin: 0 6px;
 }
 
 .menu-item.active {
-	background-position: 0 -40px;
+	background-position: 0 -44px;
 }
 
 .menu-item.feed {
-	background-image: url(../../assets/images/feed.png);
+	width: 73px;
+	background-image: url(../../assets/images/header_logo.png);
+	background-size: 73px 88px;
 }
 
 .menu-item.profile {
-	background-image: url(../../assets/images/profile.png);
-}
-
-.menu-item.closet {
-	background-image: url(../../assets/images/closet.png);
+	float: right;
+	background-image: url(../../assets/images/header_profile.png);
 }
 
 .menu-item.goodies {
-	background-image: url(../../assets/images/goodies.png);
-}
-
-.menu-item.discover {
-	background-image: url(../../assets/images/discover.png);
+	float: right;
+	background-image: url(../../assets/images/header_goodies.png);
 }
 
 .menu-item.notifications {
-	background-image: url(../../assets/images/notifications.png);
-	background-size: 40px 120px;
+	float: right;
+	background-image: url(../../assets/images/header_notifications.png);
+	background-size: 44px 132px;
 }
 
 .menu.new-notifications .menu-item.notifications:not(.active) {
-	background-position: 0 -80px;
+	background-position: 0 -88px;
 }
