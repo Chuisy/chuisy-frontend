@@ -26,7 +26,6 @@ enyo.kind({
 enyo.kind({
     name: "Feed",
     classes: "feed",
-    kind: "FittableRows",
     events: {
         // User has tapped a chu
         onShowChu: "",
@@ -235,7 +234,7 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "Spinner", classes: "pulldown-spinner"}
         ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+        {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
             {name: "feedInfoBox", classes: "feed-info-box", components: [
