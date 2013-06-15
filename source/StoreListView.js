@@ -56,11 +56,6 @@ enyo.kind({
             }
         }
     },
-    activate: function(obj) {
-        this.setStores(obj);
-    },
-    deactivate: function() {
-    },
     unfreeze: function() {
         this.$.list.updateMetrics();
         this.$.list.refresh();

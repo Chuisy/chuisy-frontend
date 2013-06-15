@@ -214,8 +214,14 @@ enyo.kind({
     history: [],
     session: null,
     handlers: {
-        ontap: "tapHandler",
-        onfocus: "focusHandler"
+        ontap: "tapHandler", onfocus: "focusHandler", onBack: "back", onNavigateTo: "mainViewNavigateTo",
+        onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
+        onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
+        onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
+        onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
+        onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
+        onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList",
+        onShowCloset: "showCloset", onShowNearby: "showNearby"
     },
     create: function() {
         this.createStart = new Date();
@@ -300,17 +306,16 @@ enyo.kind({
     raiseCurtain: function() {
         var guideSeen = localStorage.getItem("chuisy.guideSeen");
         if (!guideSeen) {
-            this.navigateTo("guide", null, true);
+            this.showGuide();
             setTimeout(enyo.bind(this, function() {
                 this.$.signInView.ready();
             }), 500);
-            this.signInViewDone();
         } else if (!App.isSignedIn()) {
             this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.navigateTo("feed", null, true);
+                this.showFeed();
             }));
             this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-                this.navigateTo("feed", null, true);
+                this.showFeed();
             }));
             this.$.signInView.setContext("start");
             this.$.signInView.ready();
@@ -319,12 +324,12 @@ enyo.kind({
             setTimeout(enyo.bind(this, function() {
                 this.$.signInView.ready();
             }), 500);
-            this.signInViewDone();
         }
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
         }
         App.startSession();
+        this.checkPendingNotifications();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -332,7 +337,6 @@ enyo.kind({
     initPushNotifications: function() {
         var pushNotification = window.plugins.pushNotification;
 
-        this.checkPendingNotifications();
         document.addEventListener('onPushNotification', enyo.bind(this, function(event) {
             chuisy.notifications.fetch();
             // this.log(JSON.stringify(event.notification));
@@ -431,152 +435,118 @@ enyo.kind({
             this.updateHistory("feed");
             this.navigateToUri(match[1], null, true);
         } else {
-            this.navigateTo("feed", null, true);
+            this.showFeed();
         }
     },
     /**
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
-    navigateToUri: function(uri, obj, direct) {
+    navigateToUri: function(uri, params, direct) {
+        params = params || {};
         if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
-            this.navigateTo("feed", obj, direct);
-        } else if (uri.match(/^discover\/$/)) {
-            // discover/
-            // Lets discover some stuff!
-            this.navigateTo("discover", obj, direct);
+            this.showFeed(this, params);
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
-            // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("profile", obj, direct);
+            this.showProfile(this, params);
         } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
             // settings/
             // Open settings view
-            this.navigateTo("settings", obj, direct);
+            this.showSettings(this, params);
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            this.navigateTo("closet", obj, direct);
+            // this.navigateTo("closet", obj, direct);
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
-            this.navigateTo("goodies", obj, direct);
+            this.showGoodies(this, params);
         } else if ((match2 = uri.match(/^card\/(\d+)\/$/))) {
             // card/{card id}/
-            this.navigateTo("goodies", obj, direct);
+            this.showGoodies(this, params);
         } else if (uri.match(/^notifications\/$/)) {
-            // chubox/
+            // notifications/
             // Whats new? Let's check out the notifications
-            this.navigateTo("notifications", obj, direct);
+            this.showNotifications(this, params);
         } else if (uri.match(/^invite\/$/)) {
             // invite/
-            this.navigateTo("invite", obj, direct);
+            this.showInviteFriends(this, params);
         } else if (uri.match(/^discoverChus\/$/)) {
-            // invite/
-            this.navigateTo("discoverChus", obj, direct);
+            // discoverChus/
+            this.showDiscoverChus(this, params);
         } else if (uri.match(/^discoverUsers\/$/)) {
-            // invite/
-            this.navigateTo("discoverUsers", obj, direct);
+            // discoverUsers/
+            this.showDiscoverUsers(this, params);
         } else if (uri.match(/^discoverStores\/$/)) {
-            // invite/
-            this.navigateTo("discoverStores", obj, direct);
+            // discoverStores/
+            this.showDiscoverStores(this, params);
+        } else if (uri.match(/^nearby\/$/)) {
+            // nearby/
+            this.showNearby(this, params);
+        } else if (uri.match(/^chus\/$/)) {
+            // chus/
+            this.showChuList(this, params);
+        } else if (uri.match(/^users\/$/)) {
+            // users/
+            this.showUserList(this, params);
+        } else if (uri.match(/^stores\/$/)) {
+            // stores/
+            this.showStoreList(this, params);
         } else if (uri.match(/^guide\/$/)) {
-            // invite/
-            this.navigateTo("guide", obj, direct);
+            // guide/
+            this.showGuide(this, params);
         } else if ((match2 = uri.match(/^chu\/(.+)$/))) {
             // chu/..
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.navigateTo("compose", obj, direct);
+                this.composeChu(this, params);
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
-                obj = obj || new chuisy.models.Chu({id: match3[1], stub: true});
-                this.navigateTo("chu", obj, direct);
+                params.obj = params.obj || new chuisy.models.Chu({id: match3[1], stub: true});
+                this.showChu(this, params);
             }
         } else if ((match2 = uri.match(/^user\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
-            if (!obj && App.checkConnection()) {
+            if (!params.obj && App.checkConnection()) {
                 // A user object has been provided. So we can open it directly.
-                obj = new chuisy.models.User({id: match2[1]});
-                obj.fetch();
+                params.obj = new chuisy.models.User({id: match2[1]});
+                params.obj.fetch();
             }
-            this.navigateTo("user", obj, direct);
+            this.showUser(this, params);
         } else if ((match2 = uri.match(/^store\/(\d+)\/$/))) {
             // user/{user id}/
             // This is the URI to a users profile
-            if (!obj && App.checkConnection()) {
+            if (!params.obj && App.checkConnection()) {
                 // A user object has been provided. So we can open it directly.
-                obj = new chuisy.models.Store({id: match2[1]});
-                obj.fetch();
+                params.obj = new chuisy.models.Store({id: match2[1]});
+                params.obj.fetch();
             }
-            this.navigateTo("store", obj, direct);
+            this.showStore(this, params);
         } else if (uri.match(/((http|ftp|https):\/\/)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?/i)) {
             // Looks like its a hyperlink
             window.open(uri, "_blank");
         } else {
             this.log("Uri hash provided but no known pattern found!");
             // TODO: Show 404 Page
-            this.navigateTo("feed", obj, direct);
+            this.showFeed(this, params);
         }
-    },
-    navigateTo: function(view, obj, direct) {
-        switch (view) {
-            case "chu":
-                obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
-                obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
-                this.cachedChus.add(obj);
-                this.updateHistory("chu/" + obj.id + "/", obj);
-                break;
-            case "gift":
-                this.updateHistory("gift/" + obj.id + "/", obj);
-                break;
-            case "user":
-                obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
-                obj = this.cachedUsers.get(obj.id) || obj;
-                this.cachedUsers.add(obj);
-                this.updateHistory("user/" + obj.id + "/", obj);
-                break;
-            case "profile":
-                this.updateHistory("profile/");
-                var user = chuisy.accounts.getActiveUser();
-                if (user) {
-                    user.fetch({remote: true});
-                }
-                break;
-            case "store":
-                obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
-                obj = this.cachedStores.get(obj.id) || obj;
-                this.cachedStores.add(obj);
-                this.updateHistory("store/" + obj.id + "/", obj);
-                break;
-            case "goodies":
-                if (obj && !(obj instanceof chuisy.models.Card)) {
-                    obj = new chuisy.models.Card(obj);
-                }
-                this.updateHistory("goodies");
-                break;
-            default:
-                this.updateHistory(view + "/");
-                break;
-        }
-        this.$.mainView.openView(view, obj, direct);
     },
     /**
         Adds current context to navigation history.
     */
-    updateHistory: function(uri, obj) {
+    updateHistory: function(uri, params) {
         var last = this.history[this.history.length-1];
         var now = new Date();
         App.sendCubeEvent("navigate", {
             from: last && last[0],
             from_obj: last && last[1],
             to: uri,
-            to_obj: obj,
+            params: params,
             duration: last && (now.getTime() - last[2].getTime())
         });
-        this.history.push([uri, obj, now]);
+        this.history.push([uri, params, now]);
         if (!App.isMobile()) {
             window.location.hash = "!/" + uri;
         }
@@ -585,36 +555,33 @@ enyo.kind({
         Removes the latest context from the history and opens the previous one
     */
     back: function() {
+        // if (this.history.length > 1) {
+        //     var current = this.history[this.history.length-1];
+        //     var last = this.history[this.history.length-2];
+        //     this.history.pop();
+        //     var params = last[1];
+        //     params.inAnim = current[1].outAnim || AnimatedPanels.SLIDE_IN_FROM_LEFT;
+        //     params.outAnim = current[1].inAnim || AnimatedPanels.SLIDE_OUT_TO_RIGHT;
+        //     this.navigateToUri(last[0], params);
+        //     // This view is already in the history so we gotta remove it or it will be there twice
+        //     this.history.pop();
+        // }
         if (this.history.length > 1) {
             this.history.pop();
             var last = this.history[this.history.length-1];
+            var params = last[1];
+            params.inAnim = AnimatedPanels.SLIDE_IN_FROM_LEFT;
+            params.outAnim = AnimatedPanels.SLIDE_OUT_TO_RIGHT;
             this.navigateToUri(last[0], last[1]);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
-    },
-    /**
-        Sets the success and error callback specified in _event.success_ and _event.failure_ and opens the Facebook sign in dialog
-    */
-    requestSignIn: function(sender, event) {
-        this.$.signInView.setSuccessCallback(event ? event.success : null);
-        this.$.signInView.setFailureCallback(event ? event.failure : null);
-        this.$.signInView.setContext(event.context);
-        // this.$.signInSlider.animateToMin();
-        this.$.signInView.addClass("showing");
-    },
-    signInViewDone: function() {
-        // this.$.signInSlider.animateToMax();
-        this.$.signInView.removeClass("showing");
     },
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
             this.$.signInView.cancel();
         }
-    },
-    showGuide: function(sender, event) {
-        this.navigateTo("guide");
     },
     tapHandler: function(sender, event) {
         if (this.focusedInput && !(event.originator instanceof enyo.Input)) {
@@ -626,55 +593,164 @@ enyo.kind({
         this.focusedInput = event.originator;
     },
     composeChu: function(sender, event) {
-        this.navigateTo("compose");
+        event = event || {};
+        this.updateHistory("chu/new/", event);
+        this.$.compose.activate();
+        this.$.panels.select(this.$.compose, event.inAnim, event.outAnim);
+        this.$.compose.resized();
+    },
+    showGuide: function(sender, event) {
+        event = event || {};
+        this.updateHistory("guide/", event);
+        this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
+        this.$.guide.resized();
     },
     showChu: function(sender, event) {
-        this.navigateTo("chu", event.chu);
+        event = event || {};
+        var obj = event.chu || event.obj;
+        obj = obj instanceof chuisy.models.Chu ? obj : new chuisy.models.Chu(obj);
+        obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
+        this.cachedChus.add(obj);
+        this.updateHistory("chu/" + obj.id + "/", event);
+        this.$.chu.setChu(obj);
+        this.$.panels.select(this.$.chu, event.inAnim, event.outAnim);
+        this.$.chu.resized();
     },
     showUser: function(sender, event) {
-        this.navigateTo("user", event.user);
+        event = event || {};
+        var obj = event.user || event.obj;
+        obj = obj instanceof chuisy.models.User ? obj : new chuisy.models.User(obj);
+        obj = this.cachedUsers.get(obj.id) || obj;
+        this.cachedUsers.add(obj);
+        this.updateHistory("user/" + obj.id + "/", event);
+        this.$.user.setUser(obj);
+        this.$.panels.select(this.$.user, event.inAnim, event.outAnim);
+        this.$.user.resized();
     },
-    showSettings: function() {
-        this.navigateTo("settings");
+    showSettings: function(sender, event) {
+        event = event || {};
+        this.updateHistory("settings/", event);
+        this.$.panels.select(this.$.settings, event.inAnim, event.outAnim);
+        this.$.settings.resized();
     },
-    showInviteFriends: function() {
-        this.navigateTo("invite");
+    showInviteFriends: function(sender, event) {
+        this.$.panels.select(this.$.invite, event.inAnim, event.outAnim);
+        this.$.invite.resized();
+        this.$.invite.activate();
     },
     showStore: function(sender, event) {
-        this.navigateTo("store", event.store);
+        event = event || {};
+        var obj = event.store || event.obj;
+        obj = obj instanceof chuisy.models.Store ? obj : new chuisy.models.Store(obj);
+        obj = this.cachedStores.get(obj.id) || obj;
+        this.cachedStores.add(obj);
+        this.updateHistory("store/" + obj.id + "/", event);
+        this.$.store.setStore(obj);
+        this.$.panels.select(this.$.store, event.inAnim, event.outAnim);
+        this.$.store.resized();
     },
     showDiscoverChus: function(sender, event) {
-        this.navigateTo("discoverChus");
+        event = event || {};
+        this.updateHistory("discoverChus/", event);
+        this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
+        this.$.discoverChus.resized();
+        this.$.discoverChus.loadTrending();
     },
     showDiscoverUsers: function(sender, event) {
-        this.navigateTo("discoverUsers");
+        event = event || {};
+        this.updateHistory("discoverUsers/", event);
+        this.$.panels.select(this.$.discoverUsers, event.inAnim, event.outAnim);
+        this.$.discoverUsers.resized();
+        this.$.discoverUsers.loadTrending();
     },
     showDiscoverStores: function(sender, event) {
-        this.navigateTo("discoverStores");
+        event = event || {};
+        this.updateHistory("discoverStores/", event);
+        this.$.panels.select(this.$.discoverStores, event.inAnim, event.outAnim);
+        this.$.discoverStores.resized();
+        this.$.discoverStores.loadTrending();
     },
     showChuList: function(sender, event) {
-        this.navigateTo("chuList", event.chus);
+        event = event || {};
+        this.updateHistory("chus/", event);
+        this.$.panels.select(this.$.chuList, event.inAnim, event.outAnim);
+        this.$.chuList.setTitle(event.title);
+        this.$.chuList.setChus(event.chus);
+        this.$.chuList.resized();
     },
     showUserList: function(sender, event) {
-        this.navigateTo("userList", event.users);
+        event = event || {};
+        this.updateHistory("users/", event);
+        this.$.panels.select(this.$.userList, event.inAnim, event.outAnim);
+        this.$.userList.setUsers(event.users);
+        this.$.userList.setTitle(event.title);
+        this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
-        this.navigateTo("storeList", event.stores);
+        event = event || {};
+        this.updateHistory("stores/", event);
+        this.$.panels.select(this.$.storeList, event.inAnim, event.outAnim);
+        this.$.storeList.setStores(event.stores);
+        this.$.chuList.setTitle(event.title);
+        this.$.storeList.resized();
     },
-    menuChanged: function(sender, event) {
-        this.navigateTo(event.value);
+    showFeed: function(sender, event) {
+        event = event || {};
+        this.updateHistory("feed/", event);
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+        this.$.mainView.showFeed(event.chu);
+    },
+    showProfile: function(sender, event) {
+        event = event || {};
+        this.updateHistory("profile/", event);
+        this.$.mainView.showProfile();
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+    },
+    showGoodies: function(sender, event) {
+        event = event || {};
+        this.updateHistory("goodies/", event);
+        this.$.mainView.showGoodies();
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+    },
+    showNotifications: function(sender, event) {
+        event = event || {};
+        this.updateHistory("notifications/", event);
+        this.$.mainView.showNotifications();
+        this.$.panels.select(this.$.mainView, event.inAnim, event.outAnim);
+    },
+    showCloset: function(sender, event) {
+        event = event || {};
+        this.updateHistory("closet/", event);
+        this.$.closet.finishEditing();
+        this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
+        this.$.closet.resized();
+    },
+    showNearby: function(sender, event) {
+        event = event || {};
+        this.updateHistory("nearby/", event);
+        this.$.panels.select(this.$.nearby, event.inAnim, event.outAnim);
+        this.$.nearby.resized();
+        this.$.nearby.loadStores();
+    },
+    showSignIn: function(sender, event) {
+        event = event || {};
+        this.updateHistory("signin/", event);
+        this.$.signInView.setSuccessCallback(event ? event.success : null);
+        this.$.signInView.setFailureCallback(event ? event.failure : null);
+        this.$.signInView.setContext(event.context);
+        this.$.panels.select(this.$.signInView, event.inAnim, event.outAnim);
     },
     notificationSelected: function(sender, event) {
-        this.navigateToUri(event.notification.get("uri"), event.notification.get("target_obj"));
+        this.navigateToUri(event.notification.get("uri"), {obj: event.notification.get("target_obj")});
     },
     chuViewDone: function(sender, event) {
-        this.navigateTo("feed", event.chu);
+        this.showFeed(sender, {chu: event.chu});
     },
     composeChuDone: function(sender, event) {
-        this.navigateTo("feed", event.chu);
+        this.showFeed(sender, {chu: event.chu});
     },
     getStartedDone: function() {
-        this.navigateTo("feed");
+        this.showFeed();
     },
     noticeConfirmed: function(sender, event) {
         this.navigateToUri(event.notice.get("uri"));
@@ -688,20 +764,42 @@ enyo.kind({
         }
     },
     guideDone: function(sender, event) {
-        this.navigateTo("feed");
+        this.showFeed();
         localStorage.setItem("chuisy.guideSeen", true);
     },
+    menuChanged: function(sender, event) {
+        var viewName = event.value.charAt(0).toUpperCase() + event.value.slice(1);
+        this["show" + viewName]();
+    },
     components: [
-        {kind: "SignInView", onDone: "signInViewDone", classes: "app-signinview showing"},
-        {kind: "MainView", classes: "enyo-fill", onBack: "back", onNavigateTo: "mainViewNavigateTo",
-            onComposeChu: "composeChu", onShowChu: "showChu", onShowUser: "showUser", onShowSettings: "showSettings",
-            onInviteFriends: "showInviteFriends", onShowStore: "showStore", onMenuChanged: "menuChanged",
-            onNotificationSelected: "notificationSelected", onChuViewDone: "chuViewDone", onComposeChuDone: "composeChuDone",
-            onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
-            onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
-            onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList"},
-        // FACEBOOK SIGNIN
+        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
+            // FACEBOOK SIGNIN
+            {kind: "SignInView", onDone: "back"},
+            {kind: "MainView", name: "mainView"},
+            // CREATE NEW CHU
+            {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
+            // DISPLAY CHU
+            {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
+            // SETTINGS
+            {kind: "Settings", name: "settings"},
+            // USER VIEW
+            {kind: "UserView", name: "user"},
+            // LOCATION VIEW
+            {kind: "StoreView", name: "store"},
+            {kind: "Closet", name: "closet"},
+            // DISCOVER CHUS
+            {kind: "DiscoverChus", name: "discoverChus"},
+            {kind: "DiscoverUsers", name: "discoverUsers"},
+            {kind: "DiscoverStores", name: "discoverStores"},
+            {kind: "InviteFriends", name: "invite"},
+            // {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
+            {kind: "Guide", name: "guide", onDone: "guideDone"},
+            {kind: "ChuListView", name: "chuList"},
+            {kind: "UserListView", name: "userList"},
+            {kind: "StoreListView", name: "storeList"},
+            {kind: "Nearby", name: "nearby"}
+        ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
-            onRequestSignIn: "requestSignIn", onHandleOpenUrl: "handleOpenUrl"}
+            onRequestSignIn: "showSignIn", onHandleOpenUrl: "handleOpenUrl"}
     ]
 });

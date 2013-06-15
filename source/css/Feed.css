@@ -36,3 +36,38 @@
     margin-left: 1%;
     background-color: #ddd;
 }
+
+.feed-tabs {
+    position: relative;
+    z-index: 10;
+    height: 35px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    display: -webkit-box;
+}
+
+.feed-tab {
+    display: block;
+    -webkit-box-flex: 1;
+    padding: 0;
+    width: 0;
+    border: none;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.05)));
+}
+
+.feed-tab, .feed-tab:active:hover:not([disabled]) {
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.feed-tab:not(:last-child) {
+    border-right: 1px solid #d8d8d8;
+}
+
+.feed-tab:not(:first-child) {
+    /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
+}
+
+.feed-tab-caption {
+    display: block;
+    font-size: 10pt;
+}

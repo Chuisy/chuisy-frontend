@@ -30,10 +30,8 @@ enyo.kind({
 	},
 	components: [
 		{classes: "menu-item feed", value: "feed", ontap: "itemTapped", name: "feed", active: true},
-		{classes: "menu-item profile", value: "profile", ontap: "itemTapped", name: "profile"},
-		{classes: "menu-item closet", value: "closet", ontap: "itemTapped", name: "closet"},
-		{classes: "menu-item discover", value: "discover", ontap: "itemTapped", name: "discover"},
+		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"},
 		{classes: "menu-item goodies", value: "goodies", ontap: "itemTapped", name: "goodies"},
-		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"}
+		{classes: "menu-item profile", value: "profile", ontap: "itemTapped", name: "profile"}
 	]
 });

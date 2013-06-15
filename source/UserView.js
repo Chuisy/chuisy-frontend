@@ -39,6 +39,7 @@ enyo.kind({
         if (!this.user.followedStores.length.total_count) {
             this.loadStores();
         }
+        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         this.$.fullName.setContent(this.user ? this.user.getFullName() : "");
@@ -113,12 +114,6 @@ enyo.kind({
         event.item.$.image.applyStyle("background-image", "url(" + (store.get("cover_image") || coverPlaceholder) + ")");
         event.item.$.storeName.setContent(store.get("name"));
     },
-    activate: function(obj) {
-        this.setUser(obj);
-        this.$.scroller.scrollToTop();
-    },
-    deactivate: function() {
-    },
     heartsTapped: function() {
         this.doShowChuList({chus: this.user.likedChus, title: this.user.get("first_name") + "'s Hearts"});
     },
@@ -126,10 +121,10 @@ enyo.kind({
         this.doShowChuList({chus: this.user.chus, title: this.user.get("first_name") + "'s Chus"});
     },
     followersTapped: function() {
-        this.doShowUserList({users: this.user.followers});
+        this.doShowUserList({users: this.user.followers, title: this.user.get("first_name") + "'s Followers"});
     },
     followingTapped: function() {
-        this.doShowUserList({users: this.user.following});
+        this.doShowUserList({users: this.user.following, title: "Following " + this.user.get("first_name")});
     },
     storesTapped: function() {
         this.doShowStoreList({stores: this.user.followedStores});

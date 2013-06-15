@@ -50,11 +50,8 @@ enyo.kind({
         this.users.meta = {};
         this.refresh(this.trendingUsers, null, null, true);
     },
-    activate: function() {
+    loadTrending: function() {
         this.trendingUsers.fetch({success: enyo.bind(this, this.refresh)});
-    },
-    deactivate: function() {
-        this.$.searchInput.blur();
     },
     unfreeze: function() {
         this.$.userList.updateMetrics();

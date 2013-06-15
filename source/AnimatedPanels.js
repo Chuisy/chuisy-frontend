@@ -39,7 +39,7 @@ enyo.kind({
             return;
         }
         if (panel == this.newPanel || !this.newPanel && panel == this.currentPanel) {
-            this.log("This panel is already selected.");
+            // this.log("This panel is already selected.");
             return;
         }
         inAnim = inAnim || AnimatedPanels.SLIDE_IN_FROM_RIGHT;
@@ -48,18 +48,21 @@ enyo.kind({
             this.animationEnd();
         }
         this.newPanel = panel;
-        // this.newPanel.applyStyle("-webkit-transform", "translate3d(100%, 0, 0)");
         this.newPanel.applyStyle("opacity", 0);
         this.newPanel.applyStyle("display", "block");
-        // enyo.asyncMethod(this, function() {
-            this.animating = true;
-            this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
-            // enyo.asyncMethod(this, function() {
-                this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
-                this.newPanel.applyStyle("-webkit-animation", inAnim + " 0.5s");
-                this.newPanel.applyStyle("opacity", 1);
-            // });
-        // });
+        this.animating = true;
+        this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
+        this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
+        this.newPanel.applyStyle("-webkit-animation", inAnim + " 0.5s");
+        this.newPanel.applyStyle("opacity", 1);
+    },
+    selectDirect: function(panel) {
+        if (this.currentPanel == panel) {
+            return;
+        }
+        panel.applyStyle("display", "block");
+        this.currentPanel.applyStyle("display", "none");
+        this.currentPanel = panel;
     },
     selectByIndex: function(index, inAnim, outAnim) {
         this.select(this.getClientControls()[index], inAnim, outAnim);

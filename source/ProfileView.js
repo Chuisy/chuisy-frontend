@@ -9,7 +9,8 @@ enyo.kind({
         onShowChuList: "",
         onShowUserList: "",
         onShowSettings: "",
-        onShowStoreList: ""
+        onShowStoreList: "",
+        onShowCloset: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -53,6 +54,8 @@ enyo.kind({
         } else {
             this.$.panels.setIndex(1);
         }
+        
+        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         if (this.user) {
@@ -123,11 +126,6 @@ enyo.kind({
         event.item.$.image.applyStyle("background-image", "url(" + (store.get("cover_image") || coverPlaceholder) + ")");
         event.item.$.storeName.setContent(store.get("name"));
     },
-    activate: function() {
-        this.$.scroller.scrollToTop();
-    },
-    deactivate: function() {
-    },
     heartsTapped: function() {
         this.doShowChuList({chus: this.user.likedChus, title: this.user.get("first_name") + "'s Hearts"});
     },
@@ -135,10 +133,10 @@ enyo.kind({
         this.doShowChuList({chus: this.user.chus, title: this.user.get("first_name") + "'s Chus"});
     },
     followersTapped: function() {
-        this.doShowUserList({users: this.user.followers});
+        this.doShowUserList({users: this.user.followers, title: this.user.get("first_name") + "'s Followers"});
     },
     followingTapped: function() {
-        this.doShowUserList({users: this.user.following});
+        this.doShowUserList({users: this.user.following, title: "Following " + this.user.get("first_name")});
     },
     storesTapped: function() {
         this.doShowStoreList({stores: this.user.followedStores});
@@ -155,7 +153,7 @@ enyo.kind({
                         {classes: "userview-tab-count", name: "heartsCount", content: "0"},
                         {classes: "userview-tab-caption", content: $L("Hearts")}
                     ]},
-                    {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
+                    {kind: "Button", classes: "userview-tab", ontap: "doShowCloset", components: [
                         {classes: "userview-tab-count", name: "chusCount", content: "0"},
                         {classes: "userview-tab-caption", content: $L("Chus")}
                     ]},

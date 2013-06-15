@@ -11,6 +11,7 @@
     height: 100%;
     box-sizing: border-box;
     display: none;
+    overflow: hidden;
     /*-webkit-transform: translate3d(100%, 0, 0);*/
 }
 

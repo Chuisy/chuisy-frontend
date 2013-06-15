@@ -25,8 +25,8 @@ enyo.kind({
 */
 enyo.kind({
     name: "Feed",
-    classes: "feed",
     kind: "FittableRows",
+    classes: "feed",
     events: {
         // User has tapped a chu
         onShowChu: "",
@@ -34,7 +34,11 @@ enyo.kind({
         onComposeChu: "",
         // User has tapped the avatar or name of a user
         onShowUser: "",
-        onNoticeConfirmed: ""
+        onNoticeConfirmed: "",
+        onShowDiscoverChus: "",
+        onShowDiscoverStores: "",
+        onShowDiscoverUsers: "",
+        onShowNearby: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -149,23 +153,12 @@ enyo.kind({
             this.doShowUser({user: user});
         }
     },
-    activate: function(newChu) {
-        // enyo.Signals.send("onShowGuide", {view: "feed"});
-        this.newChu = newChu;
+    addChu: function(newChu) {
         if (newChu) {
             newChu.added = true;
             chuisy.feed.add(newChu, {at: 0});
             this.$.feedList.setCount(chuisy.feed.length);
             this.$.feedList.reset();
-            enyo.asyncMethod(this, function() {
-                newChu.added = false;
-            });
-        }
-    },
-    deactivate: function() {
-        if (this.newChu) {
-            this.newChu.added = false;
-            this.newChu = null;
         }
     },
     scrollHandler: function() {
@@ -226,25 +219,61 @@ enyo.kind({
             notice: this.notice
         });
     },
+    nearbyTapped: function() {
+        this.doShowNearby();
+        event.preventDefault();
+        return true;
+    },
+    discoverStoresTapped: function() {
+        this.doShowDiscoverStores();
+        event.preventDefault();
+        return true;
+    },
+    discoverUsersTapped: function() {
+        this.doShowDiscoverUsers();
+        event.preventDefault();
+        return true;
+    },
+    popularTapped: function() {
+        this.doShowDiscoverChus();
+        event.preventDefault();
+        return true;
+    },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
-        {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
-        {name: "pulldown", classes: "pulldown", components: [
-            {classes: "pulldown-arrow"},
-            {kind: "Spinner", classes: "pulldown-spinner"}
-        ]},
-        {kind: "List", fit: true, name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
-            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
-            preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-            {name: "feedInfoBox", classes: "feed-info-box", components: [
-                {name: "feedInfoText", classes: "feed-info-box-text"},
-                {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+        {classes: "feed-tabs", style: "position: relative; z-index: 50", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "nearbyTapped", components: [
+                {classes: "feed-tab-caption", content: $L("Nearby")}
             ]},
-            {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            {kind: "Button", classes: "feed-tab", ontap: "popularTapped", components: [
+                {classes: "feed-tab-caption", content: $L("Popular")}
+            ]},
+            {kind: "Button", classes: "feed-tab", ontap: "discoverStoresTapped", components: [
+                {classes: "feed-tab-caption", content: $L("Stores")}
+            ]},
+            {kind: "Button", classes: "feed-tab", ontap: "discoverUsersTapped", components: [
+                {classes: "feed-tab-caption", content: $L("People")}
+            ]}
+        ]},
+        {fit: true, style: "position: relative", components: [
+            {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
+            {name: "pulldown", classes: "pulldown", components: [
+                {classes: "pulldown-arrow"},
+                {kind: "Spinner", classes: "pulldown-spinner"}
+            ]},
+            {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+                loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
+                preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+                {name: "feedInfoBox", classes: "feed-info-box", components: [
+                    {name: "feedInfoText", classes: "feed-info-box-text"},
+                    {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                    {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+                ]},
+                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
+                {name: "nextPageSpacer", classes: "next-page-spacer"}
+            ]}
         ]}
     ]
 });

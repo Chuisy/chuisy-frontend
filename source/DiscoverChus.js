@@ -83,11 +83,8 @@ enyo.kind({
         this.chus.meta = {};
         this.refresh(this.trendingChus, null, null, true);
     },
-    activate: function() {
+    loadTrending: function() {
         this.trendingChus.fetch({data: {thumbnails: ["300x100"]}, success: enyo.bind(this, this.refresh)});
-    },
-    deactivate: function() {
-        this.$.searchInput.blur();
     },
     unfreeze: function() {
         this.$.list.updateMetrics();

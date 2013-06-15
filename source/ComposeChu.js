@@ -127,7 +127,7 @@ enyo.kind({
             friends.push(friendsModels[i].toJSON());
         }
         var price = this.$.chuForm.getPrice();
-        var locale = this.store.get("location").cc; // Number formater for providing locale-specific currency formats
+        var locale = this.store.get("location") && this.store.get("location").cc; // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso", fractionDigits: 0, locale: locale && locale.toLowerCase()});
         var currency = currFmt.sign; // Local currency in iso code (e.g. EUR)
         var store = this.store.toLocJSON();

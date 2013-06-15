@@ -8,12 +8,9 @@ enyo.kind({
     events: {
         //* Gets fired when a chu is selected by tapping in it
         onShowChu: "",
-        //* The user has tapped on the menu button
-        onToggleMenu: "",
         //* The user has tapped the create chu button
         onComposeChu: "",
-        //* The user has tapped the notification button
-        onShowNotifications: ""
+        onBack: ""
     },
     handlers: {
         onpostresize: "postResize",
@@ -173,14 +170,8 @@ enyo.kind({
     //     this.$.contextMenu.applyStyle("top", y + "px");
     //     this.$.contextMenu.applyStyle("left", x + "px");
     // },
-    activate: function() {
-        // enyo.Signals.send("onShowGuide", {view: "closet"});
-    },
-    deactivate: function() {
-        this.finishEditing();
-    },
     components: [
-        {classes: "closet-edit-hint", components: [
+        {showing: false, classes: "closet-edit-hint", components: [
             {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}
         ]},
         {kind: "Signals", onClosetUpdated: "refresh"},
@@ -188,6 +179,12 @@ enyo.kind({
         {name: "contextMenu", classes: "closet-contextmenu", components: [
             {classes: "closet-contextmenu-left"},
             {classes: "closet-contextmenu-right"}
+        ]},
+        {classes: "header", components: [
+            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-text", content: $L("Your Closet")},
+            {kind: "Button", ontap: "startEditing", classes: "header-button right closet-edit-button", content: $L("edit")},
+            {kind: "Button", ontap: "finishEditing", classes: "header-button right closet-done-button", content: $L("done")}
         ]},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},

@@ -312,6 +312,8 @@ enyo.kind({
         return true;
     },
     activate: function(card) {
+        this.$.stagePopup.hide();
+        this.hideCard();
         if (card) {
             chuisy.cards.unshift(card);
             this.refresh();
@@ -320,11 +322,6 @@ enyo.kind({
             this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
-        // enyo.Signals.send("onShowGuide", {view: "goodies"});
-    },
-    deactivate: function() {
-        this.$.stagePopup.hide();
-        this.hideCard();
     },
     components: [
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
@@ -339,7 +336,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Popup", style: "width: 100%; height: 100%; top: 0; left: 0;", name: "stagePopup", floating: true, components: [
-            {kind: "Menu", name: "fakeMenu", style: "position: absolute; top: 0; width: 100%;"},
+            {kind: "Menu", name: "fakeMenu", style: "position: absolute; top: 0; width: 100%; box-shadow: none;"},
             {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front", components: [

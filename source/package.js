@@ -30,7 +30,7 @@ enyo.depends(
 	"PickStore.js",
 	"ChuForm.js",
 	"UserListItem.js",
-	"Discover.js",
+	"Nearby.js",
 	"SearchInput.js",
 	"ChuFeedItem.js",
 	"ChuList.js",
