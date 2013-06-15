@@ -329,6 +329,7 @@ enyo.kind({
             navigator.splashscreen.hide();
         }
         App.startSession();
+        this.checkPendingNotifications();
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -336,7 +337,6 @@ enyo.kind({
     initPushNotifications: function() {
         var pushNotification = window.plugins.pushNotification;
 
-        this.checkPendingNotifications();
         document.addEventListener('onPushNotification', enyo.bind(this, function(event) {
             chuisy.notifications.fetch();
             // this.log(JSON.stringify(event.notification));
