@@ -37,7 +37,8 @@ enyo.kind({
         onNoticeConfirmed: "",
         onShowDiscoverChus: "",
         onShowDiscoverStores: "",
-        onShowDiscoverUsers: ""
+        onShowDiscoverUsers: "",
+        onShowNearby: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -218,21 +219,41 @@ enyo.kind({
             notice: this.notice
         });
     },
+    nearbyTapped: function() {
+        this.doShowNearby();
+        event.preventDefault();
+        return true;
+    },
+    discoverStoresTapped: function() {
+        this.doShowDiscoverStores();
+        event.preventDefault();
+        return true;
+    },
+    discoverUsersTapped: function() {
+        this.doShowDiscoverUsers();
+        event.preventDefault();
+        return true;
+    },
+    popularTapped: function() {
+        this.doShowDiscoverChus();
+        event.preventDefault();
+        return true;
+    },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "feed-tabs", style: "position: relative; z-index: 50", components: [
-            {kind: "Button", classes: "feed-tab", ontap: "heartsTapped", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "nearbyTapped", components: [
                 {classes: "feed-tab-caption", content: $L("Nearby")}
             ]},
-            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverChus", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "popularTapped", components: [
                 {classes: "feed-tab-caption", content: $L("Popular")}
             ]},
-            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverStores", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "discoverStoresTapped", components: [
                 {classes: "feed-tab-caption", content: $L("Stores")}
             ]},
-            {kind: "Button", classes: "feed-tab", ontap: "doShowDiscoverUsers", components: [
+            {kind: "Button", classes: "feed-tab", ontap: "discoverUsersTapped", components: [
                 {classes: "feed-tab-caption", content: $L("People")}
             ]}
         ]},

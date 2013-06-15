@@ -221,7 +221,7 @@ enyo.kind({
         onGetStartedDone: "getStartedDone", onNoticeConfirmed: "noticeConfirmed", onShowDiscoverChus: "showDiscoverChus",
         onShowDiscoverUsers: "showDiscoverUsers", onShowDiscoverStores: "showDiscoverStores", onShowGuide: "showGuide",
         onGuideDone: "guideDone", onShowChuList: "showChuList", onShowUserList: "showUserList", onShowStoreList: "showStoreList",
-        onShowCloset: "showCloset"
+        onShowCloset: "showCloset", onShowNearby: "showNearby"
     },
     create: function() {
         this.createStart = new Date();
@@ -442,6 +442,7 @@ enyo.kind({
         Scans _uri_ for certain patterns and opens corresponding content if possible
     */
     navigateToUri: function(uri, params, direct) {
+        params = params || {};
         if (uri.match(/^feed\/$/)) {
             // chufeed/
             // The chu feed it is! Let't open it.
@@ -479,6 +480,9 @@ enyo.kind({
         } else if (uri.match(/^discoverStores\/$/)) {
             // discoverStores/
             this.showDiscoverStores(this, params);
+        } else if (uri.match(/^nearby\/$/)) {
+            // nearby/
+            this.showNearby(this, params);
         } else if (uri.match(/^chus\/$/)) {
             // chus/
             this.showChuList(this, params);
@@ -721,6 +725,13 @@ enyo.kind({
         this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
         this.$.closet.resized();
     },
+    showNearby: function(sender, event) {
+        event = event || {};
+        this.updateHistory("nearby/", event);
+        this.$.panels.select(this.$.nearby, event.inAnim, event.outAnim);
+        this.$.nearby.resized();
+        this.$.nearby.loadStores();
+    },
     showSignIn: function(sender, event) {
         event = event || {};
         this.updateHistory("signin/", event);
@@ -785,7 +796,8 @@ enyo.kind({
             {kind: "Guide", name: "guide", onDone: "guideDone"},
             {kind: "ChuListView", name: "chuList"},
             {kind: "UserListView", name: "userList"},
-            {kind: "StoreListView", name: "storeList"}
+            {kind: "StoreListView", name: "storeList"},
+            {kind: "Nearby", name: "nearby"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "showSignIn", onHandleOpenUrl: "handleOpenUrl"}
