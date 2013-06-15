@@ -651,7 +651,7 @@ enyo.kind({
     },
     showDiscoverChus: function(sender, event) {
         event = event || {};
-        this.updateHistory("discoverStores/", event);
+        this.updateHistory("discoverChus/", event);
         this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
         this.$.discoverChus.resized();
         this.$.discoverChus.loadTrending();
