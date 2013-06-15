@@ -26,6 +26,7 @@ enyo.kind({
         this.$.menu.selectItem("notifications");
         this.$.notifications.seen();
         this.$.panels.selectDirect(this.$.notifications);
+        this.$.notifications.resized();
     },
     menuChanged: function(sender, event) {
         this.doMenuChanged(event);
