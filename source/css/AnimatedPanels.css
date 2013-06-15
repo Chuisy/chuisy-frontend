@@ -161,3 +161,11 @@
         -webkit-transform: translateZ(0);
     }
 }
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0; -webkit-transform: scale(0.8);}
+}
+
+@-webkit-keyframes fadeOut {
+    to {opacity: 0; -webkit-transform: scale(0.8);}
+}
