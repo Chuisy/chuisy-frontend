@@ -1,26 +1,22 @@
 .userlistitem {
-/*	background-color: White;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;*/
-	padding: 8px;
-	height: 32px;
-	border-bottom: solid 1px #ddd;
+	display: -webkit-box;
+	-webkit-box-align: center;
 }
 
 .userlistitem-avatar {
-	width: 32px;
-	height: 32px;
+	display: block;
+	border-radius: 2px;
+	width: 40px;
+	height: 40px;
 }
 
 .userlistitem-fullname {
-	display: inline-block;
-	vertical-align: top;
-	max-width: 150px;
 	padding: 6px 10px;
+	-webkit-box-flex: 1;
 }
 
 .userlistitem-follow-button {
-	float: right;
+	display: block;
 	width: 85px;
 	padding-left: 0;
 	padding-right: 0;

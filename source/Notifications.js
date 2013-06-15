@@ -83,7 +83,7 @@ enyo.kind({
                         .replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "goody":
-                    this.$.text.setContent($L("You have received a new goody!"));
+                    this.$.text.setContent($L("You have <strong>received</strong> a new <strong>Goody</strong>!"));
                     image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
                     break;
             }
@@ -142,7 +142,7 @@ enyo.kind({
         // ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 40, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
+            {classes: "list-item notifications-notification", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-content", components: [
                     {classes: "notifications-notification-text", name: "text", allowHtml: true},

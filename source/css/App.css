@@ -634,3 +634,32 @@ button[disabled] {
 .notransition {
  	-webkit-transition: none !important;
 }
+
+/* LIST ITEM */
+
+.list-item {
+	background-color: #f1f1f1;
+	padding: 8px;
+	border-top: solid 1px rgba(255, 255, 255, 0.5);
+	border-bottom: solid 1px rgba(0, 0, 0, 0.05);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.01)));
+}
+
+.list-item:active:hover:not([disabled]), .list-item.selected {
+	border-top-color: rgba(0, 0, 0, 0.08);
+	border-bottom-color: rgba(255, 255, 255, 0.3);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.08)), to(rgba(0, 0, 0, 0.02)));
+}
+
+.store-list-item {
+}
+
+.store-list-item-name {
+	font-weight: bold;
+}
+
+.store-list-item-address {
+	color: #555;
+	font-size: 10pt;
+	padding-top: 2px;
+}

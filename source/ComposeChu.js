@@ -105,6 +105,7 @@ enyo.kind({
         return true;
     },
     postViewBack: function() {
+        this.$.pickStore.initialize();
         this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
         return true;
     },

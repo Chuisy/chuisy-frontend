@@ -93,8 +93,6 @@ enyo.kind({
     },
     placeTapped: function(sender, event) {
         var place = this.places[event.index];
-        this.selected = place;
-        this.$.placesList.renderRow(event.index);
 
         this.doStorePicked({store: place, coordinates: this.coordinates});
     },
@@ -164,14 +162,14 @@ enyo.kind({
             {kind: "Scroller", fit: true, classes: "pickstore-scroller", strategyKind: "TransitionScrollStrategy", thumb: false, components: [
                 // {classes: "pickstore-message", content: $L("Where are you shopping right now?"), allowHtml: true, name: "message"},
                 {kind: "Spinner", classes: "pickstore-spinner", name: "spinner", showing: false},
-                {name: "customPlace", ontap: "createCustomStore", classes: "pickstore-item", showing: false, components: [
-                    {classes: "pickstore-item-title", name: "customPlaceName"},
-                    {classes: "pickstore-item-description", content: "Create custom store"}
+                {name: "customPlace", ontap: "createCustomStore", classes: "list-item store-list-item", showing: false, components: [
+                    {classes: "store-list-item-name", name: "customPlaceName"},
+                    {classes: "store-list-item-address", content: "Create custom store"}
                 ]},
                 {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "pickstore-placeslist", components: [
-                    {name: "place", ontap: "placeTapped", classes: "pickstore-item", components: [
-                        {classes: "pickstore-item-title", name: "placeName"},
-                        {classes: "pickstore-item-description", name: "placeAddress"}
+                    {name: "place", ontap: "placeTapped", classes: "list-item store-list-item", components: [
+                        {classes: "store-list-item-name", name: "placeName"},
+                        {classes: "store-list-item-address", name: "placeAddress"}
                     ]}
                 ]},
                 {name: "noResults", classes: "pickstore-noresults", content: $L("No nearby places found!"), showing: false}

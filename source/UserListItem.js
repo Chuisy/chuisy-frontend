@@ -3,7 +3,7 @@
 */
 enyo.kind({
 	name: "UserListItem",
-	classes: "userlistitem",
+	classes: "list-item userlistitem",
 	published: {
         // The user to display
 		user: null

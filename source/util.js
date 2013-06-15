@@ -21,7 +21,7 @@ window.util = {
         } else if (days < 30) {
             return $L("{{ days }} d").replace("{{ days }}", f(days));
         } else {
-            return $L("a while back...");
+            return $L("> 30 d");
         }
     },
     createThumbnail: function(imgSrc, width, height, callback) {

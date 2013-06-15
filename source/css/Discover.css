@@ -74,17 +74,6 @@
 	background-size: cover;
 }
 
-.discover-store {
-	padding: 8px;
-	border-top: solid 1px #ddd;
-}
-
-.discover-store-address {
-	color: #555;
-	font-size: 10pt;
-	padding-top: 2px;
-}
-
 .discover.marker-open .storemarker:not(.expand) {
 	display: none;
 }
