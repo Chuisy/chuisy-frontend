@@ -291,6 +291,14 @@ button[disabled] {
 	border-bottom: solid 1px #ddd;
 }
 
+.onyx-groupbox > *:first-child {
+	border-radius: 5px 5px 0 0;
+}
+
+.onyx-groupbox > *:last-child {
+	border-radius: 0 0 5px 5px;
+}
+
 
 /* INPUT */
 

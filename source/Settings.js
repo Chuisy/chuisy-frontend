@@ -137,7 +137,7 @@ enyo.kind({
                 {classes: "settings-section-header", content: $L("Facebook")},
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
-                    {classes: "settings-item", components: [
+                    {classes: "settings-item", showing: false, components: [
                         {content: $L("Share posts"), classes: "settings-item-text"},
                         {kind: "onyx.ToggleButton", name: "sharePostsButton", ontap: "toggleShare"}
                     ]},
@@ -150,7 +150,7 @@ enyo.kind({
                         {kind: "onyx.ToggleButton", name: "shareRedeemsButton", ontap: "toggleShare"}
                     ]}
                 ]},
-                {kind: "Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},
+                {kind: "Button", style: "width: 100%; margin-bottom: 10px;", content: $L("Invite Friends"), ontap: "doInviteFriends"},
                 // NOTIFICATION SETTINGS
                 {classes: "settings-section-header", content: $L("Notifications")},
                 {kind: "onyx.Groupbox", components: [
