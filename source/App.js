@@ -450,7 +450,7 @@ enyo.kind({
         } else if (uri.match(/^profile\/$/) || uri.match(/^me\/$/)) {
             // chubox/
             this.showProfile(this, params);
-        } else if (uri.match(/^settings\/$/) || uri.match(/^me\/$/)) {
+        } else if (uri.match(/^settings\/$/)) {
             // settings/
             // Open settings view
             this.showSettings(this, params);
