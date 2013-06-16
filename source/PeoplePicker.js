@@ -117,9 +117,9 @@ enyo.kind({
         {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", onCancel: "searchInputCancel", onkeyup: "keyupHandler"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", thumb: false, fit: true, components: [
             {kind: "Repeater", name: "list", onSetupItem: "setupItem", ontap: "itemTap", components: [
-                {classes: "peoplepicker-item", name: "item", components: [
-                    {kind: "Image", classes: "peoplepicker-item-avatar", name: "avatar"},
-                    {classes: "peoplepicker-item-fullname ellipsis", name: "fullName"},
+                {classes: "list-item userlistitem peoplepicker-item", name: "item", components: [
+                    {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
+                    {classes: "userlistitem-fullname ellipsis", name: "fullName"},
                     {classes: "peoplepicker-item-light"}
                 ]}
             ]}

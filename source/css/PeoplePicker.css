@@ -1,5 +1,5 @@
 .peoplepicker {
-	background-color: white;
+	background-color: #f1f1f1;
 }
 
 .peoplepicker-filter-input {
@@ -26,15 +26,6 @@
 
 .peoplepicker-scroller {
 	-webkit-box-flex: 1;
-}
-
-.peoplepicker-item {
-	padding: 8px;
-	height: 32px;
-	border-bottom: solid 1px #f1f1f1;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.01)));
-	display: -webkit-box;
-	-webkit-box-align: center;
 }
 
 .peoplepicker-item-avatar {

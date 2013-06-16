@@ -41,12 +41,10 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var friend = this.filteredFriends[event.index];
-        this.$.avatar.setSrc(friend.getAvatar(64, 64));
+        this.$.avatar.setSrc(friend.getAvatar(80, 80));
         this.$.fullName.setContent(friend.get("name"));
 
-        this.$.addButton.setShowing(!this.isSelected(friend));
-        this.$.addButton.setContent(this.buttonLabel);
-        this.$.check.setShowing(this.isSelected(friend));
+        this.$.item.addRemoveClass("selected", this.isSelected(friend));
     },
     toggleFriend: function(sender, event) {
         var friend = this.filteredFriends[event.index];
@@ -91,11 +89,10 @@ enyo.kind({
         {kind: "Spinner", name: "spinner", classes: "fbfriendspicker-spinner", showing: false},
         {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "fbfriendspicker-friend", components: [
-                {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
-                {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
-                {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
+            {classes: "list-item userlistitem peoplepicker-item", name: "item", ontap: "toggleFriend", components: [
+                {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
+                {classes: "userlistitem-fullname ellipsis", name: "fullName"},
+                {classes: "peoplepicker-item-light"}
             ]}
         ]}
     ]
@@ -139,7 +136,7 @@ enyo.kind({
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
-            {kind: "Button", ontap: "invite", classes: "header-button right", content: $L("invite")}
+            {kind: "Button", ontap: "invite", classes: "header-button right primary", content: $L("invite")}
         ]},
         {kind: "FbFriendsPicker", fit: true}
     ]
