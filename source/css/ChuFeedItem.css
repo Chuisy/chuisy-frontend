@@ -1,28 +1,12 @@
 .chufeeditem {
-	/*box-sizing: border-box;*/
-	/*border: #ccc solid 1px;*/
-	/*margin: 10px;*/
-	/*height: 336px;*/
 	margin: 8px;
-	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
-	padding: 4px;
-	/*position: relative;*/
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 -1px 0 rgba(0, 0, 0, 0.03);
 	overflow: hidden;
 	background-color: #ffffff;
-	/*-webkit-transform: translate3d(0, 0, 0);*/
-	/*background: #ffffff url('../../assets/images/chu_placeholder.png') no-repeat center 4px;*/
-	/*background-size: 300px 300px;*/
-}
-
-/* Is applied when item is highlighted via onyx list tap highlighting */
-.chufeeditem.onyx-highlight {
-	background-color: #bbb;
 }
 
 .chufeeditem-avatar {
-	margin-left: 1px;
-	margin-right: 8px;
 	width: 35px;
 	height: 35px;
 	float: left;
@@ -32,43 +16,104 @@
 	display: block;
 	vertical-align: top;
 	font-size: 11pt;
-	padding: 0 0;
+	padding: 0 6px;
 	max-width: 150px;
 	font-weight: bold;
-	line-height: 18px;
+	line-height: 17px;
 }
 
 .chufeeditem-place {
 	color: #555;
 	font-size: 10pt;
-	padding: 2px 10px 0 2px;
+	padding: 0 6px;
+	line-height: 15px;
+	margin-top: -3px;
+	max-width: 150px;
 }
 
-.chufeeditem-image-wrapper {
-	position: relative;
-}
-
-.chufeeditem-image-spinner {
-	z-index: 1;
+.chufeeditem-image-container {
+	padding: 6px;
+	line-height: 0;
+	text-align: center;
 }
 
 .chufeeditem-image {
-	width: 100%;
-	height: 300px;
-	/*height: 288px;*/
-	/*background: url("../../assets/images/chu_placeholder.png") no-repeat center center;*/
-	/*background-size: cover;*/
-	background-color: transparent;
-	box-sizing: border-box;
-	/*border: solid 1px #ddd;*/
-	margin-bottom: 2px;
-	/*-webkit-transition: opacity 0.5s;*/
-	position: relative;
-	z-index: 10;
+	width: 292px;
+	height: 292px;
+	background-color: #cccccc;
 }
 
-.chufeeditem-image.hidden {
-	opacity: 0;
+.chufeeditem-bottom-bar {
+	width: 100%;
+	display: -webkit-box;
+}
+
+.chufeeditem-bottom-bar > button {
+	display: block;
+	background-color: #ffffff;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.01)), to(rgba(0, 0, 0, 0.05)));
+    border: none;
+    box-shadow: none;
+    border-top: solid 1px #eee;
+    border-radius: 0;
+    padding: 6px;
+}
+
+.chufeeditem-bottom-bar > button:not(:last-child) {
+    border-right: 1px solid #d8d8d8;
+}
+
+.chufeeditem-user-button {
+	-webkit-box-flex: 1;
+	text-align: left;
+	border-bottom-left-radius: 3px;
+}
+
+.chufeeditem-store-button {
+	width: 50px;
+}
+
+.chufeeditem-store-icon {
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	background: url(../../assets/images/feed_item_location.png) no-repeat 0 0;
+	background-size: cover;
+}
+
+.chufeeditem-heart-button {
+	width: 50px;
+	border-bottom-right-radius: 3px;
+	position: relative;
+}
+
+.chufeeditem-heart-icon {
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	background: url(../../assets/images/feed_item_heart.png) no-repeat 0 0;
+	background-size: 28px 56px;
+}
+
+.chufeeditem-heart-button.active > .chufeeditem-heart-icon {
+	background-position: 0 -28px;
+}
+
+.chufeeditem-heart-animated {
+	width: 28px;
+	height: 28px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 10px;
+	margin: auto;
+	background: url(../../assets/images/feed_item_heart.png) no-repeat 0 -28px;
+	background-size: 28px 56px;
+	-webkit-transform: scale(0);
+}
+
+.chufeeditem-heart-button.active > .chufeeditem-heart-animated {
+	-webkit-animation: scaleFade 0.5s ease-out;
 }
 
 .chufeeditem-likes-comments-time {
@@ -110,15 +155,4 @@
 
 .chufeeditem-comments-icon {
 	background-image: url(../../assets/images/comments_32x32.png);
-}
-
-.chufeeditem-error-icon {
-	position: absolute;
-	z-index: 100;
-	top: 10px;
-	right: 10px;
-	width: 24px;
-	height: 24px;
-	background: url(../../assets/images/warning_48x48.png);
-	background-size: cover;
 }

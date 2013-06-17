@@ -38,7 +38,8 @@ enyo.kind({
         onShowDiscoverChus: "",
         onShowDiscoverStores: "",
         onShowDiscoverUsers: "",
-        onShowNearby: ""
+        onShowNearby: "",
+        onShowStore: ""
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -46,7 +47,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("change remove", this.refreshFeed, this);
+        chuisy.feed.on("remove", this.refreshFeed, this);
         // chuisy.feed.on("add", this.preloadImage, this);
         this.pullerHeight = 50;
         this.pullerThreshold = 80;
@@ -80,6 +81,7 @@ enyo.kind({
     setupFeedItem: function(sender, event) {
         var item = chuisy.feed.at(event.index);
         this.$.chuFeedItem.setChu(item);
+        this.$.chuFeedItem.update();
 
         // this.$.chuFeedItem.removeClass("feed-item-added");
         // if (item.added) {
@@ -239,6 +241,21 @@ enyo.kind({
         event.preventDefault();
         return true;
     },
+    toggleLike: function(sender, event) {
+        var chu = chuisy.feed.at(event.index);
+        chu.toggleLike();
+        this.$.feedList.renderRow(event.index);
+        App.sendCubeEvent(chu.get("liked") ? "like" : "unlike", {
+            chu: chu,
+            context: "feed"
+        });
+        return true;
+    },
+    storeTapped: function(sender, event) {
+        var chu = chuisy.feed.at(event.index);
+        this.doShowStore({store: chu.get("store")});
+        return true;
+    },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
@@ -271,7 +288,7 @@ enyo.kind({
                     {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
                     {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
                 ]},
-                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped"},
+                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"},
                 {name: "nextPageSpacer", classes: "next-page-spacer"}
             ]}
         ]}
