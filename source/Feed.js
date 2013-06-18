@@ -165,12 +165,14 @@ enyo.kind({
     },
     scrollHandler: function() {
         var scrollTop = this.$.feedList.getScrollTop();
-        var offset = scrollTop + this.pullerHeight;
-        var opacity = 1 - offset/this.pullerHeight;
-        this.$.pulldown.applyStyle("opacity", opacity);
-        this.pulling = scrollTop < -this.pullerThreshold;
-        this.$.pulldown.addRemoveClass("pulling", this.pulling);
-        this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.pullerHeight : 0;
+        if (scrollTop < 0) {
+            var offset = scrollTop + this.pullerHeight;
+            var opacity = 1 - offset/this.pullerHeight;
+            this.$.pulldown.applyStyle("opacity", opacity);
+            this.pulling = scrollTop < -this.pullerThreshold;
+            this.$.pulldown.addRemoveClass("pulling", this.pulling);
+            this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.pullerHeight : 0;
+        }
     },
     dragFinishHandler: function() {
         if (this.pulling && !this.pulled) {
