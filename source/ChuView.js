@@ -306,7 +306,7 @@ enyo.kind({
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 window.plugins.social.available("facebook", enyo.bind(this, function(available) {
                     if (available) {
-                        window.plugins.social.facebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"), enyo.bind(this, function() {
+                        window.plugins.social.facebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"), enyo.bind(this, function() {
                             App.sendCubeEvent("share_facebook_success", {
                                 chu: this.chu
                             });
@@ -339,7 +339,7 @@ enyo.kind({
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
                 window.plugins.social.available("twitter", enyo.bind(this, function(available) {
                     if (available) {
-                        window.plugins.social.twitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"), enyo.bind(this, function() {
+                        window.plugins.social.twitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"), enyo.bind(this, function() {
                             App.sendCubeEvent("share_twitter_success", {
                                 chu: this.chu
                             });
