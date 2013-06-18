@@ -14,6 +14,7 @@
     width: 100%;
     padding: 44px 0 1000px 0;
     box-sizing: border-box;
+    position: relative;
 }
 
 .chuview-image {
@@ -24,6 +25,13 @@
 
 .chuview-image.loading {
     opacity: 0;
+}
+
+.chuview-image-spinner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 150px auto;
 }
 
 .chuview-spacer {

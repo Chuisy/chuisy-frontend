@@ -460,7 +460,7 @@ enyo.kind({
         // IMAGEVIEW
         {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
             {classes: "chuview-image-container", components: [
-                {kind: "Spinner", name: "spinner", classes: "absolute-center"},
+                {kind: "Spinner", name: "spinner", classes: "chuview-image-spinner"},
                 {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
             ]}
         ]},
