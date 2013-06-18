@@ -60,17 +60,16 @@ body {
 
 .spinner.next-page-spinner {
 	position: absolute;
-	bottom: 20px;
+	bottom: -80px;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	-webkit-transform: translate3d(0, 100px, 0);
 	-webkit-transition: -webkit-transform 0.5s;
 	/*display: none;*/
 }
 
 .spinner.next-page-spinner.rise {
-	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-transform: translate3d(0, -100px, 0);
 	/*display: block;*/
 }
 
@@ -421,7 +420,6 @@ button[disabled] {
 	background-size: cover;
 	margin-top: 10px;
 	-webkit-transition: -webkit-transform 0.5s;
-	-webkit-transform: rotateX(0);
 }
 
 .pulldown.pulling .pulldown-arrow {
@@ -434,18 +432,17 @@ button[disabled] {
 
 .pulldown-spinner {
 	position: absolute;
-	top: 20px;
+	top: -80px;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	-webkit-transform: translate3d(0, -100px, 0);
 	-webkit-transition: -webkit-transform 0.5s;
 	/*display: none;*/
 }
 
 .pulldown.pulled .pulldown-spinner {
 	/*display: inline-block;*/
-	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-transform: translate3d(0, 100px, 0);
 }
 
 .enyo-puller {
@@ -483,21 +480,6 @@ button[disabled] {
 	font-size: 15pt;
 	vertical-align: top;
 	padding: 0;
-}
-
-.app-signinview {
-	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	-webkit-transform: translate3d(110%, 0, 0);
-	-webkit-transition: -webkit-transform 0.5s;
-}
-
-.app-signinview.showing {
-	-webkit-transform: translate3d(0, 0, 0);
 }
 
 /* Popup */
@@ -617,7 +599,7 @@ button[disabled] {
 .alert {
     position: absolute;
     z-index: 10;
-    top: 0;
+    top: -42px;
     width: 100%;
     /*height: 30px;*/
     padding: 10px;
@@ -626,7 +608,6 @@ button[disabled] {
     opacity: 0.9;
     text-align: center;
     /*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);*/
-    -webkit-transform: translateY(-42px);
     -webkit-transition: -webkit-transform 0.5s;
 }
 
@@ -636,7 +617,7 @@ button[disabled] {
 }
 
 .alert.show {
-    -webkit-transform: translateY(0);
+    -webkit-transform: translate3d(0, 42px, 0);
 }
 
 .notransition {
