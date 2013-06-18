@@ -31,32 +31,137 @@
     position: relative;
 }
 
+.chuview-price {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 14pt;
+    text-shadow: 0 0 5px #000;
+    color: white;
+    font-weight: bold;
+}
+
+.chuview-avatar {
+    width: 35px;
+    height: 35px;
+    float: left;
+}
+
+.chuview-fullname {
+    display: block;
+    vertical-align: top;
+    font-size: 11pt;
+    padding: 0 6px;
+    max-width: 150px;
+    font-weight: bold;
+    line-height: 17px;
+}
+
+.chuview-store {
+    color: #555;
+    font-size: 10pt;
+    padding: 0 6px;
+    line-height: 15px;
+    margin-top: -3px;
+    max-width: 150px;
+}
+
+.chuview-bar {
+    width: 100%;
+    display: -webkit-box;
+    /*box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.5);*/
+}
+
+.chuview-bar > button {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.01)), to(rgba(0, 0, 0, 0.05)));
+    border: none;
+    box-shadow: none;
+    border-top: solid 1px #eee;
+    border-bottom: solid 1px #ddd;
+    border-radius: 0;
+    padding: 6px;
+}
+
+.chuview-bar > button:not(:last-child) {
+    border-right: 1px solid #dedede;
+}
+
+.chuview-bar > button:active:hover:not([disabled]) {
+    background-color: rgba(230, 230, 230, 0.9);
+}
+
+.chuview-user-button {
+    -webkit-box-flex: 1;
+    text-align: left;
+}
+
+.chuview-store-button {
+    width: 50px;
+}
+
+.chuview-store-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    background: url(../../assets/images/feed_item_location.png) no-repeat 0 0;
+    background-size: cover;
+}
+
+.chuview-heart-button {
+    width: 50px;
+    position: relative;
+}
+
+.chuview-heart-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    background: url(../../assets/images/feed_item_heart.png) no-repeat 0 0;
+    background-size: 28px 56px;
+}
+
+.chuview-heart-button.active > .chuview-heart-icon {
+    background-position: 0 -28px;
+}
+
+.chuview-heart-animated {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    margin: auto;
+    background: url(../../assets/images/feed_item_heart.png) no-repeat 0 -28px;
+    background-size: 28px 56px;
+    -webkit-transform: scale(0);
+}
+
+.chuview-heart-button.active > .chuview-heart-animated {
+    -webkit-animation: scaleFade 0.5s ease-out;
+}
+
 .chuview-content {
     /*background-image: url(../../assets/images/soft_wallpaper_light_small.png);
     background-size: 100px 100px;*/
     background-color: #f1f1f1;
-    padding: 5px;
-    box-shadow: 0 0 20px #000000;
 }
 
 .chuview-comments {
 }
 
 .chuview-comment {
-    padding: 5px 0;
     display: -webkit-box;
-    border-bottom: solid 1px #ddd;
 }
 
 .chuview-comment-avatar {
-    margin: 2px;
     width: 35px;
     height: 35px;
-    border: solid 1px #ccc;
 }
 
 .chuview-comment-content {
-    padding: 0 5px;
     -webkit-box-flex: 1;
 }
 
@@ -64,46 +169,51 @@
     width: 100%;
     box-sizing: border-box;
     font-size: 10pt;
-    color: #666;
-    padding: 2px;
+    color: #555;
+    padding: 4px 6px 0 6px;
     /*font-family: Muli;*/
 }
 
 .chuview-comment-fullname {
     font-size: 11pt;
+    padding: 0 6px;
     max-width: 150px;
-    padding-top: 2px;
     font-weight: bold;
+    line-height: 17px;
 }
 
 .chuview-comment-time {
     color: #555;
     font-size: 9pt;
     float: right;
-    margin-top: 4px;
+}
+
+
+.chuview-likes-container {
+    padding: 10px;
+    overflow: hidden;
+}
+
+.chuview-likes-text {
+    padding: 4px 0;
+    display: inline-block;
+    font-size: 11pt;
+    font-variant: small-caps;
+    font-weight: bold;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    vertical-align: middle;
 }
 
 .chuview-likes {
-    margin-bottom: -4px;
-    display: inline-block;
-    vertical-align: middle;
+    float: right;
 }
 
 .chuview-like-image {
     width: 30px;
     height: 30px;
-    margin: 0 1px;
-    border: solid 1px #ccc;
-}
-
-.chuview-likes-more {
-    display: inline-block;
-    vertical-align: middle;
-    color: #555;
-    padding: 5px;
-    max-width: 25px;
-    font-size: 10pt;
-    margin-bottom: -4px;
+    margin-left: 4px;
+    /*border: solid 1px #ccc;*/
 }
 
 .chuview-likes-more.big {
@@ -143,7 +253,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     margin-top: -1px;
-    /*font-weight: bold;*/
+    font-weight: bold;
     /*background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));*/
     /*color: rgba(109, 109, 109, 0.5);*/
     /*text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);*/
@@ -152,44 +262,29 @@
 .chuview-more-comments {
     width: 100%;
     text-align: center;
-    margin-top: 5px;
+    padding: 5px 10px 10px 10px;
+    box-sizing: border-box;
     font-size: 10pt;
     box-sizing: border-box;
     color: #ff1e78;
 }
 
-.chuview-comments-spinner,
-.chuview-likes-spinner {
+.chuview-comments-spinner {
     display: block;
-    margin: 5px auto 0 auto;
+    margin: 5px auto;
 }
 
-.chuview-likebar {
-    width: 320px;
-    height: 10px;
-    overflow: visible;
-    background: url(../../assets/images/chu_separator.png) no-repeat 0 center;
-    background-size: 320px 48px;
-    margin-bottom: -5px;
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    -webkit-perspective: 200px;
-}
-
-.chuview-like-button {
-    top: -29px;
-}
-
-.chuview-infobar {
-    padding: 5px 0;
-    overflow: hidden;
+.chuview-likes-spinner {
+    vertical-align: middle;
+    margin: 0 10px;
+    display: inline-block;
 }
 
 .chuview-separator {
     width: 100%;
     display: -webkit-box;
     -webkit-box-align: center;
+    padding: 5px 0;
 }
 
 .chuview-separator-icon {
@@ -201,88 +296,6 @@
     border-top: solid 1px #ddd;
     -webkit-box-flex: 1;
     margin: 0 5px;
-}
-
-.chuview-store-price {
-    padding: 8px 4px 4px 4px;
-}
-
-.chuview-avatar {
-    margin-left: 1px;
-    margin-right: 10px;
-    width: 35px;
-    height: 35px;
-    float: left;
-    border: solid 1px #ccc;
-}
-
-.chuview-fullname {
-    display: inline-block;
-    vertical-align: top;
-    font-size: 11pt;
-    padding: 0 0;
-    max-width: 200px;
-    width: auto;
-    font-weight: bold;
-}
-
-.chuview-time {
-    color: #555;
-    font-size: 9pt;
-    padding: 0 10px;
-}
-
-.chuview-store {
-    color: #555;
-    font-size: 11pt;
-    float: right;
-    max-width: 120px;
-    text-align: right;
-    /*line-height: 16px;*/
-}
-
-.chuview-store-button {
-    float: right;
-    margin-top: -4px;
-    margin-right: -4px;
-    padding: 2px 4px 2px 7px;
-}
-
-.chuview-store-button-text {
-    vertical-align: middle;
-    max-width: 75px;
-    font-size: 11pt;
-    line-height: 18px;
-}
-
-.chuview-store-icon {
-    width: 13px;
-    height: 13px;
-    margin: -2px 0 0 2px;
-    vertical-align: middle;
-}
-
-.chuview-likes-comments {
-    float: right;
-    margin-right: 2px;
-}
-
-.chuview-price {
-    font-size: 11pt;
-    color: #555;
-    display: inline-block;
-    vertical-align: top;
-    padding: 0;
-}
-
-.chuview-likes-count,
-.chuview-comments-count {
-    color: #888;
-    font-size: 10pt;
-    display: inline-block;
-    vertical-align: top;
-    padding: 0 3px 0 4px;
-    line-height: 14pt;
 }
 
 .chuview-likes-icon,

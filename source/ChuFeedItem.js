@@ -17,14 +17,14 @@ enyo.kind({
     update: function() {
         if (this.chu) {
             var user = this.chu.get("user");
-            this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("localImage") || "assets/images/chu_placeholder.png");
+            this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["300x300"] || this.chu.get("localImage") || "");
             this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
             this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
             // this.$.time.setContent(this.chu.getTimeText());
             // this.$.likesCount.setContent(this.chu.get("likes_count"));
             // this.$.commentsCount.setContent(this.chu.get("comments_count"));
             var location = this.chu.get("location");
-            this.$.place.setContent(location && location.name || "");
+            this.$.store.setContent(location && location.name || "");
             this.$.heartButton.addRemoveClass("active", this.chu.get("liked"));
             // var syncStatus = this.chu.get("syncStatus");
             // this.$.errorIcon.setShowing(syncStatus == "postFailed" || syncStatus == "uploadFailed");
@@ -77,7 +77,7 @@ enyo.kind({
             {kind: "Button", ontap: "userTapped", classes: "chufeeditem-user-button", components: [
                 {kind: "Image", classes: "chufeeditem-avatar", name: "avatar"},
                 {classes: "chufeeditem-fullname ellipsis", name: "fullName"},
-                {classes: "chufeeditem-place ellipsis", name: "place"}
+                {classes: "chufeeditem-store ellipsis", name: "store"}
             ]},
             {kind: "Button", classes: "chufeeditem-store-button", ontap: "storeTapped", components: [
                 {classes: "chufeeditem-store-icon"}

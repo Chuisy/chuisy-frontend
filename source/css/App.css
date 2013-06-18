@@ -653,7 +653,7 @@ button[disabled] {
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.01)));
 }
 
-.list-item:active:hover:not([disabled]), .list-item.selected {
+.list-item.pressable:active:hover:not([disabled]), .list-item.selected {
 	border-top-color: rgba(0, 0, 0, 0.08);
 	border-bottom-color: rgba(255, 255, 255, 0.3);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.08)), to(rgba(0, 0, 0, 0.02)));

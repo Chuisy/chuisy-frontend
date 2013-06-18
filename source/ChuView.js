@@ -62,28 +62,26 @@ enyo.kind({
         var user = this.chu.get("user");
         var store = this.chu.get("store");
 
-        var image = this.chu.get("localImage") || this.chu.get("image") || "assets/images/chu_placeholder.png";
+        var image = this.chu.get("localImage") || this.chu.get("image") || "";
         if (image != this.$.image.src) {
             this.$.spinner.show();
             this.$.image.addClass("loading");
             this.$.image.setSrc(image);
         }
 
-        this.$.storeButton.setShowing(store && store.foursquare_id);
-        this.$.store.setShowing(!store || !store.foursquare_id);
-
         this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
         this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : "");
         this.$.store.setContent(store && store.name || "");
-        this.$.storeButtonText.setContent(store && store.name || "");
-        this.$.time.setContent(this.chu.getTimeText());
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
         this.$.price.setContent(this.chu.get("price") ? currFmt.format(this.chu.get("price")) : "");
 
-        // this.addRemoveClass("owned", this.isOwned());
+        var likesCount = this.chu.get("likes_count");
+        var likesText = this.chu.get("likes_count") == 1 ? $L("1 person likes this") : $L("{{ count }} people like this").replace("{{ count }}", likesCount);
+        this.$.likesText.setContent(likesText);
+        this.$.likesContainer.setShowing(this.likesCount);
 
-        // this.$.likesCount.setContent(this.chu.get("likes_count") || 0);
+        this.$.likeButton.addRemoveClass("active", this.chu.get("liked"));
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -145,23 +143,20 @@ enyo.kind({
         this.$.moreCommentsSpinner.hide();
         this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
         this.$.moreComments.setContent($L("{count} more comments...").replace("{count}", totalCount - this.chu.comments.length));
-        this.$.commentsCount.setContent(totalCount);
+        // this.$.commentsCount.setContent(totalCount);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();
         this.$.commentsContainer.setShowing(this.chu.comments.length);
     },
     refreshLikes: function() {
-        this.$.likesSpinner.hide();
+        // this.$.likesSpinner.hide();
         this.$.likesRepeater.show();
-        var max = 8;
+        var max = 5;
         var count = this.chu.likes.meta && this.chu.likes.meta.total_count || this.chu.get("likes_count") || 0;
         count = Math.max(count, this.chu.likes.length);
-        this.$.likesCount.setContent(count);
+        // this.$.likesCount.setContent(count);
         this.$.likesRepeater.setCount(Math.min(this.chu.likes.length, max));
         this.$.likesRepeater.render();
-        this.$.moreLikes.setShowing(count > max);
-        this.$.moreLikes.setContent("+" + (count - max));
-        // this.$.moreLikes.addRemoveClass("big", (count - max) > 99);
         this.$.likesContainer.setShowing(count);
     },
     loadComments: function() {
@@ -171,9 +166,8 @@ enyo.kind({
         this.chu.comments.fetch({data: {limit: 5}});
     },
     loadLikes: function() {
-        this.$.likesSpinner.show();
+        // this.$.likesSpinner.show();
         this.$.likesRepeater.hide();
-        this.$.moreLikes.hide();
         this.$.likesContainer.show();
         this.chu.likes.fetch({data: {limit: 10}});
     },
@@ -484,57 +478,38 @@ enyo.kind({
                 {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll",
                     strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, components: [
                     // SPACER
-                    {classes: "chuview-spacer"},
+                    {classes: "chuview-spacer", components: [
+                        {classes: "chuview-price", name: "price"}
+                    ]},
                     // LIKE BAR
-                    {classes: "chuview-likebar", components: [
-                        {kind: "LikeButton", classes: "chuview-like-button", name: "likeButton", ontap: "likeButtonTapped"}
+                    {classes: "chuview-bar", components: [
+                        {kind: "Button", ontap: "showUser", classes: "chuview-user-button", components: [
+                            {kind: "Image", classes: "chuview-avatar", name: "avatar"},
+                            {classes: "chuview-fullname ellipsis", name: "fullName"},
+                            {classes: "chuview-store ellipsis", name: "store"}
+                        ]},
+                        {kind: "Button", classes: "chuview-store-button", ontap: "showStore", components: [
+                            {classes: "chuview-store-icon"}
+                        ]},
+                        {kind: "Button", name: "likeButton", classes: "chuview-heart-button", ontap: "likeButtonTapped", components: [
+                            // {classes: "chufeeditem-heart-animated"},
+                            {classes: "chuview-heart-icon"}
+                        ]}
                     ]},
                     {classes: "chuview-content", components: [
-                        // CATEGORY, PRICE, COMMENTS, LIKES
-                        {classes: "chuview-store-price", components: [
-                            // {classes: "chuview-category-icon", name: "categoryIcon", showing: false},
-                            {classes: "chuview-price", name: "price"},
-                            {kind: "Button", classes: "chuview-store-button", name: "storeButton", showing: false, ontap: "showStore", components: [
-                                {name: "storeButtonText", classes: "chuview-store-button-text ellipsis"},
-                                {kind: "Image", classes: "chuview-store-icon", src: "assets/images/black_marker.png"}
-                            ]},
-                            {name: "store", classes: "chuview-store ellipsis", showing: false},
-                            {classes: "chuview-likes-comments", showing: false, components: [
-                                {classes: "chuview-likes-count", name: "likesCount"},
-                                {classes: "chuview-likes-icon"},
-                                {classes: "chuview-comments-count", name: "commentsCount"},
-                                {classes: "chuview-comments-icon"}
-                            ]}
-                        ]},
-                        // AVATAR, NAME, TIME
-                        {classes: "chuview-infobar", components: [
-                            {kind: "Image", classes: "chuview-avatar", name: "avatar", ontap: "showUser"},
-                            {classes: "chuview-fullname ellipsis", name: "fullName", ontap: "showUser"},
-                            {classes: "chuview-time", name: "time"}
-                        ]},
-                        {name: "likesContainer", ontap: "showLikes", components: [
-                            {classes: "chuview-separator", components: [
-                                {classes: "chuview-separator-line"},
-                                {classes: "chuview-separator-icon chuview-likes-icon", style: "position: relative; top: 2px;"},
-                                {classes: "chuview-separator-line"}
-                            ]},
-                            {kind: "Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
+                        {name: "likesContainer", classes: "chuview-likes-container", ontap: "showLikes", components: [
+                            {classes: "chuview-likes-text", name: "likesText"},
+                            // {kind: "Spinner", classes: "chuview-likes-spinner", name: "likesSpinner", showing: false},
                             {kind: "Repeater", classes: "chuview-likes", name: "likesRepeater", onSetupItem: "setupLike", components: [
                                 {kind: "Image", name: "likeImage", classes: "chuview-like-image"}
-                            ]},
-                            {classes: "chuview-likes-more", name: "moreLikes"}
+                            ]}
                         ]},
                         {name: "commentsContainer", components: [
-                            {classes: "chuview-separator", components: [
-                                {classes: "chuview-separator-line"},
-                                {classes: "chuview-separator-icon chuview-comments-icon", style: "position: relative; top: 2px;"},
-                                {classes: "chuview-separator-line"}
-                            ]},
                             {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
                             {kind: "Spinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
                             // COMMENTS
                             {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [
-                                {classes: "chuview-comment", name: "comment", components: [
+                                {classes: "list-item chuview-comment", name: "comment", components: [
                                     {components: [
                                         {kind: "Image", name: "commentAvatar", classes: "chuview-comment-avatar", ontap: "showCommentUser"}
                                     ]},
