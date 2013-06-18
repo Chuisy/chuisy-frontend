@@ -124,13 +124,16 @@ enyo.kind({
     nextPage: function() {
         if (!this.loading) {
             this.loading = true;
+            this.$.nextPageSpinner.setSpinning(true);
             this.$.nextPageSpinner.addClass("rise");
             chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.setSpinning(false);
                 this.$.nextPageSpinner.removeClass("rise");
                 this.refreshFeed();
             }), error: enyo.bind(this, function() {
                 this.loading = false;
+                this.$.nextPageSpinner.setSpinning(false);
                 this.$.nextPageSpinner.removeClass("rise");
             })});
         }
@@ -182,6 +185,7 @@ enyo.kind({
     },
     setPulled: function(pulled) {
         this.pulled = pulled;
+        this.$.pulldownSpinner.setSpinning(this.pulled);
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
         this.$.pulldown.applyStyle("opacity", this.pulled ? 1 : 0);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
@@ -259,7 +263,7 @@ enyo.kind({
         return true;
     },
     components: [
-        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
+        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner", spinning: false},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {classes: "feed-tabs", style: "position: relative; z-index: 50", components: [
@@ -280,7 +284,7 @@ enyo.kind({
             {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
             {name: "pulldown", classes: "pulldown", components: [
                 {classes: "pulldown-arrow"},
-                {kind: "Spinner", classes: "pulldown-spinner"}
+                {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
             ]},
             {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
                 loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
