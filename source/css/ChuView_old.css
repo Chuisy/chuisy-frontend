@@ -1,0 +1,499 @@
+.chuview {
+}
+
+.chuview-image-scroller {
+	position: absolute;
+	z-index: -10;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.chuview-image-container {
+	width: 100%;
+	padding: 44px 0 1000px 0;
+	box-sizing: border-box;
+}
+
+.chuview-image {
+	margin-left: -5%;
+	width: 110%;
+	-webkit-transition: opacity 1s;
+}
+
+.chuview-image.loading {
+	opacity: 0;
+}
+
+.chuview-spacer {
+	height: 250px;
+	position: relative;
+}
+
+.chuview-content {
+	/*background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;*/
+	background-color: #f1f1f1;
+	padding: 5px;
+	box-shadow: 0 0 20px #000000;
+}
+
+.chuview-comments {
+}
+
+.chuview-comment {
+	padding: 5px 0;
+	display: -webkit-box;
+	border-bottom: solid 1px #ddd;
+}
+
+.chuview-comment-avatar {
+	margin: 2px;
+	width: 35px;
+	height: 35px;
+	border: solid 1px #ccc;
+}
+
+.chuview-comment-content {
+	padding: 0 5px;
+	-webkit-box-flex: 1;
+}
+
+.chuview-comment-text {
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 10pt;
+	color: #666;
+	padding: 2px;
+	/*font-family: Muli;*/
+}
+
+.chuview-comment-fullname {
+	font-size: 11pt;
+	max-width: 150px;
+	padding-top: 2px;
+	font-weight: bold;
+}
+
+.chuview-comment-time {
+	color: #555;
+	font-size: 9pt;
+	float: right;
+	margin-top: 4px;
+}
+
+.chuview-likes {
+	margin-bottom: -4px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chuview-like-image {
+	width: 30px;
+	height: 30px;
+	margin: 0 1px;
+	border: solid 1px #ccc;
+}
+
+.chuview-likes-more {
+	display: inline-block;
+	vertical-align: middle;
+	color: #555;
+	padding: 5px;
+	max-width: 25px;
+	font-size: 10pt;
+	margin-bottom: -4px;
+}
+
+.chuview-likes-more.big {
+	font-size: 9pt;
+}
+
+.chuview-commentinput {
+	display: -webkit-box;
+	padding: 4px;
+	/*-webkit-box-align: stretch;*/
+	height: 40px;
+	box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.3);
+	/*border-top: solid 1px #ccc;*/
+	position: relative;
+	z-index: 10;
+	background-color: rgb(241, 241, 241);
+}
+
+.chuview-commentinput-decorator {
+	padding: 0;
+	display: block;
+	-webkit-box-flex: 1;
+	box-sizing: border-box;
+}
+
+.chuview-commentinput-decorator > .enyo-input {
+	display: block;
+	min-height: 0;
+	width: 100%;
+	padding: 6px 5px;
+	box-sizing: border-box;
+}
+
+.chuview-commentinput-button {
+	display: block;
+	margin-left: 4px;
+	box-sizing: border-box;
+	border-radius: 4px;
+	margin-top: -1px;
+	/*font-weight: bold;*/
+	/*background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));*/
+	/*color: rgba(109, 109, 109, 0.5);*/
+	/*text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);*/
+}
+
+.chuview-more-comments {
+	width: 100%;
+	text-align: center;
+	margin-top: 5px;
+	font-size: 10pt;
+	box-sizing: border-box;
+	color: #ff1e78;
+}
+
+.chuview-comments-spinner,
+.chuview-likes-spinner {
+	display: block;
+	margin: 5px auto 0 auto;
+}
+
+.chuview-likebar {
+	width: 320px;
+	height: 10px;
+	overflow: visible;
+	background: url(../../assets/images/chu_separator.png) no-repeat 0 center;
+	background-size: 320px 48px;
+	margin-bottom: -5px;
+	position: relative;
+	z-index: 10;
+	text-align: center;
+	-webkit-perspective: 200px;
+}
+
+.chuview-like-button {
+    top: -29px;
+}
+
+.chuview-infobar {
+	padding: 5px 0;
+	overflow: hidden;
+}
+
+.chuview-separator {
+	width: 100%;
+	display: -webkit-box;
+	-webkit-box-align: center;
+}
+
+.chuview-separator-icon {
+	opacity: 0.5;
+}
+
+.chuview-separator-line {
+	height: 0;
+	border-top: solid 1px #ddd;
+	-webkit-box-flex: 1;
+	margin: 0 5px;
+}
+
+.chuview-store-price {
+	padding: 8px 4px 4px 4px;
+}
+
+.chuview-avatar {
+	margin-left: 1px;
+	margin-right: 10px;
+	width: 35px;
+	height: 35px;
+	float: left;
+	border: solid 1px #ccc;
+}
+
+.chuview-fullname {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11pt;
+	padding: 0 0;
+	max-width: 200px;
+	width: auto;
+	font-weight: bold;
+}
+
+.chuview-time {
+	color: #555;
+	font-size: 9pt;
+	padding: 0 10px;
+}
+
+.chuview-store {
+	color: #555;
+	font-size: 11pt;
+	float: right;
+	max-width: 120px;
+	text-align: right;
+	/*line-height: 16px;*/
+}
+
+.chuview-store-button {
+	float: right;
+	margin-top: -4px;
+	margin-right: -4px;
+	padding: 2px 4px 2px 7px;
+}
+
+.chuview-store-button-text {
+	vertical-align: middle;
+	max-width: 75px;
+	font-size: 11pt;
+	line-height: 18px;
+}
+
+.chuview-store-icon {
+	width: 13px;
+	height: 13px;
+	margin: -2px 0 0 2px;
+	vertical-align: middle;
+}
+
+.chuview-likes-comments {
+	float: right;
+	margin-right: 2px;
+}
+
+.chuview-price {
+	font-size: 11pt;
+	color: #555;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0;
+}
+
+.chuview-likes-count,
+.chuview-comments-count {
+	color: #888;
+	font-size: 10pt;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0 3px 0 4px;
+	line-height: 14pt;
+}
+
+.chuview-likes-icon,
+.chuview-comments-icon {
+	width: 16px;
+	height: 16px;
+	background-size: cover;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.chuview-likes-icon {
+	background-image: url(../../assets/images/likes_32x32.png);
+}
+
+.chuview-comments-icon {
+	background-image: url(../../assets/images/comments_32x32.png);
+}
+
+.chuview-share-controls {
+	visibility: hidden;
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	height: 44px;
+}
+
+.chuview.owned .chuview-share-controls {
+	visibility: visible;
+}
+
+.chuview-visibility {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url(../../assets/images/header_visibility.png) no-repeat center center;
+	background-size: 40px 80px;
+	background-position: center 0;
+	margin: 2px 0;
+	padding: 0 3px;
+	-webkit-transition: background-position 0.4s;
+	border-left: dotted 2px rgba(113, 0, 28, 0.6);
+}
+
+.chuview-visibility.public {
+	background-position: center -40px;
+}
+
+.chuview-header-button {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background: url() no-repeat center center;
+	background-size: 40px 80px;
+	background-position: 0 0;
+	margin: 2px 0;
+}
+
+.chuview-header-button:active:hover:not([disabled]):not(.friends) {
+	background-position: 0 -40px;
+}
+
+.chuview-header-button.messaging {
+	background-image: url(../../assets/images/header_messaging.png);
+}
+
+.chuview-header-button.friends {
+	background-image: url(../../assets/images/header_friends.png);
+}
+
+.chuview-header-button.twitter {
+	background-image: url(../../assets/images/header_twitter.png);
+}
+
+.chuview-header-button.facebook {
+	background-image: url(../../assets/images/header_facebook.png);
+}
+
+.chuview-header-button.pinterest {
+	background-image: url(../../assets/images/header_pinterest.png);
+}
+
+.chuview-header-button.instagram {
+	background-image: url(../../assets/images/header_instagram.png);
+}
+
+.chuview-header-button.friends.active {
+	background-position: 0 -40px;
+}
+
+.chuview-share-panels {
+	 width: 170px;
+	 height: 44px;
+	 display: inline-block;
+	 text-align: right;
+	 margin-right: 5px;
+}
+
+.chuview-friends-slider {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-image: url(../../assets/images/soft_wallpaper_light_small.png);
+	background-size: 100px 100px;
+	z-index: 100;
+}
+
+.chuview-friends-hint {
+	padding: 10px 40px;
+	text-align: center;
+	color: #555;
+	font-size: 10pt;
+}
+
+.chuview-friends-placeholder-image {
+	background-image: url(../../assets/images/friends_placeholder.png);
+}
+
+.chuview-status {
+	position: absolute;
+	z-index: 100;
+	top: 5px;
+	left: 5px;
+	margin-top: -30px;
+}
+
+.chuview-status-text {
+	display: inline-block;
+	font-size: 8pt;
+	vertical-align: middle;
+	padding: 5px;
+	text-shadow: 0 0 5px #ffffff;
+}
+
+.chuview-status-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+}
+
+.chuview-status-error-icon {
+	width: 16px;
+	height: 16px;
+	background: url(../../assets/images/warning_48x48.png) no-repeat center center;
+	background-size: 16px 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -5px;
+}
+
+.chuview-comment-delete-button {
+	float: right;
+	width: 18px;
+	height: 18px;
+	background-size: 18px 36px;
+	background-image: url(../../assets/images/delete_chu_button.png);
+	background-position: 0 0;
+	margin-top: 2px;
+	margin-left: 2px;
+}
+
+.chuview-comment-delete-button:active:hover/*:not([disabled]) */{
+	background-position: 0 -18px;
+}
+
+.chuview-loading-panel {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.7);
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	opacity: 1;
+	-webkit-transition: opacity 0.5s;
+}
+
+.chuview-loading-content {
+	color: #eee;
+	position: absolute;
+	text-align: center;
+	height: 20px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	font-family: Muli;
+}
+
+.chuview-loading-spinner {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.chuview-loading-text {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chuview-loading-dismiss {
+	width: 100%;
+	position: absolute;
+	bottom: 5px;
+	color: #eee;
+	font-size: 9pt;
+	text-align: center;
+}
+
+.fade {
+	opacity: 0;
+}
