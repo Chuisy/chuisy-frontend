@@ -8,8 +8,11 @@
     height: 100%;
     background: url(../../assets/images/spinner.svg) no-repeat center center;
     background-size: cover;
-    -webkit-animation: spin 2s linear infinite;
     display: inline-block;
+}
+
+.spinner.spin .spinner-wheel {
+    -webkit-animation: spin 2s linear infinite;
 }
 
 .spinner.light > .spinner-wheel {
