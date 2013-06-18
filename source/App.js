@@ -246,9 +246,7 @@ enyo.kind({
 
         // Hide splash screen if Cordova has been loaded yet
         if (this.isDeviceReady || !App.isMobile()) {
-            setTimeout(enyo.bind(this, function() {
-                this.raiseCurtain();
-            }), 1000);
+            this.raiseCurtain();
         }
         var now = new Date();
         App.sendCubeEvent("load_app", {
@@ -269,9 +267,7 @@ enyo.kind({
         }
 
         if (this.hasNode()) {
-            setTimeout(enyo.bind(this, function() {
-                this.raiseCurtain();
-            }), 1000);
+            this.raiseCurtain();
         }
     },
     init: function() {
