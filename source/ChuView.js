@@ -82,6 +82,8 @@ enyo.kind({
         this.$.likesContainer.setShowing(this.likesCount);
 
         this.$.likeButton.addRemoveClass("active", this.chu.get("liked"));
+
+        this.$.shareControls.setShowing(this.chu.get("visibility") == "public");
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -467,7 +469,7 @@ enyo.kind({
             // HEADER
             {classes: "header", components: [
                 {kind: "Button", content: $L("back"), ontap: "doBack", classes: "header-button left"},
-                {classes: "chuview-share-controls", components: [
+                {name: "shareControls", classes: "chuview-share-controls", components: [
                     {classes: "chuview-header-button messaging", ontap: "sms"},
                     {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
                     {classes: "chuview-header-button twitter", ontap: "twitter"},
