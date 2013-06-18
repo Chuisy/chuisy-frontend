@@ -1,7 +1,7 @@
 .chufeeditem {
 	margin: 8px;
     border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 -1px 0 rgba(0, 0, 0, 0.03);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 	overflow: hidden;
 	background-color: #ffffff;
 }
@@ -19,15 +19,14 @@
 	padding: 0 6px;
 	max-width: 150px;
 	font-weight: bold;
-	line-height: 17px;
+	line-height: 18px;
 }
 
 .chufeeditem-store {
 	color: #555;
 	font-size: 10pt;
-	padding: 0 6px;
-	line-height: 15px;
-	margin-top: -3px;
+	padding: 1px 6px 0 6px;
+	line-height: 14px;
 	max-width: 150px;
 }
 
@@ -48,30 +47,29 @@
 	display: -webkit-box;
 }
 
-.chufeeditem-bottom-bar > button {
-	display: block;
-	background-color: #ffffff;
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.01)), to(rgba(0, 0, 0, 0.05)));
-    border: none;
-    box-shadow: none;
+.chufeeditem-bottom-bar > * {
+	line-height: 0;
+	background-color: #fdfdfd;
+    /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.01)), to(rgba(0, 0, 0, 0.05)));*/
     border-top: solid 1px #eee;
-    border-radius: 0;
     padding: 6px;
-    -webkit-transition: none;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.chufeeditem-bottom-bar > button:not(:last-child) {
+.chufeeditem-bottom-bar > *:not(:last-child) {
     border-right: 1px solid #eeeeee;
 }
 
 .chufeeditem-user-button {
 	-webkit-box-flex: 1;
 	text-align: left;
-	border-bottom-left-radius: 3px;
+	/*border-bottom-left-radius: 3px;*/
 }
 
-.chufeeditem-store-button {
+.chufeeditem-store-button, .chufeeditem-heart-button {
 	width: 50px;
+	padding-top: 10px;
 }
 
 .chufeeditem-store-icon {
@@ -80,12 +78,6 @@
 	display: inline-block;
 	background: url(../../assets/images/feed_item_location.png) no-repeat 0 0;
 	background-size: cover;
-}
-
-.chufeeditem-heart-button {
-	width: 50px;
-	border-bottom-right-radius: 3px;
-	position: relative;
 }
 
 .chufeeditem-heart-icon {

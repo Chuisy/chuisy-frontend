@@ -625,7 +625,7 @@ button[disabled] {
     background-color: white;
     opacity: 0.9;
     text-align: center;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);*/
     -webkit-transform: translateY(-42px);
     -webkit-transition: -webkit-transform 0.5s;
 }

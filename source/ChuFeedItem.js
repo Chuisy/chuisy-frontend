@@ -74,15 +74,15 @@ enyo.kind({
         //     {classes: "chufeeditem-time ellipsis", name: "time"}
         // ]},
         {classes: "chufeeditem-bottom-bar", components: [
-            {kind: "Button", ontap: "userTapped", classes: "chufeeditem-user-button", components: [
+            {ontap: "userTapped", classes: "chufeeditem-user-button", components: [
                 {kind: "Image", classes: "chufeeditem-avatar", name: "avatar"},
                 {classes: "chufeeditem-fullname ellipsis", name: "fullName"},
                 {classes: "chufeeditem-store ellipsis", name: "store"}
             ]},
-            {kind: "Button", classes: "chufeeditem-store-button", ontap: "storeTapped", components: [
+            {classes: "chufeeditem-store-button", ontap: "storeTapped", components: [
                 {classes: "chufeeditem-store-icon"}
             ]},
-            {kind: "Button", name: "heartButton", classes: "chufeeditem-heart-button", ontap: "heartTapped", components: [
+            {name: "heartButton", classes: "chufeeditem-heart-button", ontap: "heartTapped", components: [
                 // {classes: "chufeeditem-heart-animated"},
                 {classes: "chufeeditem-heart-icon"}
             ]}
