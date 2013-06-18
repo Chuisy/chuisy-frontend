@@ -82,6 +82,7 @@
     border-bottom: solid 1px #ddd;
     border-radius: 0;
     padding: 6px;
+    -webkit-transition: none;
 }
 
 .chuview-bar > button:not(:last-child) {

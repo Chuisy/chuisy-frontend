@@ -57,6 +57,7 @@
     border-top: solid 1px #eee;
     border-radius: 0;
     padding: 6px;
+    -webkit-transition: none;
 }
 
 .chufeeditem-bottom-bar > button:not(:last-child) {
