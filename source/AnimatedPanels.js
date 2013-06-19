@@ -15,6 +15,7 @@ enyo.kind({
         NONE: "none"
     },
     events: {
+        onAnimationStart: "",
         onAnimationEnd: ""
     },
     published: {
@@ -23,7 +24,8 @@ enyo.kind({
         // is a decoupled in and out animation
         async: false,
         inAnim: "slideInFromRight",
-        outAnim: "slideOutToLeft"
+        outAnim: "slideOutToLeft",
+        duration: 500
     },
     create: function() {
         this.inherited(arguments);
@@ -32,24 +34,25 @@ enyo.kind({
         this.currentPanel.applyStyle("display", "block");
         this.animationStartHandler = enyo.bind(this, this.animationStart);
         this.animationEndHandler = enyo.bind(this, this.animationEnd);
+        this.fireAnimationStart = enyo.bind(this, function() {
+            this.newPanel.hasNode().removeEventListener("webkitAnimationStart", this.fireAnimationStart, false);
+            this.doAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
+        });
     },
     animationStart: function() {
         this.currentPanel.hasNode().removeEventListener("webkitAnimationStart", this.animationStartHandler, false);
         this.newPanel.applyStyle("display", "block");
-        this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " 0.5s");
+        this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
         this.newPanel.applyStyle("opacity", 1);
         this.newPanel.resized();
     },
     animationEnd: function() {
-        // this.newPanel.applyStyle("-webkit-transform", "translate3d(0, 0, 0)");
-        // this.newPanel.applyStyle("-webkit-transform", "");
-        // this.newPanel.applyStyle("opacity", 1);
+        this.doAnimationEnd({oldPanel: this.currentPanel, newPanel: this.newPanel});
         this.currentPanel.applyStyle("display", "none");
         this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.animationEndHandler, false);
         this.currentPanel = this.newPanel;
         this.newPanel = null;
         this.animating = false;
-        this.doAnimationEnd();
     },
     select: function(panel, inAnim, outAnim) {
         if (!panel) {
@@ -68,6 +71,7 @@ enyo.kind({
         this.newPanel = panel;
         this.newPanel.applyStyle("opacity", 0);
         this.animating = true;
+        this.newPanel.hasNode().addEventListener("webkitAnimationStart", this.fireAnimationStart, false);
         this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
 
         if (this.async) {
@@ -75,7 +79,7 @@ enyo.kind({
         } else {
             this.animationStart();
         }
-        this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
+        this.currentPanel.applyStyle("-webkit-animation", outAnim + " " + this.duration + "ms");
     },
     selectDirect: function(panel) {
         if (this.currentPanel == panel) {
@@ -104,8 +108,14 @@ enyo.kind({
     previous: function() {
         this.$.animatedPanels.select(this.$.first, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
     },
+    animationStart: function() {
+        this.log("***** animation start *****", arguments);
+    },
+    animationEnd: function() {
+        this.log("***** animation end *****", arguments);
+    },
     components: [
-        {kind: "AnimatedPanels", classes: "enyo-fill", components: [
+        {kind: "AnimatedPanels", onAnimationStart: "animationStart", onAnimationEnd: "animationEnd", classes: "enyo-fill", components: [
             {name: "first", style: "background-color: blue", ontap: "next"},
             {name: "second", style: "background-color: red", ontap: "previous"}
         ]}
