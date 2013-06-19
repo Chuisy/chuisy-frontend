@@ -23,7 +23,8 @@ enyo.kind({
         // is a decoupled in and out animation
         async: false,
         inAnim: "slideInFromRight",
-        outAnim: "slideOutToLeft"
+        outAnim: "slideOutToLeft",
+        duration: 500
     },
     create: function() {
         this.inherited(arguments);
@@ -36,7 +37,7 @@ enyo.kind({
     animationStart: function() {
         this.currentPanel.hasNode().removeEventListener("webkitAnimationStart", this.animationStartHandler, false);
         this.newPanel.applyStyle("display", "block");
-        this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " 0.5s");
+        this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
         this.newPanel.applyStyle("opacity", 1);
         this.newPanel.resized();
     },
@@ -75,7 +76,7 @@ enyo.kind({
         } else {
             this.animationStart();
         }
-        this.currentPanel.applyStyle("-webkit-animation", outAnim + " 0.5s");
+        this.currentPanel.applyStyle("-webkit-animation", outAnim + " " + this.duration + "ms");
     },
     selectDirect: function(panel) {
         if (this.currentPanel == panel) {
