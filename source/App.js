@@ -363,15 +363,17 @@ enyo.kind({
         Checks if the app was launched by tapping on a notifications. If so, open the corresponding view
     */
     checkPendingNotifications: function() {
-        window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
-            var notification = pending.notifications[0];
-            if (notification) {
-                this.navigateToUri(notification.uri);
-                App.sendCubeEvent("open_push_notification", {
-                    notification: notification
-                });
-            }
-        }));
+        if (window.plugins && window.plugins.pushNotification) {
+            window.plugins.pushNotification.getPendingNotifications(enyo.bind(this, function(pending) {
+                var notification = pending.notifications[0];
+                if (notification) {
+                    this.navigateToUri(notification.uri);
+                    App.sendCubeEvent("open_push_notification", {
+                        notification: notification
+                    });
+                }
+            }));
+        }
     },
     /**
         Loads and initializes js Facebook sdk

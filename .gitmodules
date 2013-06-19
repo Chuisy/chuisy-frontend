@@ -7,12 +7,6 @@ url=https://github.com/Chuisy/enyo.git
 [submodule "lib/layout"]
 	path = lib/layout
 	url = https://github.com/enyojs/layout.git
-[submodule "lib/extra"]
-	path = lib/extra
-	url = https://github.com/enyojs/extra.git
-[submodule "lib/arrangers"]
-	path = lib/arrangers
-	url = https://github.com/ShiftyAxel/more-arrangers.git
 [submodule "lib/g11n"]
 	path = lib/g11n
 	url = https://github.com/enyojs/g11n.git
