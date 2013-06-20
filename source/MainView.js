@@ -31,6 +31,13 @@ enyo.kind({
     menuChanged: function(sender, event) {
         this.doMenuChanged(event);
     },
+    activate: function() {
+        this.$.panels.show();
+        this.$.panels.resized();
+    },
+    deactivate: function() {
+        this.$.panels.hide();
+    },
     components: [
         {classes: "mainview-inner enyo-fill", components: [
             {kind: "Menu", onChange: "menuChanged"},

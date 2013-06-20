@@ -171,7 +171,7 @@ enyo.kind({
     activate: function() {
         this.chu = null;
         this.postingChu = false;
-        this.$.panels.select(this.$.chuForm);
+        this.$.panels.selectDirect(this.$.chuForm);
         this.$.pickStore.initialize();
         this.$.chuForm.clear();
         this.$.postView.clear();

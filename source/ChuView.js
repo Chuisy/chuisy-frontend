@@ -455,6 +455,15 @@ enyo.kind({
             [$L("Cancel"), $L("Delete")]
         );
     },
+    activate: function() {
+        this.$.imageScroller.show();
+        this.$.contentContainer.show();
+        this.resized();
+    },
+    deactivate: function() {
+        this.$.imageScroller.hide();
+        this.$.contentContainer.hide();
+    },
     components: [
         // IMAGEVIEW
         {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
