@@ -434,7 +434,6 @@ enyo.kind({
             var s = this.$.contentScroller.getStrategy();
             var b = this.$.likesContainer.getBounds();
             var cHeight = this.$.contentContainer.getBounds().height;
-            this.log(cHeight);
             s.scrollTop = b.top + b.height - cHeight + 10;
             s.start();
         }
