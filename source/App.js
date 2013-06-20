@@ -303,23 +303,22 @@ enyo.kind({
         var guideSeen = localStorage.getItem("chuisy.guideSeen");
         if (!guideSeen) {
             this.showGuide();
-            setTimeout(enyo.bind(this, function() {
-                this.$.signInView.ready();
-            }), 500);
+            // setTimeout(enyo.bind(this, function() {
+            //     this.$.signin.ready();
+            // }), 500);
         } else if (!App.isSignedIn()) {
-            this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.showFeed();
-            }));
-            this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-                this.showFeed();
-            }));
-            this.$.signInView.setContext("start");
-            this.$.signInView.ready();
+            this.showSignIn(this, {
+                success: enyo.bind(this, this.showFeed),
+                failure: enyo.bind(this, this.showFeed),
+                context: "start",
+                direct: true
+            });
+            // this.$.signin.ready();
         } else {
             this.recoverStateFromUri();
-            setTimeout(enyo.bind(this, function() {
-                this.$.signInView.ready();
-            }), 500);
+            // setTimeout(enyo.bind(this, function() {
+            //     this.$.signin.ready();
+            // }), 500);
         }
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
@@ -578,7 +577,7 @@ enyo.kind({
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
-            this.$.signInView.cancel();
+            this.$.signin.cancel();
         }
     },
     tapHandler: function(sender, event) {
@@ -610,7 +609,8 @@ enyo.kind({
         event = event || {};
         this.updateHistory("guide/", event);
         this.prepareView("guide");
-        this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
+        // this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
+        this.$.panels.selectDirect(this.$.guide);
         this.$.guide.resized();
     },
     showChu: function(sender, event) {
@@ -759,10 +759,15 @@ enyo.kind({
         event = event || {};
         this.updateHistory("signin/", event);
         this.prepareView("signin");
-        this.$.signInView.setSuccessCallback(event ? event.success : null);
-        this.$.signInView.setFailureCallback(event ? event.failure : null);
-        this.$.signInView.setContext(event.context);
-        this.$.panels.select(this.$.signInView, event.inAnim, event.outAnim);
+        this.$.signin.setSuccessCallback(event ? event.success : null);
+        this.$.signin.setFailureCallback(event ? event.failure : null);
+        this.$.signin.setContext(event.context);
+
+        if (event.direct) {
+            this.$.panels.selectDirect(this.$.signin);
+        } else {
+            this.$.panels.select(this.$.signin, event.inAnim, event.outAnim);
+        }
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), {obj: event.notification.get("target_obj")});
@@ -816,12 +821,12 @@ enyo.kind({
         "chuList": {kind: "ChuListView", name: "chuList"},
         "userList": {kind: "UserListView", name: "userList"},
         "storeList": {kind: "StoreListView", name: "storeList"},
-        "nearby": {kind: "Nearby", name: "nearby"}
+        "nearby": {kind: "Nearby", name: "nearby"},
+        // FACEBOOK SIGNIN
+        "signin": {kind: "SignInView", name: "signin", onDone: "back"}
     },
     components: [
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
-            // FACEBOOK SIGNIN
-            {kind: "SignInView", onDone: "back"},
             {kind: "MainView", name: "mainView"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
