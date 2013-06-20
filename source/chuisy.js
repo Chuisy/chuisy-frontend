@@ -1123,7 +1123,7 @@
             // Request thumbnails
             options = options || {};
             options.data = options.data || {};
-            options.data.thumbnails = options.data.thumbnails || ["300x300"];
+            options.data.thumbnails = options.data.thumbnails || ["292x292"];
             return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
         }
     });
