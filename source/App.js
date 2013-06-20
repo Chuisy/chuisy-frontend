@@ -303,23 +303,22 @@ enyo.kind({
         var guideSeen = localStorage.getItem("chuisy.guideSeen");
         if (!guideSeen) {
             this.showGuide();
-            setTimeout(enyo.bind(this, function() {
-                this.$.signInView.ready();
-            }), 500);
+            // setTimeout(enyo.bind(this, function() {
+            //     this.$.signin.ready();
+            // }), 500);
         } else if (!App.isSignedIn()) {
-            this.$.signInView.setSuccessCallback(enyo.bind(this, function() {
-                this.showFeed();
-            }));
-            this.$.signInView.setFailureCallback(enyo.bind(this, function() {
-                this.showFeed();
-            }));
-            this.$.signInView.setContext("start");
-            this.$.signInView.ready();
+            this.showSignIn(this, {
+                success: enyo.bind(this, this.showFeed),
+                failure: enyo.bind(this, this.showFeed),
+                context: "start",
+                direct: true
+            });
+            // this.$.signin.ready();
         } else {
             this.recoverStateFromUri();
-            setTimeout(enyo.bind(this, function() {
-                this.$.signInView.ready();
-            }), 500);
+            // setTimeout(enyo.bind(this, function() {
+            //     this.$.signin.ready();
+            // }), 500);
         }
         if (navigator.splashscreen) {
             navigator.splashscreen.hide();
@@ -578,7 +577,7 @@ enyo.kind({
     signInSliderAnimateFinish: function(sender, event) {
         if (this.$.signInSlider.getValue() == this.$.signInSlider.getMax()) {
             // User has discarded the login dialog. Call the cancel function.
-            this.$.signInView.cancel();
+            this.$.signin.cancel();
         }
     },
     tapHandler: function(sender, event) {
@@ -590,9 +589,18 @@ enyo.kind({
     focusHandler: function(sender, event) {
         this.focusedInput = event.originator;
     },
+    prepareView: function(name) {
+        if (!this.$[name]) {
+            var c = this.$.panels.createComponent(this.lazyViews[name], {owner: this});
+            c.render();
+            return true;
+        }
+        return false;
+    },
     composeChu: function(sender, event) {
         event = event || {};
         this.updateHistory("chu/new/", event);
+        this.prepareView("compose");
         this.$.compose.activate();
         this.$.panels.select(this.$.compose, event.inAnim, event.outAnim);
         this.$.compose.resized();
@@ -600,7 +608,9 @@ enyo.kind({
     showGuide: function(sender, event) {
         event = event || {};
         this.updateHistory("guide/", event);
-        this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
+        this.prepareView("guide");
+        // this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
+        this.$.panels.selectDirect(this.$.guide);
         this.$.guide.resized();
     },
     showChu: function(sender, event) {
@@ -610,6 +620,7 @@ enyo.kind({
         obj = chuisy.closet.get(obj.id) || this.cachedChus.get(obj.id) || obj;
         this.cachedChus.add(obj);
         this.updateHistory("chu/" + obj.id + "/", event);
+        this.prepareView("chu");
         this.$.chu.setChu(obj);
         this.$.panels.select(this.$.chu, event.inAnim, event.outAnim);
         this.$.chu.resized();
@@ -621,6 +632,7 @@ enyo.kind({
         obj = this.cachedUsers.get(obj.id) || obj;
         this.cachedUsers.add(obj);
         this.updateHistory("user/" + obj.id + "/", event);
+        this.prepareView("user");
         this.$.user.setUser(obj);
         this.$.panels.select(this.$.user, event.inAnim, event.outAnim);
         this.$.user.resized();
@@ -628,10 +640,14 @@ enyo.kind({
     showSettings: function(sender, event) {
         event = event || {};
         this.updateHistory("settings/", event);
+        this.prepareView("settings");
         this.$.panels.select(this.$.settings, event.inAnim, event.outAnim);
         this.$.settings.resized();
     },
     showInviteFriends: function(sender, event) {
+        event = event || {};
+        this.updateHistory("invite/", event);
+        this.prepareView("invite");
         this.$.panels.select(this.$.invite, event.inAnim, event.outAnim);
         this.$.invite.resized();
         this.$.invite.activate();
@@ -643,6 +659,7 @@ enyo.kind({
         obj = this.cachedStores.get(obj.id) || obj;
         this.cachedStores.add(obj);
         this.updateHistory("store/" + obj.id + "/", event);
+        this.prepareView("store");
         this.$.store.setStore(obj);
         this.$.panels.select(this.$.store, event.inAnim, event.outAnim);
         this.$.store.resized();
@@ -650,6 +667,7 @@ enyo.kind({
     showDiscoverChus: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverChus/", event);
+        this.prepareView("discoverChus");
         this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
         this.$.discoverChus.resized();
         this.$.discoverChus.loadTrending();
@@ -657,6 +675,7 @@ enyo.kind({
     showDiscoverUsers: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverUsers/", event);
+        this.prepareView("discoverUsers");
         this.$.panels.select(this.$.discoverUsers, event.inAnim, event.outAnim);
         this.$.discoverUsers.resized();
         this.$.discoverUsers.loadTrending();
@@ -664,6 +683,7 @@ enyo.kind({
     showDiscoverStores: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverStores/", event);
+        this.prepareView("discoverStores");
         this.$.panels.select(this.$.discoverStores, event.inAnim, event.outAnim);
         this.$.discoverStores.resized();
         this.$.discoverStores.loadTrending();
@@ -671,6 +691,7 @@ enyo.kind({
     showChuList: function(sender, event) {
         event = event || {};
         this.updateHistory("chus/", event);
+        this.prepareView("chuList");
         this.$.panels.select(this.$.chuList, event.inAnim, event.outAnim);
         this.$.chuList.setTitle(event.title);
         this.$.chuList.setChus(event.chus);
@@ -679,6 +700,7 @@ enyo.kind({
     showUserList: function(sender, event) {
         event = event || {};
         this.updateHistory("users/", event);
+        this.prepareView("userList");
         this.$.panels.select(this.$.userList, event.inAnim, event.outAnim);
         this.$.userList.setUsers(event.users);
         this.$.userList.setTitle(event.title);
@@ -687,6 +709,7 @@ enyo.kind({
     showStoreList: function(sender, event) {
         event = event || {};
         this.updateHistory("stores/", event);
+        this.prepareView("storeList");
         this.$.panels.select(this.$.storeList, event.inAnim, event.outAnim);
         this.$.storeList.setStores(event.stores);
         this.$.chuList.setTitle(event.title);
@@ -719,6 +742,7 @@ enyo.kind({
     showCloset: function(sender, event) {
         event = event || {};
         this.updateHistory("closet/", event);
+        this.prepareView("closet");
         this.$.closet.finishEditing();
         this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
         this.$.closet.resized();
@@ -726,6 +750,7 @@ enyo.kind({
     showNearby: function(sender, event) {
         event = event || {};
         this.updateHistory("nearby/", event);
+        this.prepareView("nearby");
         this.$.panels.select(this.$.nearby, event.inAnim, event.outAnim);
         this.$.nearby.resized();
         this.$.nearby.loadStores();
@@ -733,10 +758,16 @@ enyo.kind({
     showSignIn: function(sender, event) {
         event = event || {};
         this.updateHistory("signin/", event);
-        this.$.signInView.setSuccessCallback(event ? event.success : null);
-        this.$.signInView.setFailureCallback(event ? event.failure : null);
-        this.$.signInView.setContext(event.context);
-        this.$.panels.select(this.$.signInView, event.inAnim, event.outAnim);
+        this.prepareView("signin");
+        this.$.signin.setSuccessCallback(event ? event.success : null);
+        this.$.signin.setFailureCallback(event ? event.failure : null);
+        this.$.signin.setContext(event.context);
+
+        if (event.direct) {
+            this.$.panels.selectDirect(this.$.signin);
+        } else {
+            this.$.panels.select(this.$.signin, event.inAnim, event.outAnim);
+        }
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), {obj: event.notification.get("target_obj")});
@@ -769,33 +800,34 @@ enyo.kind({
         var viewName = event.value.charAt(0).toUpperCase() + event.value.slice(1);
         this["show" + viewName]();
     },
+    lazyViews: {
+        // CREATE NEW CHU
+        "compose": {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
+        // // DISPLAY CHU
+        "chu": {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
+        // // SETTINGS
+        "settings": {kind: "Settings", name: "settings"},
+        // // USER VIEW
+        "user": {kind: "UserView", name: "user"},
+        // // LOCATION VIEW
+        "store": {kind: "StoreView", name: "store"},
+        "closet": {kind: "Closet", name: "closet"},
+        // // DISCOVER CHUS
+        "discoverChus": {kind: "DiscoverChus", name: "discoverChus"},
+        "discoverUsers": {kind: "DiscoverUsers", name: "discoverUsers"},
+        "discoverStores": {kind: "DiscoverStores", name: "discoverStores"},
+        "invite": {kind: "InviteFriends", name: "invite"},
+        "guide": {kind: "Guide", name: "guide", onDone: "guideDone"},
+        "chuList": {kind: "ChuListView", name: "chuList"},
+        "userList": {kind: "UserListView", name: "userList"},
+        "storeList": {kind: "StoreListView", name: "storeList"},
+        "nearby": {kind: "Nearby", name: "nearby"},
+        // FACEBOOK SIGNIN
+        "signin": {kind: "SignInView", name: "signin", onDone: "back"}
+    },
     components: [
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
-            // FACEBOOK SIGNIN
-            {kind: "SignInView", onDone: "back"},
-            {kind: "MainView", name: "mainView"},
-            // CREATE NEW CHU
-            {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
-            // DISPLAY CHU
-            {kind: "ChuView", name: "chu", onDone: "chuViewDone"},
-            // SETTINGS
-            {kind: "Settings", name: "settings"},
-            // USER VIEW
-            {kind: "UserView", name: "user"},
-            // LOCATION VIEW
-            {kind: "StoreView", name: "store"},
-            {kind: "Closet", name: "closet"},
-            // DISCOVER CHUS
-            {kind: "DiscoverChus", name: "discoverChus"},
-            {kind: "DiscoverUsers", name: "discoverUsers"},
-            {kind: "DiscoverStores", name: "discoverStores"},
-            {kind: "InviteFriends", name: "invite"},
-            // {kind: "GetStarted", name: "getstarted", onDone: "getStartedDone"},
-            {kind: "Guide", name: "guide", onDone: "guideDone"},
-            {kind: "ChuListView", name: "chuList"},
-            {kind: "UserListView", name: "userList"},
-            {kind: "StoreListView", name: "storeList"},
-            {kind: "Nearby", name: "nearby"}
+            {kind: "MainView", name: "mainView"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
             onRequestSignIn: "showSignIn", onHandleOpenUrl: "handleOpenUrl"}
