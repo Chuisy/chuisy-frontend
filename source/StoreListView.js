@@ -2,7 +2,8 @@ enyo.kind({
     name: "StoreListView",
     kind: "FittableRows",
     published: {
-        stores: null
+        stores: null,
+        title: ""
     },
     events: {
         onBack: "",
@@ -20,6 +21,9 @@ enyo.kind({
                 this.$.nextPageSpinner.removeClass("rise");
             })});
         }
+    },
+    titleChanged: function() {
+        this.$.title.setContent(this.title);
     },
     setupStore: function(sender, event) {
         var store = this.stores.at(event.index);
@@ -62,6 +66,7 @@ enyo.kind({
     },
     activate: function() {
         this.$.list.show();
+        this.resized();
     },
     deactivate: function() {
         this.$.list.hide();
@@ -69,7 +74,7 @@ enyo.kind({
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
-            {classes: "header-text", content: $L("Stores")}
+            {classes: "header-text", name: "title"}
         ]},
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
