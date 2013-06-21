@@ -50,7 +50,7 @@ enyo.kind({
         chuisy.feed.on("remove", this.refreshFeed, this);
         // chuisy.feed.on("add", this.preloadImage, this);
         this.pullerHeight = 50;
-        this.pullerThreshold = 80;
+        this.pullerThreshold = 60;
         this.setPulled(true);
     },
     feedLoaded: function() {
