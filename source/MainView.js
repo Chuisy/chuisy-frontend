@@ -10,22 +10,22 @@ enyo.kind({
     showFeed: function(chu) {
         this.$.menu.selectItem("feed");
         this.$.feed.addChu(chu);
-        this.$.panels.selectDirect(this.$.feed);
+        this.$.panels.select(this.$.feed);
         this.$.feed.resized();
     },
     showProfile: function() {
         this.$.menu.selectItem("profile");
-        this.$.panels.selectDirect(this.$.profile);
+        this.$.panels.select(this.$.profile);
     },
     showGoodies: function(chu) {
         this.$.menu.selectItem("goodies");
         this.$.goodies.activate();
-        this.$.panels.selectDirect(this.$.goodies);
+        this.$.panels.select(this.$.goodies);
     },
     showNotifications: function(chu) {
         this.$.menu.selectItem("notifications");
         this.$.notifications.seen();
-        this.$.panels.selectDirect(this.$.notifications);
+        this.$.panels.select(this.$.notifications);
         this.$.notifications.resized();
     },
     menuChanged: function(sender, event) {
@@ -41,7 +41,7 @@ enyo.kind({
     components: [
         {classes: "mainview-inner enyo-fill", components: [
             {kind: "Menu", onChange: "menuChanged"},
-            {kind: "AnimatedPanels", classes: "mainview-panels", name: "panels", components: [
+            {kind: "AnimatedPanels", async: true, inAnim: "fadeIn", outAnim: "fadeOut", duration: 300, classes: "mainview-panels", name: "panels", components: [
                 // CHU FEED
                 {kind: "Feed", name: "feed"},
                 // OWN PROFILE VIEW

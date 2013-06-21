@@ -608,7 +608,8 @@ button[disabled] {
     opacity: 0.9;
     text-align: center;
     /*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);*/
-    -webkit-transition: -webkit-transform 0.5s;
+    opacity: 0;
+    -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
 }
 
 .alert.error {
@@ -618,6 +619,7 @@ button[disabled] {
 
 .alert.show {
     -webkit-transform: translate3d(0, 42px, 0);
+    opacity: 1;
 }
 
 .notransition {
