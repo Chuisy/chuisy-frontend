@@ -715,7 +715,7 @@ enyo.kind({
         this.prepareView("storeList");
         this.$.panels.select(this.$.storeList, event.inAnim, event.outAnim);
         this.$.storeList.setStores(event.stores);
-        this.$.chuList.setTitle(event.title);
+        this.$.storeList.setTitle(event.title);
         this.$.storeList.resized();
     },
     showFeed: function(sender, event) {
