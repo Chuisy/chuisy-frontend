@@ -157,10 +157,14 @@ enyo.kind({
         s.start();
     },
     activate: function() {
+        this.$.avatar.show();
+        this.$.nameFollow.show();
         this.$.scroller.show();
         this.$.storePanel.resized();
     },
     deactivate: function() {
+        this.$.avatar.hide();
+        this.$.nameFollow.hide();
         this.$.scroller.hide();
     },
     positionParallaxElements: function() {
