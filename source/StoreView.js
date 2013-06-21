@@ -18,7 +18,7 @@ enyo.kind({
         this.positionParallaxElements();
     },
     storeChanged: function() {
-        var rand = Math.ceil(Math.random()*2);
+        var rand = Math.ceil(Math.random()*3);
         this.coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
         this.updateView();

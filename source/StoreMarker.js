@@ -5,7 +5,7 @@ enyo.kind({
 		store: null
 	},
 	storeChanged: function() {
-		var rand = Math.ceil(Math.random()*2);
+		var rand = Math.ceil(Math.random()*3);
         var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
 
         this.$.popup.applyStyle("background-image", "url(" + (this.store.get("cover_image") || coverPlaceholder) + ")");
