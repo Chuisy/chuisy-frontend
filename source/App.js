@@ -592,6 +592,9 @@ enyo.kind({
     prepareView: function(name) {
         if (!this.$[name]) {
             var c = this.$.panels.createComponent(this.lazyViews[name], {owner: this});
+            if (c.deactivate) {
+                c.deactivate();
+            }
             c.render();
             return true;
         }
@@ -800,6 +803,16 @@ enyo.kind({
         var viewName = event.value.charAt(0).toUpperCase() + event.value.slice(1);
         this["show" + viewName]();
     },
+    panelsAnimationStart: function(sender, event) {
+        if (event.newPanel.activate) {
+            event.newPanel.activate();
+        }
+    },
+    panelsAnimationEnd: function(sender, event) {
+        if (event.oldPanel.deactivate) {
+            event.oldPanel.deactivate();
+        }
+    },
     lazyViews: {
         // CREATE NEW CHU
         "compose": {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
@@ -826,7 +839,7 @@ enyo.kind({
         "signin": {kind: "SignInView", name: "signin", onDone: "back"}
     },
     components: [
-        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
+        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", onAnimationStart: "panelsAnimationStart", onAnimationEnd: "panelsAnimationEnd", components: [
             {kind: "MainView", name: "mainView"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",

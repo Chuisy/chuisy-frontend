@@ -11,6 +11,13 @@ enyo.kind({
     loadStores: function() {
         this.$.storeMap.loadStores();
     },
+    activate: function() {
+        this.$.storeMap.show();
+        this.resized();
+    },
+    deactivate: function() {
+        this.$.storeMap.hide();
+    },
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},

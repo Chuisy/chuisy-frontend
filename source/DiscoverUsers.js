@@ -57,6 +57,13 @@ enyo.kind({
         this.$.userList.updateMetrics();
         this.$.userList.refresh();
     },
+    activate: function() {
+        this.$.userList.show();
+        this.resized();
+    },
+    deactivate: function() {
+        this.$.userList.hide();
+    },
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},

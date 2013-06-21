@@ -142,6 +142,13 @@ enyo.kind({
         });
         return true;
     },
+    activate: function() {
+        this.$.scroller.show();
+        this.resized();
+    },
+    deactivate: function() {
+        this.$.scroller.hide();
+    },
     components: [
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}

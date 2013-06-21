@@ -127,11 +127,16 @@ enyo.kind({
         }));
     },
     activate: function() {
+        this.$.fbFriendsPicker.show();
+        this.resized();
         this.$.fbFriendsPicker.reset();
         var user = chuisy.accounts.getActiveUser();
         if (user) {
             user.fbFriends.fetchAll();
         }
+    },
+    deactivate: function() {
+        this.$.fbFriendsPicker.hide();
     },
     components: [
         {classes: "header", components: [

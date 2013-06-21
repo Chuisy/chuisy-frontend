@@ -24,7 +24,7 @@ enyo.kind({
         if (!this.store.chus.meta.total_count) {
             this.loadChus();
         }
-        this.$.scroller.scrollToTop();
+        this.$.contentScroller.scrollToTop();
     },
     updateView: function() {
         this.$.name.setContent(this.store.get("name"));
@@ -151,13 +151,20 @@ enyo.kind({
         s.scrollTop = this.$.infoAncor.getBounds().top;
         s.start();
     },
+    activate: function() {
+        this.$.contentScroller.show();
+        this.$.storePanel.resized();
+    },
+    deactivate: function() {
+        this.$.contentScroller.hide();
+    },
     components: [
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
             {kind: "FittableRows", name: "storePanel", components: [
                 {classes: "header", components: [
                     {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
                 ]},
-                {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", components: [
+                {kind: "Scroller", name: "contentScroller", fit: true, strategyKind: "TransitionScrollStrategy", components: [
                     {classes: "userview-window", name: "avatarWindow", components: [
                         {classes: "userview-fullname", name: "name"},
                         {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"}
