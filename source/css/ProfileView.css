@@ -1,14 +1,21 @@
 .profileview {
 }
 
+.userview-avatar.profileview-avatar {
+	top: -85px;
+}
+
+.userview-name-follow.profileview-name-follow {
+	top: 102px;
+}
+
 .profileview-settings-button {
 	width: 36px;
 	height: 36px;
 	background-size: 36px 72px;
 	background-image: url(../../assets/images/settings_button.png);
-	position: absolute;
-	right: 5px;
-	bottom: 5px;
+    float: right;
+    margin: 5px;
 }
 
 .profileview-settings-button:active:hover:not([disabled]) {
