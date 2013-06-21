@@ -139,7 +139,9 @@ enyo.kind({
         }
     },
     chuTapped: function(sender, event) {
-        this.doShowChu({chu: chuisy.feed.at(event.index)});
+        if (!this.$.feedList.getStrategy().stoppedOnDown) {
+            this.doShowChu({chu: chuisy.feed.at(event.index)});
+        }
         event.preventDefault();
     },
     online: function() {
@@ -151,11 +153,13 @@ enyo.kind({
         return true;
     },
     userTapped: function(sender, event) {
-        var user = chuisy.feed.at(event.index).get("user");
-        if (!user && !App.isSignedIn()) {
-            enyo.Signals.send("onRequestSignIn", {context: "other"});
-        } else if (user) {
-            this.doShowUser({user: user});
+        if (!this.$.feedList.getStrategy().stoppedOnDown) {
+            var user = chuisy.feed.at(event.index).get("user");
+            if (!user && !App.isSignedIn()) {
+                enyo.Signals.send("onRequestSignIn", {context: "other"});
+            } else if (user) {
+                this.doShowUser({user: user});
+            }
         }
     },
     addChu: function(newChu) {
@@ -258,8 +262,10 @@ enyo.kind({
         return true;
     },
     storeTapped: function(sender, event) {
-        var chu = chuisy.feed.at(event.index);
-        this.doShowStore({store: chu.get("store")});
+        if (!this.$.feedList.getStrategy().stoppedOnDown) {
+            var chu = chuisy.feed.at(event.index);
+            this.doShowStore({store: chu.get("store")});
+        }
         return true;
     },
     components: [
