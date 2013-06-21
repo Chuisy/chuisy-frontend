@@ -153,7 +153,7 @@ enyo.kind({
                 {kind: "Image", classes: "userview-avatar profileview-avatar", name: "avatar"},
                 {name: "nameFollow", classes: "userview-name-follow profileview-name-follow", components: [
                     {classes: "profileview-settings-button", ontap: "doShowSettings"},
-                    {classes: "userview-fullname", name: "fullName"}
+                    {classes: "userview-fullname ellipsis", name: "fullName"}
                 ]},
                 {kind: "Scroller", classes: "enyo-fill", strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
                     {classes: "userview-window", components: [

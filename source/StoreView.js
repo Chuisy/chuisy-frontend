@@ -175,7 +175,7 @@ enyo.kind({
         {kind: "Image", classes: "userview-avatar", name: "avatar"},
         {name: "nameFollow", classes: "userview-name-follow", components: [
             {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
-            {classes: "userview-fullname", name: "name"}
+            {classes: "userview-fullname ellipsis", name: "name"}
         ]},
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
             {kind: "FittableRows", name: "storePanel", components: [

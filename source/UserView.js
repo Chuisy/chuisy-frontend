@@ -167,7 +167,7 @@ enyo.kind({
         {kind: "Image", classes: "userview-avatar", name: "avatar"},
         {name: "nameFollow", classes: "userview-name-follow", components: [
             {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
-            {classes: "userview-fullname", name: "fullName"}
+            {classes: "userview-fullname ellipsis", name: "fullName"}
         ]},
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
