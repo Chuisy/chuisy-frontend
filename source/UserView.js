@@ -13,9 +13,14 @@ enyo.kind({
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
+    create: function() {
+        this.inherited(arguments);
+        var s = this.$.scroller.getStrategy();
+        s.scrollIntervalMS = 17;
+        this.positionParallaxElements();
+    },
     userChanged: function() {
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
-        this.$.avatarWindow.applyStyle("background-image", "url()");
         this.updateView();
 
         // Bind the user model to this view
@@ -43,7 +48,8 @@ enyo.kind({
     },
     updateView: function() {
         this.$.fullName.setContent(this.user ? this.user.getFullName() : "");
-        this.$.avatarWindow.applyStyle("background-image", "url(" + this.user.profile.get("avatar") + ")");
+        // this.$.avatarWindow.applyStyle("background-image", "url(" + this.user.profile.get("avatar") + ")");
+        this.$.avatar.setSrc(this.user.profile.get("avatar") || "");
         this.$.heartsCount.setContent(this.user.get("like_count") || 0);
         this.$.chusCount.setContent(this.user.get("chu_count") || 0);
         this.$.followersCount.setContent(this.user.get("follower_count") || 0);
@@ -143,78 +149,92 @@ enyo.kind({
         return true;
     },
     activate: function() {
+        this.$.avatar.show();
+        this.$.nameFollow.show();
         this.$.scroller.show();
         this.resized();
     },
     deactivate: function() {
+        this.$.avatar.hide();
+        this.$.nameFollow.hide();
         this.$.scroller.hide();
     },
+    positionParallaxElements: function() {
+        this.$.avatar.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/2 + "px, 0)");
+        this.$.nameFollow.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/1.5 + "px, 0)");
+    },
     components: [
+        {kind: "Image", classes: "userview-avatar", name: "avatar"},
+        {name: "nameFollow", classes: "userview-name-follow", components: [
+            {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
+            {classes: "userview-fullname", name: "fullName"}
+        ]},
         {classes: "header", components: [
             {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
         ]},
-        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", components: [
-            {classes: "userview-window", name: "avatarWindow", components: [
-                {classes: "userview-fullname", name: "fullName"},
-                {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"}
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
+            {classes: "userview-window", components: [
+                {style: "position: absolute; bottom: 0; right: 0; width: 100px; height: 50px;", ontap: "toggleFollow"}
             ]},
-            {classes: "userview-tabs", components: [
-                {kind: "Button", classes: "userview-tab", ontap: "heartsTapped", components: [
-                    {classes: "userview-tab-count", name: "heartsCount", content: "0"},
-                    {classes: "userview-tab-caption", content: $L("Hearts")}
-                ]},
-                {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
-                    {classes: "userview-tab-count", name: "chusCount", content: "0"},
-                    {classes: "userview-tab-caption", content: $L("Chus")}
-                ]},
-                {kind: "Button", classes: "userview-tab", ontap: "followersTapped", components: [
-                    {classes: "userview-tab-count", name: "followersCount", content: "0"},
-                    {classes: "userview-tab-caption", content: $L("Followers")}
-                ]},
-                {kind: "Button", classes: "userview-tab", ontap: "followingTapped", components: [
-                    {classes: "userview-tab-count", name: "followingCount", content: "0"},
-                    {classes: "userview-tab-caption", content: $L("Following")}
-                ]}
-            ]},
-            {classes: "userview-box", ontap: "heartsTapped", components: [
-                {classes: "userview-box-label hearts"},
-                {kind: "Repeater", style: "display: inline-block;", name: "heartsRepeater", onSetupItem: "setupHeart", components: [
-                    {name: "image", classes: "userview-box-image"}
-                ]},
-                {kind: "Spinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
-                {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
-            ]},
-            {classes: "userview-box", ontap: "chusTapped", components: [
-                {classes: "userview-box-label chus"},
-                {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
-                    {name: "image", classes: "userview-box-image"}
-                ]},
-                {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
-                {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
-            ]},
-            // {classes: "userview-box followers", components: [
-            //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "<strong>21</strong> people follow Martin"},
-            //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "Martin follows <strong>5</strong> people"}
-            // ]},
-            {classes: "userview-box", ontap: "goodiesTapped", components: [
-                {classes: "userview-box-label goodies"},
-                {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [
-                    {name: "image", classes: "userview-box-image"}
-                ]},
-                {kind: "Spinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
-                {name: "goodiesEmtpy", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
-            ]},
-            {classes: "userview-box", ontap: "storesTapped", components: [
-                {classes: "userview-box-label stores"},
-                {kind: "Repeater", style: "display: inline-block;", name: "storesRepeater", onSetupItem: "setupStore", components: [
-                    {name: "image", classes: "userview-box-image", components: [
-                        {classes: "userview-store-name ellipsis", name: "storeName"}
+            {style: "background-color: #f1f1f1;", components: [
+                {classes: "userview-tabs", components: [
+                    {kind: "Button", classes: "userview-tab", ontap: "heartsTapped", components: [
+                        {classes: "userview-tab-count", name: "heartsCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Hearts")}
+                    ]},
+                    {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
+                        {classes: "userview-tab-count", name: "chusCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Chus")}
+                    ]},
+                    {kind: "Button", classes: "userview-tab", ontap: "followersTapped", components: [
+                        {classes: "userview-tab-count", name: "followersCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Followers")}
+                    ]},
+                    {kind: "Button", classes: "userview-tab", ontap: "followingTapped", components: [
+                        {classes: "userview-tab-count", name: "followingCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Following")}
                     ]}
                 ]},
-                {kind: "Spinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
-                {name: "storesEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
-            ]},
-            {style: "height: 5px;"}
+                {classes: "userview-box", ontap: "heartsTapped", components: [
+                    {classes: "userview-box-label hearts"},
+                    {kind: "Repeater", style: "display: inline-block;", name: "heartsRepeater", onSetupItem: "setupHeart", components: [
+                        {name: "image", classes: "userview-box-image"}
+                    ]},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
+                    {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                ]},
+                {classes: "userview-box", ontap: "chusTapped", components: [
+                    {classes: "userview-box-label chus"},
+                    {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
+                        {name: "image", classes: "userview-box-image"}
+                    ]},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                    {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                ]},
+                // {classes: "userview-box followers", components: [
+                //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "<strong>21</strong> people follow Martin"},
+                //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "Martin follows <strong>5</strong> people"}
+                // ]},
+                {classes: "userview-box", ontap: "goodiesTapped", components: [
+                    {classes: "userview-box-label goodies"},
+                    {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [
+                        {name: "image", classes: "userview-box-image"}
+                    ]},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
+                    {name: "goodiesEmtpy", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                ]},
+                {classes: "userview-box", ontap: "storesTapped", components: [
+                    {classes: "userview-box-label stores"},
+                    {kind: "Repeater", style: "display: inline-block;", name: "storesRepeater", onSetupItem: "setupStore", components: [
+                        {name: "image", classes: "userview-box-image", components: [
+                            {classes: "userview-store-name ellipsis", name: "storeName"}
+                        ]}
+                    ]},
+                    {kind: "Spinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
+                    {name: "storesEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                ]},
+                {style: "height: 5px;"}
+            ]}
         ]}
     ]
 });

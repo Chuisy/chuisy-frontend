@@ -20,7 +20,6 @@ enyo.kind({
     handlers: {
         onpostresize: "postResize"
     },
-    scrollerOffset: 20,
     twitterUrl: "http://twitter.com/share/",
     pinterestUrl: "http://pinterest.com/pin/create/button/",
     listenTo: Backbone.Events.listenTo,
@@ -28,13 +27,13 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         var s = this.$.contentScroller.getStrategy();
-        s.scrollIntervalMS = 20;
-        s.maxScrollTop = -60;
+        s.scrollIntervalMS = 17;
+        // s.maxScrollTop = -60;
     },
     imageLoaded: function() {
         this.$.spinner.hide();
         this.$.image.removeClass("loading");
-        this.arrangeImage();
+        this.positionImage();
     },
     chuChanged: function() {
         this.updateView();
@@ -88,12 +87,8 @@ enyo.kind({
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
     */
-    arrangeImage: function() {
-        // var s = this.$.imageScroller.getStrategy().$.scrollMath;
-        // s.kSpringDamping = 1;
-        // s.setScrollY(this.scrollerOffset);
-        // s.start();
-        this.$.imageScroller.setScrollTop(this.$.contentScroller.getScrollTop()/3.5 + this.scrollerOffset);
+    positionImage: function() {
+        this.$.imageContainer.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.contentScroller.getScrollTop()/2 + "px, 0)");
     },
     /**
         Checks if the current user ownes this chu
@@ -244,12 +239,6 @@ enyo.kind({
             }
         }
     },
-    scroll: function(sender, inEvent) {
-        // var s = this.$.imageScroller.getStrategy().$.scrollMath;
-        // s.setScrollY(Math.max(this.scrollerOffset-this.$.contentScroller.getScrollTop()/3.5), -100);
-        // s.scroll();
-        this.arrangeImage();
-    },
     /**
         Open this chus authors profile
     */
@@ -265,7 +254,7 @@ enyo.kind({
     },
     postResize: function() {
         this.$.contentScroller.applyStyle("height", (this.$.contentContainer.getBounds().height + 500) + "px");
-        this.arrangeImage();
+        this.positionImage();
     },
     getMessage: function() {
         var store = this.chu.get("store");
@@ -456,21 +445,18 @@ enyo.kind({
         );
     },
     activate: function() {
-        this.$.imageScroller.show();
+        this.$.imageContainer.show();
         this.$.contentContainer.show();
         this.resized();
     },
     deactivate: function() {
-        this.$.imageScroller.hide();
+        this.$.imageContainer.hide();
         this.$.contentContainer.hide();
     },
     components: [
-        // IMAGEVIEW
-        {kind: "Scroller", name: "imageScroller", thumb: false, classes: "chuview-image-scroller", components: [
-            {classes: "chuview-image-container", components: [
-                {kind: "Spinner", name: "spinner", classes: "chuview-image-spinner"},
-                {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
-            ]}
+        {name: "imageContainer", classes: "chuview-image-container", components: [
+            {kind: "Spinner", name: "spinner", classes: "absolute-center"},
+            {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
         ]},
         // CONTROLS
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
@@ -485,7 +471,7 @@ enyo.kind({
                 ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
-                {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "scroll",
+                {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "positionImage",
                     strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, components: [
                     // SPACER
                     {classes: "chuview-spacer", components: [

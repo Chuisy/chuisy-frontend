@@ -11,9 +11,16 @@ enyo.kind({
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
+    create: function() {
+        this.inherited(arguments);
+        var s = this.$.scroller.getStrategy();
+        s.scrollIntervalMS = 17;
+        this.positionParallaxElements();
+    },
     storeChanged: function() {
+        var rand = Math.ceil(Math.random()*2);
+        this.coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
-        this.$.avatarWindow.applyStyle("background-image", "url()");
         this.updateView();
 
         // Bind the user model to this view
@@ -24,7 +31,7 @@ enyo.kind({
         if (!this.store.chus.meta.total_count) {
             this.loadChus();
         }
-        this.$.contentScroller.scrollToTop();
+        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         this.$.name.setContent(this.store.get("name"));
@@ -32,10 +39,8 @@ enyo.kind({
         this.$.followButton.setContent(this.store.get("following") ? "unfollow" : "follow");
         this.$.followersCount.setContent(this.store.get("follower_count") || 0);
 
-        var rand = Math.ceil(Math.random()*2);
-        var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
-        var coverImage = this.store.get("cover_image") || coverPlaceholder;
-        this.$.avatarWindow.applyStyle("background-image", "url(" + coverImage + ")");
+        var coverImage = this.store.get("cover_image") || this.coverPlaceholder;
+        this.$.avatar.setSrc(coverImage);
 
         var hasLocation = this.store.get("latitude") && this.store.get("longitude");
 
@@ -152,79 +157,93 @@ enyo.kind({
         s.start();
     },
     activate: function() {
-        this.$.contentScroller.show();
+        this.$.avatar.show();
+        this.$.nameFollow.show();
+        this.$.scroller.show();
         this.$.storePanel.resized();
     },
     deactivate: function() {
-        this.$.contentScroller.hide();
+        this.$.avatar.hide();
+        this.$.nameFollow.hide();
+        this.$.scroller.hide();
+    },
+    positionParallaxElements: function() {
+        this.$.avatar.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/2 + "px, 0)");
+        this.$.nameFollow.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/1.5 + "px, 0)");
     },
     components: [
+        {kind: "Image", classes: "userview-avatar", name: "avatar"},
+        {name: "nameFollow", classes: "userview-name-follow", components: [
+            {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
+            {classes: "userview-fullname", name: "name"}
+        ]},
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
             {kind: "FittableRows", name: "storePanel", components: [
                 {classes: "header", components: [
                     {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
                 ]},
-                {kind: "Scroller", name: "contentScroller", fit: true, strategyKind: "TransitionScrollStrategy", components: [
-                    {classes: "userview-window", name: "avatarWindow", components: [
-                        {classes: "userview-fullname", name: "name"},
-                        {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"}
+                {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
+                    {classes: "userview-window", components: [
+                        {style: "position: absolute; bottom: 0; right: 0; width: 100px; height: 50px;", ontap: "toggleFollow"}
                     ]},
-                    {classes: "userview-tabs", components: [
-                        {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
-                            {classes: "userview-tab-count", name: "chusCount", content: "0"},
-                            {classes: "userview-tab-caption", content: $L("Chus")}
+                    {style: "background-color: #f1f1f1", components: [
+                        {classes: "userview-tabs", components: [
+                            {kind: "Button", classes: "userview-tab", ontap: "chusTapped", components: [
+                                {classes: "userview-tab-count", name: "chusCount", content: "0"},
+                                {classes: "userview-tab-caption", content: $L("Chus")}
+                            ]},
+                            {kind: "Button", classes: "userview-tab", ontap: "followersTapped", components: [
+                                {classes: "userview-tab-count", name: "followersCount", content: "0"},
+                                {classes: "userview-tab-caption", content: $L("Followers")}
+                            ]},
+                            {kind: "Button", classes: "userview-tab", ontap: "showInfo", components: [
+                                {classes: "storeview-tab-icon info"},
+                                {classes: "userview-tab-caption", content: $L("Info")}
+                            ]},
+                            {kind: "Button", classes: "userview-tab", ontap: "showMap", name: "mapButton", components: [
+                                {classes: "storeview-tab-icon map"},
+                                {classes: "userview-tab-caption", content: $L("Map")}
+                            ]}
                         ]},
-                        {kind: "Button", classes: "userview-tab", ontap: "followersTapped", components: [
-                            {classes: "userview-tab-count", name: "followersCount", content: "0"},
-                            {classes: "userview-tab-caption", content: $L("Followers")}
+                        {classes: "userview-box", name: "locationBox", ontap: "showMap", components: [
+                            {classes: "userview-box-label stores"},
+                            {classes: "userview-box-image storeview-location-tile", name: "locationTile"}
                         ]},
-                        {kind: "Button", classes: "userview-tab", ontap: "showInfo", components: [
-                            {classes: "storeview-tab-icon info"},
-                            {classes: "userview-tab-caption", content: $L("Info")}
+                        {classes: "userview-box", ontap: "chusTapped", components: [
+                            {classes: "userview-box-label chus"},
+                            {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
+                                {name: "image", classes: "userview-box-image"}
+                            ]},
+                            {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                            {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                         ]},
-                        {kind: "Button", classes: "userview-tab", ontap: "showMap", name: "mapButton", components: [
-                            {classes: "storeview-tab-icon map"},
-                            {classes: "userview-tab-caption", content: $L("Map")}
-                        ]}
-                    ]},
-                    {classes: "userview-box", name: "locationBox", ontap: "showMap", components: [
-                        {classes: "userview-box-label stores"},
-                        {classes: "userview-box-image storeview-location-tile", name: "locationTile"}
-                    ]},
-                    {classes: "userview-box", ontap: "chusTapped", components: [
-                        {classes: "userview-box-label chus"},
-                        {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
-                            {name: "image", classes: "userview-box-image"}
+                        {name: "infoAncor"},
+                        {classes: "storeview-info-section", name: "addressSection", ontap: "showMap", components: [
+                            {classes: "storeview-info-label", content: $L("Address")},
+                            {classes: "storeview-info-text", name: "address", allowHtml: true}
                         ]},
-                        {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
-                        {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
-                    ]},
-                    {name: "infoAncor"},
-                    {classes: "storeview-info-section", name: "addressSection", ontap: "showMap", components: [
-                        {classes: "storeview-info-label", content: $L("Address")},
-                        {classes: "storeview-info-text", name: "address", allowHtml: true}
-                    ]},
-                    {classes: "storeview-info-section", name: "phoneSection", ontap: "openPhone", components: [
-                        {classes: "storeview-info-label", content: $L("Phone")},
-                        {classes: "storeview-info-text", name: "phone"}
-                    ]},
-                    {classes: "storeview-info-section", name: "websiteSection", ontap: "openWebsite", components: [
-                        {classes: "storeview-info-label", content: $L("Website")},
-                        {classes: "storeview-info-text", name: "website"}
-                    ]},
-                    {classes: "storeview-info-section", name: "emailSection", ontap: "openEmail", components: [
-                        {classes: "storeview-info-label", content: $L("Email")},
-                        {classes: "storeview-info-text", name: "email"}
-                    ]},
-                    {classes: "storeview-info-section", name: "openingHoursSection", components: [
-                        {classes: "storeview-info-label", content: $L("Opening hours")},
-                        {classes: "storeview-info-text", name: "openingHours", allowHtml: true}
-                    ]},
-                    {classes: "storeview-info-section", name: "moreInfoSection", components: [
-                        {classes: "storeview-info-label", content: $L("More info")},
-                        {classes: "storeview-info-text", name: "moreInfo", allowHtml: true}
-                    ]},
-                    {style: "height: 5px;"}
+                        {classes: "storeview-info-section", name: "phoneSection", ontap: "openPhone", components: [
+                            {classes: "storeview-info-label", content: $L("Phone")},
+                            {classes: "storeview-info-text", name: "phone"}
+                        ]},
+                        {classes: "storeview-info-section", name: "websiteSection", ontap: "openWebsite", components: [
+                            {classes: "storeview-info-label", content: $L("Website")},
+                            {classes: "storeview-info-text", name: "website"}
+                        ]},
+                        {classes: "storeview-info-section", name: "emailSection", ontap: "openEmail", components: [
+                            {classes: "storeview-info-label", content: $L("Email")},
+                            {classes: "storeview-info-text", name: "email"}
+                        ]},
+                        {classes: "storeview-info-section", name: "openingHoursSection", components: [
+                            {classes: "storeview-info-label", content: $L("Opening hours")},
+                            {classes: "storeview-info-text", name: "openingHours", allowHtml: true}
+                        ]},
+                        {classes: "storeview-info-section", name: "moreInfoSection", components: [
+                            {classes: "storeview-info-label", content: $L("More info")},
+                            {classes: "storeview-info-text", name: "moreInfo", allowHtml: true}
+                        ]},
+                        {style: "height: 5px;"}
+                    ]}
                 ]}
             ]},
             {kind: "FittableRows", name: "mapPanel", style: "z-index: 100", components: [
