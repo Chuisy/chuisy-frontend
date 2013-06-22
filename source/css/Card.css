@@ -1,5 +1,5 @@
 .card-stage {
-    position: absolute;
+    position: relative;
     -webkit-perspective: 1000px;
     background-color: rgba(0, 0, 0, 0);
     -webkit-transition: background-color 0.5s;
