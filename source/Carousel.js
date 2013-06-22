@@ -41,7 +41,7 @@ enyo.kind({
         }
     },
     components: [
-        {name: "client", classes: "carousel-sliding-client"}
+        {name: "client", classes: "carousel-sliding-client", style: "-webkit-transition: -webkit-transform 1000ms"}
     ]
 });
 
