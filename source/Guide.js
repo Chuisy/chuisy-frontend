@@ -4,10 +4,6 @@ enyo.kind({
     events: {
         onDone: ""
     },
-    create: function() {
-        this.inherited(arguments);
-        this.$.panels.getAnimator().setDuration(500);
-    },
     next: function() {
         this.goToStep(this.$.panels.getIndex() + 1);
         return true;
@@ -25,9 +21,7 @@ enyo.kind({
         return true;
     },
     stepSelected: function(sender, event) {
-        if (event.originator.getActive()) {
-            this.goToStep(event.originator.value);
-        }
+        this.goToStep(sender.value);
     },
     panelsTransitionStart: function(sender, event) {
         var step = event.toIndex;
@@ -46,7 +40,7 @@ enyo.kind({
             {classes: "header-text", content: $L("How it works")}
             // {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
         ]},
-        {kind: "Panels", arrangerKind: "CarouselArranger", onTransitionStart: "panelsTransitionStart", fit: true, components: [
+        {kind: "Carousel", name: "panels", onTransitionStart: "panelsTransitionStart", fit: true, components: [
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
                     {classes: "guide-card-title", content: $L("Discover fashion")},
@@ -81,11 +75,11 @@ enyo.kind({
                 {classes: "guide-card-side"}
             ]}
         ]},
-        {kind: "Group", name: "ghosts", classes: "guide-card-ghost", ontap: "stepSelected", style: "margin-bottom: 15px;", components: [
-            {kind: "Button", classes: "guide-card-ghost-bullet", value: 0, active: true},
-            {kind: "Button", classes: "guide-card-ghost-bullet", value: 1},
-            {kind: "Button", classes: "guide-card-ghost-bullet", value: 2},
-            {kind: "Button", classes: "guide-card-ghost-bullet", value: 3}
+        {kind: "Group", name: "ghosts", classes: "guide-card-ghost", style: "margin-bottom: 15px;", components: [
+            {kind: "Button", classes: "guide-card-ghost-bullet", ontap: "stepSelected", value: 0, active: true},
+            {kind: "Button", classes: "guide-card-ghost-bullet", ontap: "stepSelected", value: 1},
+            {kind: "Button", classes: "guide-card-ghost-bullet", ontap: "stepSelected", value: 2},
+            {kind: "Button", classes: "guide-card-ghost-bullet", ontap: "stepSelected", value: 3}
         ]}
     ]
 });
