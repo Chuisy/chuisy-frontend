@@ -1,0 +1,14 @@
+.heart {
+    -webkit-perspective: 1000px;
+    width: 100px;
+    height: 100px;
+    display: none;
+}
+
+.heart-inner {
+    opacity: 0;
+    width: 100px;
+    height: 100px;
+    background: url(../../assets/images/heart.png) no-repeat center center;
+    background-size: cover;
+}
