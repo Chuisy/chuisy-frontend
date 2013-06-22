@@ -255,6 +255,9 @@ enyo.kind({
         var chu = chuisy.feed.at(event.index);
         chu.toggleLike();
         this.$.feedList.renderRow(event.index);
+        if (chu.get("liked")) {
+            this.$.heart.animate();
+        }
         App.sendCubeEvent(chu.get("liked") ? "like" : "unlike", {
             chu: chu,
             context: "feed"
@@ -269,6 +272,7 @@ enyo.kind({
         return true;
     },
     components: [
+        {kind: "Heart", classes: "absolute-center"},
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner", spinning: false},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
