@@ -128,6 +128,9 @@ enyo.kind({
         if (this.checkSynced()) {
             this.chu.toggleLike();
             this.refreshLikes();
+            if (this.chu.get("liked")) {
+                this.$.heart.animate();
+            }
             App.sendCubeEvent(this.chu.get("liked") ? "like" : "unlike", {
                 chu: this.chu,
                 context: "chu_view"
@@ -454,6 +457,7 @@ enyo.kind({
         this.$.contentContainer.hide();
     },
     components: [
+        {kind: "Heart", classes: "absolute-center"},
         {name: "imageContainer", classes: "chuview-image-container", components: [
             {kind: "Spinner", name: "spinner", classes: "absolute-center"},
             {kind: "Image", name: "image", onload: "imageLoaded", classes: "chuview-image"}
