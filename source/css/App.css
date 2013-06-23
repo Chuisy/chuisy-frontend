@@ -73,24 +73,15 @@ body {
 	/*display: block;*/
 }
 
-.fade-screen {
-	position: absolute;
-	top: 44px;
-	left: 0;
-	z-index: -1000;
-	width: 100%;
-	height: 600px;
-	background-color: white;
-	box-shadow: inset 0 1px 5px #222;
-	opacity: 0;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.5s;
+.last-page-marker {
+    margin: 20px auto;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border-radius: 50px;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
-
-.fade-screen.shown {
-	opacity: 1;
-}
-
 
 /* BUTTONS */
 

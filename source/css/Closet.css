@@ -24,15 +24,15 @@
 }
 
 .closet-chu {
-	width: 98px;
-	height: 98px;
-	margin: 3px;
+	width: 96px;
+	height: 96px;
+	margin: 8px 4px 0 4px;
 	box-sizing: border-box;
 	display: inline-block;
 	position: relative;
 	background-color: White;
 	border-radius: 2px;
-	box-shadow: 0 1px 1px #888;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 	padding: 4px;
 	-webkit-transition: -webkit-transform 0.2s, opacity 0.2s;
 	-webkit-transform: translate3d(0, 0, 0);
@@ -55,7 +55,7 @@
 }
 
 .closet-row {
-	margin-bottom: -6px;
+	line-height: 0;
 }
 
 .closet-list {

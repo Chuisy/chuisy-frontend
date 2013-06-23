@@ -3,9 +3,9 @@
 }
 
 .chulist-chu {
-	width: 98px;
-	height: 98px;
-	margin: 3px;
+	width: 96px;
+	height: 96px;
+	margin: 8px 4px 0 4px;
 	box-sizing: border-box;
 	display: inline-block;
 	position: relative;
@@ -27,8 +27,5 @@
 }
 
 .chulist-row {
-	margin-bottom: -6px;
-}
-
-.chulist-list {
+	line-height: 0;
 }

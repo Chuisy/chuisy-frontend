@@ -86,13 +86,11 @@ enyo.kind({
             }
 
             var isLastItem = index == this.chus.length-1;
-            if (isLastItem && this.chus.hasNextPage()) {
-                // We are at the end of the list and there seems to be more.
-                // Load next bunch of chus
-                this.$.nextPageSpacer.show();
+            var hasNextPage = this.chus.hasNextPage();
+            this.$.nextPageSpacer.setShowing(isLastItem && hasNextPage);
+            this.$.listClient.applyStyle("margin-bottom", isLastItem ? "8px" : "0");
+            if (isLastItem && hasNextPage) {
                 this.nextPage();
-            } else {
-                this.$.nextPageSpacer.hide();
             }
         }
 

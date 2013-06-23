@@ -78,6 +78,9 @@ enyo.kind({
             } else {
                 c.applyStyle("visibility", "hidden");
             }
+
+            var isLastItem = index == chuisy.closet.length-1;
+            this.$.listClient.applyStyle("margin-bottom", isLastItem ? "8px" : "0");
         }
 
         return true;

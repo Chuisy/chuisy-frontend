@@ -64,8 +64,6 @@ enyo.kind({
                 this.$.feedList.reset();
             });
         }
-
-        chuisy.feed.each(this.preloadImage, this);
     },
     /**
         Refreshfeed based on the existing list.
@@ -103,13 +101,11 @@ enyo.kind({
         });
 
         var isLastItem = event.index == chuisy.feed.length-1;
-        if (isLastItem && chuisy.feed.hasNextPage()) {
-            // We are at the end of the list and there seems to be more.
-            // Load next bunch of chus
+        var hasNextPage = chuisy.feed.hasNextPage();
+        this.$.nextPageSpacer.setShowing(isLastItem && hasNextPage);
+        this.$.lastPageMarker.setShowing(isLastItem && !hasNextPage);
+        if (isLastItem && hasNextPage) {
             this.nextPage();
-            this.$.nextPageSpacer.show();
-        } else {
-            this.$.nextPageSpacer.hide();
         }
 
         if (this.notice && event.index === 0) {
@@ -305,7 +301,8 @@ enyo.kind({
                     {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
                 ]},
                 {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"},
-                {name: "nextPageSpacer", classes: "next-page-spacer"}
+                {name: "nextPageSpacer", classes: "next-page-spacer"},
+                {name: "lastPageMarker", classes: "last-page-marker"}
             ]}
         ]}
     ]
