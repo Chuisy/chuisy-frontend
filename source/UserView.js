@@ -17,7 +17,6 @@ enyo.kind({
         this.inherited(arguments);
         var s = this.$.scroller.getStrategy();
         s.scrollIntervalMS = 17;
-        this.positionParallaxElements();
     },
     userChanged: function() {
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
@@ -44,7 +43,6 @@ enyo.kind({
         if (!this.user.followedStores.length.total_count) {
             this.loadStores();
         }
-        this.$.scroller.scrollToTop();
     },
     updateView: function() {
         this.$.fullName.setContent(this.user ? this.user.getFullName() : "");
@@ -153,11 +151,14 @@ enyo.kind({
         this.$.nameFollow.show();
         this.$.scroller.show();
         this.resized();
+        this.$.scroller.scrollToTop();
     },
     deactivate: function() {
         this.$.avatar.hide();
         this.$.nameFollow.hide();
         this.$.scroller.hide();
+        this.$.avatar.applyStyle("-webkit-transform", "none");
+        this.$.nameFollow.applyStyle("-webkit-transform", "none");
     },
     positionParallaxElements: function() {
         this.$.avatar.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/2 + "px, 0)");
