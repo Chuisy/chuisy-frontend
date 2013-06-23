@@ -19,7 +19,7 @@ enyo.kind({
     // Estimated width of a single chu
     chuWidth: 105,
     // Meta object for requests
-    chusPerPage: 60,
+    chusPerPage: 30,
     // Items in the chu box
     items: [],
     create: function() {
