@@ -1,43 +1,54 @@
 .menu {
 	text-align: left;
+	display: -webkit-box;
 }
 
 .menu-item {
-	display: inline-block;
-	width: 44px;
-	height: 44px;
-	background: url() no-repeat center center;
+	background: url() no-repeat center top;
 	background-size: 44px 88px;
-	background-position: 0 0;
-	margin: 0 6px;
+	-webkit-box-flex: 1;
 }
 
+.menu-item:not(:last-child) {
+	border-right: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:not(:first-child) {
+	border-left: solid 1px rgba(255, 255, 255, 0.1);
+} 
+
 .menu-item.active {
-	background-position: 0 -44px;
+	background-position-y: -44px;
+	background-color: rgba(0, 0, 0, 0.1);
+	/*box-shadow: inset 0 15px 30px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.1);*/
+	border-left: solid 1px transparent;
+	border-right: solid 1px transparent;
+	/*box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);*/
+}
+
+.menu-item-active:not(:last-child) {
+	border-right: solid 1px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item.feed {
-	width: 73px;
+	-webkit-box-flex: 1.5;
 	background-image: url(../../assets/images/header_logo.png);
-	background-size: 73px 88px;
+	background-size: 88px 88px;
 }
 
 .menu-item.profile {
-	float: right;
 	background-image: url(../../assets/images/header_profile.png);
 }
 
 .menu-item.goodies {
-	float: right;
 	background-image: url(../../assets/images/header_goodies.png);
 }
 
 .menu-item.notifications {
-	float: right;
 	background-image: url(../../assets/images/header_notifications.png);
 	background-size: 44px 132px;
 }
 
 .menu.new-notifications .menu-item.notifications:not(.active) {
-	background-position: 0 -88px;
+	background-position-y: -88px;
 }

@@ -30,8 +30,8 @@ enyo.kind({
 	},
 	components: [
 		{classes: "menu-item feed", value: "feed", ontap: "itemTapped", name: "feed", active: true},
-		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"},
+		{classes: "menu-item profile", value: "profile", ontap: "itemTapped", name: "profile"},
 		{classes: "menu-item goodies", value: "goodies", ontap: "itemTapped", name: "goodies"},
-		{classes: "menu-item profile", value: "profile", ontap: "itemTapped", name: "profile"}
+		{classes: "menu-item notifications", value: "notifications", ontap: "itemTapped", name: "notifications"}
 	]
 });
