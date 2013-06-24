@@ -160,6 +160,7 @@ button[disabled] {
     line-height: 1.1em;
     font-size: 10pt;
     font-weight: bold;
+    margin: 7px;
 }
 
 .header-button.primary {
@@ -173,14 +174,14 @@ button[disabled] {
 
 .header-button.left {
 	position: absolute;
-	top: 7px;
-	left: 7px;
+	top: 0;
+	left: 0;
 }
 
 .header-button.right {
 	position: absolute;
-	top: 7px;
-	right: 7px;
+	top: 0;
+	right: 0;
 }
 
 .header-button:active:hover:not([disabled]) {
@@ -274,6 +275,13 @@ button[disabled] {
 
 .header-icon:active:hover {
 	background-position-y: -44px;
+}
+
+.header-icon.back {
+	background-image: url(../../assets/images/header_back.png);
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .header-icon.messaging {

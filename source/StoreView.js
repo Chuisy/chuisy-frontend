@@ -180,7 +180,7 @@ enyo.kind({
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
             {kind: "FittableRows", name: "storePanel", components: [
                 {classes: "header", components: [
-                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
+                    {classes: "header-icon back", ontap: "doBack"}
                 ]},
                 {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
                     {classes: "userview-window", components: [

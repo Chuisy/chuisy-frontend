@@ -99,7 +99,7 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", content: $L("Chus")}
         ]},
         // SEARCH INPUT

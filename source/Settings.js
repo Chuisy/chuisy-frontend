@@ -109,7 +109,7 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
+            {classes: "header-icon back", ontap: "doBack"}
         ]},
         {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "settings-content", components: [

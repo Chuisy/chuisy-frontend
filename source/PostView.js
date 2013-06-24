@@ -93,7 +93,7 @@ enyo.kind({
         {kind: "AnimatedPanels", name: "panels", classes: "enyo-fill", components: [
             {name: "formView", components: [
                 {classes: "header", components: [
-                    {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+                    {classes: "header-icon back", ontap: "doBack"},
                     {kind: "Button", ontap: "doDone", classes: "header-button right primary", content: $L("post")}
                 ]},
                 {classes: "postview-scroller-inner", components: [

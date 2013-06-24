@@ -466,12 +466,12 @@ enyo.kind({
         {kind: "FittableRows", name: "controls", classes: "chuview-controls enyo-fill", components: [
             // HEADER
             {classes: "header", components: [
-                {kind: "Button", content: $L("back"), ontap: "doBack", classes: "header-button left"},
+                {classes: "header-icon back", ontap: "doBack"},
                 {name: "shareControls", classes: "chuview-share-controls", components: [
-                    {classes: "chuview-header-button messaging", ontap: "sms"},
-                    {classes: "chuview-header-button facebook", name: "facebookButton", ontap: "facebook"},
-                    {classes: "chuview-header-button twitter", ontap: "twitter"},
-                    {classes: "chuview-header-button instagram", ontap: "instagram"}
+                    {classes: "header-icon messaging", ontap: "sms"},
+                    {classes: "header-icon facebook", name: "facebookButton", ontap: "facebook"},
+                    {classes: "header-icon twitter", ontap: "twitter"},
+                    {classes: "header-icon instagram", ontap: "instagram"}
                 ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [

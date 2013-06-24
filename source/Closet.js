@@ -191,7 +191,7 @@ enyo.kind({
             {classes: "closet-contextmenu-right"}
         ]},
         {classes: "header", components: [
-            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", content: $L("Your Closet")},
             {kind: "Button", ontap: "startEditing", classes: "header-button right closet-edit-button", content: $L("edit")},
             {kind: "Button", ontap: "finishEditing", classes: "header-button right closet-done-button", content: $L("done")}

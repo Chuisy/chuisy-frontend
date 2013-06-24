@@ -73,7 +73,7 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")},
+            {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", name: "title"}
         ]},
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},

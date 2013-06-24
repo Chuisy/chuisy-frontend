@@ -138,7 +138,8 @@ enyo.kind({
     },
     components: [
         {classes: "header", components: [
-            {kind: "Button", ontap: "doBack", classes: "header-button left", content: $L("back")}
+            {classes: "header-icon back", ontap: "doBack"},
+            {classes: "header-text", content: $L("Pick Store")}
             // {kind: "Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
         {kind: "FittableRows", fit: true, style: "position: relative", components: [
