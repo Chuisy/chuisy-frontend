@@ -319,48 +319,6 @@
     height: 44px;
 }
 
-.chuview-header-button {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: url() no-repeat center center;
-    background-size: 40px 80px;
-    background-position: 0 0;
-    margin: 2px 0;
-}
-
-.chuview-header-button:active:hover:not([disabled]):not(.friends) {
-    background-position: 0 -40px;
-}
-
-.chuview-header-button.messaging {
-    background-image: url(../../assets/images/header_messaging.png);
-}
-
-.chuview-header-button.friends {
-    background-image: url(../../assets/images/header_friends.png);
-}
-
-.chuview-header-button.twitter {
-    background-image: url(../../assets/images/header_twitter.png);
-}
-
-.chuview-header-button.facebook {
-    background-image: url(../../assets/images/header_facebook.png);
-}
-
-.chuview-header-button.pinterest {
-    background-image: url(../../assets/images/header_pinterest.png);
-}
-
-.chuview-header-button.instagram {
-    background-image: url(../../assets/images/header_instagram.png);
-}
-
-.chuview-header-button.friends.active {
-    background-position: 0 -40px;
-}
-
 .chuview-status {
     position: absolute;
     z-index: 100;

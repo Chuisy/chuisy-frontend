@@ -264,6 +264,33 @@ button[disabled] {
 	margin-right: -2px;
 }
 
+.header-icon {
+	display: inline-block;
+	height: 44px;
+	width: 44px;
+	background: url() no-repeat center top;
+	background-size: 44px 88px;
+}
+
+.header-icon:active:hover {
+	background-position-y: -44px;
+}
+
+.header-icon.messaging {
+    background-image: url(../../assets/images/header_messaging.png);
+}
+
+.header-icon.twitter {
+    background-image: url(../../assets/images/header_twitter.png);
+}
+
+.header-icon.facebook {
+    background-image: url(../../assets/images/header_facebook.png);
+}
+
+.header-icon.instagram {
+    background-image: url(../../assets/images/header_instagram.png);
+}
 
 /* GROUPBOX */
 
