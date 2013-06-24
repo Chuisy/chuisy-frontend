@@ -7,7 +7,7 @@ enyo.kind({
         if (this.outAnimTimeout) {
             clearTimeout(this.outAnimTimeout);
         }
-        this.outAnimTimeout = setTimeout(enyo.bind(this, this.startOutAnimation), 700);
+        this.outAnimTimeout = setTimeout(enyo.bind(this, this.startOutAnimation), 600);
         if (this.hideTimeout) {
             clearTimeout(this.hideTimeout);
         }
@@ -16,22 +16,19 @@ enyo.kind({
         }), 1200);
     },
     startInAnimation: function() {
-        var x = 0;
-        var y = 50;
-        var rotX = 0;
-        var rotY = 0;
         this.$.inner.applyStyle("-webkit-transition", "none");
-        this.$.inner.applyStyle("-webkit-transform", "translate3d(" + x + "px, " + y + "px, 0) rotateX(" + rotX + "deg) rotateY(" + rotY +"deg)");
+        // this.$.inner.applyStyle("-webkit-transform", "translate3d(" + x + "px, " + y + "px, 0) rotateX(" + rotX + "deg) rotateY(" + rotY +"deg)");
         this.$.inner.applyStyle("opacity", 0);
+        this.$.inner.applyStyle("-webkit-transform", "scale(0.5)");
         this.applyStyle("display", "block");
         enyo.asyncMethod(this, function() {
-            this.$.inner.applyStyle("-webkit-transition", "all 0.5s");
-            this.$.inner.applyStyle("-webkit-transform", "");
+            this.$.inner.applyStyle("-webkit-transition", "all 0.4s");
             this.$.inner.applyStyle("opacity", 1);
+            this.$.inner.applyStyle("-webkit-transform", "scale(1)");
         });
     },
     startOutAnimation: function() {
-        var x = Math.random() * 100 - 50;
+        var x = Math.random() * 60 - 30;
         var y = -50;
         var rotX = 50;
         var rotY = x/2;
