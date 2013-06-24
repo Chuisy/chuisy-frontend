@@ -31,11 +31,13 @@ enyo.kind({
     },
     showSpinner: function() {
         setTimeout(enyo.bind(this, function() {
+            this.$.nextPageSpinner.setSpinning(true);
             this.$.nextPageSpinner.addClass("rise");
         }), 500);
     },
     hideSpinner: function() {
         this.$.nextPageSpinner.removeClass("rise");
+        this.$.nextPageSpinner.setSpinning(false);
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);

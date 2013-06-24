@@ -14,6 +14,7 @@ enyo.kind({
         this.$.repeater.setCount(chuisy.cards.length);
         this.$.placeholder.setShowing(!chuisy.cards.length);
         this.$.spinner.removeClass("rise");
+        this.$.spinner.setSpinning(false);
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
@@ -319,12 +320,13 @@ enyo.kind({
             this.refresh();
         }
         if (App.isSignedIn()) {
+            this.$.spinner.setSpinning(true);
             this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
     },
     components: [
-        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise", spinning: false},
         {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
