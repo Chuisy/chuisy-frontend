@@ -51,7 +51,7 @@ enyo.kind({
         this.currentPanel.applyStyle("display", "none");
         this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.animationEndHandler, false);
         this.currentPanel = this.newPanel;
-        this.newPanel = null;
+        // this.newPanel = null;
         this.animating = false;
     },
     select: function(panel, inAnim, outAnim) {
@@ -59,7 +59,7 @@ enyo.kind({
             this.warn("The panel you selected is null or undefined!");
             return;
         }
-        if (panel == this.newPanel || !this.newPanel && panel == this.currentPanel) {
+        if (panel == this.newPanel || panel == this.currentPanel) {
             // this.log("This panel is already selected.");
             return;
         }
