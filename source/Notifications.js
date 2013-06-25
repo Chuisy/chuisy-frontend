@@ -142,7 +142,7 @@ enyo.kind({
             {name: "placeholder", classes: "placeholder-image absolute-center"},
             // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
         // ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 40, classes: "enyo-fill",
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-image", name: "image"},
