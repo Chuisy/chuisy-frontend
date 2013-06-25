@@ -129,6 +129,9 @@ enyo.kind({
                 } else if (!App.lastKnownLocation && failure) {
                     failure();
                 }
+            }, {
+                maximumAge: 30000,
+                enableHighAccuracy: true
             });
             localStorage.setItem("chuisy.hasAskedForGeolocation", true);
         },
