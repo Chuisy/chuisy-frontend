@@ -228,6 +228,8 @@ enyo.kind({
     pushNotification: function(sender, event) {
         // Received a push notification. Let's see whats new.
         if (this.chu && event.notification.uri == "chu/" + this.chu.id + "/") {
+            navigator.notification.beep(1);
+            navigator.notification.vibrate(1000);
             if (event.notification.action == "comment") {
                 this.loadComments();
                 setTimeout(enyo.bind(this, function() {

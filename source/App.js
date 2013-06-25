@@ -337,8 +337,8 @@ enyo.kind({
             // this.log(JSON.stringify(event.notification));
             // pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
             enyo.Signals.send("onPushNotification", event);
-            navigator.notification.beep(1);
-            navigator.notification.vibrate(1000);
+            // navigator.notification.beep(1);
+            // navigator.notification.vibrate(1000);
         }));
     },
     /**
