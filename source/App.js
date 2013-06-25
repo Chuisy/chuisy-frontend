@@ -839,6 +839,7 @@ enyo.kind({
         "signin": {kind: "SignInView", name: "signin", onDone: "back"}
     },
     components: [
+        {classes: "header", style: "width: 100%; position: absolute; top: 0; left: 0; z-index: -100; box-shadow: none;"},
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", onAnimationStart: "panelsAnimationStart", onAnimationEnd: "panelsAnimationEnd", components: [
             {kind: "MainView", name: "mainView"}
         ]},
