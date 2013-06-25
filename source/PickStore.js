@@ -168,7 +168,7 @@ enyo.kind({
                     {classes: "store-list-item-address", content: "Create custom store"}
                 ]},
                 {kind: "FlyweightRepeater", name: "placesList", onSetupItem: "setupItem", classes: "pickstore-placeslist", components: [
-                    {name: "place", ontap: "placeTapped", classes: "list-item store-list-item", components: [
+                    {name: "place", ontap: "placeTapped", classes: "list-item store-list-item pressable", components: [
                         {classes: "store-list-item-name", name: "placeName"},
                         {classes: "store-list-item-address", name: "placeAddress"}
                     ]}

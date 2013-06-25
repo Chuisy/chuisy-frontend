@@ -144,7 +144,7 @@ enyo.kind({
         // ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 40, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "list-item notifications-notification", name: "notification", ontap: "notificationTapped", components: [
+            {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
                 {classes: "notifications-notification-image", name: "image"},
                 {classes: "notifications-notification-content", components: [
                     {classes: "notifications-notification-text", name: "text", allowHtml: true},
