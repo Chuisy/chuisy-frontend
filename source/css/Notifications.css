@@ -12,7 +12,7 @@
 }
 
 .notifications-notification.read {
-	/*opacity: 0.5;*/
+	opacity: 0.5;
 }
 
 .notifications-notification-image {
