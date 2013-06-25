@@ -120,7 +120,8 @@ enyo.kind({
         this.postingChu = true;
 
         // Prepare attributes
-        var user = chuisy.accounts.getActiveUser();
+        var user = chuisy.accounts.getActiveUser().toJSON();
+        user.profile.avatar_thumbnail = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
         var visibility = this.$.postView.getVisibility();
         var friends = [];
         var friendsModels = this.$.postView.getFriends();
@@ -151,7 +152,7 @@ enyo.kind({
         }, {at: 0});
         if (comment) {
             chu.comments.add(new chuisy.models.ChuComment({
-                user: user.toJSON(),
+                user: user,
                 text: comment
             }));
         }
