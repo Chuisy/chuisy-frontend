@@ -285,9 +285,9 @@ enyo.kind({
 
         enyo.Signals.send(App.isOnline() ? "ononline" : "onoffline");
 
-        chuisy.notifications.on("reset", function() {
+        chuisy.notifications.on("seen reset", function() {
             if (App.isMobile()) {
-                window.plugins.pushNotification.setApplicationIconBadgeNumber(chuisy.notifications.meta.unseen_count, function() {});
+                window.plugins.pushNotification.setApplicationIconBadgeNumber(chuisy.notifications.getUnseenCount(), function() {});
             }
         });
 
