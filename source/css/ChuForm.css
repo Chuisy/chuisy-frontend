@@ -11,6 +11,7 @@
 	background-color: white;
 	padding: 4px;
 	border-radius: 2px;
+	min-height: 304px;
 }
 
 .chuform-price {

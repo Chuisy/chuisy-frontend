@@ -105,7 +105,6 @@ enyo.kind({
     */
     clear: function() {
         // this.$.privateButton.setActive(true);
-        this.setImage("assets/images/chu_placeholder.png");
         this.setPrice(0);
         this.$.priceHint.addClass("showing");
         this.priceChanged();
