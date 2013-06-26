@@ -72,12 +72,18 @@ enyo.kind({
         this.newPanel.applyStyle("opacity", 0);
         this.animating = true;
         this.newPanel.hasNode().addEventListener("webkitAnimationStart", this.fireAnimationStart, false);
-        this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
 
         if (this.async) {
             this.currentPanel.hasNode().addEventListener("webkitAnimationStart", this.animationStartHandler, false);
         } else {
             this.animationStart();
+        }
+        if (outAnim != AnimatedPanels.NONE) {
+            this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
+        } else {
+            setTimeout(enyo.bind(this, function() {
+                this.animationEnd();
+            }), this.duration + 500);
         }
         this.currentPanel.applyStyle("-webkit-animation", outAnim + " " + this.duration + "ms");
     },
