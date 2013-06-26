@@ -58,7 +58,7 @@
 	"{{ minutes }} min": "{{ minutes }} Min",
 	"{{ hours }} h": "{{ hours }} Std",
 	"{{ days }} d": "{{ days }} T",
-	"> 30 d": "> 30 T",
+	"a while back": "eine Weile her",
 	"Change": "Ändern",
 	"Type to filter...": "Filtern...",
 	"Signing in...": "Anmelden...",
