@@ -14,7 +14,6 @@
 	top: -15px;
 	left: -15px;
 	border-radius: 30px;
-	font-family: "Quicksand";
 	font-size: 15px;
 	text-align: center;
 	line-height: 27px;
@@ -48,7 +47,6 @@
 	background-size: cover;
 	padding: 10px;
 	line-height: 1.2em;
-	font-family: "Muli";
 	color: White;
 	text-shadow: 0 0 5px #000;
 	box-sizing: border-box;
@@ -96,12 +94,14 @@
 
 .storemarker-store-name {
 	padding-bottom: 4px;
-	font-size: 16pt;
+	font-size: 13pt;
 	font-weight: bold;
 	max-width: 150px;
 	white-space: nowrap;
+	line-height: 18px;
 }
 
 .storemarker-store-address {
 	font-size: 10pt;
+	line-height: 18px;
 }
