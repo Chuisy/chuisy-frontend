@@ -1366,15 +1366,15 @@
         /*
             Returns a plain object with the structure of a Chuisy Location object
         */
-        toLocJSON: function() {
+        toStoreJSON: function() {
             return {
                 name: this.get("name"),
-                latitude: this.get("location").lat,
-                longitude: this.get("location").lng,
-                address: this.get("location").address,
-                zip_code: this.get("location").postalCode,
-                city: this.get("location").city,
-                country: this.get("location").cc,
+                latitude: this.get("location") && this.get("location").lat,
+                longitude: this.get("location") && this.get("location").lng,
+                address: this.get("location") && this.get("location").address,
+                zip_code: this.get("location") && this.get("location").postalCode,
+                city: this.get("location") && this.get("location").city,
+                country: this.get("location") && this.get("location").cc,
                 foursquare_id: this.id
             };
         }

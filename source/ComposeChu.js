@@ -132,7 +132,7 @@ enyo.kind({
         var locale = this.store.get("location") && this.store.get("location").cc; // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso", fractionDigits: 0, locale: locale && locale.toLowerCase()});
         var currency = currFmt.sign; // Local currency in iso code (e.g. EUR)
-        var store = this.store.toLocJSON();
+        var store = this.store.toStoreJSON();
         var latitude = this.coordinates && this.coordinates.latitude;
         var longitude = this.coordinates && this.coordinates.longitude;
         var like = this.$.postView.getLike();
