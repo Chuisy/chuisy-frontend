@@ -78,14 +78,14 @@ enyo.kind({
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }
+        }
 
-            var isLastItem = index == this.chus.length-1;
-            var hasNextPage = this.chus.hasNextPage();
-            this.$.nextPageSpacer.setShowing(isLastItem && hasNextPage);
-            this.$.listClient.applyStyle("margin-bottom", isLastItem ? "8px" : "0");
-            if (isLastItem && hasNextPage) {
-                this.nextPage();
-            }
+        var isLastRow = this.chus.length && event.index+1 == Math.ceil(this.chus.length / this.cellCount);
+        var hasNextPage = this.chus.hasNextPage();
+        this.$.nextPageSpacer.setShowing(isLastRow && hasNextPage);
+        this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
+        if (isLastRow && hasNextPage) {
+            this.nextPage();
         }
 
         return true;

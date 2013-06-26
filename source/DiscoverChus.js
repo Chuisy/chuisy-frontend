@@ -97,10 +97,6 @@ enyo.kind({
     loadTrending: function() {
         this.trendingChus.fetch({data: {thumbnails: ["100x100"], limit: 21}, success: enyo.bind(this, this.refresh)});
     },
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
-    },
     activate: function() {
         this.$.list.show();
         this.resized();

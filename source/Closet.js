@@ -78,10 +78,10 @@ enyo.kind({
             } else {
                 c.applyStyle("visibility", "hidden");
             }
-
-            var isLastItem = index == chuisy.closet.length-1;
-            this.$.listClient.applyStyle("margin-bottom", isLastItem ? "8px" : "0");
         }
+
+        var isLastRow = this.chus.length && event.index+1 == Math.ceil(this.chus.length / this.cellCount);
+        this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
 
         return true;
     },
