@@ -15,6 +15,7 @@ enyo.kind({
     },
     showProfile: function() {
         this.$.menu.selectItem("profile");
+        this.$.profile.activate();
         this.$.panels.select(this.$.profile);
     },
     showGoodies: function(chu) {

@@ -42,9 +42,6 @@ enyo.kind({
                 this.loadHearts();
             }
             this.refreshChus();
-            if (!this.user.chus.meta.total_count) {
-                this.loadChus();
-            }
             this.refreshGoodies();
             if (!this.user.goodies.meta.total_count) {
                 this.loadGoodies();
@@ -64,7 +61,7 @@ enyo.kind({
             this.$.fullName.setContent(this.user.getFullName());
             this.$.avatar.setSrc(this.user.profile.get("avatar") || "");
             this.$.heartsCount.setContent(this.user.get("like_count") || 0);
-            this.$.chusCount.setContent(this.user.get("chu_count") || 0);
+            this.$.chusCount.setContent(chuisy.closet.length);
             this.$.followersCount.setContent(this.user.get("follower_count") || 0);
             this.$.followingCount.setContent(this.user.get("following_count") || 0);
         }
@@ -90,11 +87,11 @@ enyo.kind({
     },
     refreshChus: function() {
         this.$.chusSpinner.hide();
-        this.$.chusRepeater.setCount(Math.min(this.user.chus.length, 3));
-        this.$.chusEmpty.setShowing(!this.user.chus.length);
+        this.$.chusRepeater.setCount(Math.min(chuisy.closet.length, 3));
+        this.$.chusEmpty.setShowing(!chuisy.closet.length);
     },
     setupChu: function(sender, event) {
-        var chu = this.user && this.user.chus.at(event.index);
+        var chu = chuisy.closet.at(event.index);
         event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
     },
     loadGoodies: function() {
@@ -147,6 +144,10 @@ enyo.kind({
         this.$.avatar.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/2 + "px, 0)");
         this.$.nameFollow.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/1.5 + "px, 0)");
     },
+    activate: function() {
+        this.updateView();
+        this.refreshChus();
+    },
     components: [
         {kind: "Panels", name: "panels", classes: "enyo-fill", draggable: false, animate: false, components: [
             {components: [
@@ -186,7 +187,7 @@ enyo.kind({
                             {kind: "Spinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
                             {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                         ]},
-                        {classes: "userview-box", ontap: "chusTapped", components: [
+                        {classes: "userview-box", ontap: "doShowCloset", components: [
                             {classes: "userview-box-label chus"},
                             {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
                                 {name: "image", classes: "userview-box-image"}
