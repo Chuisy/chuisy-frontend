@@ -68,7 +68,7 @@ enyo.kind({
         }
     },
     scrollMathScroll: function(inSender) {
-        this.setPrice(Math.max(0, inSender.x/10));
+        this.setPrice(Math.max(0, Math.floor(inSender.x/10)));
     },
     scrollMathStart: function() {
         this.startAdjustPrice();
