@@ -282,15 +282,19 @@ enyo.kind({
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "tabs", classes: "feed-tabs", components: [
             {kind: "Button", classes: "feed-tab", ontap: "nearbyTapped", components: [
+                {classes: "feed-tab-icon nearby"},
                 {classes: "feed-tab-caption", content: $L("Nearby")}
             ]},
             {kind: "Button", classes: "feed-tab", ontap: "popularTapped", components: [
-                {classes: "feed-tab-caption", content: $L("Popular")}
+                {classes: "feed-tab-icon discover"},
+                {classes: "feed-tab-caption", content: $L("Discover")}
             ]},
             {kind: "Button", classes: "feed-tab", ontap: "discoverStoresTapped", components: [
+                {classes: "feed-tab-icon stores"},
                 {classes: "feed-tab-caption", content: $L("Stores")}
             ]},
             {kind: "Button", classes: "feed-tab", ontap: "discoverUsersTapped", components: [
+                {classes: "feed-tab-icon people"},
                 {classes: "feed-tab-caption", content: $L("People")}
             ]}
         ]},
