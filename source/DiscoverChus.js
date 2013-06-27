@@ -111,7 +111,8 @@ enyo.kind({
         ]},
         // SEARCH INPUT
         // {style: "padding: 5px; box-sizing: border-box;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel"},
+            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel",
+            placeholder: $L("Search for people and stores...")},
         // ]},
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Chus found."), showing: false},
