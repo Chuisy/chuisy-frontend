@@ -100,7 +100,7 @@ enyo.kind({
                 this.doMarkerTap({obj: obj, markerControl: markerControl});
             }));
         } else {
-            image = "./assets/images/marker-pink96x96.png";
+            image = "./assets/images/marker.png";
             marker = new google.maps.Marker({
                 position: latlng,
                 map: this.map,
@@ -129,8 +129,8 @@ enyo.kind({
             style: "position: relative; width: 1000px; height: 0; margin-left: -500px", components: [
                 {style: "width: 100%; overflow: visible; text-align: center; position: absolute; bottom: 0;",
                 components: [
-                    {name: "inner", classes: "tooltip-content-wrapper", style: "display: inline-block", allowHtml: true, content: popupContent},
-                    {classes: "tooltip-tip"}
+                    {name: "inner", classes: "map-popup-content", style: "display: inline-block", allowHtml: true, content: popupContent},
+                    {classes: "map-popup-tip"}
                 ]}
             ]
         });
