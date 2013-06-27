@@ -146,6 +146,7 @@ enyo.kind({
         };
         var infoBox = new InfoBox(options);
         infoBox.open(this.map, marker);
+        marker.infoBox = infoBox;
         return infoBox;
     },
     placeRichMarker: function(coords, markerControl, animate) {
@@ -163,6 +164,9 @@ enyo.kind({
     },
     clearMarkers: function() {
         for (var i = 0; i < this.markers.length; i++) {
+            if (this.markers[i].infoBox) {
+                this.markers[i].infoBox.close();
+            }
             this.markers[i].setMap(null);
             delete this.markers[i];
         }
@@ -170,6 +174,9 @@ enyo.kind({
     },
     removeMarker: function(marker) {
         marker.setMap(null);
+        if (marker.infoBox) {
+            marker.infoBox.close();
+        }
         this.markers = _.without(this.markers, marker);
     },
     apiLoaded: function() {
