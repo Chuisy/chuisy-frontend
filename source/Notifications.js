@@ -86,7 +86,7 @@ enyo.kind({
                     break;
                 case "goody":
                     this.$.text.setContent($L("You have <strong>received</strong> a new <strong>Goody</strong>!"));
-                    image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
+                    image = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
                     break;
             }
             this.$.time.setContent(time);
