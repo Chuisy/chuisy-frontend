@@ -609,7 +609,6 @@ enyo.kind({
         this.prepareView("compose");
         this.$.compose.activate();
         this.$.panels.select(this.$.compose, event.inAnim, event.outAnim);
-        this.$.compose.resized();
     },
     showGuide: function(sender, event) {
         event = event || {};
@@ -629,7 +628,6 @@ enyo.kind({
         this.prepareView("chu");
         this.$.chu.setChu(obj);
         this.$.panels.select(this.$.chu, event.inAnim, event.outAnim);
-        this.$.chu.resized();
     },
     showUser: function(sender, event) {
         event = event || {};
@@ -641,21 +639,18 @@ enyo.kind({
         this.prepareView("user");
         this.$.user.setUser(obj);
         this.$.panels.select(this.$.user, event.inAnim, event.outAnim);
-        this.$.user.resized();
     },
     showSettings: function(sender, event) {
         event = event || {};
         this.updateHistory("settings/", event);
         this.prepareView("settings");
         this.$.panels.select(this.$.settings, event.inAnim, event.outAnim);
-        this.$.settings.resized();
     },
     showInviteFriends: function(sender, event) {
         event = event || {};
         this.updateHistory("invite/", event);
         this.prepareView("invite");
         this.$.panels.select(this.$.invite, event.inAnim, event.outAnim);
-        this.$.invite.resized();
         this.$.invite.activate();
     },
     showStore: function(sender, event) {
@@ -668,14 +663,12 @@ enyo.kind({
         this.prepareView("store");
         this.$.store.setStore(obj);
         this.$.panels.select(this.$.store, event.inAnim, event.outAnim);
-        this.$.store.resized();
     },
     showDiscoverChus: function(sender, event) {
         event = event || {};
         this.updateHistory("discoverChus/", event);
         this.prepareView("discoverChus");
         this.$.panels.select(this.$.discoverChus, event.inAnim, event.outAnim);
-        this.$.discoverChus.resized();
         this.$.discoverChus.loadTrending();
     },
     showDiscoverUsers: function(sender, event) {
@@ -683,7 +676,6 @@ enyo.kind({
         this.updateHistory("discoverUsers/", event);
         this.prepareView("discoverUsers");
         this.$.panels.select(this.$.discoverUsers, event.inAnim, event.outAnim);
-        this.$.discoverUsers.resized();
         this.$.discoverUsers.loadTrending();
     },
     showDiscoverStores: function(sender, event) {
@@ -691,7 +683,6 @@ enyo.kind({
         this.updateHistory("discoverStores/", event);
         this.prepareView("discoverStores");
         this.$.panels.select(this.$.discoverStores, event.inAnim, event.outAnim);
-        this.$.discoverStores.resized();
         this.$.discoverStores.loadTrending();
     },
     showChuList: function(sender, event) {
@@ -701,7 +692,6 @@ enyo.kind({
         this.$.panels.select(this.$.chuList, event.inAnim, event.outAnim);
         this.$.chuList.setTitle(event.title);
         this.$.chuList.setChus(event.chus);
-        this.$.chuList.resized();
     },
     showUserList: function(sender, event) {
         event = event || {};
@@ -710,7 +700,6 @@ enyo.kind({
         this.$.panels.select(this.$.userList, event.inAnim, event.outAnim);
         this.$.userList.setUsers(event.users);
         this.$.userList.setTitle(event.title);
-        this.$.userList.resized();
     },
     showStoreList: function(sender, event) {
         event = event || {};
@@ -719,7 +708,6 @@ enyo.kind({
         this.$.panels.select(this.$.storeList, event.inAnim, event.outAnim);
         this.$.storeList.setStores(event.stores);
         this.$.storeList.setTitle(event.title);
-        this.$.storeList.resized();
     },
     showFeed: function(sender, event) {
         event = event || {};
@@ -751,14 +739,12 @@ enyo.kind({
         this.prepareView("closet");
         this.$.closet.finishEditing();
         this.$.panels.select(this.$.closet, event.inAnim, event.outAnim);
-        this.$.closet.resized();
     },
     showNearby: function(sender, event) {
         event = event || {};
         this.updateHistory("nearby/", event);
         this.prepareView("nearby");
         this.$.panels.select(this.$.nearby, event.inAnim, event.outAnim);
-        this.$.nearby.resized();
         this.$.nearby.loadStores();
     },
     showSignIn: function(sender, event) {
