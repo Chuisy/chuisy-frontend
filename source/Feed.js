@@ -42,15 +42,16 @@ enyo.kind({
         onShowStore: ""
     },
     handlers: {
-        onpostresize: "unfreeze"
+        onflick: "flick"
     },
+    scrollerOffset: 35,
+    pullerHeight: 50,
+    pullerThreshold: 60,
     create: function() {
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
         chuisy.feed.on("remove", this.refreshFeed, this);
         // chuisy.feed.on("add", this.preloadImage, this);
-        this.pullerHeight = 50;
-        this.pullerThreshold = 60;
         this.setPulled(true);
     },
     feedLoaded: function() {
@@ -62,6 +63,7 @@ enyo.kind({
         if (this.hasNode()) {
             enyo.asyncMethod(this, function() {
                 this.$.feedList.reset();
+                this.$.feedList.setScrollTop(-this.scrollerOffset);
             });
         }
     },
@@ -142,10 +144,12 @@ enyo.kind({
     },
     online: function() {
         this.$.noInternet.removeClass("show");
+        this.$.tabs.removeClass("disabled");
         return true;
     },
     offline: function() {
         this.$.noInternet.addClass("show");
+        this.$.tabs.addClass("disabled");
         return true;
     },
     userTapped: function(sender, event) {
@@ -169,12 +173,13 @@ enyo.kind({
     scrollHandler: function() {
         var scrollTop = this.$.feedList.getScrollTop();
         if (scrollTop < 0) {
-            var offset = scrollTop + this.pullerHeight;
+            this.$.tabs.removeClass("hide");
+            var offset = scrollTop + this.pullerHeight + this.scrollerOffset;
             var opacity = 1 - offset/this.pullerHeight;
             this.$.pulldown.applyStyle("opacity", opacity);
-            this.pulling = scrollTop < -this.pullerThreshold;
+            this.pulling = scrollTop+this.scrollerOffset < -this.pullerThreshold;
             this.$.pulldown.addRemoveClass("pulling", this.pulling);
-            this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.pullerHeight : 0;
+            this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
         }
     },
     dragFinishHandler: function() {
@@ -188,7 +193,7 @@ enyo.kind({
         this.$.pulldownSpinner.setSpinning(this.pulled);
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
         this.$.pulldown.applyStyle("opacity", this.pulled ? 1 : 0);
-        this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.pullerHeight : 0;
+        this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
         this.$.feedList.getStrategy().start();
     },
     unfreeze: function() {
@@ -267,12 +272,15 @@ enyo.kind({
         }
         return true;
     },
+    flick: function(sender, event) {
+        this.$.tabs.addRemoveClass("hide", event.yVelocity < 0);
+    },
     components: [
         {kind: "Heart", classes: "absolute-center"},
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner", spinning: false},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
-        {classes: "feed-tabs", style: "position: relative; z-index: 50", components: [
+        {name: "tabs", classes: "feed-tabs", components: [
             {kind: "Button", classes: "feed-tab", ontap: "nearbyTapped", components: [
                 {classes: "feed-tab-caption", content: $L("Nearby")}
             ]},
@@ -286,24 +294,22 @@ enyo.kind({
                 {classes: "feed-tab-caption", content: $L("People")}
             ]}
         ]},
-        {fit: true, style: "position: relative", components: [
-            {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
-            {name: "pulldown", classes: "pulldown", components: [
-                {classes: "pulldown-arrow"},
-                {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
+        {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
+        {name: "pulldown", style: "top: 35px;", classes: "pulldown", components: [
+            {classes: "pulldown-arrow"},
+            {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
+        ]},
+        {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+            loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
+            preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+            {name: "feedInfoBox", classes: "feed-info-box", components: [
+                {name: "feedInfoText", classes: "feed-info-box-text"},
+                {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
             ]},
-            {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
-                loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
-                preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-                {name: "feedInfoBox", classes: "feed-info-box", components: [
-                    {name: "feedInfoText", classes: "feed-info-box-text"},
-                    {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                    {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
-                ]},
-                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"},
-                {name: "nextPageSpacer", classes: "next-page-spacer"},
-                {name: "lastPageMarker", classes: "last-page-marker"}
-            ]}
+            {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"},
+            {name: "nextPageSpacer", classes: "next-page-spacer"},
+            {name: "lastPageMarker", classes: "last-page-marker"}
         ]}
     ]
 });
