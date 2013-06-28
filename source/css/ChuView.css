@@ -220,9 +220,8 @@
 .chuview-commentinput {
     display: -webkit-box;
     padding: 4px;
-    /*-webkit-box-align: stretch;*/
-    height: 40px;
-    box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.3);
+    -webkit-box-align: center;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
     /*border-top: solid 1px #ccc;*/
     position: relative;
     z-index: 10;
@@ -236,12 +235,19 @@
     box-sizing: border-box;
 }
 
+.chuview-commentinput-decorator.onyx-focused {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
 .chuview-commentinput-decorator > .enyo-input {
     display: block;
     min-height: 0;
     width: 100%;
-    padding: 6px 5px;
+    padding: 7px;
     box-sizing: border-box;
+    height: 32px;
+    line-height: 18px;
 }
 
 .chuview-commentinput-button {
@@ -249,8 +255,8 @@
     margin-left: 4px;
     box-sizing: border-box;
     border-radius: 4px;
-    margin-top: -1px;
     font-weight: bold;
+    margin-top: -2px;
     /*background: -webkit-gradient(linear, left top, left bottom, from(rgb(247, 247, 247)), to(rgb(219, 219, 219)));*/
     /*color: rgba(109, 109, 109, 0.5);*/
     /*text-shadow: 1px 2px 1px rgba(241, 241, 241, 0.37), 0px 0px 0px rgba(43, 43, 43, 0.9), 1px 3px 5px rgba(230, 230, 230, 0.88);*/
