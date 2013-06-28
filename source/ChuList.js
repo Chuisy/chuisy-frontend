@@ -9,7 +9,8 @@ enyo.kind({
     published: {
         // A _chuisy.models.ChuCollection_ object
         chus: null,
-        chusPerPage: 30
+        chusPerPage: 30,
+        scrollerOffset: 0
     },
     events: {
         //* A chu has been selected
@@ -32,6 +33,9 @@ enyo.kind({
         if (this.chus) {
             this.listenTo(this.chus, "sync", this.refresh);
         }
+    },
+    scrollerOffsetChanged: function() {
+        this.$.list.getStrategy().topBoundary = -this.scrollerOffset;
     },
     rendered: function() {
         this.inherited(arguments);
@@ -111,6 +115,7 @@ enyo.kind({
             this.$.list.refresh();
         } else {
             this.$.list.reset();
+            this.$.list.setScrollTop(-this.scrollerOffset);
         }
         this.doRefresh();
     },
@@ -125,7 +130,7 @@ enyo.kind({
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
-            strategyKind: "TransitionScrollStrategy", components: [
+            strategyKind: "TransitionScrollStrategy", preventDragPropagation: false, components: [
             {name: "listClient", classes: "chulist-row"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}

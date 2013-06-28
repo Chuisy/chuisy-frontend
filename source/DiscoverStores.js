@@ -5,11 +5,16 @@ enyo.kind({
         onBack: "",
         onShowStore: ""
     },
+    handlers: {
+        onflick: "flick"
+    },
+    scrollerOffset: 35,
     create: function() {
         this.inherited(arguments);
         this.trendingStores = new chuisy.models.StoreCollection();
         this.stores = new chuisy.models.StoreCollection();
         this.currentColl = this.trendingStores;
+        this.$.list.getStrategy().topBoundary = -this.scrollerOffset;
         // this.stores.on("sync", _.bind(this.synced, this, "chu"));
         // this.trendingStores.on("sync", _.bind(this.synced, this, "chu"));
     },
@@ -46,6 +51,7 @@ enyo.kind({
             } else {
                 this.currentColl = coll;
                 this.$.list.reset();
+                this.$.list.setScrollTop(-this.scrollerOffset);
             }
         }
     },
@@ -92,19 +98,31 @@ enyo.kind({
     deactivate: function() {
         this.$.list.hide();
     },
+    online: function() {
+        this.$.noInternet.removeClass("show");
+        this.$.searchInput.removeClass("disabled");
+        return true;
+    },
+    offline: function() {
+        this.$.noInternet.addClass("show");
+        this.$.searchInput.addClass("disabled");
+        return true;
+    },
+    flick: function(sender, event) {
+        this.$.searchInput.addRemoveClass("hide", event.yVelocity < 0);
+    },
     components: [
+        {kind: "Signals", ononline: "online", onoffline: "offline"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", content: $L("Stores")}
         ]},
-        // SEARCH INPUT
-        // {style: "padding: 5px; box-sizing: border-box; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); position: relative; z-index: 10;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel", disabled: false},
-        // ]},
+        {classes: "alert error discover-alert", name: "noInternet", content: $L("No internet connection available!")},
+        {kind: "SearchInput", classes: "discover-searchinput scrollaway", onEnter: "searchInputEnter", onCancel: "searchInputCancel", disabled: false},
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
-        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Chus found."), showing: false},
+        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Stores found."), showing: false},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
-            strategyKind: "TransitionScrollStrategy", thumb: false, components: [
+            strategyKind: "TransitionScrollStrategy", thumb: false, preventDragPropagation: false, components: [
             {name: "store", ontap: "storeTap", classes: "list-item store-list-item pressable", components: [
                 {classes: "store-list-item-name", name: "storeName"},
                 {classes: "store-list-item-address", name: "storeAddress"}

@@ -5,12 +5,16 @@ enyo.kind({
         onBack: ""
         // onShowChu: ""
     },
+    handlers: {
+        onflick: "flick"
+    },
     create: function() {
         this.inherited(arguments);
         this.trendingChus = new chuisy.models.ChuCollection();
         this.chus = new chuisy.models.ChuCollection();
         this.currentColl = this.trendingChus;
         this.$.list.setChus(this.currentColl);
+        this.$.list.setScrollerOffset(35);
         // this.chus.on("sync", _.bind(this.synced, this, "chu"));
         // this.trendingChus.on("sync", _.bind(this.synced, this, "chu"));
     },
@@ -104,16 +108,29 @@ enyo.kind({
     deactivate: function() {
         this.$.list.hide();
     },
+    online: function() {
+        this.$.noInternet.removeClass("show");
+        this.$.searchInput.removeClass("disabled");
+        return true;
+    },
+    offline: function() {
+        this.$.noInternet.addClass("show");
+        this.$.searchInput.addClass("disabled");
+        return true;
+    },
+    flick: function(sender, event) {
+        this.$.searchInput.addRemoveClass("hide", event.yVelocity < 0);
+    },
     components: [
+        {kind: "Signals", ononline: "online", onoffline: "offline"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", content: $L("Chus")}
         ]},
+        {classes: "alert error discover-alert", name: "noInternet", content: $L("No internet connection available!")},
         // SEARCH INPUT
-        // {style: "padding: 5px; box-sizing: border-box;", components: [
-            {kind: "SearchInput", classes: "discover-searchinput", onEnter: "searchInputEnter", onCancel: "searchInputCancel",
-            placeholder: $L("Search for people and stores...")},
-        // ]},
+        {kind: "SearchInput", classes: "discover-searchinput scrollaway", onEnter: "searchInputEnter", onCancel: "searchInputCancel",
+        placeholder: $L("Search for people and stores...")},
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Chus found."), showing: false},
         // {kind: "List", fit: true, name: "list", onSetupItem: "setupChu", rowsPerPage: 20,

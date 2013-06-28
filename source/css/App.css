@@ -119,8 +119,14 @@ button[disabled] {
 	height: 44px;
 	/*background: url(../../assets/images/menu-bar.png) repeat-x;
 	background-size: 320px 44px;*/
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ca2868), to(#b01b05));
-	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ca2868), to(#b01b05));*/
+	/*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);*/
+	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B91901), to(#b01b05));*/
+	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#CE1A00), to(#b01b05));*/
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#BE1B02), to(#b01b05));
+	/*background-color: #b01b05;*/
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	border-bottom: solid 1px rgba(0, 0, 0, 0.3);
 	box-sizing: border-box;
 	position: relative;
 	z-index: 99;
@@ -548,7 +554,7 @@ button[disabled] {
 .alert {
     position: absolute;
     z-index: 10;
-    top: -42px;
+    top: -40px;
     width: 100%;
     /*height: 30px;*/
     padding: 8px;
@@ -568,7 +574,7 @@ button[disabled] {
 
 .alert.show {
     -webkit-transition: -webkit-transform 0.5s;
-    -webkit-transform: translate3d(0, 42px, 0);
+    -webkit-transform: translate3d(0, 40px, 0);
     opacity: 0.9;
 }
 

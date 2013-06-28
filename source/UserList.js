@@ -5,7 +5,8 @@ enyo.kind({
     },
     published: {
         users: null,
-        rowsPerPage: 20
+        rowsPerPage: 20,
+        scrollerOffset: 0
     },
     handlers: {
         onpostresize: "unfreeze"
@@ -29,6 +30,9 @@ enyo.kind({
     },
     rowsPerPageChanged: function() {
         this.$.userList.setRowsPerPage(this.rowsPerPage);
+    },
+    scrollerOffsetChanged: function() {
+        this.$.userList.getStrategy().topBoundary = -this.scrollerOffset;
     },
     setupUser: function(sender, event) {
         var user = this.users.at(event.index);
@@ -65,6 +69,7 @@ enyo.kind({
             this.$.userList.refresh();
         } else {
             this.$.userList.reset();
+            this.$.userList.setScrollTop(-this.scrollerOffset);
         }
     },
     toggleFollow: function(sender, event) {
@@ -83,7 +88,8 @@ enyo.kind({
     },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
-        {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy", thumb: false, rowsPerPage: 20, components: [
+        {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy",
+            thumb: false, rowsPerPage: 20, preventDragPropagation: false, components: [
             {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"},
             {name: "nextPageSpacer", classes: "next-page-spacer"}
         ]}
