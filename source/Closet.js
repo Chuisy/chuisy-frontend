@@ -80,7 +80,7 @@ enyo.kind({
             }
         }
 
-        var isLastRow = this.chus.length && event.index+1 == Math.ceil(this.chus.length / this.cellCount);
+        var isLastRow = chuisy.closet.length && event.index+1 == Math.ceil(chuisy.closet.length / this.cellCount);
         this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
 
         return true;
