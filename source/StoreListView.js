@@ -79,7 +79,7 @@ enyo.kind({
         {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise"},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {name: "store", ontap: "storeTap", classes: "list-item store-list-item", components: [
+            {name: "store", ontap: "storeTap", classes: "list-item store-list-item pressable", components: [
                 {classes: "store-list-item-name", name: "storeName"},
                 {classes: "store-list-item-address", name: "storeAddress"}
             ]},
