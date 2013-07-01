@@ -98,6 +98,7 @@ enyo.kind({
         this.$.subject.setShowing(item.get("subject_image"));
 
         this.$.notification.addRemoveClass("read", item.get("read"));
+        this.$.notification.addRemoveClass("unseen", !item.get("seen"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
         if (isLastItem && chuisy.notifications.hasNextPage()) {
@@ -122,7 +123,6 @@ enyo.kind({
             if (!not.get("read")) {
                 // Mark notification as read
                 not.save({read: true});
-                this.refresh();
             }
         }
     },
