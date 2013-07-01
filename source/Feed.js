@@ -196,10 +196,6 @@ enyo.kind({
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
         this.$.feedList.getStrategy().start();
     },
-    unfreeze: function() {
-        this.$.feedList.updateMetrics();
-        this.$.feedList.refresh();
-    },
     // generatePage: function(sender, event) {
     //     // var startIndex = (event.pageNumber - 2) * this.$.feedList.getRowsPerPage();
     //     enyo.asyncMethod(this, function() {

@@ -60,10 +60,6 @@ enyo.kind({
             }
         }
     },
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
-    },
     activate: function() {
         this.$.list.show();
         this.resized();

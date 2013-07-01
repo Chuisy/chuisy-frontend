@@ -57,10 +57,6 @@ enyo.kind({
     loadTrending: function() {
         this.trendingUsers.fetch({success: enyo.bind(this, this.refresh)});
     },
-    unfreeze: function() {
-        this.$.userList.updateMetrics();
-        this.$.userList.refresh();
-    },
     activate: function() {
         this.$.userList.show();
         this.resized();

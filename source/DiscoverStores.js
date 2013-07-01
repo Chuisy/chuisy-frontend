@@ -87,10 +87,6 @@ enyo.kind({
     loadTrending: function() {
         this.trendingStores.fetch({success: enyo.bind(this, this.refresh)});
     },
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
-    },
     activate: function() {
         this.$.list.show();
         this.resized();

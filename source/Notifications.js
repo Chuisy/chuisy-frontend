@@ -8,9 +8,6 @@ enyo.kind({
         // User has tapped a notification
         onNotificationSelected: ""
     },
-    handlers: {
-        onpostresize: "unfreeze"
-    },
     create: function() {
         this.inherited(arguments);
         chuisy.notifications.on("reset", this.refresh, this);
@@ -131,10 +128,6 @@ enyo.kind({
     */
     seen: function() {
         chuisy.notifications.seen();
-    },
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
     },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},

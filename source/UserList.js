@@ -8,9 +8,6 @@ enyo.kind({
         rowsPerPage: 20,
         scrollerOffset: 0
     },
-    handlers: {
-        onpostresize: "unfreeze"
-    },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
     create: function() {
@@ -81,10 +78,6 @@ enyo.kind({
             context: "list"
         });
         return true;
-    },
-    unfreeze: function() {
-        this.$.userList.updateMetrics();
-        this.$.userList.refresh();
     },
     components: [
         {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
