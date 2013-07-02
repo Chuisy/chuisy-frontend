@@ -42,3 +42,11 @@
 	color: #ff1e78;
 	text-decoration: none;
 }
+
+.profileview-login-text {
+	padding: 30px;
+	text-align: center;
+	font-size: 10pt;
+    color: #888;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.59);
+}
