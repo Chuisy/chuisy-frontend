@@ -214,7 +214,7 @@ enyo.kind({
             }
         }
     },
-    history: [],
+    history: [["feed/"]],
     session: null,
     handlers: {
         ontap: "tapHandler", onfocus: "focusHandler", onBack: "back", onNavigateTo: "mainViewNavigateTo",
@@ -321,7 +321,7 @@ enyo.kind({
                 direct: true
             });
             // this.$.signin.ready();
-        } else {
+        } else if (!this.handledOpenUrl) {
             this.recoverStateFromUri();
             // setTimeout(enyo.bind(this, function() {
             //     this.$.signin.ready();
@@ -436,7 +436,6 @@ enyo.kind({
     recoverStateFromUri: function() {
         var match, hash = window.location.hash;
         if ((match = hash.match(/^#!\/(.+)/))) {
-            this.updateHistory("feed");
             this.navigateToUri(match[1], null, true);
         } else {
             this.showFeed();
@@ -548,7 +547,7 @@ enyo.kind({
             from_obj: last && last[1],
             to: uri,
             params: params,
-            duration: last && (now.getTime() - last[2].getTime())
+            duration: last && last[2] && (now.getTime() - last[2].getTime())
         });
         this.history.push([uri, params, now]);
         if (!App.isMobile()) {
@@ -573,10 +572,10 @@ enyo.kind({
         if (this.history.length > 1) {
             this.history.pop();
             var last = this.history[this.history.length-1];
-            var params = last[1];
+            var params = last[1] || {};
             params.inAnim = AnimatedPanels.SLIDE_IN_FROM_LEFT;
             params.outAnim = AnimatedPanels.SLIDE_OUT_TO_RIGHT;
-            this.navigateToUri(last[0], last[1]);
+            this.navigateToUri(last[0], params);
             // This view is already in the history so we gotta remove it or it will be there twice
             this.history.pop();
         }
@@ -785,6 +784,7 @@ enyo.kind({
         var match = event.url.match(/chuisy.com\/((\w+\/?)*)(\?|$)/);
         if (match) {
             this.navigateToUri(match[1]);
+            this.handledOpenUrl = true;
         }
     },
     guideDone: function(sender, event) {
