@@ -106,6 +106,7 @@
     border-radius: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    border: none;
     border-top: solid 1px #e0e0e0;
     /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.02)), to(rgba(0, 0, 0, 0.08)));
     padding: 6px 10px 8px 10px;
