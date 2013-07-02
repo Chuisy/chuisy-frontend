@@ -119,19 +119,19 @@ enyo.kind({
         event.item.$.storeName.setContent(store.get("name"));
     },
     heartsTapped: function() {
-        this.doShowChuList({chus: this.user.likedChus, title: this.user.get("first_name") + "'s Hearts"});
+        this.doShowChuList({chus: this.user.likedChus, title: $L("{{ name }}'s Hearts").replace("{{ name }}", this.user.get("first_name"))});
     },
     chusTapped: function() {
-        this.doShowChuList({chus: this.user.chus, title: this.user.get("first_name") + "'s Chus"});
+        this.doShowChuList({chus: this.user.chus, title: $L("{{ name }}'s Chus").replace("{{ name }}", this.user.get("first_name"))});
     },
     followersTapped: function() {
-        this.doShowUserList({users: this.user.followers, title: this.user.get("first_name") + "'s Followers"});
+        this.doShowUserList({users: this.user.followers, title: $L("{{ name }}'s Followers").replace("{{ name }}", this.user.get("first_name"))});
     },
     followingTapped: function() {
-        this.doShowUserList({users: this.user.following, title: "Following " + this.user.get("first_name")});
+        this.doShowUserList({users: this.user.following, title: $L("Followed by {{ name }}").replace("{{ name }}", this.user.get("first_name"))});
     },
     storesTapped: function() {
-        this.doShowStoreList({stores: this.user.followedStores});
+        this.doShowStoreList({stores: this.user.followedStores, title: $L("Followed by {{ name }}").replace("{{ name }}", this.user.get("first_name"))});
     },
     followButtonTapped: function() {
         if (App.checkConnection()) {
