@@ -239,6 +239,10 @@ enyo.kind({
         if (!App.isMobile()) {
             this.init();
         }
+        if (navigator.camera) {
+            // Clean up temporary pictures
+            navigator.camera.cleanup();
+        }
     },
     renderInto: function() {
         this.renderStart = new Date();
@@ -500,7 +504,7 @@ enyo.kind({
             if (match2[1].match(/new\/$/)) {
                 // chu/new/
                 // Always glad to see new Chus. Let's open an empty chu view.
-                this.composeChu(this, params);
+                this.showCompose(this, params);
             } else if ((match3 = match2[1].match(/^(\d+)\/$/))) {
                 // chu/{chu id}
                 params.obj = params.obj || new chuisy.models.Chu({id: match3[1], stub: true});
@@ -603,11 +607,10 @@ enyo.kind({
         }
         return false;
     },
-    composeChu: function(sender, event) {
+    showCompose: function(sender, event) {
         event = event || {};
         this.updateHistory("chu/new/", event);
         this.prepareView("compose");
-        this.$.compose.activate();
         this.$.panels.select(this.$.compose, event.inAnim, event.outAnim);
     },
     showGuide: function(sender, event) {
@@ -800,6 +803,28 @@ enyo.kind({
     panelsAnimationEnd: function(sender, event) {
         if (event.oldPanel.deactivate) {
             event.oldPanel.deactivate();
+        }
+    },
+    /**
+        Opens the device's camera
+    */
+    composeChu: function() {
+        this.showCompose();
+        // this.getImageTime = new Date();
+        try {
+            navigator.camera.getPicture(enyo.bind(this, function(uri) {
+                this.$.compose.setImage(uri);
+            }), enyo.bind(this, function(message) {
+                this.warn("Getting image failed!");
+                // App.sendCubeEvent("get_image_fail", {
+                //     message: message,
+                //     duration: new Date().getTime() - this.getImageTime.getTime()
+                // });
+                this.back();
+            }), {targetWidth: 612, targetHeight: 612, allowEdit: true, correctOrientation: true, quality: 49});
+        } catch (e) {
+            this.warn("No camera available!");
+            this.$.compose.setImage("");
         }
     },
     lazyViews: {
