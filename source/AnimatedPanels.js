@@ -32,24 +32,31 @@ enyo.kind({
         this.currentPanel = this.getClientControls()[0];
         // this.currentPanel.applyStyle("-webkit-transform", "translate3d(0, 0, 0)");
         this.currentPanel.applyStyle("display", "block");
-        this.animationStartHandler = enyo.bind(this, this.animationStart);
-        this.animationEndHandler = enyo.bind(this, this.animationEnd);
-        this.fireAnimationStart = enyo.bind(this, function() {
-            this.newPanel.hasNode().removeEventListener("webkitAnimationStart", this.fireAnimationStart, false);
-            this.doAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
-        });
+        this.inAnimationStartHandler = enyo.bind(this, this.inAnimationStart);
+        this.outAnimationStartHandler = enyo.bind(this, this.outAnimationStart);
+        this.inAnimationEndHandler = enyo.bind(this, this.inAnimationEnd);
+        this.outAnimationEndHandler = enyo.bind(this, this.outAnimationEnd);
     },
-    animationStart: function() {
-        this.currentPanel.hasNode().removeEventListener("webkitAnimationStart", this.animationStartHandler, false);
+    inAnimationStart: function() {
+        this.newPanel.hasNode().removeEventListener("webkitAnimationStart", this.inAnimationStart, false);
+        this.doAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
+    },
+    outAnimationStart: function() {
+        this.currentPanel.hasNode().removeEventListener("webkitAnimationStart", this.outAnimationStartHandler, false);
         this.newPanel.applyStyle("display", "block");
         this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
         this.newPanel.applyStyle("opacity", 1);
         this.newPanel.resized();
     },
-    animationEnd: function() {
+    inAnimationEnd: function() {
+        this.newPanel.hasNode().removeEventListener("webkitAnimationEnd", this.inAnimationEndHandler, false);
+        this.newPanel.applyStyle("-webkit-animation", "none");
+    },
+    outAnimationEnd: function() {
         this.doAnimationEnd({oldPanel: this.currentPanel, newPanel: this.newPanel});
         this.currentPanel.applyStyle("display", "none");
-        this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.animationEndHandler, false);
+        this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.outAnimationEndHandler, false);
+        this.currentPanel.applyStyle("-webkit-animation", "none");
         this.currentPanel = this.newPanel;
         // this.newPanel = null;
         this.animating = false;
@@ -66,25 +73,30 @@ enyo.kind({
         this.currInAnim = inAnim || this.inAnim;
         outAnim = outAnim || this.outAnim;
         if (this.animating) {
-            this.animationEnd();
+            this.outAnimationEnd();
         }
         this.newPanel = panel;
         this.newPanel.applyStyle("opacity", 0);
         this.animating = true;
-        this.newPanel.hasNode().addEventListener("webkitAnimationStart", this.fireAnimationStart, false);
 
-        if (this.async) {
-            this.currentPanel.hasNode().addEventListener("webkitAnimationStart", this.animationStartHandler, false);
+        if (inAnim != AnimatedPanels.NONE) {
+            this.newPanel.hasNode().addEventListener("webkitAnimationStart", this.inAnimationStartHandler, false);
+            this.newPanel.hasNode().addEventListener("webkitAnimationEnd", this.inAnimationEndHandler, false);
+        }
+
+        if (this.async && outAnim != AnimatedPanels.NONE) {
+            this.currentPanel.hasNode().addEventListener("webkitAnimationStart", this.outAnimationStartHandler, false);
         } else {
-            this.animationStart();
+            this.outAnimationStart();
         }
         if (outAnim != AnimatedPanels.NONE) {
-            this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
+            this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.outAnimationEndHandler, false);
         } else {
             setTimeout(enyo.bind(this, function() {
-                this.animationEnd();
+                this.outAnimationEnd();
             }), this.duration + 500);
         }
+
         this.currentPanel.applyStyle("-webkit-animation", outAnim + " " + this.duration + "ms");
     },
     selectDirect: function(panel) {
