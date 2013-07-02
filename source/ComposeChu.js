@@ -89,7 +89,7 @@ enyo.kind({
         return true;
     },
     postViewBack: function() {
-        this.$.pickStore.initialize();
+        // this.$.pickStore.initialize();
         this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
         return true;
     },
@@ -104,8 +104,11 @@ enyo.kind({
         this.postingChu = true;
 
         // Prepare attributes
-        var user = chuisy.accounts.getActiveUser().toJSON();
-        user.profile.avatar_thumbnail = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
+        var userMod = chuisy.accounts.getActiveUser();
+        var user = userMod && userMod.toJSON();
+        if (user) {
+            user.profile.avatar_thumbnail = userMod.profile.get("avatar_thumbnail");
+        }
         var visibility = this.$.postView.getVisibility();
         var friends = [];
         var friendsModels = this.$.postView.getFriends();

@@ -69,7 +69,7 @@ enyo.kind({
         }
 
         this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : "");
+        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("You (anonymous)"));
         this.$.store.setContent(store && store.name || "");
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
@@ -175,9 +175,9 @@ enyo.kind({
         var comment = this.chu.comments.at(event.index);
         var user = comment.get("user");
         this.$.commentText.setContent(comment.get("text"));
-        var avatar = user.profile.avatar_thumbnail || user.profile.avatar || "assets/images/avatar_thumbnail_placeholder.png";
+        var avatar = user && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png";
         this.$.commentAvatar.setSrc(avatar);
-        this.$.commentFullName.setContent(comment.get("user").first_name + " " + comment.get("user").last_name);
+        this.$.commentFullName.setContent(user ? user.first_name + " " + user.last_name : $L("You (anonymous)"));
         this.$.commentTime.setContent(comment.getTimeText());
         // this.$.commentDeleteButton.setShowing(chuisy.accounts.getActiveUser() && (user.id == chuisy.accounts.getActiveUser().id));
     },

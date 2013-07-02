@@ -19,7 +19,7 @@ enyo.kind({
             var user = this.chu.get("user");
             this.$.image.setSrc(this.chu.get("thumbnails") && this.chu.get("thumbnails")["292x292"] || this.chu.get("localImage") || "");
             this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "");
-            this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("Not signed in..."));
+            this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("You (anonymous)"));
             var store = this.chu.get("store");
             this.$.store.setContent(store && store.name || "");
             this.$.heartButton.addRemoveClass("active", this.chu.get("liked"));

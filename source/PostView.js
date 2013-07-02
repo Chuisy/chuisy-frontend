@@ -18,7 +18,8 @@ enyo.kind({
         this.inherited(arguments);
         this.setupFriends();
         this.shareFacebookChanged();
-        this.visibilityChanged();
+        this.activeUserChanged();
+        chuisy.accounts.on("change:active_user", this.activeUserChanged, this);
     },
     storeChanged: function() {
         this.$.store.setContent(this.store ? this.store.get("name") : "");
@@ -30,7 +31,7 @@ enyo.kind({
         this.$[this.visibility + "Button"].setActive(true);
     },
     visibilitySelected: function(sender, event) {
-        sender.setActive(true);
+        // sender.setActive(true);
         this.visibility = sender.value;
     },
     shareFacebookChanged: function() {
@@ -74,7 +75,8 @@ enyo.kind({
         return this.$.peoplePicker.getSelectedItems();
     },
     clear: function() {
-        this.setVisibility("public");
+        // this.setVisibility("public");
+        this.visibilityChanged();
         this.$.peoplePicker.setSelectedItems([]);
         this.$.shareCount.setContent("");
         this.setupFriends();
@@ -88,6 +90,13 @@ enyo.kind({
     },
     getComment: function() {
         return this.$.commentInput.getValue();
+    },
+    activeUserChanged: function() {
+        var user = chuisy.accounts.getActiveUser();
+        this.setVisibility(user ? "public" : "private");
+        this.$.publicButton.setDisabled(!user);
+        this.$.share.setShowing(user);
+        this.$.login.setShowing(!user);
     },
     components: [
         {kind: "AnimatedPanels", name: "panels", classes: "enyo-fill", components: [
@@ -110,14 +119,14 @@ enyo.kind({
                         ]}
                     ]},
                     {kind: "Group", classes: "postview-section", components: [
-                        {kind: "GroupItem", name: "publicButton", active: true, ontap: "visibilitySelected", classes: "postview-visibility-item", value: "public", components: [
+                        {kind: "Button", name: "publicButton", active: true, ontap: "visibilitySelected", classes: "postview-visibility-item", value: "public", components: [
                             {classes: "postview-visibility-header", components: [
                                 {classes: "postview-visibility-icon public"},
                                 {classes: "postview-visibility-title", content: $L("Public")}
                             ]},
                             {classes: "postview-visibility-description", content: $L("All your followers and friends can see this Chu.")}
                         ]},
-                        {kind: "GroupItem", name: "privateButton", ontap: "visibilitySelected", classes: "postview-visibility-item", value: "private", components: [
+                        {kind: "Button", name: "privateButton", ontap: "visibilitySelected", classes: "postview-visibility-item", value: "private", components: [
                             {classes: "postview-visibility-header", components: [
                                 {classes: "postview-visibility-icon private"},
                                 {classes: "postview-visibility-title", content: $L("Private")}
@@ -125,28 +134,34 @@ enyo.kind({
                             {classes: "postview-visibility-description", content: $L("This Chu is private but you can share it with selected friends.")}
                         ]}
                     ]},
-                    {classes: "postview-share-header", components: [
-                        {classes: "postview-share-header-text", content: $L("Share")},
-                        {classes: "postview-share-header-count", name: "shareCount"}
-                    ]},
-                    {kind: "Button", content: $L("Share with selected friends"), classes: "postview-section postview-add-friends", ontap: "openPeoplePicker"},
-                    {classes: "postview-section", components: [
-                        {kind: "Button", name: "facebookButton", ontap: "toggleFacebook", classes: "postview-share-button facebook", components: [
-                            {classes: "postview-share-icon"},
-                            {classes: "postview-share-caption", content: "Facebook"}
+                    {name: "share", components: [
+                        {classes: "postview-share-header", components: [
+                            {classes: "postview-share-header-text", content: $L("Share")},
+                            {classes: "postview-share-header-count", name: "shareCount"}
                         ]},
-                        {kind: "Button", ontap: "twitter", classes: "postview-share-button twitter", components: [
-                            {classes: "postview-share-icon"},
-                            {classes: "postview-share-caption", content: "Twitter"}
-                        ]},
-                        {kind: "Button", ontap: "messaging", classes: "postview-share-button messaging", components: [
-                            {classes: "postview-share-icon"},
-                            {classes: "postview-share-caption", content: "Messaging"}
-                        ]},
-                        {kind: "Button", ontap: "email", classes: "postview-share-button email", components: [
-                            {classes: "postview-share-icon"},
-                            {classes: "postview-share-caption", content: "Email"}
+                        {kind: "Button", content: $L("Share with selected friends"), classes: "postview-section postview-add-friends", ontap: "openPeoplePicker"},
+                        {classes: "postview-section", components: [
+                            {kind: "Button", name: "facebookButton", ontap: "toggleFacebook", classes: "postview-share-button facebook", components: [
+                                {classes: "postview-share-icon"},
+                                {classes: "postview-share-caption", content: "Facebook"}
+                            ]},
+                            {kind: "Button", ontap: "twitter", classes: "postview-share-button twitter", components: [
+                                {classes: "postview-share-icon"},
+                                {classes: "postview-share-caption", content: "Twitter"}
+                            ]},
+                            {kind: "Button", ontap: "messaging", classes: "postview-share-button messaging", components: [
+                                {classes: "postview-share-icon"},
+                                {classes: "postview-share-caption", content: "Messaging"}
+                            ]},
+                            {kind: "Button", ontap: "email", classes: "postview-share-button email", components: [
+                                {classes: "postview-share-icon"},
+                                {classes: "postview-share-caption", content: "Email"}
+                            ]}
                         ]}
+                    ]},
+                    {name: "login", classes: "postview-login-container", components: [
+                        {classes: "postview-login-text", content: $L("If you want to share this Chu with others you have to login first. Don't worry, your data is safe and we won't post anything without asking you!")},
+                        {kind: "SignInButton"}
                     ]}
                 ]}
             ]},
