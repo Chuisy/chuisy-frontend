@@ -69,7 +69,7 @@ enyo.kind({
         }
 
         this.$.avatar.setSrc(user && user.profile && user.profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : $L("You (anonymous)"));
+        this.$.fullName.setContent(user ? (user.first_name + " " + user.last_name) : " ");
         this.$.store.setContent(store && store.name || "");
 
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", fractionDigits: 0, currency: this.chu.get("price_currency"), locale: store && store.country && store.country.toLowerCase() || undefined});
