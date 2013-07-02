@@ -105,6 +105,7 @@ enyo.kind({
     */
     clear: function() {
         // this.$.privateButton.setActive(true);
+        this.setImage("");
         this.setPrice(0);
         this.$.priceHint.addClass("showing");
         this.priceChanged();

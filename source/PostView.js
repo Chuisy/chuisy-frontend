@@ -76,6 +76,7 @@ enyo.kind({
     },
     clear: function() {
         // this.setVisibility("public");
+        this.setImage("");
         this.visibilityChanged();
         this.$.peoplePicker.setSelectedItems([]);
         this.$.shareCount.setContent("");

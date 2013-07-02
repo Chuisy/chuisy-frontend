@@ -13,13 +13,15 @@ enyo.kind({
     published: {
         image: ""
     },
-    imageChanged: function() {
+    clear: function() {
+        this.$.panels.selectDirect(this.$.chuForm);
         this.chu = null;
         this.postingChu = false;
-        this.$.panels.selectDirect(this.$.chuForm);
         this.$.pickStore.initialize();
         this.$.chuForm.clear();
         this.$.postView.clear();
+    },
+    imageChanged: function() {
         this.$.chuForm.setImage(this.image);
         this.$.postView.setImage(this.image);
     },

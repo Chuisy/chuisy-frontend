@@ -810,6 +810,7 @@ enyo.kind({
     */
     composeChu: function() {
         this.showCompose();
+        this.$.compose.clear();
         // this.getImageTime = new Date();
         try {
             navigator.camera.getPicture(enyo.bind(this, function(uri) {
