@@ -85,11 +85,14 @@ enyo.kind({
         this.refresh(this.trendingStores, null, null, true);
     },
     loadTrending: function() {
-        this.trendingStores.fetch({success: enyo.bind(this, this.refresh)});
+        if (!this.trendingStores.length) {
+            this.trendingStores.fetch({success: enyo.bind(this, this.refresh)});
+        }
     },
     activate: function() {
         this.$.list.show();
         this.resized();
+        this.$.searchInput.removeClass("hide");
     },
     deactivate: function() {
         this.$.list.hide();

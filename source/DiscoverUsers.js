@@ -55,11 +55,14 @@ enyo.kind({
         this.refresh(this.trendingUsers, null, null, true);
     },
     loadTrending: function() {
-        this.trendingUsers.fetch({success: enyo.bind(this, this.refresh)});
+        if (!this.trendingUsers.length) {
+            this.trendingUsers.fetch({success: enyo.bind(this, this.refresh)});
+        }
     },
     activate: function() {
         this.$.userList.show();
         this.resized();
+        this.$.searchInput.removeClass("hide");
     },
     deactivate: function() {
         this.$.userList.hide();

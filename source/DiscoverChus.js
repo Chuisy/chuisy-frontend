@@ -99,11 +99,14 @@ enyo.kind({
         this.refresh(this.trendingChus, null, null, true);
     },
     loadTrending: function() {
-        this.trendingChus.fetch({data: {thumbnails: ["100x100"], limit: 21}, success: enyo.bind(this, this.refresh)});
+        if (!this.trendingChus.length) {
+            this.trendingChus.fetch({data: {thumbnails: ["100x100"], limit: 21}, success: enyo.bind(this, this.refresh)});
+        }
     },
     activate: function() {
         this.$.list.show();
         this.resized();
+        this.$.searchInput.removeClass("hide");
     },
     deactivate: function() {
         this.$.list.hide();
