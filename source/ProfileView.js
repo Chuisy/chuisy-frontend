@@ -92,7 +92,9 @@ enyo.kind({
     },
     setupChu: function(sender, event) {
         var chu = chuisy.closet.at(event.index);
-        event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
+        var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
+            chu.get("localImage") || chu.get("image") || "";
+        event.item.$.image.applyStyle("background-image", "url(" + image + ")");
     },
     loadGoodies: function() {
         this.$.goodiesEmtpy.hide();
