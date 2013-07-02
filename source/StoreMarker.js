@@ -9,7 +9,7 @@ enyo.kind({
         var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
 
         this.$.popup.applyStyle("background-image", "url(" + (this.store.get("cover_image") || coverPlaceholder) + ")");
-		this.$.marker.setContent(this.store.get("chu_count"));
+		// this.$.marker.setContent(this.store.get("chu_count"));
 		this.$.storeName.setContent(this.store.get("name"));
 		var addressString = "";
 		if (this.store.get("address")) {
