@@ -18,12 +18,6 @@ enyo.kind({
         this.stopListening();
         this.refresh(null, null, null, true);
         this.listenTo(this.users, "sync", this.refresh);
-        if (!this.users.meta.total_count) {
-            this.$.nextPageSpinner.addClass("rise");
-            this.users.fetch({success: enyo.bind(this, function() {
-                this.$.nextPageSpinner.removeClass("rise");
-            })});
-        }
     },
     rowsPerPageChanged: function() {
         this.$.userList.setRowsPerPage(this.rowsPerPage);

@@ -10,6 +10,9 @@ enyo.kind({
     },
     usersChanged: function() {
         this.$.userList.setUsers(this.users);
+        if (!this.users.meta.total_count) {
+            this.users.fetch();
+        }
     },
     titleChanged: function() {
         this.$.title.setContent(this.title);

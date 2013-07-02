@@ -11,10 +11,7 @@ enyo.kind({
     chusChanged: function() {
         this.$.chuList.setChus(this.chus);
         if (!this.chus.meta.total_count) {
-            this.$.nextPageSpinner.addClass("rise");
-            this.chus.fetch({success: enyo.bind(this, function() {
-                this.$.nextPageSpinner.removeClass("rise");
-            }), data: {count: 21, thumbnails: ["100x100"]}});
+            this.chus.fetch({data: {count: 21, thumbnails: ["100x100"]}});
         }
     },
     titleChanged: function() {
