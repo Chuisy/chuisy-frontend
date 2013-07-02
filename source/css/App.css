@@ -100,12 +100,11 @@ button {
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.1)));
 	box-sizing: border-box;
-    -webkit-transition: background-color 0.3s linear 0.4s;
+    /*-webkit-transition: background-color 0.3s linear 0.4s;*/
     margin: 0;
 }
 
 button:active:hover:not([disabled]) {
-	-webkit-transition: none;
 	background-color: #ddd;
 }
 
