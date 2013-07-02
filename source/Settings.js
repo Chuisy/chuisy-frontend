@@ -24,8 +24,6 @@ enyo.kind({
             this.updateView();
             this.stopListening();
             this.listenTo(user, "change change:avatar", this.updateView);
-        } else {
-            this.doBack();
         }
     },
     updateView: function() {
