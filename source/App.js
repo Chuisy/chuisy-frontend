@@ -460,7 +460,7 @@ enyo.kind({
         } else if (uri.match(/^closet\/$/)) {
             // chubox/
             // User wants to see his Chu Box? Our pleasure!
-            // this.navigateTo("closet", obj, direct);
+            this.showCloset(this, params);
         } else if (uri.match(/^goodies\/$/)) {
             // goodies/
             this.showGoodies(this, params);
