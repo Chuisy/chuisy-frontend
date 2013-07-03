@@ -64,10 +64,16 @@ enyo.kind({
         },
         fbHasPublishPermissions: function(callback) {
             if (!App.isMobile()) {
+                callback(false);
+                return;
+            }
+            if (App.fbHasPublishPermissionsCached !== undefined) {
+                callback(App.fbHasPublishPermissionsCached);
                 return;
             }
             FB.api('/me/permissions', function (response) {
-                callback(response && response.data && response.data[0] && response.data[0].publish_actions);
+                App.fbHasPublishPermissionsCached = response && response.data && response.data[0] && response.data[0].publish_actions;
+                callback(App.fbHasPublishPermissionsCached);
             });
         },
         fbRequestPublishPermissions: function(success, failure) {
