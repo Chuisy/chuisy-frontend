@@ -32,7 +32,6 @@ enyo.kind({
     },
     postResize: function() {
         this.setupList();
-        this.$.list.updateMetrics();
         this.refresh();
     },
     setupList: function() {
@@ -185,7 +184,6 @@ enyo.kind({
         {showing: false, classes: "closet-edit-hint", components: [
             {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}
         ]},
-        {kind: "Signals", onClosetUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "contextMenu", classes: "closet-contextmenu", components: [
             {classes: "closet-contextmenu-left"},
