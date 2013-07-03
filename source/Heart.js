@@ -28,9 +28,9 @@ enyo.kind({
         });
     },
     startOutAnimation: function() {
-        var x = Math.random() * 60 - 30;
-        var y = -50;
-        var rotX = 50;
+        var x = Math.random() * 30 - 15;
+        var y = -35;
+        var rotX = 40;
         var rotY = x/2;
         this.$.inner.applyStyle("-webkit-transform", "translate3d(" + x + "px, " + y + "px, 0) rotateX(" + rotX + "deg) rotateY(" + rotY +"deg)");
         this.$.inner.applyStyle("opacity", 0);
