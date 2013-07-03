@@ -452,11 +452,13 @@ enyo.kind({
     activate: function() {
         this.$.imageContainer.show();
         this.$.contentContainer.show();
+        this.$.commentInputContainer.show();
         this.resized();
     },
     deactivate: function() {
         this.$.imageContainer.hide();
         this.$.contentContainer.hide();
+        this.$.commentInputContainer.hide();
     },
     components: [
         {kind: "Heart", classes: "absolute-center"},
@@ -530,7 +532,7 @@ enyo.kind({
                 ]}
             ]},
             // COMMENT INPUT
-            {classes: "chuview-commentinput", components: [
+            {name: "commentInputContainer", classes: "chuview-commentinput", components: [
                 {kind: "onyx.InputDecorator", classes: "chuview-commentinput-decorator", alwaysLooksFocused: true, components: [
                     {kind: "onyx.TextArea", name: "commentInput", placeholder: $L("Comment..."), onkeydown: "commentInputKeydown"}
                 ]},
