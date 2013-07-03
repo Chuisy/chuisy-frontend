@@ -126,6 +126,7 @@ enyo.kind({
         var longitude = this.coordinates && this.coordinates.longitude;
         var like = this.$.postView.getLike();
         var comment = this.$.postView.getComment();
+        var share = this.$.postView.getShareFacebook();
 
         var chu = chuisy.closet.create({
             user: user,
@@ -137,7 +138,8 @@ enyo.kind({
             latitude: latitude,
             longitude: longitude,
             liked: like,
-            comment: comment
+            comment: comment,
+            fb_og_share: share
         }, {at: 0});
         if (comment) {
             chu.comments.add(new chuisy.models.ChuComment({
