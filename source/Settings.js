@@ -105,6 +105,13 @@ enyo.kind({
             App.fbRequestPublishPermissions();
         }
     },
+    activate: function() {
+        // this.$.scroller.show();
+        this.resized();
+    },
+    deactivate: function() {
+        // this.$.scroller.hide();
+    },
     components: [
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"}
