@@ -64,6 +64,7 @@ enyo.kind({
             enyo.asyncMethod(this, function() {
                 this.$.feedList.reset();
                 this.$.feedList.setScrollTop(-this.scrollerOffset);
+                this.$.tabs.removeClass("hide");
             });
         }
     },
