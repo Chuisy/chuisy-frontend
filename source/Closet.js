@@ -146,6 +146,7 @@ enyo.kind({
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = chuisy.closet.at(index);
         this.$.list.performOnRow(event.index, function(index, cellIndex) {
+            this.$["chu" + sender.cellIndex].removeClass("wiggle");
             this.$["chu" + sender.cellIndex].addClass("deleted");
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
