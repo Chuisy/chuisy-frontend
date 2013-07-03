@@ -31,22 +31,36 @@ enyo.kind({
     },
     heartTapped: function(sender, event) {
         if (App.checkConnection()) {
+            // App.requireSignIn(enyo.bind(this, function() {
+            //     var user = chuisy.accounts.getActiveUser();
+            //     // If user has activated sharing likes, make sure that we have publishing permissions.
+            //     // If not, ask him again (if a certain period of time has passed)
+            //     if (user && user.profile.get("fb_og_share_likes")) {
+            //         App.fbRequestPublishPermissions();
+            //         this.doToggleLike();
+            //     } else {
+            //         App.optInSetting("fb_og_share_likes", $L("Share on Facebook"),
+            //             $L("Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! " +
+            //                 "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, enyo.bind(this, function(choice) {
+            //                 if (choice) {
+            //                     App.fbRequestPublishPermissions();
+            //                 }
+            //                 this.doToggleLike();
+            //             }));
+            //     }
+            // }), "like");
             App.requireSignIn(enyo.bind(this, function() {
                 var user = chuisy.accounts.getActiveUser();
-                // If user has activated sharing likes, make sure that we have publishing permissions.
-                // If not, ask him again (if a certain period of time has passed)
                 if (user && user.profile.get("fb_og_share_likes")) {
-                    App.fbRequestPublishPermissions();
-                    this.doToggleLike();
+                    App.fbRequestPublishPermissions(enyo.bind(this, function() {
+                        this.doToggleLike();
+                    }), enyo.bind(this, function() {
+                        user.profile.set("fb_og_share_likes", false);
+                        user.save();
+                        this.doToggleLike();
+                    }));
                 } else {
-                    App.optInSetting("fb_og_share_likes", $L("Share on Facebook"),
-                        $L("Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! " +
-                            "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, enyo.bind(this, function(choice) {
-                            if (choice) {
-                                App.fbRequestPublishPermissions();
-                            }
-                            this.doToggleLike();
-                        }));
+                    this.doToggleLike();
                 }
             }), "like");
         }
