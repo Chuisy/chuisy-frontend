@@ -15,8 +15,10 @@ enyo.kind({
         NONE: "none"
     },
     events: {
-        onAnimationStart: "",
-        onAnimationEnd: ""
+        onInAnimationStart: "",
+        onOutAnimationStart: "",
+        onInAnimationEnd: "",
+        onOutAnimationEnd: ""
     },
     published: {
         // If true, the out animation of the old panel will be started as soon as possible
@@ -30,32 +32,55 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         this.currentPanel = this.getClientControls()[0];
-        // this.currentPanel.applyStyle("-webkit-transform", "translate3d(0, 0, 0)");
         this.currentPanel.applyStyle("display", "block");
-        this.inAnimationStartHandler = enyo.bind(this, this.inAnimationStart);
-        this.outAnimationStartHandler = enyo.bind(this, this.outAnimationStart);
-        this.inAnimationEndHandler = enyo.bind(this, this.inAnimationEnd);
-        this.outAnimationEndHandler = enyo.bind(this, this.outAnimationEnd);
+        this.animationStartHandler = enyo.bind(this, this.animationStart);
+        this.animationEndHandler = enyo.bind(this, this.animationEnd);
     },
-    inAnimationStart: function() {
-        this.newPanel.hasNode().removeEventListener("webkitAnimationStart", this.inAnimationStart, false);
-        this.doAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
+    rendered: function() {
+        this.inherited(arguments);
+        this.hasNode().addEventListener("webkitAnimationStart", this.animationStartHandler, false);
+        this.hasNode().addEventListener("webkitAnimationEnd", this.animationEndHandler, false);
     },
-    outAnimationStart: function() {
-        this.currentPanel.hasNode().removeEventListener("webkitAnimationStart", this.outAnimationStartHandler, false);
+    animationStart: function(event) {
+        if (this.currentPanel && event.target == this.currentPanel.hasNode() && event.animationName == this.currOutAnim) {
+            this.outAnimationStart();
+        } else if (this.newPanel && event.target == this.newPanel.hasNode() && event.animationName == this.currInAnim) {
+            this.inAnimationStart();
+        }
+    },
+    animationEnd: function(event) {
+        if (this.currentPanel && event.target == this.currentPanel.hasNode() && event.animationName == this.currOutAnim) {
+            this.outAnimationEnd();
+        } else if (this.newPanel && event.target == this.newPanel.hasNode() && event.animationName == this.currInAnim) {
+            this.inAnimationEnd();
+        }
+    },
+    startInAnimation: function() {
+        this.newPanel.applyStyle("opacity", 0);
         this.newPanel.applyStyle("display", "block");
         this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
         this.newPanel.applyStyle("opacity", 1);
-        this.newPanel.resized();
+    },
+    startOutAnimation: function() {
+        this.currentPanel.applyStyle("-webkit-animation", this.currOutAnim + " " + this.duration + "ms");
+    },
+    inAnimationStart: function() {
+        this.doInAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
+    },
+    outAnimationStart: function() {
+        this.doOutAnimationStart({oldPanel: this.currentPanel, newPanel: this.newPanel});
+        this.animating = true;
+        if (this.async) {
+            this.startInAnimation();
+        }
     },
     inAnimationEnd: function() {
-        this.newPanel.hasNode().removeEventListener("webkitAnimationEnd", this.inAnimationEndHandler, false);
+        this.doInAnimationEnd({oldPanel: this.currentPanel, newPanel: this.newPanel});
         this.newPanel.applyStyle("-webkit-animation", "none");
     },
     outAnimationEnd: function() {
-        this.doAnimationEnd({oldPanel: this.currentPanel, newPanel: this.newPanel});
+        this.doOutAnimationEnd({oldPanel: this.currentPanel, newPanel: this.newPanel});
         this.currentPanel.applyStyle("display", "none");
-        this.currentPanel.hasNode().removeEventListener("webkitAnimationEnd", this.outAnimationEndHandler, false);
         this.currentPanel.applyStyle("-webkit-animation", "none");
         this.currentPanel = this.newPanel;
         // this.newPanel = null;
@@ -71,33 +96,21 @@ enyo.kind({
             return;
         }
         this.currInAnim = inAnim || this.inAnim;
-        outAnim = outAnim || this.outAnim;
+        this.currOutAnim = outAnim || this.outAnim;
         if (this.animating) {
             this.outAnimationEnd();
         }
         this.newPanel = panel;
-        this.newPanel.applyStyle("opacity", 0);
-        this.animating = true;
-
-        if (inAnim != AnimatedPanels.NONE) {
-            this.newPanel.hasNode().addEventListener("webkitAnimationStart", this.inAnimationStartHandler, false);
-            this.newPanel.hasNode().addEventListener("webkitAnimationEnd", this.inAnimationEndHandler, false);
-        }
-
-        if (this.async && outAnim != AnimatedPanels.NONE) {
-            this.currentPanel.hasNode().addEventListener("webkitAnimationStart", this.outAnimationStartHandler, false);
-        } else {
+        this.startOutAnimation();
+        if (this.currOutAnim == AnimatedPanels.NONE) {
             this.outAnimationStart();
-        }
-        if (outAnim != AnimatedPanels.NONE) {
-            this.currentPanel.hasNode().addEventListener("webkitAnimationEnd", this.outAnimationEndHandler, false);
-        } else {
             setTimeout(enyo.bind(this, function() {
                 this.outAnimationEnd();
             }), this.duration + 500);
         }
-
-        this.currentPanel.applyStyle("-webkit-animation", outAnim + " " + this.duration + "ms");
+        if (!this.async) {
+            this.startInAnimation();
+        }
     },
     selectDirect: function(panel) {
         if (this.currentPanel == panel) {
@@ -133,7 +146,7 @@ enyo.kind({
         this.log("***** animation end *****", arguments);
     },
     components: [
-        {kind: "AnimatedPanels", onAnimationStart: "animationStart", onAnimationEnd: "animationEnd", classes: "enyo-fill", components: [
+        {kind: "AnimatedPanels", classes: "enyo-fill", components: [
             {name: "first", style: "background-color: blue", ontap: "next"},
             {name: "second", style: "background-color: red", ontap: "previous"}
         ]}

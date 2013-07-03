@@ -16,7 +16,7 @@ enyo.kind({
         isOnline: function() {
             if (navigator.connection) {
                 var networkState = navigator.connection.type;
-                return networkState != Connection.UNKNOWN && networkState != Connection.NONE;
+                return networkState != Connection.NONE;
             } else {
                 return true;
             }
@@ -855,7 +855,7 @@ enyo.kind({
     },
     components: [
         {classes: "header", style: "width: 100%; position: absolute; top: 0; left: 0; z-index: -100; box-shadow: none;"},
-        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", onAnimationStart: "panelsAnimationStart", onAnimationEnd: "panelsAnimationEnd", components: [
+        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", onInAnimationStart: "panelsAnimationStart", onOutAnimationEnd: "panelsAnimationEnd", components: [
             {kind: "MainView", name: "mainView"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
