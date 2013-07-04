@@ -51,8 +51,9 @@ enyo.kind({
         this.inherited(arguments);
         chuisy.feed.on("reset", this.feedLoaded, this);
         chuisy.feed.on("remove", this.refreshFeed, this);
-        // chuisy.feed.on("add", this.preloadImage, this);
         this.setPulled(true);
+        var s = this.$.feedList.getStrategy();
+        s.scrollIntervalMS = 17;
     },
     feedLoaded: function() {
         this.notice = chuisy.notices && chuisy.notices.filter(function(notice) {
@@ -173,10 +174,12 @@ enyo.kind({
     scrollHandler: function() {
         var scrollTop = this.$.feedList.getScrollTop();
         if (scrollTop < 0) {
+            this.$.pulldown.show();
             this.$.tabs.removeClass("hide");
             var offset = scrollTop + this.pullerHeight + this.scrollerOffset;
-            var opacity = 1 - offset/this.pullerHeight;
-            this.$.pulldown.applyStyle("opacity", opacity);
+            // var opacity = 1 - offset/this.pullerHeight;
+            // this.$.pulldown.applyStyle("opacity", opacity);
+            this.$.pulldown.applyStyle("-webkit-transform", "translate3d(0, " + Math.min(this.scrollerOffset + this.pullerHeight, -scrollTop) + "px, 0)");
             this.pulling = scrollTop+this.scrollerOffset < -this.pullerThreshold;
             this.$.pulldown.addRemoveClass("pulling", this.pulling);
             this.$.feedList.getStrategy().topBoundary = this.pulling || this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
@@ -190,9 +193,9 @@ enyo.kind({
     },
     setPulled: function(pulled) {
         this.pulled = pulled;
+        this.$.pulldown.setShowing(this.pulled);
         this.$.pulldownSpinner.setSpinning(this.pulled);
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
-        this.$.pulldown.applyStyle("opacity", this.pulled ? 1 : 0);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
         this.$.feedList.getStrategy().start();
     },
@@ -295,7 +298,7 @@ enyo.kind({
             ]}
         ]},
         {classes: "alert error", name: "noInternet", content: $L("No internet connection available!")},
-        {name: "pulldown", style: "top: 35px;", classes: "pulldown", components: [
+        {name: "pulldown", showing: false, classes: "pulldown", components: [
             {classes: "pulldown-arrow"},
             {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
         ]},
