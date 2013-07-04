@@ -155,7 +155,7 @@ enyo.kind({
         this.refreshChus();
     },
     components: [
-        {kind: "Image", classes: "userview-avatar profileview-avatar", name: "avatar"},
+        {kind: "Image", classes: "userview-avatar profileview-avatar fadein", name: "avatar"},
         {name: "nameFollow", classes: "userview-name-follow profileview-name-follow", components: [
             {classes: "profileview-settings-button", ontap: "doShowSettings", name: "settingsButtonDummy"},
             {classes: "userview-fullname ellipsis", name: "fullName"}
