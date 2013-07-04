@@ -110,6 +110,7 @@ enyo.kind({
     },
     deactivate: function() {
         this.$.list.hide();
+        this.$.searchInput.addClass("hide");
     },
     online: function() {
         this.$.noInternet.removeClass("show");

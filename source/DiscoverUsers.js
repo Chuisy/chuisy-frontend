@@ -66,6 +66,7 @@ enyo.kind({
     },
     deactivate: function() {
         this.$.userList.hide();
+        this.$.searchInput.addClass("hide");
     },
     online: function() {
         this.$.noInternet.removeClass("show");
