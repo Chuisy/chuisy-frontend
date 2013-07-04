@@ -172,7 +172,7 @@ enyo.kind({
         this.$.nameFollow.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/1.5 + "px, 0)");
     },
     components: [
-        {kind: "Image", classes: "userview-avatar", name: "avatar"},
+        {kind: "Image", classes: "userview-avatar fadein", name: "avatar"},
         {name: "nameFollow", classes: "userview-name-follow", components: [
             {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
             {classes: "userview-fullname ellipsis", name: "name"}

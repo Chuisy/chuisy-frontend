@@ -32,8 +32,12 @@ enyo.kind({
     },
     imageLoaded: function() {
         this.$.spinner.hide();
-        this.$.image.removeClass("loading");
-        this.positionImage();
+        this.$.imageContainer.applyStyle("-webkit-animation", "none");
+        enyo.asyncMethod(this, function() {
+            this.$.imageContainer.applyStyle("-webkit-animation", "fadein 0.5s");
+            this.$.image.applyStyle("opacity", 1);
+            this.positionImage();
+        });
     },
     chuChanged: function() {
         this.updateView();
@@ -64,7 +68,8 @@ enyo.kind({
         var image = this.chu.get("localImage") || this.chu.get("image") || "";
         if (image != this.$.image.src) {
             this.$.spinner.show();
-            this.$.image.addClass("loading");
+            // this.$.image.addClass("loading");
+            this.$.image.applyStyle("opacity", 0);
             this.$.image.setSrc(image);
         }
 
@@ -493,7 +498,7 @@ enyo.kind({
                 ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
-                {kind: "Scroller", name: "contentScroller", touch: true, touchOverscroll: true, thumb: false, onScroll: "positionImage",
+                {kind: "Scroller", name: "contentScroller", touch: true, onScroll: "positionImage",
                     strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, components: [
                     // SPACER
                     {classes: "chuview-spacer", components: [

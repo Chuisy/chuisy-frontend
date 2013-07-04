@@ -39,7 +39,7 @@
 }
 
 .fadein {
-	-webkit-animation: fadein 0.3s;
+	-webkit-animation: fadein 0.5s;
 }
 
 @-webkit-keyframes scaleFade {
