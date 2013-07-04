@@ -106,8 +106,8 @@ enyo.kind({
 
         var isLastItem = event.index == chuisy.feed.length-1;
         var hasNextPage = chuisy.feed.hasNextPage();
-        this.$.nextPageSpacer.setShowing(isLastItem && hasNextPage);
-        this.$.lastPageMarker.setShowing(isLastItem && !hasNextPage);
+        this.$.listItem.addRemoveClass("next-page", isLastItem && hasNextPage);
+        this.$.listItem.addRemoveClass("last-item", isLastItem && !hasNextPage);
         if (isLastItem && hasNextPage) {
             this.nextPage();
         }
@@ -124,17 +124,11 @@ enyo.kind({
     nextPage: function() {
         if (!this.loading) {
             this.loading = true;
-            this.$.nextPageSpinner.setSpinning(true);
-            this.$.nextPageSpinner.addClass("rise");
             chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
                 this.loading = false;
-                this.$.nextPageSpinner.setSpinning(false);
-                this.$.nextPageSpinner.removeClass("rise");
                 this.refreshFeed();
             }), error: enyo.bind(this, function() {
                 this.loading = false;
-                this.$.nextPageSpinner.setSpinning(false);
-                this.$.nextPageSpinner.removeClass("rise");
             })});
         }
     },
@@ -276,7 +270,6 @@ enyo.kind({
     },
     components: [
         {kind: "Heart", classes: "absolute-center"},
-        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner", spinning: false},
         {kind: "Signals", ononline: "online", onoffline: "offline", onSignInSuccess: "loadFeed", onSignOut: "loadFeed"},
         {classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "tabs", classes: "feed-tabs", components: [
@@ -304,15 +297,17 @@ enyo.kind({
         ]},
         {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
-            preventDragPropagation: false, ondrag: "dragHandler", ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
-            {name: "feedInfoBox", classes: "feed-info-box", components: [
-                {name: "feedInfoText", classes: "feed-info-box-text"},
-                {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
-            ]},
-            {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"},
-            {name: "nextPageSpacer", classes: "next-page-spacer"},
-            {name: "lastPageMarker", classes: "last-page-marker"}
+            preventDragPropagation: false, ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+            {name: "listItem", classes: "list-item-wrapper", components: [
+                {name: "feedInfoBox", classes: "feed-info-box", components: [
+                    {name: "feedInfoText", classes: "feed-info-box-text"},
+                    {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                    {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+                ]},
+                {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"}
+                // {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"}
+                // {name: "lastPageMarker", classes: "last-page-marker"}
+            ]}
         ]}
     ]
 });
