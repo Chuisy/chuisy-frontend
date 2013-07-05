@@ -24,17 +24,7 @@ enyo.kind({
             this.$.list.reset();
         }
         this.$.placeholder.setShowing(!chuisy.notifications.length);
-        this.hideSpinner();
-    },
-    showSpinner: function() {
-        setTimeout(enyo.bind(this, function() {
-            this.$.nextPageSpinner.setSpinning(true);
-            this.$.nextPageSpinner.addClass("rise");
-        }), 500);
-    },
-    hideSpinner: function() {
-        this.$.nextPageSpinner.removeClass("rise");
-        this.$.nextPageSpinner.setSpinning(false);
+        this.$.spinner.hide();
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
@@ -98,12 +88,10 @@ enyo.kind({
         this.$.notification.addRemoveClass("unseen", !item.get("seen"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
-        if (isLastItem && chuisy.notifications.hasNextPage()) {
-            // Last item in the list and there is more! Load next page
-            this.$.nextPageSpacer.show();
+        var hasNextPage = chuisy.notifications.hasNextPage();
+        this.$.listItem.addRemoveClass("next-page", isLastItem && hasNextPage);
+        if (isLastItem && hasNextPage) {
             this.nextPage();
-        } else {
-            this.$.nextPageSpacer.hide();
         }
 
         return true;
@@ -130,22 +118,23 @@ enyo.kind({
         chuisy.notifications.seen();
     },
     components: [
-        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},
+        {kind: "Spinner", name: "spinner", showing: true, style: "position: absolute; top: 20px; left: 0; right: 0; margin: 0 auto;"},
         // {classes: "placeholder", name: "placeholder", components: [
             {name: "placeholder", classes: "placeholder-image absolute-center"},
             // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
         // ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
-                {classes: "notifications-notification-image", name: "image"},
-                {classes: "notifications-notification-content", components: [
-                    {classes: "notifications-notification-text", name: "text", allowHtml: true},
-                    {classes: "notifications-notification-time", name: "time"}
-                ]},
-                {classes: "notifications-notification-subject", name: "subject"}
-            ]},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            {name: "listItem", classes: "list-item-wrapper", components: [
+                {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
+                    {classes: "notifications-notification-image", name: "image"},
+                    {classes: "notifications-notification-content", components: [
+                        {classes: "notifications-notification-text", name: "text", allowHtml: true},
+                        {classes: "notifications-notification-time", name: "time"}
+                    ]},
+                    {classes: "notifications-notification-subject", name: "subject"}
+                ]}
+            ]}
         ]}
     ]
 });

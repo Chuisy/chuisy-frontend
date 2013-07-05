@@ -53,27 +53,13 @@ body {
 	background-position: 0 -60px;
 }
 
-/* Indicator for when the next page in a list is loaded */
-.next-page-spacer {
-	height: 60px;
-}
-
 .spinner.next-page-spinner {
-	position: absolute;
-	bottom: -80px;
-	left: 0;
-	right: 0;
-	margin: 0 auto;
-	-webkit-transition: -webkit-transform 0.5s;
-	/*display: none;*/
+	margin: 20px auto;
 }
 
-.spinner.next-page-spinner.rise {
-	-webkit-transform: translate3d(0, -100px, 0);
-	/*display: block;*/
-}
-
-.last-page-marker {
+.list-item-wrapper.last-item:after {
+	content: "";
+	display: block;
     margin: 20px auto;
     width: 12px;
     height: 12px;
@@ -81,6 +67,23 @@ body {
     border-radius: 50px;
     box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.list-item-wrapper.next-page:after {
+	content: "Wait, there's more...";
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 20px 0;
+	font-size: 10pt;
+	color: #888;
+	text-shadow: 0px 1px 0px rgba(255,255,255,1);
+	/*width: 25px;
+	height: 25px;
+	margin: 20px auto;*/
+    /*background: url(../../assets/images/spinner.gif) no-repeat center center;*/
+    /*background-size: cover;*/
+    /*-webkit-animation: spin 2s linear infinite;*/
 }
 
 /* BUTTONS */
@@ -119,13 +122,15 @@ button[disabled] {
 	/*background: url(../../assets/images/menu-bar.png) repeat-x;
 	background-size: 320px 44px;*/
 	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ca2868), to(#b01b05));*/
+	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C5014F), to(#D61C00));*/
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C50138), to(#D61C00));
 	/*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);*/
 	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B91901), to(#b01b05));*/
 	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#CE1A00), to(#b01b05));*/
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#BE1B02), to(#b01b05));
+	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#BE1B02), to(#b01b05));*/
 	/*background-color: #b01b05;*/
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	border-bottom: solid 1px rgba(0, 0, 0, 0.3);
+	border-bottom: solid 1px #b01b05;
 	box-sizing: border-box;
 	position: relative;
 	z-index: 99;
