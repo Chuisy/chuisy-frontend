@@ -11,7 +11,10 @@ enyo.kind({
     chusChanged: function() {
         this.$.chuList.setChus(this.chus);
         if (!this.chus.meta.total_count) {
-            this.chus.fetch({data: {count: 21, thumbnails: ["100x100"]}});
+            this.$.spinner.show();
+            this.chus.fetch({data: {count: 21, thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
+                this.$.spinner.hide();
+            })});
         }
     },
     titleChanged: function() {
@@ -25,6 +28,7 @@ enyo.kind({
         this.$.chuList.hide();
     },
     components: [
+        {kind: "Spinner", style: "position: absolute; left: 0; right: 0; top: 64px; margin: 0 auto;"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", name: "title"}

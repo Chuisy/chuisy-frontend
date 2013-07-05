@@ -11,7 +11,10 @@ enyo.kind({
     usersChanged: function() {
         this.$.userList.setUsers(this.users);
         if (!this.users.meta.total_count) {
-            this.users.fetch();
+            this.$.spinner.show();
+            this.users.fetch({success: enyo.bind(this, function() {
+                this.$.spinner.hide();
+            })});
         }
     },
     titleChanged: function() {
@@ -25,6 +28,7 @@ enyo.kind({
         this.$.userList.hide();
     },
     components: [
+        {kind: "Spinner", style: "position: absolute; left: 0; right: 0; top: 64px; margin: 0 auto;"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", name: "title"}
