@@ -861,7 +861,7 @@ enyo.kind({
     },
     components: [
         {classes: "header", style: "width: 100%; position: absolute; top: 0; left: 0; z-index: -100; box-shadow: none;"},
-        {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", onInAnimationStart: "panelsAnimationStart", onOutAnimationEnd: "panelsAnimationEnd", components: [
+        {kind: "AnimatedPanels", async: true, classes: "enyo-fill", name: "panels", onInAnimationStart: "panelsAnimationStart", onOutAnimationEnd: "panelsAnimationEnd", components: [
             {kind: "MainView", name: "mainView"}
         ]},
         {kind: "Signals", ondeviceready: "deviceReady", ononline: "online", onoffline: "offline", onresume: "resume", onpause: "pause",
