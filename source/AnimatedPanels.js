@@ -58,8 +58,10 @@ enyo.kind({
     startInAnimation: function() {
         this.newPanel.applyStyle("opacity", 0);
         this.newPanel.applyStyle("display", "block");
-        this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
-        this.newPanel.applyStyle("opacity", 1);
+        enyo.asyncMethod(this, function() {
+            this.newPanel.applyStyle("-webkit-animation", this.currInAnim + " " + this.duration + "ms");
+            this.newPanel.applyStyle("opacity", 1);
+        });
     },
     startOutAnimation: function() {
         this.currentPanel.applyStyle("-webkit-animation", this.currOutAnim + " " + this.duration + "ms");
