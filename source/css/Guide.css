@@ -1,6 +1,7 @@
 .card-side.guide-card-side {
-    background-image: url(../../assets/images/lightpaperfibers.png);
-    background-size: 500px 300px;
+    /*background-image: url(../../assets/images/lightpaperfibers.png);
+    background-size: 500px 300px;*/
+    background-color: white;
     text-align: center;
     height: 330px;
     box-sizing: border-box;
@@ -35,8 +36,8 @@
 .guide-card-title {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #444;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.59);
-    padding: 20px 20px 10px 20px;
+    /*text-shadow: 0px 1px 0px rgba(255,255,255,0.59);*/
+    padding: 30px 20px 15px 20px;
     font-size: 17pt;
     font-weight: bold;
 }
@@ -44,8 +45,8 @@
 .guide-card-text {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #444;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.59);
-    padding: 0 20px 15px 20px;
+    /*text-shadow: 0px 1px 0px rgba(255,255,255,0.59);*/
+    padding: 0 25px;
     font-size: 11pt;
     line-height: 1.3em;
 }
