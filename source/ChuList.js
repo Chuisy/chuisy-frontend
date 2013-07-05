@@ -86,7 +86,7 @@ enyo.kind({
 
         var isLastRow = this.chus.length && event.index+1 == Math.ceil(this.chus.length / this.cellCount);
         var hasNextPage = this.chus.hasNextPage();
-        this.$.nextPageSpacer.setShowing(isLastRow && hasNextPage);
+        this.$.listClient.addRemoveClass("next-page", isLastRow && hasNextPage);
         this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
         if (isLastRow && hasNextPage) {
             this.nextPage();
@@ -95,11 +95,8 @@ enyo.kind({
         return true;
     },
     nextPage: function() {
-        this.$.nextPageSpinner.addClass("rise");
         this.chus.fetchNext({
-            success: enyo.bind(this, function() {
-                this.$.nextPageSpinner.removeClass("rise");
-            }), data: {
+            data: {
                 limit: 21,
                 thumbnails: ["100x100"]
             }
@@ -128,11 +125,9 @@ enyo.kind({
         return this.$.list.getScrollTop();
     },
     components: [
-        {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
             strategyKind: "TransitionScrollStrategy", preventDragPropagation: false, components: [
-            {name: "listClient", classes: "chulist-row"},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            {name: "listClient", classes: "chulist-row list-item-wrapper"}
         ]}
     ]
 });

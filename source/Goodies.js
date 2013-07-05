@@ -13,7 +13,7 @@ enyo.kind({
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
         this.$.placeholder.setShowing(!chuisy.cards.length);
-        this.$.spinner.removeClass("rise");
+        this.$.spinner.hide();
         this.$.spinner.setSpinning(false);
     },
     setupItem: function(sender, event) {
@@ -326,7 +326,7 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "Spinner", name: "spinner", classes: "next-page-spinner rise", spinning: false},
+        {kind: "Spinner", name: "spinner", style: "position: absolute; top: 20px; right: 0; left: 0; margin: 0 auto;", showing: true},
         {name: "placeholder", classes: "placeholder-image"},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
