@@ -127,7 +127,7 @@ enyo.kind({
     components: [
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
             strategyKind: "TransitionScrollStrategy", preventDragPropagation: false, components: [
-            {name: "listClient", classes: "chulist-row list-item-wrapper"}
+            {name: "listClient", classes: "chulist-row list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}}
         ]}
     ]
 });

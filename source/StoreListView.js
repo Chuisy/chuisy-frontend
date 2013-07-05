@@ -69,7 +69,7 @@ enyo.kind({
         {kind: "Spinner", style: "position: absolute; left: 0; right: 0; top: 64px; margin: 0 auto;"},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {name: "listItem", classes: "list-item-wrapper", components: [
+            {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
                 {name: "store", ontap: "storeTap", classes: "list-item store-list-item pressable", components: [
                     {classes: "store-list-item-name", name: "storeName"},
                     {classes: "store-list-item-address", name: "storeAddress"}

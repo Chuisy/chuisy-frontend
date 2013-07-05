@@ -125,7 +125,7 @@ enyo.kind({
         // ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {name: "listItem", classes: "list-item-wrapper", components: [
+            {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
                 {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
                     {classes: "notifications-notification-image", name: "image"},
                     {classes: "notifications-notification-content", components: [

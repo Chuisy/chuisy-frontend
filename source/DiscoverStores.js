@@ -126,7 +126,7 @@ enyo.kind({
         {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Stores found."), showing: false},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, preventDragPropagation: false, components: [
-            {name: "listItem", classes: "list-item-wrapper", components: [
+            {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
                 {name: "store", ontap: "storeTap", classes: "list-item store-list-item pressable", components: [
                     {classes: "store-list-item-name", name: "storeName"},
                     {classes: "store-list-item-address", name: "storeAddress"}

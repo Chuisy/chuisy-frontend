@@ -71,7 +71,7 @@ enyo.kind({
     components: [
         {kind: "List", classes: "enyo-fill", name: "userList", onSetupItem: "setupUser", strategyKind: "TransitionScrollStrategy",
             thumb: false, rowsPerPage: 20, preventDragPropagation: false, components: [
-            {name: "listItem", classes: "list-item-wrapper", components: [
+            {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
                 {kind: "UserListItem", ontap: "userTap", onToggleFollow: "toggleFollow"}
             ]}
         ]}

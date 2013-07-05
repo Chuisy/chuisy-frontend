@@ -70,7 +70,7 @@ body {
 }
 
 .list-item-wrapper.next-page:after {
-	content: "Wait, there's more...";
+	content: attr(data-next-page);
 	display: block;
 	width: 100%;
 	text-align: center;
