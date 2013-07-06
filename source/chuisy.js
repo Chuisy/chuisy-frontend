@@ -117,6 +117,7 @@
                 chuisy.accounts.getActiveUser().destroy({nosync: true});
             }
             chuisy.accounts.setActiveUser(null);
+            chuisy.notifications.reset();
         },
         createInvites: function(requestId, recipientIds) {
             var objects = [];
