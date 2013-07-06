@@ -52,16 +52,12 @@ enyo.kind({
             App.requireSignIn(enyo.bind(this, function() {
                 var user = chuisy.accounts.getActiveUser();
                 if (user && user.profile.get("fb_og_share_likes")) {
-                    App.fbRequestPublishPermissions(enyo.bind(this, function() {
-                        this.doToggleLike();
-                    }), enyo.bind(this, function() {
+                    App.fbRequestPublishPermissions(null, enyo.bind(this, function() {
                         user.profile.set("fb_og_share_likes", false);
                         user.save();
-                        this.doToggleLike();
                     }));
-                } else {
-                    this.doToggleLike();
                 }
+                this.doToggleLike();
             }), "like");
         }
         return true;

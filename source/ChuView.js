@@ -125,17 +125,13 @@ enyo.kind({
             // }), "like");
             App.requireSignIn(enyo.bind(this, function() {
                 var user = chuisy.accounts.getActiveUser();
-                if (!this.chu.get("liked") && user && user.profile.get("fb_og_share_likes")) {
-                    App.fbRequestPublishPermissions(enyo.bind(this, function() {
-                        this.toggleLike();
-                    }), enyo.bind(this, function() {
+                if (user && user.profile.get("fb_og_share_likes")) {
+                    App.fbRequestPublishPermissions(null, enyo.bind(this, function() {
                         user.profile.set("fb_og_share_likes", false);
                         user.save();
-                        this.toggleLike();
                     }));
-                } else {
-                    this.toggleLike();
                 }
+                this.toggleLike();
             }), "like");
         }
         return true;
