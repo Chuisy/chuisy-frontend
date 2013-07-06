@@ -51,7 +51,6 @@ enyo.kind({
     chuFormDone: function() {
         // this.$.panels.setIndex(1);
         this.$.panels.select(this.$.pickStore);
-        this.$.pickStore.resized();
         this.pickStoreTime = new Date();
         return true;
     },
@@ -160,12 +159,15 @@ enyo.kind({
         // });
         return true;
     },
+    inAnimationStart: function(sender, event) {
+        event.newPanel.resized();
+    },
     activate: function() {
     },
     deactivate: function() {
     },
     components: [
-        {kind: "AnimatedPanels", name: "panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
+        {kind: "AnimatedPanels", async: true, name: "panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", onInAnimationStart: "inAnimationStart", components: [
             // STEP 1: Pick filter, price, category
             {kind: "ChuForm", onDone: "chuFormDone", onBack: "chuFormBack"},
             // STEP 2: Pick location/place from list
