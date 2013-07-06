@@ -106,3 +106,27 @@
 .feed-tab:not(:first-child) {
     /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
 }
+
+.feed-placeholder-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f1f1f1;
+    z-index: 10;
+}
+
+.feed-placeholder-card {
+    height: 230px;
+    background: none;
+    box-shadow: none;
+}
+
+.feed-placeholder-card-text {
+    color: #888;
+}
+
+/*.feed-placeholder-card-image {
+    margin: 20px auto 15px auto;
+}*/

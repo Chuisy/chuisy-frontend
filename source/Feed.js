@@ -41,9 +41,6 @@ enyo.kind({
         onShowNearby: "",
         onShowStore: ""
     },
-    handlers: {
-        onflick: "flick"
-    },
     scrollerOffset: 35,
     pullerHeight: 50,
     pullerThreshold: 60,
@@ -60,7 +57,8 @@ enyo.kind({
             return !localStorage.getItem("chuisy.dismissed_notices." + notice.get("key"));
         })[0];
         this.$.feedList.setCount(chuisy.feed.length);
-        this.setPulled(!chuisy.feed.length);
+        this.$.placeholder.setShowing(!chuisy.feed.length);
+        this.setPulled(false);
         if (this.hasNode()) {
             enyo.asyncMethod(this, function() {
                 this.$.feedList.reset();
@@ -295,9 +293,16 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
         ]},
-        {kind: "List", classes: "enyo-fill", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
+        {name: "placeholder", showing: false, classes: "feed-placeholder-wrapper", components: [
+            {classes: "placeholder-card feed-placeholder-card absolute-center", components: [
+                {kind: "Image", src: "assets/images/empty_placeholder.png", classes: "placeholder-card-image feed-placeholder-card-image"},
+                {classes: "placeholder-card-text feed-placeholder-card-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")}
+                // {kind: "Button", classes: "placeholder-card-button", ontap: "discoverUsersTapped", content: $L("Find people to follow")}
+            ]}
+        ]},
+        {kind: "List", classes: "enyo-fill fadein", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
-            preventDragPropagation: false, ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", components: [
+            preventDragPropagation: false, ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", onflick: "flick", components: [
             {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
                 {name: "feedInfoBox", classes: "feed-info-box", components: [
                     {name: "feedInfoText", classes: "feed-info-box-text"},
