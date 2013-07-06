@@ -28,7 +28,7 @@ enyo.kind({
         this.$.userList.hide();
     },
     components: [
-        {kind: "Spinner", style: "position: absolute; left: 0; right: 0; top: 64px; margin: 0 auto;"},
+        {kind: "Spinner", style: "position: absolute; left: 0; right: 0; top: 64px; margin: 0 auto;", showing: false},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", name: "title"}
