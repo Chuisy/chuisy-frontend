@@ -39,13 +39,12 @@ enyo.kind({
         }), 500);
     },
     signInSuccess: function() {
-        this.log("sign in success!");
         if (this.successCallback) {
             this.successCallback();
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: true});
     },
     signInFail: function() {
         if (this.failureCallback) {
@@ -53,7 +52,7 @@ enyo.kind({
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: false});
     },
     /**
         Calls _failureCallback_ and fires done event
@@ -64,7 +63,7 @@ enyo.kind({
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: false});
         if (event) {
             event.preventDefault();
         }

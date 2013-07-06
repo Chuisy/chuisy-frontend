@@ -319,14 +319,6 @@ enyo.kind({
             // setTimeout(enyo.bind(this, function() {
             //     this.$.signin.ready();
             // }), 500);
-        } else if (!App.isSignedIn()) {
-            this.showSignIn(this, {
-                success: enyo.bind(this, this.showFeed),
-                failure: enyo.bind(this, this.showFeed),
-                context: "start",
-                direct: true
-            });
-            // this.$.signin.ready();
         } else if (!this.handledOpenUrl) {
             this.recoverStateFromUri();
             // setTimeout(enyo.bind(this, function() {
@@ -338,6 +330,15 @@ enyo.kind({
         }
         App.startSession();
         this.checkPendingNotifications();
+
+        if (!App.isSignedIn()) {
+            this.showSignIn(this, {
+                success: enyo.bind(this, this.showFeed),
+                failure: enyo.bind(this, this.showFeed),
+                context: "start",
+                direct: true
+            });
+        }
     },
     /**
         Checks any pending notifications and adds event listener for new push notifications
@@ -757,17 +758,13 @@ enyo.kind({
     },
     showSignIn: function(sender, event) {
         event = event || {};
-        this.updateHistory("signin/", event);
-        this.prepareView("signin");
+        if (!this.$.signin) {
+            this.createComponent(this.lazyViews.signin).render();
+        }
         this.$.signin.setSuccessCallback(event ? event.success : null);
         this.$.signin.setFailureCallback(event ? event.failure : null);
         this.$.signin.setContext(event.context);
-
-        if (event.direct) {
-            this.$.panels.selectDirect(this.$.signin);
-        } else {
-            this.$.panels.select(this.$.signin, event.inAnim, event.outAnim);
-        }
+        this.$.signin.open();
     },
     notificationSelected: function(sender, event) {
         this.navigateToUri(event.notification.get("uri"), {obj: event.notification.get("target_obj")});
@@ -834,6 +831,15 @@ enyo.kind({
             this.$.compose.setImage("");
         }
     },
+    signInDone: function(sender, event) {
+        this.$.signin.close();
+        if (event.success) {
+            // Probably won't need this view again so we can destroy it
+            setTimeout(enyo.bind(this, function() {
+                this.$.signin.destroy();
+            }), 1000);
+        }
+    },
     lazyViews: {
         // CREATE NEW CHU
         "compose": {kind: "ComposeChu", name: "compose", onDone: "composeChuDone"},
@@ -857,7 +863,7 @@ enyo.kind({
         "storeList": {kind: "StoreListView", name: "storeList"},
         "nearby": {kind: "Nearby", name: "nearby"},
         // FACEBOOK SIGNIN
-        "signin": {kind: "SignInView", name: "signin", onDone: "back"}
+        "signin": {kind: "SignInView", name: "signin", onDone: "signInDone"}
     },
     components: [
         {classes: "header", style: "width: 100%; position: absolute; top: 0; left: 0; z-index: -100; box-shadow: none;"},
