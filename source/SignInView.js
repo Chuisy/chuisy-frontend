@@ -8,6 +8,9 @@ enyo.kind({
     events: {
         onDone: ""
     },
+    handlers: {
+        tap: ""
+    },
     published: {
         // Callback that gets called when the user has successfully signed in
         successCallback: function() {},
@@ -20,24 +23,28 @@ enyo.kind({
         this.contextChanged();
     },
     contextChanged: function() {
-        this.$.primaryText.setShowing(this.context == "start");
-        this.$.secondaryText.setShowing(this.context != "start");
-        this.$.cancelButton.setContent(this.context == "start" ? $L("Browse anonymously") : $L("Cancel"));
+        // this.$.cancelButton.setContent(this.context == "start" ? $L("Browse anonymously") : $L("Cancel"));
         this.$.signInButton.setContext(this.context);
     },
-    ready: function() {
-        // setTimeout(enyo.bind(this, function() {
-            this.addClass("ready");
-        // }), 500);
+    open: function() {
+        this.show();
+        enyo.asyncMethod(this, function() {
+            this.addClass("show");
+        });
+    },
+    close: function() {
+        this.removeClass("show");
+        setTimeout(enyo.bind(this, function() {
+            this.hide();
+        }), 500);
     },
     signInSuccess: function() {
-        this.log("sign in success!");
         if (this.successCallback) {
             this.successCallback();
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: true});
     },
     signInFail: function() {
         if (this.failureCallback) {
@@ -45,7 +52,7 @@ enyo.kind({
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: false});
     },
     /**
         Calls _failureCallback_ and fires done event
@@ -56,7 +63,7 @@ enyo.kind({
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: false});
         if (event) {
             event.preventDefault();
         }
@@ -64,19 +71,19 @@ enyo.kind({
             context: this.context
         });
     },
+    tap: function(sender, event) {
+        if (!event.originator.isDescendantOf(this.$.front)) {
+            this.cancel();
+        }
+    },
     components: [
-        {classes: "signinview-scrim"},
-        {classes: "signinview-content", components: [
-            {classes: "signinview-spacer"},
-            {classes: "signinview-center", components: [
-                {name: "primaryText", classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
-                {name: "secondaryText", classes: "signinview-text", style: "font-size: 13pt;", showing: false,
+        {kind: "Card", classes: "enyo-fill signinview-card", components: [
+            {name: "front", classes: "signinview-card-front", components: [
+                {kind: "Image", src: "assets/images/friends_placeholder.png", classes: "signinview-image"},
+                {classes: "signinview-text",
                     content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
-                {kind: "SignInButton", onSignInSuccess: "signInSuccess", onSignInFail: "signInFail", style: "display: block; margin: 0 auto;"},
-                {kind: "Button", name: "cancelButton", style: "width: 240px; display: block; margin: 5px auto;", ontap: "cancel"},
-                {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
-            ]},
-            {classes: "signinview-spacer"}
+                {kind: "SignInButton", onSignInSuccess: "signInSuccess", onSignInFail: "signInFail", classes: "signinview-signin-button"}
+            ]}
         ]}
     ]
 });

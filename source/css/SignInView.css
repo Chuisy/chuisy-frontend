@@ -1,24 +1,61 @@
 .signinview {
+	background-color: transparent;
+	-webkit-transition: background-color 0.5s;
+    -webkit-perspective: 1000px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.signinview.show {
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.card-stage.signinview-card {
+	opacity: 0;
+	-webkit-transform: translate3d(0, 0, 700px) rotateY(90deg);
+	-webkit-transition: -webkit-transform 0.5s, opacity 0.4s;
+}
+
+.signinview.show .signinview-card {
+	-webkit-transform: translate3d(0, 0, 0) rotateY(0);
+	opacity: 1;
+}
+
+.card-side.signinview-card-front {
+	height: 300px;
 	background-color: #f1f1f1;
 }
 
-.signinview-spacer {
-	-webkit-box-flex: 1;
+.signin-button.signinview-signin-button {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 
-.signinview-content {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-box-align: stretch;
+.signin-button.signinview-signin-button .signin-button-button {
+	border-radius: 0 0 13px 13px;
+	box-shadow: none;
+	border-top: solid 1px #38548D;
+}
+
+.signinview-image {
+	width: 128px;
+	height: 128px;
+	display: block;
+	margin: 0 auto;
 }
 
 .signinview-text {
 	width: 100%;
 	text-align: center;
-	padding: 20px 40px 30px 40px;
-	color: #444;
+	padding: 0 40px;
+	color: #888;
 	text-shadow: 0px 1px 0px rgba(255,255,255,1);
 	font-size: 12pt;
+	line-height: 1.3em;
 	box-sizing: border-box;
 }
 
@@ -38,11 +75,4 @@
 	display: block;
 	margin: 5px auto;
 	width: 250px;
-}
-
-.signinview-logo {
-	display: block;
-	width: 120px;
-	height: 60px;
-	margin: 0 auto;
 }
