@@ -625,7 +625,7 @@ enyo.kind({
         this.prepareView("guide");
         // this.$.panels.select(this.$.guide, event.inAnim, event.outAnim);
         this.$.panels.selectDirect(this.$.guide);
-        this.$.guide.resized();
+        this.$.guide.activate();
     },
     showChu: function(sender, event) {
         event = event || {};

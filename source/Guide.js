@@ -32,7 +32,9 @@ enyo.kind({
         // this.$.forwardButton.setShowing(step < 3);
         // this.$.backButton.setShowing(step > 0);
     },
-    activate: function() {},
+    activate: function() {
+        this.resized();
+    },
     deactivate: function() {},
     components: [
         {classes: "header", components: [
