@@ -184,7 +184,7 @@ enyo.kind({
                 ]},
                 {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
                     {classes: "userview-window", components: [
-                        {style: "position: absolute; bottom: 0; right: 0; width: 100px; height: 50px;", ontap: "toggleFollow"}
+                        {style: "position: absolute; bottom: 0; right: 0; width: 100px; height: 50px;", ontap: "followButtonTapped"}
                     ]},
                     {style: "background-color: #f1f1f1", components: [
                         {classes: "userview-tabs", components: [
