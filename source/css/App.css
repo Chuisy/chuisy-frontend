@@ -356,6 +356,52 @@ button[disabled] {
 	background-size: cover;
 }
 
+.placeholder-card {
+    background-image: url(../../assets/images/lightpaperfibers.png);
+    background-size: 500px 300px;
+    background-color: white;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+    width: 300px;
+    height: 300px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.placeholder-card-image {
+    width: 128px;
+    height: 128px;
+    display: block;
+    margin: 10px auto;
+}
+
+.placeholder-card-text {
+    padding: 0 20px 10px 20px;
+    font-size: 12pt;
+    line-height: 1.4em;
+    color: #555;
+    -webkit-box-flex: 1;
+	text-shadow: 0px 1px 0px rgba(255,255,255,1);
+}
+
+.placeholder-card-button {
+    display: block;
+    width: 100%;
+    padding: 10px 10px 12px 10px;
+    font-weight: bold;
+    box-shadow: none;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: none;
+    border-top: solid 1px #e0e0e0;
+    /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.02)), to(rgba(0, 0, 0, 0.08)));
+    padding: 6px 10px 8px 10px;
+    position: relative;*/
+}
+
 
 /* PULLER */
 

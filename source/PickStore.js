@@ -144,19 +144,19 @@ enyo.kind({
         ]},
         {kind: "FittableRows", fit: true, style: "position: relative", components: [
             {name: "initialLocationMessage", showing: false, classes: "pickstore-location-message", components: [
-                {classes: "pickstore-location-message-card absolute-center", components: [
-                    {kind: "Image", src: "assets/images/map_placeholder.png", classes: "pickstore-location-message-image"},
-                    {classes: "pickstore-location-message-text", content: $L("Um zu sehen, ob es in diesem Geschäft Geschenke für dich gibt, müssen wir wissen, wo du gerade shoppst. Deine Daten sind sicher!")},
-                    {kind: "Button", classes: "pickstore-location-button", ontap: "getGeoLocation", components: [
+                {classes: "placeholder-card absolute-center", components: [
+                    {kind: "Image", src: "assets/images/map_placeholder.png", classes: "placeholder-card-image"},
+                    {classes: "placeholder-card-text", content: $L("Um zu sehen, ob es in diesem Geschäft Geschenke für dich gibt, müssen wir wissen, wo du gerade shoppst. Deine Daten sind sicher!")},
+                    {kind: "Button", classes: "placeholder-card-button", ontap: "getGeoLocation", components: [
                         {kind: "Image", classes: "pickstore-location-icon", src: "assets/images/black_marker.png"},
                         {classes: "pickstore-location-button-caption", content: $L("Get Location")}
                     ]}
                 ]}
             ]},
             {name: "noLocationMessage", showing: false, classes: "pickstore-location-message", components: [
-                {classes: "pickstore-location-message-card absolute-center", components: [
-                    {kind: "Image", src: "assets/images/map_placeholder.png", classes: "pickstore-location-message-image"},
-                    {classes: "pickstore-location-message-text", content: $L("Leider konntent wir deinen Standort nicht bestimmen. Bitte gehe in deine Telefoneinstellungen unter <strong>Datenschutz > Ortungsdienste</strong> und stelle sicher, dass Chuisy aktiviert ist!"), allowHtml: true}
+                {classes: "placeholder-card absolute-center", components: [
+                    {kind: "Image", src: "assets/images/map_placeholder.png", classes: "placeholder-card-image"},
+                    {classes: "placeholder-card-text", content: $L("Leider konntent wir deinen Standort nicht bestimmen. Bitte gehe in deine Telefoneinstellungen unter <strong>Datenschutz > Ortungsdienste</strong> und stelle sicher, dass Chuisy aktiviert ist!"), allowHtml: true}
                 ]}
             ]},
             {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", placeholder: $L("Search or create store..."), onEnter: "searchInputEnter", onChange: "searchInputChange", onCancel: "searchInputCancel", searchEnterButton: false},
