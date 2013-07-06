@@ -1,6 +1,6 @@
 enyo.kind({
     name: "SignInButton",
-    style: "display: inline-block; position: relative; text-align: center;",
+    classes: "signin-button",
     events: {
         onSignInSuccess: "",
         onSignInFail: ""
@@ -40,9 +40,9 @@ enyo.kind({
         return true;
     },
     components: [
-        {kind: "Button", name: "button", classes: "facebook-button", ontap: "signIn", components: [
-            {classes: "facebook-button-icon"},
-            {classes: "facebook-button-caption", content: $L("Sign in with Facebook")}
+        {kind: "Button", name: "button", classes: "signin-button-button", ontap: "signIn", components: [
+            {classes: "signin-button-icon"},
+            {classes: "signin-button-caption", content: $L("Sign in with Facebook")}
         ]},
         {name: "spinner", kind: "Spinner", classes: "absolute-center", showing: false}
     ]

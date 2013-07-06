@@ -93,7 +93,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0 0 5px #888;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     width: 300px;
     height: 400px;
     border-radius: 15px;
