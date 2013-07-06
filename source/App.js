@@ -331,13 +331,8 @@ enyo.kind({
         App.startSession();
         this.checkPendingNotifications();
 
-        if (!App.isSignedIn()) {
-            this.showSignIn(this, {
-                success: enyo.bind(this, this.showFeed),
-                failure: enyo.bind(this, this.showFeed),
-                context: "start",
-                direct: true
-            });
+        if (!App.isSignedIn() && guideSeen) {
+            this.showSignIn(this, {context: "start"});
         }
     },
     /**
