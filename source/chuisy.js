@@ -42,9 +42,6 @@
                 chuisy.accounts.syncActiveUser();
 
                 if (!lightweight) {
-                    // Fetch the active users friends
-                    user.friends.fetchAll();
-
                     chuisy.notifications.startPolling(60000);
                 }
             } else {
