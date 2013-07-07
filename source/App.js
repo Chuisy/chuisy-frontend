@@ -249,6 +249,13 @@ enyo.kind({
             // Clean up temporary pictures
             navigator.camera.cleanup();
         }
+
+        chuisy.accounts.on("change:active_user", this.activeUserChanged, this);
+    },
+    activeUserChanged: function() {
+        this.cachedUsers.reset();
+        this.cachedChus.reset();
+        this.cachedStores.reset();
     },
     renderInto: function() {
         this.renderStart = new Date();
