@@ -30,10 +30,11 @@ enyo.kind({
     },
     visibilityChanged: function() {
         this.$[this.visibility + "Button"].setActive(true);
+        this.$.shareButtons.setShowing(this.visibility == "public");
+        this.setShareFacebook(this.visibility == "private" ? false : this.shareFacebook);
     },
     visibilitySelected: function(sender, event) {
-        // sender.setActive(true);
-        this.visibility = sender.value;
+        this.setVisibility(sender.value);
     },
     shareFacebookChanged: function() {
         this.$.facebookButton.addRemoveClass("active", this.shareFacebook);
@@ -88,7 +89,7 @@ enyo.kind({
         this.setLike(false);
         this.setUuid("");
         App.fbHasPublishPermissions(enyo.bind(this, function(yes) {
-            this.setShareFacebook(yes);
+            this.setShareFacebook(yes && this.visibility == "public");
         }));
     },
     getComment: function() {
@@ -162,7 +163,7 @@ enyo.kind({
                             {classes: "postview-share-header-count", name: "shareCount"}
                         ]},
                         {kind: "Button", content: $L("Share with selected friends"), classes: "postview-section postview-add-friends", ontap: "openPeoplePicker"},
-                        {classes: "postview-section", components: [
+                        {name: "shareButtons", classes: "postview-section", components: [
                             {kind: "Button", name: "facebookButton", ontap: "toggleFacebook", classes: "postview-share-button facebook", components: [
                                 {classes: "postview-share-icon"},
                                 {classes: "postview-share-caption", content: "Facebook"}
