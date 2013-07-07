@@ -23,7 +23,9 @@ enyo.kind({
         this.positionParallaxElements();
     },
     activeUserChanged: function() {
-        this.setUser(chuisy.accounts.getActiveUser());
+        setTimeout(enyo.bind(this, function() {
+            this.setUser(chuisy.accounts.getActiveUser());
+        }), 100);
     },
     userChanged: function() {
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
