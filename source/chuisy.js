@@ -17,9 +17,9 @@
             chuisy.accounts.trigger("change:active_user");
 
             if (!lightweight) {
-                chuisy.notices.fetch({data: {
-                    language: navigator.language.split("-")[0]
-                }});
+                // chuisy.notices.fetch({data: {
+                //     language: navigator.language.split("-")[0]
+                // }});
 
                 chuisy.closet.fetch();
                 chuisy.closet.checkLocalFiles();
