@@ -45,11 +45,6 @@
                     // Fetch the active users friends
                     user.friends.fetchAll();
 
-                    // Fetch cards for goodies view
-                    chuisy.cards.fetch();
-
-                    // Regularly poll for new notifications
-                    chuisy.notifications.fetch();
                     chuisy.notifications.startPolling(60000);
                 }
             } else {
