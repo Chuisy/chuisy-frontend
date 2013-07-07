@@ -50,7 +50,10 @@ enyo.kind({
         // chuisy.feed.on("remove", this.refreshFeed, this);
         var s = this.$.feedList.getStrategy();
         s.scrollIntervalMS = 17;
-        this.fetchFeed();
+        chuisy.accounts.on("change:active_user", this.activeUserChanged, this);
+    },
+    activeUserChanged: function() {
+        setTimeout(enyo.bind(this, this.fetchFeed, true), chuisy.feed.meta.total_count ? 1000 : 50);
     },
     fetchFeed: function(direct) {
         this.setPulled(true, direct);
