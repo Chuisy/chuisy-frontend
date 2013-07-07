@@ -1252,12 +1252,6 @@
             return this.filter(function(el) {
                 return !el.get("read");
             }).length;
-        },
-        fetch: function(options) {
-            options = options || {};
-            options.data = options.data || {};
-            options.data.limit = options.data.limit || 40;
-            Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
         }
     });
 
