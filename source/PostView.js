@@ -10,7 +10,8 @@ enyo.kind({
         image: "",
         visibility: "public",
         shareFacebook: false,
-        like: false
+        like: false,
+        uuid: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
@@ -85,6 +86,7 @@ enyo.kind({
         this.setShareFacebook(false);
         this.$.commentInput.setValue("");
         this.setLike(false);
+        this.setUuid("");
         App.fbHasPublishPermissions(enyo.bind(this, function(yes) {
             this.setShareFacebook(yes);
         }));

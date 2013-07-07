@@ -20,6 +20,8 @@ enyo.kind({
         this.$.pickStore.initialize();
         this.$.chuForm.clear();
         this.$.postView.clear();
+        this.uuid = util.generateUuid();
+        this.$.postView.setUuid(this.uuid);
     },
     imageChanged: function() {
         this.$.chuForm.setImage(this.image);
@@ -138,7 +140,8 @@ enyo.kind({
             longitude: longitude,
             liked: like,
             comment: comment,
-            fb_og_share: share
+            fb_og_share: share,
+            uuid: this.uuid
         }, {at: 0});
         if (comment) {
             chu.comments.add(new chuisy.models.ChuComment({
