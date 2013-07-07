@@ -52,15 +52,15 @@ enyo.kind({
         s.scrollIntervalMS = 17;
         this.fetchFeed();
     },
-    fetchFeed: function() {
-        this.setPulled(true);
+    fetchFeed: function(direct) {
+        this.setPulled(true, direct);
         chuisy.feed.fetch({data: {
             thumbnails: ["292x292"]
         }, success: enyo.bind(this, function() {
-            this.setPulled(false);
+            this.setPulled(false, direct);
             this.feedLoaded();
         }), error: enyo.bind(this, function() {
-            this.setPulled(false);
+            this.setPulled(false, direct);
         })});
     },
     nextPage: function() {
@@ -195,14 +195,16 @@ enyo.kind({
         }
         this.setPulled(this.pulling || this.pulled);
     },
-    setPulled: function(pulled) {
+    setPulled: function(pulled, direct) {
         this.pulled = pulled;
         this.$.pulldown.setShowing(this.pulled);
         this.$.pulldownSpinner.setSpinning(this.pulled);
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
         this.$.pulldown.applyStyle("-webkit-transform", "translate3d(0, " + (this.pulled ? this.scrollerOffset + this.pullerHeight : 0)+ "px, 0)");
-        this.$.feedList.getStrategy().start();
+        if (direct) {
+            this.$.feedList.setScrollTop(this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset);
+        }
     },
     // generatePage: function(sender, event) {
     //     // var startIndex = (event.pageNumber - 2) * this.$.feedList.getRowsPerPage();
