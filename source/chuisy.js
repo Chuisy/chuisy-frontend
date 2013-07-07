@@ -24,7 +24,6 @@
                 chuisy.closet.fetch();
                 chuisy.closet.checkLocalFiles();
 
-
                 chuisy.venues.fetch();
             }
         },
@@ -46,10 +45,6 @@
                     // Fetch the active users friends
                     user.friends.fetchAll();
 
-                    // Regularly synchronize the closet
-                    chuisy.closet.syncRecords();
-                    chuisy.closet.startPolling(60000);
-
                     // Fetch cards for goodies view
                     chuisy.cards.fetch();
 
@@ -61,7 +56,6 @@
                 // Unset auth credentials
                 Backbone.Tastypie.authCredentials = {};
                 chuisy.accounts.stopPolling();
-                chuisy.closet.stopPolling();
                 chuisy.notifications.stopPolling();
                 chuisy.notifications.reset();
                 chuisy.cards.reset();
@@ -252,21 +246,9 @@
             model.save({syncStatus: "postFailed"}, {nosync: true, silent: true});
             model.trigger("change:syncStatus", model);
         },
-        /*
-            Synchronizes all added, destroyed and modified models; Fetches new models from the server
-        */
-        syncRecords: function() {
-            var added = this.getList("added");
+        syncChanged: function() {
             var changed = this.getList("changed");
-            var destroyed = this.getList("destroyed");
-
-            console.log("syncing records for collection " + this.localStorage.name + "...");
-            console.log("added: " + JSON.stringify(added));
             console.log("changed: " + JSON.stringify(changed));
-            console.log("destroyed: " + JSON.stringify(destroyed));
-
-            // Load all remove models and update in local storage, IF the respective model has not been changed locally
-            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
 
             // Sync all changed models
             for (var i=0; i<changed.length; i++) {
@@ -275,12 +257,20 @@
                     model.save(null, {remote: true, nosync: true, silent: true});
                 }
             }
+        },
+        syncDestroyed: function() {
+            var destroyed = this.getList("destroyed");
+            console.log("destroyed: " + JSON.stringify(destroyed));
 
             // Sync all destroyed models
             for (i=0; i<destroyed.length; i++) {
                 var model = new this.model({id: destroyed[i]});
                 model.destroy({remote: true, wait: true, complete: _.bind(this.destroyedRecordSynced, this, model)});
             }
+        },
+        syncAdded: function() {
+            var added = this.getList("added");
+            console.log("added: " + JSON.stringify(added));
 
             // Sync all added models
             for (i=0; i<added.length; i++) {
@@ -303,6 +293,19 @@
                     model.set("id", lid);
                 }
             }
+        },
+        /*
+            Synchronizes all added, destroyed and modified models; Fetches new models from the server
+        */
+        syncRecords: function() {
+            console.log("syncing records for collection " + this.localStorage.name + "...");
+
+            // Load all remove models and update in local storage, IF the respective model has not been changed locally
+            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
+
+            this.syncChanged();
+            this.syncDestroyed();
+            this.syncAdded();
         },
         /*
             Start syncing collection regularly. _interval_ is the time to wait between syncing. _options_
