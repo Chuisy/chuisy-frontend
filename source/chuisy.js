@@ -24,8 +24,6 @@
                 chuisy.closet.fetch();
                 chuisy.closet.checkLocalFiles();
 
-                chuisy.feed.fetch();
-                chuisy.feed.fetch({remote: true, data: {limit: 20}});
 
                 chuisy.venues.fetch();
             }
@@ -1104,29 +1102,29 @@
         The Chu Feed. Contains a list of Chus relevant for the active User
     */
     chuisy.models.Feed = chuisy.models.ChuCollection.extend({
-        url: chuisy.apiRoot + chuisy.version + "/chu/feed/",
-        localStorage: new Backbone.LocalStorage("feed"),
-        reset: function(models, options) {
-            if (!options.remote) {
-                return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
-            }
+        url: chuisy.apiRoot + chuisy.version + "/chu/feed/"
+        // localStorage: new Backbone.LocalStorage("feed"),
+        // reset: function(models, options) {
+        //     if (!options.remote) {
+        //         return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+        //     }
 
-            // Cache the first page of Chus
-            this.each(function(model) {
-                this.localStorage.destroy(model);
-            }, this);
-            chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
-            this.each(function(model) {
-                this.localStorage.create(model);
-            }, this);
-        },
-        fetch: function(options) {
-            // Request thumbnails
-            options = options || {};
-            options.data = options.data || {};
-            options.data.thumbnails = options.data.thumbnails || ["292x292"];
-            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
-        }
+        //     // Cache the first page of Chus
+        //     this.each(function(model) {
+        //         this.localStorage.destroy(model);
+        //     }, this);
+        //     chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+        //     this.each(function(model) {
+        //         this.localStorage.create(model);
+        //     }, this);
+        // },
+        // fetch: function(options) {
+        //     // Request thumbnails
+        //     options = options || {};
+        //     options.data = options.data || {};
+        //     options.data.thumbnails = options.data.thumbnails || ["292x292"];
+        //     return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
+        // }
     });
 
     /*

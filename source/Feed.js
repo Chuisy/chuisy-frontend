@@ -46,11 +46,35 @@ enyo.kind({
     pullerThreshold: 60,
     create: function() {
         this.inherited(arguments);
-        chuisy.feed.on("reset", this.feedLoaded, this);
-        chuisy.feed.on("remove", this.refreshFeed, this);
-        this.setPulled(true);
+        // chuisy.feed.on("reset", this.feedLoaded, this);
+        // chuisy.feed.on("remove", this.refreshFeed, this);
         var s = this.$.feedList.getStrategy();
         s.scrollIntervalMS = 17;
+        this.fetchFeed();
+    },
+    fetchFeed: function() {
+        this.setPulled(true);
+        chuisy.feed.fetch({data: {
+            thumbnails: ["292x292"]
+        }, success: enyo.bind(this, function() {
+            this.setPulled(false);
+            this.feedLoaded();
+        }), error: enyo.bind(this, function() {
+            this.setPulled(false);
+        })});
+    },
+    nextPage: function() {
+        if (!this.loading) {
+            this.loading = true;
+            chuisy.feed.fetchNext({data: {
+                thumbnails: ["292x292"]
+            }, success: enyo.bind(this, function() {
+                this.loading = false;
+                this.refreshFeed();
+            }), error: enyo.bind(this, function() {
+                this.loading = false;
+            })});
+        }
     },
     feedLoaded: function() {
         // this.notice = chuisy.notices && chuisy.notices.filter(function(notice) {
@@ -58,7 +82,6 @@ enyo.kind({
         // })[0];
         this.$.feedList.setCount(chuisy.feed.length);
         this.$.placeholder.setShowing(!chuisy.feed.length);
-        this.setPulled(false);
         if (this.hasNode()) {
             enyo.asyncMethod(this, function() {
                 this.$.feedList.reset();
@@ -119,17 +142,6 @@ enyo.kind({
 
         return true;
     },
-    nextPage: function() {
-        if (!this.loading) {
-            this.loading = true;
-            chuisy.feed.fetchNext({remote: true, success: enyo.bind(this, function() {
-                this.loading = false;
-                this.refreshFeed();
-            }), error: enyo.bind(this, function() {
-                this.loading = false;
-            })});
-        }
-    },
     chuTapped: function(sender, event) {
         if (!this.$.feedList.getStrategy().stoppedOnDown) {
             this.doShowChu({chu: chuisy.feed.at(event.index)});
@@ -179,7 +191,7 @@ enyo.kind({
     },
     dragFinishHandler: function() {
         if (this.pulling && !this.pulled) {
-            chuisy.feed.fetch({remote: true});
+            this.fetchFeed();
         }
         this.setPulled(this.pulling || this.pulled);
     },
@@ -189,6 +201,7 @@ enyo.kind({
         this.$.pulldownSpinner.setSpinning(this.pulled);
         this.$.pulldown.addRemoveClass("pulled", this.pulled);
         this.$.feedList.getStrategy().topBoundary = this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset;
+        this.$.pulldown.applyStyle("-webkit-transform", "translate3d(0, " + (this.pulled ? this.scrollerOffset + this.pullerHeight : 0)+ "px, 0)");
         this.$.feedList.getStrategy().start();
     },
     // generatePage: function(sender, event) {
