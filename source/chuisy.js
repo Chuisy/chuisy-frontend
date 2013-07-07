@@ -42,7 +42,7 @@
                 chuisy.accounts.syncActiveUser();
 
                 if (!lightweight) {
-                    chuisy.notifications.startPolling(60000);
+                    chuisy.notifications.startPolling(60000, {data: {limit: 10}});
                 }
             } else {
                 // Unset auth credentials
@@ -63,7 +63,7 @@
                 // We have gone from offline to online and there is an active and authenticated user. Lets do some synching!
                 chuisy.accounts.syncActiveUser();
                 chuisy.closet.syncRecords();
-                chuisy.notifications.fetch();
+                chuisy.notifications.fetch({data: {limit: 10}});
             }
         },
         /**

@@ -426,7 +426,7 @@ enyo.kind({
         var pushNotification = window.plugins.pushNotification;
 
         document.addEventListener('onPushNotification', enyo.bind(this, function(event) {
-            chuisy.notifications.fetch();
+            chuisy.notifications.fetch({data: {limit: 5}});
             // this.log(JSON.stringify(event.notification));
             // pushNotification.setApplicationIconBadgeNumber(event.notification.aps.badge, function() {});
             enyo.Signals.send("onPushNotification", event);
