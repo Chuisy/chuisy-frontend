@@ -101,6 +101,25 @@ enyo.kind({
         this.$.share.setShowing(user);
         this.$.login.setShowing(!user);
     },
+    getShareMessage: function() {
+        if (this.store && this.store.get("name")) {
+            return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", this.store.get("name"));
+        } else {
+            return $L("Check out this cool fashion item!");
+        }
+    },
+    getShareUrl: function() {
+        return "http://staging.chuisy.com/chu/uuid/" + this.uuid + "/";
+    },
+    twitter: function() {
+        App.shareTwitter(this.getShareMessage(), this.getShareUrl(), this.image);
+    },
+    messaging: function() {
+        App.shareMessaging(this.getShareMessage(), this.getShareUrl());
+    },
+    email: function() {
+        App.shareEmail(this.getShareMessage(), this.getShareUrl());
+    },
     components: [
         {kind: "AnimatedPanels", name: "panels", classes: "enyo-fill", components: [
             {name: "formView", components: [
