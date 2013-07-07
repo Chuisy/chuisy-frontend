@@ -53,9 +53,9 @@ enyo.kind({
         s.scrollIntervalMS = 17;
     },
     feedLoaded: function() {
-        this.notice = chuisy.notices && chuisy.notices.filter(function(notice) {
-            return !localStorage.getItem("chuisy.dismissed_notices." + notice.get("key"));
-        })[0];
+        // this.notice = chuisy.notices && chuisy.notices.filter(function(notice) {
+        //     return !localStorage.getItem("chuisy.dismissed_notices." + notice.get("key"));
+        // })[0];
         this.$.feedList.setCount(chuisy.feed.length);
         this.$.placeholder.setShowing(!chuisy.feed.length);
         this.setPulled(false);
@@ -110,12 +110,12 @@ enyo.kind({
             this.nextPage();
         }
 
-        if (this.notice && event.index === 0) {
-            this.$.feedInfoText.setContent(this.notice.get("text"));
-            this.$.feedInfoBox.show();
-        } else {
-            this.$.feedInfoBox.hide();
-        }
+        // if (this.notice && event.index === 0) {
+        //     this.$.feedInfoText.setContent(this.notice.get("text"));
+        //     this.$.feedInfoBox.show();
+        // } else {
+        //     this.$.feedInfoBox.hide();
+        // }
 
         return true;
     },
@@ -304,11 +304,11 @@ enyo.kind({
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
             preventDragPropagation: false, ondragfinish: "dragFinishHandler", preventScrollPropagation: false, onScroll: "scrollHandler", onflick: "flick", components: [
             {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
-                {name: "feedInfoBox", classes: "feed-info-box", components: [
-                    {name: "feedInfoText", classes: "feed-info-box-text"},
-                    {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
-                    {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
-                ]},
+                // {name: "feedInfoBox", classes: "feed-info-box", components: [
+                //     {name: "feedInfoText", classes: "feed-info-box-text"},
+                //     {kind: "Button", content: $L("No Thanks"), classes: "feed-info-box-button dismiss", ontap: "dismissNotice"},
+                //     {kind: "Button", content: $L("Let's Go"), classes: "feed-info-box-button confirm", ontap: "confirmNotice"}
+                // ]},
                 {kind: "ChuFeedItem", tapHighlight: false, ontap: "chuTapped", onUserTapped: "userTapped", onToggleLike: "toggleLike", onStoreTapped: "storeTapped"}
                 // {kind: "Spinner", name: "nextPageSpinner", classes: "next-page-spinner"}
                 // {name: "lastPageMarker", classes: "last-page-marker"}
