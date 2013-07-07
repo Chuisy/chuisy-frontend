@@ -17,7 +17,6 @@ enyo.kind({
     stopListening: Backbone.Events.stopListening,
     create: function() {
         this.inherited(arguments);
-        this.setupFriends();
         this.shareFacebookChanged();
         this.activeUserChanged();
         chuisy.accounts.on("change:active_user", this.activeUserChanged, this);
@@ -70,7 +69,10 @@ enyo.kind({
     setupFriends: function() {
         var user = chuisy.accounts.getActiveUser();
         if (user) {
-            this.$.peoplePicker.setItems(user.friends.models);
+            // Fetch the active users friends
+            user.friends.fetchAll({success: enyo.bind(this, function() {
+                this.$.peoplePicker.setItems(user.friends.models);
+            })});
         }
     },
     getFriends: function() {

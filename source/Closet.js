@@ -150,6 +150,7 @@ enyo.kind({
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
             chu.destroy();
+            chuisy.closet.syncDestroyed();
         }, 300);
     },
     hold: function(sender, event) {

@@ -99,7 +99,7 @@ enyo.kind({
     nextPage: function() {
         chuisy.notifications.fetchNext({success: enyo.bind(this, function() {
             this.refresh();
-        })});
+        }), data: {limit: 20}});
     },
     notificationTapped: function(sender, event) {
         var not = chuisy.notifications.at(event.index);

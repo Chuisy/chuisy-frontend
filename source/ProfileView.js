@@ -23,9 +23,7 @@ enyo.kind({
         this.positionParallaxElements();
     },
     activeUserChanged: function() {
-        setTimeout(enyo.bind(this, function() {
-            this.setUser(chuisy.accounts.getActiveUser());
-        }), 100);
+        this.setUser(chuisy.accounts.getActiveUser());
     },
     userChanged: function() {
         // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
@@ -41,17 +39,8 @@ enyo.kind({
 
             // Refresh collections associated with this user. Fetch from server if necessary
             this.refreshHearts();
-            if (!this.user.likedChus.meta.total_count) {
-                this.loadHearts();
-            }
             this.refreshGoodies();
-            if (!this.user.goodies.meta.total_count) {
-                this.loadGoodies();
-            }
             this.refreshStores();
-            if (!this.user.followedStores.length.total_count) {
-                this.loadStores();
-            }
         }
 
         this.$.heartsButton.setDisabled(!this.user);
@@ -155,6 +144,15 @@ enyo.kind({
     activate: function() {
         this.updateView();
         this.refreshChus();
+        if (this.user && !this.user.likedChus.meta.total_count) {
+            this.loadHearts();
+        }
+        if (this.user && !this.user.goodies.meta.total_count) {
+            this.loadGoodies();
+        }
+        if (this.user && !this.user.followedStores.length.total_count) {
+            this.loadStores();
+        }
     },
     components: [
         {kind: "Image", classes: "userview-avatar profileview-avatar fadein", name: "avatar"},

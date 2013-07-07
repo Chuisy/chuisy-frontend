@@ -17,15 +17,12 @@
             chuisy.accounts.trigger("change:active_user");
 
             if (!lightweight) {
-                chuisy.notices.fetch({data: {
-                    language: navigator.language.split("-")[0]
-                }});
+                // chuisy.notices.fetch({data: {
+                //     language: navigator.language.split("-")[0]
+                // }});
 
                 chuisy.closet.fetch();
                 chuisy.closet.checkLocalFiles();
-
-                chuisy.feed.fetch();
-                chuisy.feed.fetch({remote: true, data: {limit: 20}});
 
                 chuisy.venues.fetch();
             }
@@ -45,30 +42,12 @@
                 chuisy.accounts.syncActiveUser();
 
                 if (!lightweight) {
-                    // Regularly synchronize changes to the user information
-                    setInterval(function() {
-                        chuisy.accounts.syncActiveUser();
-                    }, 60000);
-
-                    // Fetch the active users friends
-                    user.friends.fetchAll();
-
-                    // Regularly synchronize the closet
-                    chuisy.closet.syncRecords();
-                    chuisy.closet.startPolling(60000);
-
-                    // Fetch cards for goodies view
-                    chuisy.cards.fetch();
-
-                    // Regularly poll for new notifications
-                    chuisy.notifications.fetch();
-                    chuisy.notifications.startPolling(60000);
+                    chuisy.notifications.startPolling(60000, {data: {limit: 10}});
                 }
             } else {
                 // Unset auth credentials
                 Backbone.Tastypie.authCredentials = {};
                 chuisy.accounts.stopPolling();
-                chuisy.closet.stopPolling();
                 chuisy.notifications.stopPolling();
                 chuisy.notifications.reset();
                 chuisy.cards.reset();
@@ -84,7 +63,7 @@
                 // We have gone from offline to online and there is an active and authenticated user. Lets do some synching!
                 chuisy.accounts.syncActiveUser();
                 chuisy.closet.syncRecords();
-                chuisy.notifications.fetch();
+                chuisy.notifications.fetch({data: {limit: 10}});
             }
         },
         /**
@@ -259,21 +238,9 @@
             model.save({syncStatus: "postFailed"}, {nosync: true, silent: true});
             model.trigger("change:syncStatus", model);
         },
-        /*
-            Synchronizes all added, destroyed and modified models; Fetches new models from the server
-        */
-        syncRecords: function() {
-            var added = this.getList("added");
+        syncChanged: function() {
             var changed = this.getList("changed");
-            var destroyed = this.getList("destroyed");
-
-            console.log("syncing records for collection " + this.localStorage.name + "...");
-            console.log("added: " + JSON.stringify(added));
             console.log("changed: " + JSON.stringify(changed));
-            console.log("destroyed: " + JSON.stringify(destroyed));
-
-            // Load all remove models and update in local storage, IF the respective model has not been changed locally
-            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
 
             // Sync all changed models
             for (var i=0; i<changed.length; i++) {
@@ -282,12 +249,20 @@
                     model.save(null, {remote: true, nosync: true, silent: true});
                 }
             }
+        },
+        syncDestroyed: function() {
+            var destroyed = this.getList("destroyed");
+            console.log("destroyed: " + JSON.stringify(destroyed));
 
             // Sync all destroyed models
             for (i=0; i<destroyed.length; i++) {
                 var model = new this.model({id: destroyed[i]});
                 model.destroy({remote: true, wait: true, complete: _.bind(this.destroyedRecordSynced, this, model)});
             }
+        },
+        syncAdded: function() {
+            var added = this.getList("added");
+            console.log("added: " + JSON.stringify(added));
 
             // Sync all added models
             for (i=0; i<added.length; i++) {
@@ -310,6 +285,19 @@
                     model.set("id", lid);
                 }
             }
+        },
+        /*
+            Synchronizes all added, destroyed and modified models; Fetches new models from the server
+        */
+        syncRecords: function() {
+            console.log("syncing records for collection " + this.localStorage.name + "...");
+
+            // Load all remove models and update in local storage, IF the respective model has not been changed locally
+            this.fetchAll({remote: true, update: true, add: true, remove: false, merge: true});
+
+            this.syncChanged();
+            this.syncDestroyed();
+            this.syncAdded();
         },
         /*
             Start syncing collection regularly. _interval_ is the time to wait between syncing. _options_
@@ -1104,29 +1092,29 @@
         The Chu Feed. Contains a list of Chus relevant for the active User
     */
     chuisy.models.Feed = chuisy.models.ChuCollection.extend({
-        url: chuisy.apiRoot + chuisy.version + "/chu/feed/",
-        localStorage: new Backbone.LocalStorage("feed"),
-        reset: function(models, options) {
-            if (!options.remote) {
-                return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
-            }
+        url: chuisy.apiRoot + chuisy.version + "/chu/feed/"
+        // localStorage: new Backbone.LocalStorage("feed"),
+        // reset: function(models, options) {
+        //     if (!options.remote) {
+        //         return chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+        //     }
 
-            // Cache the first page of Chus
-            this.each(function(model) {
-                this.localStorage.destroy(model);
-            }, this);
-            chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
-            this.each(function(model) {
-                this.localStorage.create(model);
-            }, this);
-        },
-        fetch: function(options) {
-            // Request thumbnails
-            options = options || {};
-            options.data = options.data || {};
-            options.data.thumbnails = options.data.thumbnails || ["292x292"];
-            return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
-        }
+        //     // Cache the first page of Chus
+        //     this.each(function(model) {
+        //         this.localStorage.destroy(model);
+        //     }, this);
+        //     chuisy.models.ChuCollection.prototype.reset.call(this, models, options);
+        //     this.each(function(model) {
+        //         this.localStorage.create(model);
+        //     }, this);
+        // },
+        // fetch: function(options) {
+        //     // Request thumbnails
+        //     options = options || {};
+        //     options.data = options.data || {};
+        //     options.data.thumbnails = options.data.thumbnails || ["292x292"];
+        //     return chuisy.models.ChuCollection.prototype.fetch.call(this, options);
+        // }
     });
 
     /*
@@ -1261,12 +1249,6 @@
             return this.filter(function(el) {
                 return !el.get("read");
             }).length;
-        },
-        fetch: function(options) {
-            options = options || {};
-            options.data = options.data || {};
-            options.data.limit = options.data.limit || 40;
-            Backbone.Tastypie.Collection.prototype.fetch.call(this, options);
         }
     });
 
