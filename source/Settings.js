@@ -53,8 +53,6 @@ enyo.kind({
             first_name: this.$.firstName.getValue(),
             last_name: this.$.lastName.getValue()
         });
-        // chuisy.accounts.mark(user, "changed", true);
-        chuisy.accounts.syncActiveUser();
     },
     facebookSignIn: function() {
         // Get facebook access token
@@ -111,6 +109,7 @@ enyo.kind({
     },
     deactivate: function() {
         // this.$.scroller.hide();
+        chuisy.accounts.syncActiveUser();
     },
     components: [
         {classes: "header", components: [
