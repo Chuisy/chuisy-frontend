@@ -313,30 +313,7 @@ enyo.kind({
     facebook: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                window.plugins.social.available("facebook", enyo.bind(this, function(available) {
-                    if (available) {
-                        window.plugins.social.facebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"), enyo.bind(this, function() {
-                            App.sendCubeEvent("share_facebook_success", {
-                                chu: this.chu
-                            });
-                        }), enyo.bind(this, function() {
-                            App.sendCubeEvent("share_facebook_fail", {
-                                chu: this.chu
-                            });
-                        }));
-                    } else {
-                        var params = {
-                            method: "feed",
-                            link: this.getShareUrl(),
-                            picture: this.chu.get("image")
-                        };
-                        FB.ui(params, function(obj) {
-                            App.sendCubeEvent(obj && obj.post_id ? "share_facebook_success" : "share_facebook_fail", {
-                                chu: this.chu
-                            });
-                        });
-                    }
-                }));
+                App.shareFacebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"));
             }
         }), "share_facebook");
     },
@@ -346,25 +323,7 @@ enyo.kind({
     twitter: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                window.plugins.social.available("twitter", enyo.bind(this, function(available) {
-                    if (available) {
-                        window.plugins.social.twitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"), enyo.bind(this, function() {
-                            App.sendCubeEvent("share_twitter_success", {
-                                chu: this.chu
-                            });
-                        }), enyo.bind(this, function() {
-                            App.sendCubeEvent("share_twitter_fail", {
-                                chu: this.chu
-                            });
-                        }));
-                    } else {
-                        var url = this.twitterUrl + "?text=" + encodeURIComponent(this.getMessage()) + "&url=" + encodeURIComponent(this.getShareUrl()) + "&via=Chuisy";
-                        window.open(url, "_blank");
-                        App.sendCubeEvent("share_twitter_web", {
-                            chu: this.chu
-                        });
-                    }
-                }));
+                App.shareTwitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"));
             }
         }), "share_twitter");
     },
@@ -374,12 +333,7 @@ enyo.kind({
     pinterest: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                var url = this.getShareUrl();
-                var media = this.chu.get("image");
-                window.location = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media);
-                App.sendCubeEvent("share_pinterest", {
-                    chu: this.chu
-                });
+                App.sharePinterest(this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"));
             }
         }), "share_pinterest");
     },
@@ -387,14 +341,7 @@ enyo.kind({
         Share image via instagram
     */
     instagram: function() {
-        var start = new Date();
-        util.watermark(this.chu.get("image"), enyo.bind(this, function(dataUrl) {
-            Instagram.share(dataUrl, this.getMessage(), function(err) {
-                App.sendCubeEvent(err ? "share_instagram_fail" : "share_instagram_success", {
-                    chu: this.chu
-                });
-            });
-        }));
+        App.shareInstagram(this.getMessage(), this.chu.get("localImage") || this.chu.get("image"));
     },
     /**
         Open sms composer with message / link
@@ -402,15 +349,9 @@ enyo.kind({
     sms: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (this.checkSynced() && this.checkUploaded()) {
-                var message = this.getMessage();
-                window.plugins.smsComposer.showSMSComposer("", message + " " + this.getShareUrl(), function(result) {
-                    App.sendCubeEvent(result == 1 ? "share_messenger_success" : "share_messenger_cancel", {
-                        chu: this.chu
-                    });
-                });
+                App.shareMessaging(this.getMessage(), this.getShareUrl());
             }
         }), "share_messenger");
-        event.preventDefault();
         return true;
     },
     /**
@@ -419,9 +360,7 @@ enyo.kind({
     email: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (this.checkSynced() && this.checkUploaded()) {
-                var subject = $L("Hi there!");
-                var message = this.getMessage();
-                window.plugins.emailComposer.showEmailComposer(subject, message + " " + this.getShareUrl());
+                App.shareEmail(this.getMessage(), this.getShareUrl());
             }
         }), "share_email");
     },

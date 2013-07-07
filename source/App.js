@@ -9,6 +9,8 @@ enyo.kind({
     classes: "app",
     statics: {
         version: "1.3.0",
+        twitterUrl: "http://twitter.com/share/",
+        pinterestUrl: "http://pinterest.com/pin/create/button/",
         /**
             Checks if app is online. Only works properly with Phonegap.
             Otherwise always returns true.
@@ -218,6 +220,81 @@ enyo.kind({
             } else {
                 callback(user.profile.get(setting));
             }
+        },
+        shareFacebook: function(message, url, image) {
+            window.plugins.social.available("facebook", enyo.bind(this, function(available) {
+                if (available) {
+                    window.plugins.social.facebook(message, url, image, function() {
+                        App.sendCubeEvent("share_facebook_success");
+                    }, function() {
+                        App.sendCubeEvent("share_facebook_fail");
+                    });
+                } else {
+                    var params = {
+                        method: "feed",
+                        link: url,
+                        picture: image
+                    };
+                    FB.ui(params, function(obj) {
+                        App.sendCubeEvent(obj && obj.post_id ? "share_facebook_success" : "share_facebook_fail");
+                    });
+                }
+            }));
+        },
+        /**
+            Open twitter share dialog
+        */
+        shareTwitter: function(message, url, image) {
+            window.plugins.social.available("twitter", enyo.bind(this, function(available) {
+                if (available) {
+                    window.plugins.social.twitter(message, url, image, function() {
+                        App.sendCubeEvent("share_twitter_success");
+                    }, function() {
+                        App.sendCubeEvent("share_twitter_fail");
+                    });
+                } else {
+                    var target = App.twitterUrl + "?text=" + encodeURIComponent(message) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
+                    window.open(target, "_blank");
+                    App.sendCubeEvent("share_twitter_web");
+                }
+            }));
+        },
+        /**
+            Open pinterest share dialog
+        */
+        sharePinterest: function(url, image) {
+            var target = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(image);
+            window.open(target, "_blank");
+            App.sendCubeEvent("share_pinterest");
+        },
+        /**
+            Share image via instagram
+        */
+        shareInstagram: function(message, image) {
+            util.watermark(image,function(dataUrl) {
+                Instagram.share(dataUrl, message, function(err) {
+                    App.sendCubeEvent(err ? "share_instagram_fail" : "share_instagram_success");
+                });
+            });
+        },
+        /**
+            Open sms composer with message / link
+        */
+        shareMessaging: function(message, url) {
+            window.plugins.smsComposer.showSMSComposer("", message + " " + url, function(result) {
+                App.sendCubeEvent(result == 1 ? "share_messenger_success" : "share_messenger_fail");
+            });
+            event.preventDefault();
+            return true;
+        },
+        /**
+            Open email composer with message / link
+        */
+        shareEmail: function(message, url) {
+            var subject = $L("Look what I found on Chuisy!");
+            window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
+                App.sendCubeEvent(result == 2 ? "share_email_success" : "share_email_fail");
+            }, subject, message + " " + url);
         }
     },
     history: [["feed/"]],
