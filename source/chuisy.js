@@ -43,11 +43,6 @@
                 chuisy.accounts.syncActiveUser();
 
                 if (!lightweight) {
-                    // Regularly synchronize changes to the user information
-                    setInterval(function() {
-                        chuisy.accounts.syncActiveUser();
-                    }, 60000);
-
                     // Fetch the active users friends
                     user.friends.fetchAll();
 
