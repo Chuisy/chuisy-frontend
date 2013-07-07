@@ -151,7 +151,7 @@ enyo.kind({
         }
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
-                chuisy.closet.syncRecords();
+                chuisy.closet.syncAdded();
             }
             this.doDone({chu: chu});
         }));
