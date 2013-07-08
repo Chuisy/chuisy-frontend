@@ -89,7 +89,7 @@ enyo.kind({
         event.item.$.image.applyStyle("background-image", "url(" + chu.get("thumbnails")["100x100"] + ")");
     },
     chusTapped: function() {
-        this.doShowChuList({chus: this.store.chus, title: $L("Chus in {{ name }}").replace("{{ name }}", this.store.get("name"))});
+        this.doShowChuList({chus: this.store.chus, title: $L("Chus at {{ name }}").replace("{{ name }}", this.store.get("name"))});
     },
     followersTapped: function() {
         this.doShowUserList({users: this.store.followers, title: $L("{{ name }}'s Followers").replace("{{ name }}", this.store.get("name"))});
