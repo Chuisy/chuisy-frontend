@@ -101,6 +101,12 @@ enyo.kind({
     },
     toggleFollow: function(sender, event) {
         this.store.toggleFollow();
+        App.sendCubeEvent("action", {
+            type: "follow_store",
+            result: this.store.get("following") ? "follow" : "unfollow",
+            store: this.store,
+            context: "profile"
+        });
         return true;
     },
     showMap: function() {
