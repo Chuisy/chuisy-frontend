@@ -133,10 +133,10 @@ enyo.kind({
     },
     components: [
         {kind: "Spinner", name: "spinner", showing: true, style: "position: absolute; top: 20px; left: 0; right: 0; margin: 0 auto;"},
-        // {classes: "placeholder", name: "placeholder", components: [
-            {name: "placeholder", classes: "placeholder-image absolute-center"},
-            // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
-        // ]},
+        {classes: "placeholder", name: "placeholder", components: [
+            {name: "placeholder", classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("You don't have any notifications yet.")}
+        ]},
         {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
             {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [

@@ -327,7 +327,10 @@ enyo.kind({
     },
     components: [
         {kind: "Spinner", name: "spinner", style: "position: absolute; top: 20px; right: 0; left: 0; margin: 0 auto;", showing: true},
-        {name: "placeholder", classes: "placeholder-image"},
+        {classes: "placeholder", name: "placeholder", components: [
+            {name: "placeholder", classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("You don't have any Goodies yet.")}
+        ]},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
