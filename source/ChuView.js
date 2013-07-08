@@ -216,6 +216,7 @@ enyo.kind({
         }
     },
     commentEnter: function() {
+        this.$.commentInput.hasNode().blur();
         if (App.checkConnection()) {
             App.requireSignIn(enyo.bind(this, this.postComment), "comment");
         }
