@@ -36,7 +36,22 @@ enyo.kind({
         } else {
             var connection = $L(" that you are interested in");
             var targetObj = item.get("target_obj");
-            if (targetObj) {
+            if (item.get("connection")) {
+                switch (item.get("connection")) {
+                    case "owned":
+                        connection = $L(" of yours");
+                        break;
+                    case "shared":
+                        connection = $L(" that was shared with you");
+                        break;
+                    case "commented":
+                        connection = $L(" that you commented on");
+                        break;
+                    case "liked":
+                        connection = $L(" that you liked");
+                        break;
+                }
+            } else if (targetObj) {
                 if (targetObj.owned) {
                     connection = $L(" of yours");
                 } else if (targetObj.shared) {
@@ -47,7 +62,6 @@ enyo.kind({
                     connection = $L(" that you liked");
                 }
             }
-            var time = item.getTimeText();
             switch (item.get("action")) {
                 case "like":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
@@ -76,8 +90,8 @@ enyo.kind({
                     image = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
                     break;
             }
-            this.$.time.setContent(time);
         }
+        this.$.time.setContent(item.getTimeText());
 
         this.$.image.applyStyle("background-image", "url(" + (image || item.get("thumbnail") || "") + ")");
 
