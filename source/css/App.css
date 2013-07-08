@@ -121,16 +121,12 @@ button[disabled] {
 	height: 44px;
 	/*background: url(../../assets/images/menu-bar.png) repeat-x;
 	background-size: 320px 44px;*/
-	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ca2868), to(#b01b05));*/
-	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C5014F), to(#D61C00));*/
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C50138), to(#D61C00));
-	/*box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);*/
-	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B91901), to(#b01b05));*/
-	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#CE1A00), to(#b01b05));*/
-	/*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#BE1B02), to(#b01b05));*/
+    /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#E21A6A), to(#CF1C0E));*/
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff1e78), to(#bf1407));
 	/*background-color: #b01b05;*/
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	border-bottom: solid 1px #b01b05;
+    border-top: #FF4D94;
+	border-bottom: solid 1px #A31408;
 	box-sizing: border-box;
 	position: relative;
 	z-index: 99;
