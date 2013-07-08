@@ -497,8 +497,6 @@
                 this.save({localAvatar: newUrl}, {nosync: true});
                 this.trigger("change:avatar", this);
                 this.uploadAvatar();
-                // Create a local thumbnail for the avatar
-                this.makeThumbnail();
             }, this));
         },
         /*
