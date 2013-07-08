@@ -11,7 +11,6 @@ enyo.kind({
         this.$.menu.selectItem("feed");
         this.$.feed.addChu(chu);
         this.$.panels.select(this.$.feed);
-        this.$.feed.resized();
     },
     showProfile: function() {
         this.$.menu.selectItem("profile");
@@ -26,7 +25,6 @@ enyo.kind({
     showNotifications: function(chu) {
         this.$.menu.selectItem("notifications");
         this.$.panels.select(this.$.notifications);
-        this.$.notifications.resized();
         setTimeout(function() {
             chuisy.notifications.seen();
         }, 100);
@@ -41,10 +39,13 @@ enyo.kind({
     deactivate: function() {
         this.$.panels.hide();
     },
+    inAnimationStart: function(sender, event) {
+        event.newPanel.resized();
+    },
     components: [
         {classes: "mainview-inner enyo-fill", components: [
             {kind: "Menu", onChange: "menuChanged"},
-            {kind: "AnimatedPanels", async: true, inAnim: "fadeIn", outAnim: "fadeOut", duration: 300, classes: "mainview-panels", name: "panels", components: [
+            {kind: "AnimatedPanels", onInAnimationStart: "inAnimationStart", async: true, inAnim: "fadeIn", outAnim: "fadeOut", duration: 300, classes: "mainview-panels", name: "panels", components: [
                 // CHU FEED
                 {kind: "Feed", name: "feed"},
                 // OWN PROFILE VIEW
