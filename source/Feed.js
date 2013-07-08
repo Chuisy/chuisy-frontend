@@ -123,10 +123,10 @@ enyo.kind({
         // } else {
         //     this.$.chuFeedItem.applyStyle("opacity", 1);
         // }
-        App.sendCubeEvent("impression", {
-            chu: item,
-            context: "feed"
-        });
+        // App.sendCubeEvent("impression", {
+        //     chu: item,
+        //     context: "feed"
+        // });
 
         var isLastItem = event.index == chuisy.feed.length-1;
         var hasNextPage = chuisy.feed.hasNextPage();
@@ -209,38 +209,23 @@ enyo.kind({
             this.$.feedList.setScrollTop(this.pulled ? -this.scrollerOffset-this.pullerHeight : -this.scrollerOffset);
         }
     },
-    // generatePage: function(sender, event) {
-    //     // var startIndex = (event.pageNumber - 2) * this.$.feedList.getRowsPerPage();
-    //     enyo.asyncMethod(this, function() {
-    //         var rows = this.$.feedList.getRowsPerPage();
-    //         var startIndex = event.pageNumber * rows;
+    // dismissNotice: function() {
+    //     App.sendCubeEvent("dismiss_notice", {
+    //         context: "feed",
+    //         notice: this.notice
+    //     });
+    //     localStorage.setItem("chuisy.dismissed_notices." + this.notice.get("key"), true);
+    //     this.notice = null;
+    //     this.feedLoaded();
+    // },
+    // confirmNotice: function() {
+    //     this.doNoticeConfirmed({notice: this.notice});
 
-    //         var chus = chuisy.feed.slice(startIndex, startIndex + rows);
-    //         for (var i=0; i<chus.length; i++) {
-    //             App.sendCubeEvent("impression", {
-    //                 chu: chus[i],
-    //                 context: "feed"
-    //             });
-    //         }
+    //     App.sendCubeEvent("confirm_notice", {
+    //         context: "feed",
+    //         notice: this.notice
     //     });
     // },
-    dismissNotice: function() {
-        App.sendCubeEvent("dismiss_notice", {
-            context: "feed",
-            notice: this.notice
-        });
-        localStorage.setItem("chuisy.dismissed_notices." + this.notice.get("key"), true);
-        this.notice = null;
-        this.feedLoaded();
-    },
-    confirmNotice: function() {
-        this.doNoticeConfirmed({notice: this.notice});
-
-        App.sendCubeEvent("confirm_notice", {
-            context: "feed",
-            notice: this.notice
-        });
-    },
     nearbyTapped: function() {
         this.doShowNearby();
         event.preventDefault();
@@ -268,7 +253,9 @@ enyo.kind({
         if (chu.get("liked")) {
             this.$.heart.animate();
         }
-        App.sendCubeEvent(chu.get("liked") ? "like" : "unlike", {
+        App.sendCubeEvent("action", {
+            type: "like",
+            result: chu.get("liked") ? "like" : "unlike",
             chu: chu,
             context: "feed"
         });

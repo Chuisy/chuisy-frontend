@@ -146,7 +146,9 @@ enyo.kind({
             if (this.chu.get("liked")) {
                 this.$.heart.animate();
             }
-            App.sendCubeEvent(this.chu.get("liked") ? "like" : "unlike", {
+            App.sendCubeEvent("action", {
+                type: "like",
+                result: this.chu.get("liked") ? "like" : "unlike",
                 chu: this.chu,
                 context: "chu_view"
             });
@@ -224,7 +226,8 @@ enyo.kind({
                 user: chuisy.accounts.getActiveUser().toJSON()
             };
             var comment = this.chu.comments.create(attrs);
-            App.sendCubeEvent("comment", {
+            App.sendCubeEvent("action", {
+                type: "comment",
                 comment: comment
             });
             this.refreshComments();

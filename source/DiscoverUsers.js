@@ -31,10 +31,6 @@ enyo.kind({
         if (query) {
             this.$.searchInput.blur();
             this.search(query);
-            App.sendCubeEvent("search", {
-                context: "users",
-                query: query
-            });
         } else {
             this.searchInputCancel();
         }
@@ -47,6 +43,11 @@ enyo.kind({
         this.$.noResults.hide();
         this.latestQuery = query;
         this.users.fetch({searchQuery: query, success: enyo.bind(this, this.refresh)});
+        App.sendCubeEvent("action", {
+            type: "search",
+            context: "users",
+            query: query
+        });
     },
     searchInputCancel: function() {
         this.latestQuery = null;

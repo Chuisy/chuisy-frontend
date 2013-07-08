@@ -67,7 +67,9 @@ enyo.kind({
         if (event) {
             event.preventDefault();
         }
-        App.sendCubeEvent("signin_cancel", {
+        App.sendCubeEvent("action", {
+            type: "signin",
+            result: "cancel",
             context: this.context
         });
     },

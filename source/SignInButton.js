@@ -11,9 +11,6 @@ enyo.kind({
     signIn: function() {
         this.$.button.setDisabled(true);
         this.$.spinner.setShowing(true);
-        App.sendCubeEvent("signin_tap", {
-            context: this.context
-        });
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
                 chuisy.signIn(accessToken, enyo.bind(this, function() {

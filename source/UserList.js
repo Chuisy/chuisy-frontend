@@ -59,7 +59,9 @@ enyo.kind({
         var user = this.users.at(event.index);
         user.toggleFollow();
         this.$.userList.renderRow(event.index);
-        App.sendCubeEvent(user.get("following") ? "follow" : "unfollow", {
+        App.sendCubeEvent("action", {
+            type: "follow",
+            result: user.get("following") ? "follow" : "unfollow",
             target_user: user,
             context: "list"
         });
