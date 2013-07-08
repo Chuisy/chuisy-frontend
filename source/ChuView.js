@@ -88,6 +88,12 @@ enyo.kind({
         this.$.likeButton.addRemoveClass("active", this.chu.get("liked"));
 
         this.$.shareControls.setShowing(this.chu.get("visibility") == "public");
+        this.$.instagramButton.setShowing(false);
+        if (Instagram) {
+            Instagram.isInstalled(enyo.bind(this, function(err, installed) {
+                this.$.instagramButton.setShowing(installed);
+            }));
+        }
     },
     /**
         Configures the image view to the right zoom and scroll position to allow parallax scrolling
@@ -432,7 +438,7 @@ enyo.kind({
                     {classes: "header-icon messaging", ontap: "sms"},
                     {classes: "header-icon facebook", name: "facebookButton", ontap: "facebook"},
                     {classes: "header-icon twitter", ontap: "twitter"},
-                    {classes: "header-icon instagram", ontap: "instagram"}
+                    {classes: "header-icon instagram", ontap: "instagram", name: "instagramButton"}
                 ]}
             ]},
             {fit: true, name: "contentContainer", style: "position: relative; overflow: hidden;", components: [
