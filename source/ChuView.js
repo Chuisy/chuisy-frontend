@@ -111,24 +111,6 @@ enyo.kind({
     },
     likeButtonTapped: function() {
         if (App.checkConnection()) {
-            // App.requireSignIn(enyo.bind(this, function() {
-            //     var user = chuisy.accounts.getActiveUser();
-            //     // If user has activated sharing likes, make sure that we have publishing permissions.
-            //     // If not, ask him again (if a certain period of time has passed)
-            //     if (user && user.profile.get("fb_og_share_likes")) {
-            //         App.fbRequestPublishPermissions();
-            //         this.toggleLike();
-            //     } else {
-            //         App.optInSetting("fb_og_share_likes", $L("Share on Facebook"),
-            //             $L("Do you want to share your likes on Facebook? Some goodies can only be received if you share your stories! " +
-            //                 "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, enyo.bind(this, function(choice) {
-            //                 if (choice) {
-            //                     App.fbRequestPublishPermissions();
-            //                 }
-            //                 this.toggleLike();
-            //             }));
-            //     }
-            // }), "like");
             App.requireSignIn(enyo.bind(this, function() {
                 var user = chuisy.accounts.getActiveUser();
                 if (user && user.profile.get("fb_og_share_likes")) {
@@ -473,7 +455,7 @@ enyo.kind({
                             ]}
                         ]},
                         {name: "commentsContainer", components: [
-                            {classes: "chuview-more-comments", content: "Load more comments...", name: "moreComments", ontap: "moreComments"},
+                            {classes: "chuview-more-comments", content: $L("Load more comments..."), name: "moreComments", ontap: "moreComments"},
                             {kind: "Spinner", classes: "chuview-comments-spinner", name: "moreCommentsSpinner", showing: false},
                             // COMMENTS
                             {kind: "FlyweightRepeater", classes: "chuview-comments", name: "commentsRepeater", onSetupItem: "setupComment", components: [

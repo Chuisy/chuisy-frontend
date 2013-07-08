@@ -45,11 +45,6 @@ enyo.kind({
         }), enyo.bind(this, function() {
             this.$.initialLocationMessage.hide();
             this.$.noLocationMessage.show();
-            // navigator.notification.alert($L("Chuisy couldn't get your current location. " +
-            //     "If you want to properly enjoy Chuisy and receive little gifts from local retailers, " +
-            //     "go to 'Privacy > Location Services' in your phone's settings and enable location services for Chuisy!"), function() {
-            //     this.refreshPlacesList();
-            // }, $L("Can't find you!"), $L("OK"));
         }));
     },
     fetchPlaces: function() {
@@ -118,7 +113,7 @@ enyo.kind({
     searchInputChange: function() {
         this.filterString = this.$.searchInput.getValue();
         this.$.customPlace.setShowing(this.filterString);
-        this.$.customPlaceName.setContent($L("Create \"{{ name }}\"").replace("{{ name }}", this.filterString));
+        this.$.customPlaceName.setContent($L("Create '{{ name }}'").replace("{{ name }}", this.filterString));
         this.refreshPlacesList();
 
         this.selected = this.filteredPlaces.length ? this.filteredPlaces[0] : null;
@@ -140,7 +135,6 @@ enyo.kind({
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
             {classes: "header-text", content: $L("Pick Store")}
-            // {kind: "Button", ontap: "skip", classes: "done-button", content: "skip"}
         ]},
         {kind: "FittableRows", fit: true, style: "position: relative", components: [
             {name: "initialLocationMessage", showing: false, classes: "pickstore-location-message", components: [

@@ -200,10 +200,6 @@ enyo.kind({
                         {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
                         {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
                     ]},
-                    // {classes: "userview-box followers", components: [
-                    //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "<strong>21</strong> people follow Martin"},
-                    //     {kind: "Button", classes: "userview-followers-button", allowHtml: true, content: "Martin follows <strong>5</strong> people"}
-                    // ]},
                     {classes: "userview-box", ontap: "goodiesTapped", components: [
                         {classes: "userview-box-label goodies"},
                         {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [

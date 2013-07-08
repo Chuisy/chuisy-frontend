@@ -38,15 +38,13 @@ enyo.kind({
     deactivate: function() {},
     components: [
         {classes: "header", components: [
-            // {kind: "Button", name: "backButton", content: "zurück", ontap: "previous", classes: "header-button left"},
             {classes: "header-text", content: $L("How it works")}
-            // {kind: "Button", name: "forwardButton", content: "weiter", ontap: "next", classes: "header-button right"}
         ]},
         {kind: "Carousel", name: "panels", onTransitionStart: "panelsTransitionStart", fit: true, components: [
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", style: "background: url(assets/images/guide_front_1.jpg) no-repeat center bottom #fff; background-size: 300px 153px;", components: [
                     {classes: "guide-card-title", content: $L("Discover fashion")},
-                    {classes: "guide-card-text", content: $L("Discover the prettiest fashion items in your city. Find out where others go shopping and find inspiration for your own shopping trips.")}
+                    {classes: "guide-card-text", content: $L("Discover the prettiest fashion items in your city. See where others go shopping and find inspiration for your own shopping trips!")}
                 ]},
                 {classes: "guide-card-side"}
             ]},
@@ -61,7 +59,7 @@ enyo.kind({
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
                     {classes: "guide-card-title", content: $L("Join now")},
-                    {classes: "guide-card-text", content: $L("If you sign in you can connect with your friends and use all of Chuisy's features. Your data is safe with us and we won't post anything without asking you!"), style: "padding: 10px 25px 30px 25px;"},
+                    {classes: "guide-card-text", content: $L("Sign in to connect with your friends and use all of Chuisy's features. Your data is safe with us and we won't post anything without asking you!"), style: "padding: 10px 25px 30px 25px;"},
                     {kind: "SignInButton", onSignInSuccess: "doDone", onSignInFail: "doDone"},
                     {kind: "Button", content: $L("Browse anonymously"), classes: "signin-cancel-button", ontap: "doDone"}
                 ]},

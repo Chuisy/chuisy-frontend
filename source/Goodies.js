@@ -287,7 +287,7 @@ enyo.kind({
         var redeem = enyo.bind(this, function() {
             App.confirm(
                 $L("Redeem Coupon"),
-                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone who can claim it! A coupon can only be redeemed once!"),
                 enyo.bind(this, function(choice) {
                     if (choice) {
                         this.redeemCoupon();
@@ -335,7 +335,7 @@ enyo.kind({
         {kind: "Spinner", name: "spinner", style: "position: absolute; top: 20px; right: 0; left: 0; margin: 0 auto;", showing: true},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("You don't have any Goodies yet.")}
+            {classes: "placeholder-text", content: $L("You don't have any goodies yet.")}
         ]},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
