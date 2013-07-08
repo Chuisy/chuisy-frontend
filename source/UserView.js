@@ -154,6 +154,7 @@ enyo.kind({
         this.$.scroller.show();
         this.resized();
         this.$.scroller.scrollToTop();
+        this.positionParallaxElements();
     },
     deactivate: function() {
         this.$.avatar.hide();

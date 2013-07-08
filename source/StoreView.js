@@ -167,6 +167,8 @@ enyo.kind({
         this.$.nameFollow.show();
         this.$.scroller.show();
         this.$.storePanel.resized();
+        this.$.scroller.scrollToTop();
+        this.positionParallaxElements();
     },
     deactivate: function() {
         this.$.avatar.hide();
