@@ -125,7 +125,7 @@ enyo.kind({
         }));
         App.sendCubeEvent("action", {
             type: "post_chu",
-            result: "success",
+            result: "submit",
             chu: chu,
             adjust_price: this.adjustPriceStart.getTime(),
             pick_store: this.pickStoreStart.getTime(),
