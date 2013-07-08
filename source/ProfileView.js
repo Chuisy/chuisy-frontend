@@ -55,7 +55,7 @@ enyo.kind({
     },
     updateView: function() {
         this.$.fullName.setContent(this.user && this.user.getFullName() || "");
-        this.$.avatar.setSrc(this.user && this.user.profile.get("avatar") || "assets/images/avatar_placeholder.png");
+        this.$.avatar.setSrc(this.user && this.user.get("localAvatar") || this.user && this.user.profile.get("avatar") || "assets/images/avatar_placeholder.png");
         this.$.heartsCount.setContent(this.user && this.user.get("like_count") || 0);
         this.$.chusCount.setContent(chuisy.closet.length);
         this.$.followersCount.setContent(this.user && this.user.get("follower_count") || 0);
