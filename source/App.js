@@ -45,20 +45,29 @@ enyo.kind({
         */
         loginWithFacebook: function(callback, fail) {
             var scope = "user_birthday,user_location,user_about_me,user_website,email";
-            App.sendCubeEvent("fb_connect_open", {
-                scope: scope
-            });
             FB.login({scope: scope}, function(response) {
                 if (response.status == "connected") {
                     callback(response.authResponse.accessToken);
-                    App.sendCubeEvent("fb_connect_success", {
-                        scope: scope
+                    App.sendCubeEvent("fb_api", {
+                        type: "connect",
+                        scope: scope,
+                        result: "success"
                     });
                 } else {
+                    App.sendCubeEvent("fb_api", {
+                        type: "connect",
+                        scope: scope,
+                        result: "fail"
+                    });
                     navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
                         fail, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
+                App.sendCubeEvent("fb_api", {
+                    type: "connect",
+                    scope: scope,
+                    result: error == "The user has cancelled the login" ? "cancel" : "fail"
+                });
                 // console.log("***** login fail ***** " + JSON.stringify(error));
                 navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
                     fail, $L("Facebook signin failed!"), $L("OK"));
@@ -85,26 +94,35 @@ enyo.kind({
             var scope = "publish_actions";
             App.fbHasPublishPermissions(function(yes) {
                 if (!yes) {
-                    App.sendCubeEvent("fb_connect_open", {
-                        scope: scope
-                    });
                     FB.login({scope: scope}, function(response) {
                         if (response.authResponse) {
                             if (success) {
                                 success(response.authResponse.accessToken);
                             }
-                            App.sendCubeEvent("fb_connect_success", {
-                                scope: scope
+                            App.sendCubeEvent("fb_api", {
+                                type: "connect",
+                                scope: scope,
+                                result: "success"
                             });
                         } else {
                             if (failure) {
                                 failure();
                             }
+                            App.sendCubeEvent("fb_api", {
+                                type: "connect",
+                                scope: scope,
+                                result: "fail"
+                            });
                         }
                     }, function(error) {
                         if (failure) {
                             failure();
                         }
+                        App.sendCubeEvent("fb_api", {
+                            type: "connect",
+                            scope: scope,
+                            result: error == "The user has cancelled the login" ? "cancel" : "fail"
+                        });
                     });
                 } else if (success) {
                     success();
