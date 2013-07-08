@@ -1,5 +1,4 @@
 enyo.depends(
-	"fonts.css",
 	"animations.css",
 	// "Spinner.css",
 	"App.css",
