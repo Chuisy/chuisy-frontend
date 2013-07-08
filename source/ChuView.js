@@ -147,7 +147,7 @@ enyo.kind({
         this.$.commentsSpinner.hide();
         this.$.moreCommentsSpinner.hide();
         this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
-        this.$.moreComments.setContent($L("{count} more comments...").replace("{count}", totalCount - this.chu.comments.length));
+        this.$.moreComments.setContent($L("{{ count }} more comments...").replace("{count}", totalCount - this.chu.comments.length));
         // this.$.commentsCount.setContent(totalCount);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();

@@ -123,7 +123,7 @@ enyo.kind({
         var totalCount = this.chu.comments.meta && this.chu.comments.meta.total_count || this.chu.get("comments_count") || 0;
         this.$.commentsSpinner.hide();
         this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
-        this.$.moreComments.setContent($L("{count} more comments...").replace("{count}", totalCount - this.chu.comments.length));
+        this.$.moreComments.setContent($L("{{ count }} more comments...").replace("{count}", totalCount - this.chu.comments.length));
         this.$.commentsCount.setContent(totalCount);
         this.$.commentsRepeater.setCount(this.chu.comments.length);
         this.$.commentsRepeater.render();

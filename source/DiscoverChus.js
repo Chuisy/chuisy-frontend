@@ -98,7 +98,7 @@ enyo.kind({
         {kind: "Signals", ononline: "online", onoffline: "offline"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
-            {classes: "header-text", content: $L("Chus")}
+            {classes: "header-text", content: $L("Discover")}
         ]},
         {classes: "alert error discover-alert", name: "noInternet", content: $L("No internet connection available!")},
         // SEARCH INPUT

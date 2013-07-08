@@ -97,7 +97,7 @@ enyo.kind({
         // SEARCH INPUT
         {kind: "SearchInput", classes: "discover-searchinput scrollaway", onEnter: "searchInputEnter", onCancel: "searchInputCancel", disabled: false},
         {kind: "Spinner", name: "spinner", showing: false, classes: "discover-spinner"},
-        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No People found."), showing: false},
+        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No people found."), showing: false},
         {kind: "UserList", name: "userList", fit: true}
     ]
 });
