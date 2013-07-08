@@ -56,6 +56,7 @@ enyo.kind({
         setTimeout(enyo.bind(this, this.fetchFeed, true), chuisy.feed.meta.total_count ? 1000 : 50);
     },
     fetchFeed: function(direct) {
+        this.$.placeholder.hide();
         this.setPulled(true, direct);
         chuisy.feed.fetch({data: {
             thumbnails: ["292x292"]

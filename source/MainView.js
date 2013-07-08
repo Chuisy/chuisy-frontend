@@ -11,6 +11,9 @@ enyo.kind({
         this.$.menu.selectItem("feed");
         this.$.feed.addChu(chu);
         this.$.panels.select(this.$.feed);
+        if (!chuisy.feed.length) {
+            this.$.feed.fetchFeed(true);
+        }
     },
     showProfile: function() {
         this.$.menu.selectItem("profile");
