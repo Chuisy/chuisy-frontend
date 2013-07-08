@@ -112,7 +112,7 @@ enyo.kind({
         }
     },
     getShareUrl: function() {
-        return "http://staging.chuisy.com/chu/uuid/" + this.uuid + "/";
+        return "http://www.chuisy.com/chu/uuid/" + this.uuid + "/";
     },
     twitter: function() {
         App.shareTwitter(this.getShareMessage(), this.getShareUrl(), this.image);
