@@ -146,7 +146,7 @@ enyo.kind({
             {name: "initialLocationMessage", showing: false, classes: "pickstore-location-message", components: [
                 {classes: "placeholder-card absolute-center", components: [
                     {kind: "Image", src: "assets/images/map_placeholder.png", classes: "placeholder-card-image"},
-                    {classes: "placeholder-card-text", content: $L("Um zu sehen, ob es in diesem Geschäft Geschenke für dich gibt, müssen wir wissen, wo du gerade shoppst. Deine Daten sind sicher!")},
+                    {classes: "placeholder-card-text", content: $L("In order to find nearby stores we have to access your location. Don't worry, your data is safe with us!")},
                     {kind: "Button", classes: "placeholder-card-button", ontap: "getGeoLocation", components: [
                         {kind: "Image", classes: "pickstore-location-icon", src: "assets/images/black_marker.png"},
                         {classes: "pickstore-location-button-caption", content: $L("Get Location")}
@@ -156,7 +156,7 @@ enyo.kind({
             {name: "noLocationMessage", showing: false, classes: "pickstore-location-message", components: [
                 {classes: "placeholder-card absolute-center", components: [
                     {kind: "Image", src: "assets/images/map_placeholder.png", classes: "placeholder-card-image"},
-                    {classes: "placeholder-card-text", content: $L("Leider konntent wir deinen Standort nicht bestimmen. Bitte gehe in deine Telefoneinstellungen unter <strong>Datenschutz > Ortungsdienste</strong> und stelle sicher, dass Chuisy aktiviert ist!"), allowHtml: true}
+                    {classes: "placeholder-card-text", content: $L("Unfortunately we weren't able to access your location. Please go to your settings under 'Privacy > Location Services' and make sure Chuisy is enabled!"), allowHtml: true}
                 ]}
             ]},
             {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", placeholder: $L("Search or create store..."), onEnter: "searchInputEnter", onChange: "searchInputChange", onCancel: "searchInputCancel", searchEnterButton: false},

@@ -170,5 +170,6 @@
     "Join now": "Jetzt mitmachen",
     "If you sign in you can connect with your friends and use all of Chuisy's features. Your data is safe with us and we won't post anything without asking you!": "Wenn du dich anmeldest, kannst du deine Freunde finden und Chuisy uneingeschränkt nutzen. Deine Daten sind sicher und wir posten nichts, ohne dich zu fragen.",
     "How it works": "So funktioniert's",
-    "Browse anonymously": "Erstmal anonym stöbern"
+    "Browse anonymously": "Erstmal anonym stöbern",
+    "Unfortunately we weren't able to access your location. Please go to your settings under 'Privacy > Location Services' and make sure Chuisy is enabled!": "Leider konnten wir deinen Standort nicht bestimmen. Bitte gehe in deine Einstellungen unter <strong>Datenschutz > Ortungsdienste</strong> und stelle sicher, dass Chuisy aktiviert ist!"
 }
