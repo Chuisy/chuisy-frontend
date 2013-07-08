@@ -28,10 +28,7 @@ enyo.kind({
     setupUser: function(sender, event) {
         var user = this.users.at(event.index);
         this.$.userListItem.setUser(user);
-        if (this.users.length == 1) {
-            // Workaround for lists with a single items where userChanged does not seem to be called automatically.
-            this.$.userListItem.userChanged();
-        }
+        this.$.userListItem.update();
 
         var isLastItem = event.index == this.users.length-1;
         var hasNextPage = this.users.hasNextPage();
