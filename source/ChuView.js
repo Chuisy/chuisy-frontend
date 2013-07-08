@@ -323,7 +323,7 @@ enyo.kind({
     facebook: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                App.shareFacebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"));
+                App.shareFacebook(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"));
             }
         }), "share_facebook");
     },
@@ -333,7 +333,7 @@ enyo.kind({
     twitter: function() {
         App.requireSignIn(enyo.bind(this, function() {
             if (App.checkConnection() && this.checkSynced() && this.checkUploaded()) {
-                App.shareTwitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage") || this.chu.get("image"));
+                App.shareTwitter(this.getMessage(), this.getShareUrl(), this.chu.get("localImage"));
             }
         }), "share_twitter");
     },
