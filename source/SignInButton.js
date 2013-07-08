@@ -11,21 +11,28 @@ enyo.kind({
     signIn: function() {
         this.$.button.setDisabled(true);
         this.$.spinner.setShowing(true);
-        App.sendCubeEvent("signin_tap", {
-            context: this.context
-        });
         if (App.checkConnection()) {
             App.loginWithFacebook(enyo.bind(this, function(accessToken) {
                 chuisy.signIn(accessToken, enyo.bind(this, function() {
                     this.$.button.setDisabled(false);
                     this.$.spinner.setShowing(false);
                     this.doSignInSuccess();
+                    App.sendCubeEvent("action", {
+                        type: "signin",
+                        result: "success",
+                        context: this.context
+                    });
                 }), enyo.bind(this, function() {
                     this.$.button.setDisabled(false);
                     this.$.spinner.setShowing(false);
                     navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
                         this.doSignInFail();
                     }, $L("Authentication failed"), $L("OK")));
+                    App.sendCubeEvent("action", {
+                        type: "signin",
+                        result: "fail",
+                        context: this.context
+                    });
                 }));
             }), enyo.bind(this, function() {
                 this.$.button.setDisabled(false);

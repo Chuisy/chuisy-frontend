@@ -26,54 +26,27 @@ enyo.kind({
     imageChanged: function() {
         this.$.chuForm.setImage(this.image);
         this.$.postView.setImage(this.image);
+        this.adjustPriceStart = new Date();
     },
-    // gotImage: function(uri) {
-    //     // App.sendCubeEvent("get_image_success", {
-    //     //     duration: new Date().getTime() - this.getImageTime.getTime()
-    //     // });
-
-    //     this.image = uri;
-
-    //     // var user = chuisy.accounts.getActiveUser();
-    //     // If user has activated sharing posts, make sure that we have publishing permissions.
-    //     // If not, ask him again (if a certain period of time has passed)
-    //     // if (user && user.profile.get("fb_og_share_posts")) {
-    //     //     App.fbRequestPublishPermissions();
-    //     // } else {
-    //     //     App.optInSetting("fb_og_share_posts", $L("Share on Facebook"),
-    //     //         $L("Do you want to share your Chus on Facebook? Some goodies can only be received if you share your stories! " +
-    //     //             "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, function(choice) {
-    //     //             if (choice) {
-    //     //                 App.fbRequestPublishPermissions();
-    //     //             }
-    //     //         });
-    //     // }
-    //     this.postChuTime = new Date();
-    // },
     chuFormDone: function() {
-        // this.$.panels.setIndex(1);
         this.$.panels.select(this.$.pickStore);
-        this.pickStoreTime = new Date();
+        this.pickStoreStart = new Date();
         return true;
     },
     storePicked: function (sender, event) {
-        // App.sendCubeEvent("pick_store", {
-        //     store: event.store,
-        //     duration: this.pickStore ? new Date().getTime() - this.pickStoreTime.getTime() : undefined
-        // });
         this.store = event.store;
         this.coordinates = event.coordinates;
         enyo.asyncMethod(this, function() {
             this.$.postView.setStore(this.store);
             this.$.panels.select(this.$.postView);
         });
-        // this.$.chuForm.setStore(this.store);
-        // enyo.Signals.send("onShowGuide", {view: "compose"});
+        this.postStart = new Date();
     },
     chuFormBack: function() {
-        // App.sendCubeEvent("post_chu_back", {
-        //     duration: new Date().getTime() - this.postChuTime.getTime()
-        // });
+        App.sendCubeEvent("action", {
+            type: "post_chu",
+            result: "cancel"
+        });
         this.doBack();
         if (event) {
             event.preventDefault();
@@ -81,10 +54,6 @@ enyo.kind({
         return true;
     },
     pickStoreBack: function() {
-        // App.sendCubeEvent("pick_store_back", {
-        //     duration: new Date().getTime() - this.pickStoreTime.getTime()
-        // });
-        // this.$.panels.setIndex(0);
         this.$.panels.select(this.$.chuForm, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
         if (event) {
             event.preventDefault();
@@ -92,7 +61,6 @@ enyo.kind({
         return true;
     },
     postViewBack: function() {
-        // this.$.pickStore.initialize();
         this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
         return true;
     },
@@ -155,11 +123,14 @@ enyo.kind({
             }
             this.doDone({chu: chu});
         }));
-
-        // App.sendCubeEvent("post_chu", {
-        //     chu: chu,
-        //     duration: new Date().getTime() - this.postChuTime.getTime()
-        // });
+        App.sendCubeEvent("action", {
+            type: "post_chu",
+            result: "submit",
+            chu: chu,
+            adjust_price: this.adjustPriceStart.getTime(),
+            pick_store: this.pickStoreStart.getTime(),
+            post: this.postStart.getTime()
+        });
         return true;
     },
     inAnimationStart: function(sender, event) {

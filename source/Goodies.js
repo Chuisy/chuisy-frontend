@@ -114,7 +114,9 @@ enyo.kind({
             }), 500);
         });
 
-        App.sendCubeEvent("show_card", {
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "open",
             card: card
         });
     },
@@ -149,8 +151,10 @@ enyo.kind({
             }), 100);
         }), 500);
 
-        App.sendCubeEvent("hide_card", {
-            card: this.card
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "close",
+            card: card
         });
     },
     //* Whether or not the scroller is actively moving
@@ -219,8 +223,10 @@ enyo.kind({
             this.isAnimating = false;
         }), 500);
 
-        App.sendCubeEvent("flip_card", {
-            card: this.card
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "flip",
+            card: card
         });
     },
     getAbsolutePosition: function(con) {
@@ -246,10 +252,6 @@ enyo.kind({
 
         var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
 
-        App.sendCubeEvent("redeem_coupon", {
-            coupon: coupon
-        });
-
         coupon.redeem({complete: enyo.bind(this, function(request, status) {
             if (request.status == 200) {
                 this.$.redeemSpinner.hide();
@@ -257,7 +259,9 @@ enyo.kind({
                 this.card.get("coupon").redeemed = true;
                 this.$.card.addClass("redeemed");
                 this.item.addClass("redeemed");
-                App.sendCubeEvent("redeem_coupon_success", {
+                App.sendCubeEvent("action", {
+                    type: "redeem_coupon",
+                    result: "success",
                     coupon: coupon
                 });
             } else {
@@ -269,7 +273,9 @@ enyo.kind({
                 }
                 this.$.redeemSpinner.hide();
                 this.$.redeemButton.setDisabled(false);
-                App.sendCubeEvent("redeem_coupon_fail", {
+                App.sendCubeEvent("action", {
+                    type: "redeem_coupon",
+                    result: "fail",
                     coupon: coupon,
                     status_code: request.status,
                     response_text: request.responseText
@@ -328,7 +334,7 @@ enyo.kind({
     components: [
         {kind: "Spinner", name: "spinner", style: "position: absolute; top: 20px; right: 0; left: 0; margin: 0 auto;", showing: true},
         {classes: "placeholder", name: "placeholder", components: [
-            {name: "placeholder", classes: "placeholder-image"},
+            {classes: "placeholder-image"},
             {classes: "placeholder-text", content: $L("You don't have any Goodies yet.")}
         ]},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [

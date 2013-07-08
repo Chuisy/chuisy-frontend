@@ -18,47 +18,6 @@ enyo.kind({
         // this.chus.on("sync", _.bind(this.synced, this, "chu"));
         // this.trendingChus.on("sync", _.bind(this.synced, this, "chu"));
     },
-    // setupChu: function(sender, event) {
-    //     var chu = this.currentColl.at(event.index);
-    //     var image = chu.get("thumbnails") && chu.get("thumbnails")["300x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
-    //     this.$.resultChuImage.applyStyle("background-image", "url(" + image + ")");
-    //     this.$.chuAvatar.setSrc(chu.get("user").profile.avatar_thumbnail || "assets/images/avatar_thumbnail_placeholder.png");
-    //     var isLastItem = event.index == this.currentColl.length-1;
-    //     if (isLastItem && this.currentColl.hasNextPage()) {
-    //         // Item is last item in the list but there is more! Load next page.
-    //         this.$.nextPageSpacer.show();
-    //         this.nextPage();
-    //     } else {
-    //         this.$.nextPageSpacer.hide();
-    //     }
-    //     App.sendCubeEvent("impression", {
-    //         chu: chu,
-    //         context: "discover"
-    //     });
-    //     return true;
-    // },
-    // nextPage: function() {
-    //     this.$.spinner.addClass("rise");
-    //     this.currentColl.fetchNext({success: enyo.bind(this, this.refresh), data: {thumbnails: ["300x100"]}});
-    // },
-    // chuTap: function(sender, event) {
-    //     this.doShowChu({chu: this.currentColl.at(event.index)});
-    //     event.preventDefault();
-    // },
-    // refresh: function(coll, response, request, force) {
-    //     if (force || request && request.data && request.data.q == this.latestQuery) {
-    //         this.$.spinner.removeClass("rise");
-    //         this.$.noResults.setShowing(!coll.length);
-    //         this.$.list.setCount(coll.length);
-    //         if (this.currentColl == coll && coll.meta && coll.meta.offset) {
-    //             this.currentColl = coll;
-    //             this.$.list.refresh();
-    //         } else {
-    //             this.currentColl = coll;
-    //             this.$.list.reset();
-    //         }
-    //     }
-    // },
     refresh: function(coll, response, request, force) {
         if (force || request && request.data && request.data.q == this.latestQuery) {
             this.$.spinner.hide();
@@ -91,6 +50,11 @@ enyo.kind({
         this.$.noResults.hide();
         this.latestQuery = query;
         this.chus.fetch({searchQuery: query, data: {thumbnails: ["100x100"], limit: 21}, success: enyo.bind(this, this.refresh)});
+        App.sendCubeEvent("action", {
+            type: "search",
+            context: "chus",
+            query: query
+        });
     },
     searchInputCancel: function() {
         this.latestQuery = null;

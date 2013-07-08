@@ -79,6 +79,14 @@ enyo.kind({
                     }
                 }
             })});
+
+            App.sendCubeEvent("action", {
+                type: "search",
+                context: "nearby_stores",
+                query: searchQuery,
+                center: position.coords.latitude + "," + position.coords.longitude,
+                radius: 5000
+            });
         }), enyo.bind(this, function() {
             this.$.loading.removeClass("show");
             this.$.panels.setIndex(1);

@@ -45,20 +45,29 @@ enyo.kind({
         */
         loginWithFacebook: function(callback, fail) {
             var scope = "user_birthday,user_location,user_about_me,user_website,email";
-            App.sendCubeEvent("fb_connect_open", {
-                scope: scope
-            });
             FB.login({scope: scope}, function(response) {
                 if (response.status == "connected") {
                     callback(response.authResponse.accessToken);
-                    App.sendCubeEvent("fb_connect_success", {
-                        scope: scope
+                    App.sendCubeEvent("fb_api", {
+                        type: "connect",
+                        scope: scope,
+                        result: "success"
                     });
                 } else {
+                    App.sendCubeEvent("fb_api", {
+                        type: "connect",
+                        scope: scope,
+                        result: "fail"
+                    });
                     navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
                         fail, $L("Facebook signin failed!"), $L("OK"));
                 }
             }, function(error) {
+                App.sendCubeEvent("fb_api", {
+                    type: "connect",
+                    scope: scope,
+                    result: error == "The user has cancelled the login" ? "cancel" : "fail"
+                });
                 // console.log("***** login fail ***** " + JSON.stringify(error));
                 navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
                     fail, $L("Facebook signin failed!"), $L("OK"));
@@ -85,26 +94,35 @@ enyo.kind({
             var scope = "publish_actions";
             App.fbHasPublishPermissions(function(yes) {
                 if (!yes) {
-                    App.sendCubeEvent("fb_connect_open", {
-                        scope: scope
-                    });
                     FB.login({scope: scope}, function(response) {
                         if (response.authResponse) {
                             if (success) {
                                 success(response.authResponse.accessToken);
                             }
-                            App.sendCubeEvent("fb_connect_success", {
-                                scope: scope
+                            App.sendCubeEvent("fb_api", {
+                                type: "connect",
+                                scope: scope,
+                                result: "success"
                             });
                         } else {
                             if (failure) {
                                 failure();
                             }
+                            App.sendCubeEvent("fb_api", {
+                                type: "connect",
+                                scope: scope,
+                                result: "fail"
+                            });
                         }
                     }, function(error) {
                         if (failure) {
                             failure();
                         }
+                        App.sendCubeEvent("fb_api", {
+                            type: "connect",
+                            scope: scope,
+                            result: error == "The user has cancelled the login" ? "cancel" : "fail"
+                        });
                     });
                 } else if (success) {
                     success();
@@ -117,14 +135,19 @@ enyo.kind({
         },
         getGeoLocation: function(success, failure) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                App.sendCubeEvent("geolocation_success");
+                App.sendCubeEvent("action", {
+                    type: "geolocation",
+                    result: "success"
+                });
                 localStorage.setItem("chuisy.lastKnownLocation", JSON.stringify(position));
                 App.lastKnownLocation = position;
                 if (success) {
                     success(position);
                 }
             }, function(error) {
-                App.sendCubeEvent("geolocation_fail", {
+                App.sendCubeEvent("action", {
+                    type: "geolocation",
+                    result: "fail",
                     error: error
                 });
                 // console.warn("Failed to retrieve geolocation! " + JSON.stringify(error));
@@ -189,11 +212,16 @@ enyo.kind({
                 start: new Date(),
                 id: util.generateUuid()
             };
-            App.sendCubeEvent("start_session");
+            App.sendCubeEvent("app_lifecycle", {
+                type: "start_session"
+            });
         },
         endSession: function() {
             var duration = new Date().getTime() - App.session.start.getTime();
-            App.sendCubeEvent("end_session", {duration: duration});
+            App.sendCubeEvent("app_lifecycle", {
+                type: "end_session",
+                duration: duration
+            });
         },
         optInSetting: function(setting, title, message, interval, callback) {
             var user = chuisy.accounts.getActiveUser();
@@ -209,8 +237,10 @@ enyo.kind({
                     user.profile.set(setting, choice);
                     user.save();
                     chuisy.accounts.syncActiveUser();
-                    App.sendCubeEvent("ask_opt_in", {
-                        choice: choice
+                    App.sendCubeEvent("action", {
+                        type: "opt_in",
+                        subject: setting,
+                        result: choice ? "accept" : "deny"
                     });
                     if (callback) {
                         callback(choice);
@@ -225,9 +255,15 @@ enyo.kind({
             window.plugins.social.available("facebook", enyo.bind(this, function(available) {
                 if (available) {
                     window.plugins.social.facebook(message, url, image, function() {
-                        App.sendCubeEvent("share_facebook_success");
+                        App.sendCubeEvent("fb_api", {
+                            type: "share",
+                            result: "success"
+                        });
                     }, function() {
-                        App.sendCubeEvent("share_facebook_fail");
+                        App.sendCubeEvent("fb_api", {
+                            type: "share",
+                            result: "fail"
+                        });
                     });
                 } else {
                     var params = {
@@ -236,7 +272,10 @@ enyo.kind({
                         picture: image
                     };
                     FB.ui(params, function(obj) {
-                        App.sendCubeEvent(obj && obj.post_id ? "share_facebook_success" : "share_facebook_fail");
+                        App.sendCubeEvent("fb_api", {
+                            type: "share",
+                            result: obj && obj.post_id ? "success" : "fail"
+                        });
                     });
                 }
             }));
@@ -248,14 +287,23 @@ enyo.kind({
             window.plugins.social.available("twitter", enyo.bind(this, function(available) {
                 if (available) {
                     window.plugins.social.twitter(message, url, image, function() {
-                        App.sendCubeEvent("share_twitter_success");
+                        App.sendCubeEvent("action", {
+                            type: "share_twitter",
+                            result: "success"
+                        });
                     }, function() {
-                        App.sendCubeEvent("share_twitter_fail");
+                        App.sendCubeEvent("action", {
+                            type: "share_twitter",
+                            result: "fail"
+                        });
                     });
                 } else {
                     var target = App.twitterUrl + "?text=" + encodeURIComponent(message) + "&url=" + encodeURIComponent(url) + "&via=Chuisy";
                     window.open(target, "_blank");
-                    App.sendCubeEvent("share_twitter_web");
+                    App.sendCubeEvent("action", {
+                        type: "share_twitter",
+                        result: "open_web"
+                    });
                 }
             }));
         },
@@ -265,7 +313,7 @@ enyo.kind({
         sharePinterest: function(url, image) {
             var target = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(image);
             window.open(target, "_blank");
-            App.sendCubeEvent("share_pinterest");
+            App.sendCubeEvent("action", {type: "share_pinterest"});
         },
         /**
             Share image via instagram
@@ -273,7 +321,9 @@ enyo.kind({
         shareInstagram: function(message, image) {
             util.watermark(image,function(dataUrl) {
                 Instagram.share(dataUrl, message, function(err) {
-                    App.sendCubeEvent(err ? "share_instagram_fail" : "share_instagram_success");
+                    App.sendCubeEvent("share_instagram", {
+                        result: err ? "fail" : "success"
+                    });
                 });
             });
         },
@@ -282,7 +332,9 @@ enyo.kind({
         */
         shareMessaging: function(message, url) {
             window.plugins.smsComposer.showSMSComposer("", message + " " + url, function(result) {
-                App.sendCubeEvent(result == 1 ? "share_messenger_success" : "share_messenger_fail");
+                App.sendCubeEvent("share_messenger", {
+                    result: result == 1 ? "success" : "fail"
+                });
             });
             event.preventDefault();
             return true;
@@ -293,7 +345,9 @@ enyo.kind({
         shareEmail: function(message, url) {
             var subject = $L("Look what I found on Chuisy!");
             window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
-                App.sendCubeEvent(result == 2 ? "share_email_success" : "share_email_fail");
+                App.sendCubeEvent("share_email", {
+                    result: result == 2 ? "success" : "fail"
+                });
             }, subject, message + " " + url);
         }
     },
@@ -346,7 +400,8 @@ enyo.kind({
             this.raiseCurtain();
         }
         var now = new Date();
-        App.sendCubeEvent("load_app", {
+        App.sendCubeEvent("app_lifecycle", {
+            type: "load",
             loading_time: now.getTime() - window.loadStart.getTime(),
             scripts_loading_time: this.createStart.getTime() - window.loadStart.getTime(),
             create_time: this.renderStart.getTime() - this.createStart.getTime(),
@@ -460,7 +515,8 @@ enyo.kind({
                 var notification = pending.notifications[0];
                 if (notification) {
                     this.navigateToUri(notification.uri);
-                    App.sendCubeEvent("open_push_notification", {
+                    App.sendCubeEvent("action", {
+                        type: "open_push_notification",
                         notification: notification
                     });
                 }
@@ -492,15 +548,13 @@ enyo.kind({
         }(document, false));
     },
     online: function() {
-        this.log("online");
         chuisy.setOnline(true);
-        App.sendCubeEvent("online");
+        App.sendCubeEvent("app_lifecycle", {"type": "online"});
         return true;
     },
     offline: function() {
-        this.log("offline");
         chuisy.setOnline(false);
-        App.sendCubeEvent("offline");
+        App.sendCubeEvent("app_lifecycle", {"type": "offline"});
         return true;
     },
     resume: function() {
@@ -893,16 +947,23 @@ enyo.kind({
     composeChu: function() {
         this.showCompose();
         this.$.compose.clear();
-        // this.getImageTime = new Date();
+        var getImageTime = new Date();
         try {
             navigator.camera.getPicture(enyo.bind(this, function(uri) {
                 this.$.compose.setImage(uri);
+                App.sendCubeEvent("action", {
+                    type: "get_image",
+                    result: "success",
+                    duration: new Date().getTime() - getImageTime.getTime()
+                });
             }), enyo.bind(this, function(message) {
-                this.warn("Getting image failed!");
-                // App.sendCubeEvent("get_image_fail", {
-                //     message: message,
-                //     duration: new Date().getTime() - this.getImageTime.getTime()
-                // });
+                var result = message == "no image selected" ? "cancel" : "fail";
+                App.sendCubeEvent("action", {
+                    type: "get_image",
+                    result: result,
+                    error: result == "fail" ? message : undefined,
+                    duration: new Date().getTime() - getImageTime.getTime()
+                });
                 this.back();
             }), {targetWidth: 612, targetHeight: 612, allowEdit: true, correctOrientation: true, quality: 49});
         } catch (e) {

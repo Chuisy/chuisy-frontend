@@ -109,11 +109,15 @@ enyo.kind({
                 chuisy.createInvites(response.request, ids);
                 // User did send the request
                 this.doBack();
-                App.sendCubeEvent("fb_invite", {
+                App.sendCubeEvent("fb_api", {
+                    type: "invite",
+                    result: "success",
                     ids: ids
                 });
             } else {
-                App.sendCubeEvent("fb_invite_cancel", {
+                App.sendCubeEvent("fb_api", {
+                    type: "invite",
+                    result: "cancel",
                     ids: ids
                 });
             }
