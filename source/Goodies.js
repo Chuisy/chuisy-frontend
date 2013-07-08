@@ -154,7 +154,7 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "card",
             result: "close",
-            card: card
+            card: this.card
         });
     },
     //* Whether or not the scroller is actively moving
@@ -226,7 +226,7 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "card",
             result: "flip",
-            card: card
+            card: this.card
         });
     },
     getAbsolutePosition: function(con) {
