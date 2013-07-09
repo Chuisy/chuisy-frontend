@@ -16,6 +16,8 @@ enyo.kind({
         this.inherited(arguments);
         this.userChanged();
         this.listenTo(chuisy.accounts, "change:active_user", this.userChanged);
+        this.s = this.$.scroller.getStrategy();
+        this.s.scrollIntervalMS = 17;
     },
     userChanged: function(sender, event) {
         var user = chuisy.accounts.getActiveUser();
@@ -111,12 +113,21 @@ enyo.kind({
         chuisy.accounts.syncActiveUser();
         this.$.scroller.hide();
     },
+    scroll: function() {
+        var offset = -this.s.scrollTop - this.s.bottomBoundary;
+        var rot = Math.max(-90, Math.min(0, -90 - 90/50 * offset));
+        var offset2 =  -this.s.scrollTop - this.s.bottomBoundary + 50;
+        var rot2 = Math.max(-90, Math.min(0, -90 - 90/50 * offset2));
+        this.$.signature.applyStyle("-webkit-transform", "translate3d(0, " + offset + "px, 0) rotateX(" + rot + "deg)");
+        this.$.poweredBy.applyStyle("-webkit-transform", "translate3d(0, " + offset2 + "px, 0) rotateX(" + rot2 + "deg)");
     },
     components: [
+        {name: "signature", classes: "settings-signature", style: "border-bottom: dotted 1px #888;", allowHtml: true, content: "Developed by <strong>Martin Kleinschrodt</strong>"},
+        {name: "poweredBy", classes: "settings-signature", style: "border-top: dotted 1px #fff; ", allowHtml: true, content: "Powered by <strong>Enyo</strong>"},
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"}
         ]},
-        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "scroll", sthumb: false, components: [
             {classes: "settings-content", components: [
                 // PROFILE INFORMATION
                 {classes: "settings-section-header", content: $L("Profile")},

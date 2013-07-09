@@ -1,7 +1,6 @@
 .settings {
 	background-color: #f1f1f1;
-	background-image: url(../../assets/images/greyfloral.png);
-	background-size: 150px 124px;
+    -webkit-perspective: 1000px;
 }
 
 .settings .onyx-groupbox {
@@ -40,8 +39,8 @@
 .settings-content {
 	padding: 10px;
 	box-sizing: border-box;
-	/*background-image: url(../../assets/images/greyfloral.png);
-	background-size: 150px 124px;*/
+	background-image: url(../../assets/images/greyfloral.png);
+	background-size: 150px 124px;
 }
 
 .settings-avatar {
@@ -79,4 +78,21 @@
 
 .settings-notification-icon.active {
 	background-position: 0 -32px;
+}
+
+.settings-signature {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    bottom: -50px;
+    background-color: gray;
+    -webkit-transform: tranlate3d(0, 0, 0);
+    -webkit-transform-origin: 50% 0;
+    -webkit-backface-visibility: hidden;
+    font-size: 10pt;
+    background-color: #f1f1f1;
+    text-shadow: 0 1px 0 #fff;
+    line-height: 50px;
+    text-align: center;
+    color: #888;
 }
