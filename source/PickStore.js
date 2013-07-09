@@ -90,6 +90,7 @@ enyo.kind({
         var place = this.places[event.index];
 
         this.doStorePicked({store: place, coordinates: this.coordinates});
+        event.preventDefault();
     },
     searchInputEnter: function(sender, event) {
         // User has pressed enter. Select custom location
