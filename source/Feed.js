@@ -299,9 +299,10 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
         ]},
-        {classes: "placeholder", showing: false, name: "placeholder", components: [
+        {classes: "placeholder", showing: true, name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")}
+            {classes: "placeholder-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")},
+            {kind: "Button", classes: "feed-placeholder-button", content: $L("Start discovering"), ontap: "doShowDiscoverChus"}
         ]},
         {kind: "List", classes: "enyo-fill fadein", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",

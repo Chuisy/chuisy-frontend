@@ -107,6 +107,33 @@
     /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
 }
 
+.feed .placeholder {
+    padding: 80px 0;
+}
+
 .feed .placeholder-image {
     background-image: url(../../assets/images/empty_placeholder.png);
+}
+
+.feed-placeholder-button {
+    border: dotted 1px #888;
+    color: #888;
+    text-shadow: 0 1px 1px #fff;
+    box-shadow: none;
+    background: transparent;
+    margin-top: 15px;
+    position: relative;
+    padding: 10px 12px;
+}
+
+.feed-placeholder-button:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    border: dotted 1px #fff;
 }
