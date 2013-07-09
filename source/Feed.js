@@ -299,12 +299,9 @@ enyo.kind({
             {classes: "pulldown-arrow"},
             {kind: "Spinner", name: "pulldownSpinner", classes: "pulldown-spinner", spinning: false}
         ]},
-        {name: "placeholder", showing: false, classes: "feed-placeholder-wrapper", components: [
-            {classes: "placeholder-card feed-placeholder-card absolute-center", components: [
-                {kind: "Image", src: "assets/images/empty_placeholder.png", classes: "placeholder-card-image feed-placeholder-card-image"},
-                {classes: "placeholder-card-text feed-placeholder-card-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")}
-                // {kind: "Button", classes: "placeholder-card-button", ontap: "discoverUsersTapped", content: $L("Find people to follow")}
-            ]}
+        {classes: "placeholder", showing: false, name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")}
         ]},
         {kind: "List", classes: "enyo-fill fadein", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,
             loadingIconClass: "puller-spinner", strategyKind: "TransitionScrollStrategy",
