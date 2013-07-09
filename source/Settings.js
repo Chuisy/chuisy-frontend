@@ -104,12 +104,13 @@ enyo.kind({
         }
     },
     activate: function() {
-        // this.$.scroller.show();
+        this.$.scroller.show();
         this.resized();
     },
     deactivate: function() {
-        // this.$.scroller.hide();
         chuisy.accounts.syncActiveUser();
+        this.$.scroller.hide();
+    },
     },
     components: [
         {classes: "header", components: [
