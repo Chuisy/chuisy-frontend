@@ -684,9 +684,7 @@ enyo.kind({
         var now = new Date();
         App.sendCubeEvent("navigate", {
             from: last && last[0],
-            from_obj: last && last[1],
             to: uri,
-            params: params,
             duration: last && last[2] && (now.getTime() - last[2].getTime())
         });
         this.history.push([uri, params, now]);
