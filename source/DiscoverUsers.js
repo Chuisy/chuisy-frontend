@@ -85,7 +85,10 @@ enyo.kind({
         return true;
     },
     flick: function(sender, event) {
-        this.$.searchInput.addRemoveClass("hide", event.yVelocity < 0);
+        var self = this;
+        setTimeout(function() {
+            self.$.searchInput.addRemoveClass("hide", event.yVelocity < 0);
+        }, 100);
     },
     components: [
         {kind: "Signals", ononline: "online", onoffline: "offline"},

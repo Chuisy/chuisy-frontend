@@ -270,7 +270,10 @@ enyo.kind({
         return true;
     },
     flick: function(sender, event) {
-        this.$.tabs.addRemoveClass("hide", event.yVelocity < 0);
+        var self = this;
+        setTimeout(function() {
+            self.$.tabs.addRemoveClass("hide", event.yVelocity < 0);
+        }, 100);
     },
     components: [
         {kind: "Heart", classes: "absolute-center"},
