@@ -28,9 +28,7 @@ enyo.kind({
     showNotifications: function(chu) {
         this.$.menu.selectItem("notifications");
         this.$.panels.select(this.$.notifications);
-        setTimeout(function() {
-            chuisy.notifications.seen();
-        }, 100);
+        this.$.notifications.seen();
     },
     menuChanged: function(sender, event) {
         this.doMenuChanged(event);

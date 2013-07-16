@@ -12,6 +12,7 @@ enyo.kind({
         this.inherited(arguments);
         chuisy.notifications.on("reset", this.refresh, this);
         chuisy.notifications.on("request", this.showSpinner, this);
+        this.unseen = {};
     },
     /**
         Refreshes notification list with loaded items
@@ -99,7 +100,7 @@ enyo.kind({
         this.$.subject.setShowing(item.get("subject_image"));
 
         this.$.notification.addRemoveClass("read", item.get("read"));
-        this.$.notification.addRemoveClass("unseen", !item.get("seen"));
+        this.$.notification.addRemoveClass("unseen", !item.get("seen") || this.unseen[item.id]);
 
         var isLastItem = event.index == chuisy.notifications.length-1;
         var hasNextPage = chuisy.notifications.hasNextPage();
@@ -129,6 +130,12 @@ enyo.kind({
         Mark all notifications as seen
     */
     seen: function() {
+        this.unseen = {};
+        chuisy.notifications.each(enyo.bind(this, function(n) {
+            if (!n.get("seen")) {
+                this.unseen[n.id] = n;
+            }
+        }));
         chuisy.notifications.seen();
     },
     components: [

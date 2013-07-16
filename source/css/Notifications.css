@@ -49,14 +49,14 @@
 .notifications-notification.unseen .notifications-notification-time:after {
 	content: "";
 	display: inline-block;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#E62103), to(#CA1A00));
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff1e78), to(#bf1407));
 	/*border: solid 1px #b01b05;*/
 	box-sizing: border-box;
 	width: 8px;
 	height: 8px;
 	margin-left: 5px;
 	border-radius: 50px;
-	box-shadow: 0 0 1px red;
+	box-shadow: 0 0 1px #ff1e78;
 }
 
 .notifications-notification-subject {
