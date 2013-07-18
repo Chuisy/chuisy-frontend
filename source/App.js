@@ -253,11 +253,13 @@ enyo.kind({
                     window.plugins.social.facebook(message, url, image, function() {
                         App.sendCubeEvent("fb_api", {
                             type: "share",
+                            url: url,
                             result: "success"
                         });
                     }, function() {
                         App.sendCubeEvent("fb_api", {
                             type: "share",
+                            url: url,
                             result: "fail"
                         });
                     });
@@ -270,7 +272,8 @@ enyo.kind({
                     FB.ui(params, function(obj) {
                         App.sendCubeEvent("fb_api", {
                             type: "share",
-                            result: obj && obj.post_id ? "success" : "fail"
+                            result: obj && obj.post_id ? "success" : "fail",
+                            url: url
                         });
                     });
                 }
@@ -285,12 +288,14 @@ enyo.kind({
                     window.plugins.social.twitter(message, url, image, function() {
                         App.sendCubeEvent("action", {
                             type: "share_twitter",
-                            result: "success"
+                            result: "success",
+                            url: url
                         });
                     }, function() {
                         App.sendCubeEvent("action", {
                             type: "share_twitter",
-                            result: "fail"
+                            result: "fail",
+                            url: url
                         });
                     });
                 } else {
@@ -298,7 +303,8 @@ enyo.kind({
                     window.open(target, "_blank");
                     App.sendCubeEvent("action", {
                         type: "share_twitter",
-                        result: "open_web"
+                        result: "open_web",
+                        url: url
                     });
                 }
             }));
@@ -309,7 +315,7 @@ enyo.kind({
         sharePinterest: function(url, image) {
             var target = this.pinterestUrl + "?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(image);
             window.open(target, "_blank");
-            App.sendCubeEvent("action", {type: "share_pinterest"});
+            App.sendCubeEvent("action", {type: "share_pinterest", url: url});
         },
         /**
             Share image via instagram
@@ -318,7 +324,8 @@ enyo.kind({
             util.watermark(image,function(dataUrl) {
                 Instagram.share(dataUrl, message, function(err) {
                     App.sendCubeEvent("share_instagram", {
-                        result: err ? "fail" : "success"
+                        result: err ? "fail" : "success",
+                        image: image
                     });
                 });
             });
@@ -329,7 +336,8 @@ enyo.kind({
         shareMessaging: function(message, url) {
             window.plugins.smsComposer.showSMSComposer("", message + " " + url, function(result) {
                 App.sendCubeEvent("share_messenger", {
-                    result: result == 1 ? "success" : "fail"
+                    result: result == 1 ? "success" : "fail",
+                    url: url
                 });
             });
             event.preventDefault();
@@ -342,7 +350,8 @@ enyo.kind({
             var subject = $L("Look what I found on Chuisy!");
             window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
                 App.sendCubeEvent("share_email", {
-                    result: result == 2 ? "success" : "fail"
+                    result: result == 2 ? "success" : "fail",
+                    url: url
                 });
             }, subject, message + " " + url);
         }
