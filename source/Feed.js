@@ -257,7 +257,10 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "like",
             result: chu.get("liked") ? "like" : "unlike",
-            chu: chu,
+            chu: {
+                id: chu.id,
+                user: chu.get("user").id
+            },
             context: "feed"
         });
         return true;

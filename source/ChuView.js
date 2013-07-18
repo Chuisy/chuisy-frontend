@@ -137,7 +137,10 @@ enyo.kind({
             App.sendCubeEvent("action", {
                 type: "like",
                 result: this.chu.get("liked") ? "like" : "unlike",
-                chu: this.chu,
+                chu: {
+                    id: this.chu.id,
+                    user: this.chu.get("user").id
+                },
                 context: "chu_view"
             });
         }
@@ -217,7 +220,10 @@ enyo.kind({
             var comment = this.chu.comments.create(attrs);
             App.sendCubeEvent("action", {
                 type: "comment",
-                comment: comment
+                chu: {
+                    id: this.chu.id,
+                    user: this.chu.get("user").id
+                }
             });
             this.refreshComments();
 
