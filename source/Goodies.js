@@ -326,8 +326,6 @@ enyo.kind({
             this.refresh();
         }
         if (App.isSignedIn()) {
-            this.$.spinner.setSpinning(true);
-            this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
     },
