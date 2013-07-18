@@ -11,8 +11,8 @@ function extend(target) {
     return target;
 }
 
-var sourceDir = "./source/";
-var stringsFile = "./assets/resources/de.json";
+var sourceDir = process.argv[2];
+var stringsFile = process.argv[3];
 var strings = {};
 var stringsOld = {};
 
