@@ -192,13 +192,9 @@ enyo.kind({
         sendCubeEvent: function(type, data) {
             data = data || {};
             var user = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().toJSON();
-            if (user) {
-                delete user.api_key;
-                delete user.fb_access_token;
-            }
             enyo.mixin(data, {
                 location: App.lastKnownLocation,
-                user: user,
+                user: user && user.id,
                 device: window.device,
                 version: App.version,
                 session_id: App.session && App.session.id,
