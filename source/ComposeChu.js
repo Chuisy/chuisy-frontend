@@ -126,9 +126,9 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "post_chu",
             result: "submit",
-            adjust_price: this.adjustPriceStart.getTime(),
-            pick_store: this.pickStoreStart.getTime(),
-            post: this.postStart.getTime()
+            adjust_price: this.adjustTimeStart && this.adjustPriceStart.getTime(),
+            pick_store: this.pickStoreStart && this.pickStoreStart.getTime(),
+            post: this.postStart && this.postStart.getTime()
         });
         return true;
     },
