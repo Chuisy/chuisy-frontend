@@ -117,7 +117,7 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "card",
             result: "open",
-            card: card
+            card: card.id
         });
     },
     stageTapped: function(sender, event) {
@@ -154,7 +154,7 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "card",
             result: "close",
-            card: this.card
+            card: this.card.id
         });
     },
     //* Whether or not the scroller is actively moving
@@ -226,7 +226,7 @@ enyo.kind({
         App.sendCubeEvent("action", {
             type: "card",
             result: "flip",
-            card: this.card
+            card: this.card.id
         });
     },
     getAbsolutePosition: function(con) {
@@ -262,7 +262,7 @@ enyo.kind({
                 App.sendCubeEvent("action", {
                     type: "redeem_coupon",
                     result: "success",
-                    coupon: coupon
+                    coupon: coupon.id
                 });
             } else {
                 var message = request.status == 400 && request.responseText ? $L(request.responseText) : $L('Something went wrong. Please try again later!');
@@ -276,7 +276,7 @@ enyo.kind({
                 App.sendCubeEvent("action", {
                     type: "redeem_coupon",
                     result: "fail",
-                    coupon: coupon,
+                    coupon: coupon.id,
                     status_code: request.status,
                     response_text: request.responseText
                 });

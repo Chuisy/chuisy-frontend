@@ -34,10 +34,6 @@ enyo.kind({
         if (query) {
             this.$.searchInput.blur();
             this.search(query);
-            App.sendCubeEvent("search", {
-                context: "chus",
-                query: query
-            });
         } else {
             this.searchInputCancel();
         }
