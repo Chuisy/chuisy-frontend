@@ -20,8 +20,10 @@ enyo.kind({
 		}
 	},
 	itemTapped: function(sender, event) {
-		sender.setActive(true);
-		this.doChange({value: sender.value});
+		if (!sender.getActive()) {
+			sender.setActive(true);
+			this.doChange({value: sender.value});
+		}
 		// Prevent event from propagating to views lying below the respective element (bug in mobile safari)
 		event.preventDefault();
 	},
