@@ -221,7 +221,7 @@ enyo.kind({
                     {style: "height: 5px;"}
                 ]},
                 {name: "login", components: [
-                    {classes: "profileview-login-text", content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
+                    {classes: "profileview-login-text", content: $L("Connect with Facebook now if you want to use all of Chuisy's features. Don't worry, we won't post anything without asking you!")},
                     {kind: "SignInButton", context: "profile", onSignInSuccess: "signInSuccess", style: "display: block; margin: 0 auto;"}
                     // {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
                 ]}

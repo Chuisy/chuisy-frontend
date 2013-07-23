@@ -1430,7 +1430,7 @@
     //                     });
     //                 },
     //                 $L("Authentication Problem"),
-    //                 $L("Ok")
+    //                 $L("OK")
     //             );
     //         } else {
     //             alert($L("There was a problem with your authentication credentials. Please log in again."));
@@ -1443,12 +1443,12 @@
     //     if (xhr.status == 500) {
     //         if (navigator.notification) {
     //             navigator.notification.alert(
-    //                 $L("Something went wrong. Don't worry, we're fixing it."),
+    //                 $L("Oops, something went wrong. Don't worry - we're fixing it."),
     //                 $L("Server Problem"),
-    //                 $L("Ok")
+    //                 $L("OK")
     //             );
     //         } else {
-    //             alert($L("Something went wrong. Don't worry, we're fixing it."));
+    //             alert($L("Oops, something went wrong. Don't worry - we're fixing it."));
     //         }
     //     }
     // });

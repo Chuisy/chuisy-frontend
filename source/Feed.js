@@ -307,7 +307,7 @@ enyo.kind({
         ]},
         {classes: "placeholder", showing: true, name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("There is nothing here to see! Maybe you are not following any people or stores yet?")},
+            {classes: "placeholder-text", content: $L("Nothing to see here! Are you following any people or stores yet?")},
             {kind: "Button", classes: "feed-placeholder-button", content: $L("Start discovering"), ontap: "doShowDiscoverChus"}
         ]},
         {kind: "List", classes: "enyo-fill fadein", name: "feedList", onSetupItem: "setupFeedItem", rowsPerPage: 5, thumb: false, noSelect: true,

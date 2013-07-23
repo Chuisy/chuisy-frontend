@@ -83,7 +83,7 @@ enyo.kind({
             {name: "front", classes: "signinview-card-front", components: [
                 {kind: "Image", src: "assets/images/friends_placeholder.png", classes: "signinview-image"},
                 {classes: "signinview-text",
-                    content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
+                    content: $L("Connect with Facebook now if you want to use all of Chuisy's features. Don't worry, we won't post anything without asking you!")},
                 {kind: "SignInButton", onSignInSuccess: "signInSuccess", onSignInFail: "signInFail", classes: "signinview-signin-button"}
             ]}
         ]}

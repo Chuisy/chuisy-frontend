@@ -279,7 +279,7 @@ enyo.kind({
         if (store && store.name) {
             return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", store.name);
         } else {
-            return $L("Check out this cool fashion item!");
+            return $L("Check out this great fashion item!");
         }
     },
     checkSynced: function() {

@@ -188,7 +188,7 @@ enyo.kind({
         {classes: "enyo-fill map-container", name: "map", components: [
             {classes: "placeholder", name: "placeholder", components: [
                 {classes: "placeholder-image"},
-                {classes: "placeholder-text", content: $L("Sorry, the map could not be loaded. Please check your internet connection!")}
+                {classes: "placeholder-text", content: $L("Sorry, the map could not be loaded. Please check your internet connection.")}
             ]}
         ]},
         {kind: "Signals", onLoadMapsApi: "apiLoaded"}

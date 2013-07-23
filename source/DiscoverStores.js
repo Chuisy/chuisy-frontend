@@ -127,7 +127,7 @@ enyo.kind({
         {classes: "alert error discover-alert", name: "noInternet", content: $L("No internet connection available!")},
         {kind: "SearchInput", classes: "discover-searchinput scrollaway", onEnter: "searchInputEnter", onCancel: "searchInputCancel", disabled: false},
         {kind: "Spinner", name: "spinner", showing: false, classes: "discover-spinner"},
-        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No Stores found."), showing: false},
+        {name: "noResults", classes: "discover-no-results absolute-center", content: $L("No stores found."), showing: false},
         {kind: "List", fit: true, name: "list", onSetupItem: "setupStore", rowsPerPage: 20,
             strategyKind: "TransitionScrollStrategy", thumb: false, preventDragPropagation: false, components: [
             {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
