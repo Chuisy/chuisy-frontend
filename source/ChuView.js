@@ -146,7 +146,7 @@ enyo.kind({
         }
     },
     refreshComments: function() {
-        var totalCount = this.chu.comments.meta && this.chu.comments.total_count || this.chu.get("comments_count") || 0;
+        var totalCount = this.chu.comments.meta && this.chu.comments.meta.total_count || this.chu.get("comments_count") || 0;
         this.$.commentsSpinner.hide();
         this.$.moreCommentsSpinner.hide();
         this.$.moreComments.setShowing(this.chu.comments.hasNextPage());
