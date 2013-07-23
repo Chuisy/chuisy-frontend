@@ -26,10 +26,6 @@
     height: 200px;
 }
 
-.storemap .placeholder-text {
-    padding: 10px;
-}
-
 .storemap .placeholder-image {
     background-image: url(../../assets/images/map_placeholder.png);
 }

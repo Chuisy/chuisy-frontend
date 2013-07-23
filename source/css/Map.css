@@ -26,10 +26,6 @@
 	background-color: #f1f1f1;
 }
 
-.map-container .placeholder-text {
-	padding: 10px;
-}
-
 .map-container .placeholder-image {
 	background-image: url(../../assets/images/map_placeholder.png);
 }

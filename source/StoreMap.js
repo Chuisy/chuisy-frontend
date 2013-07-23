@@ -130,7 +130,7 @@ enyo.kind({
             {style: "position: relative", components: [
                 {classes: "placeholder", name: "placeholder", components: [
                     {classes: "placeholder-image"},
-                    {classes: "placeholder-text", content: $L("Sorry, the map could not be loaded. Please check your internet connection!")}
+                    {classes: "placeholder-text", content: $L("Unfortunately we weren't able to access your location. Please go to your settings under 'Privacy > Location Services' and make sure Chuisy is enabled!")}
                 ]}
             ]}
         ]}
