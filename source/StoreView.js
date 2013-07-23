@@ -36,7 +36,7 @@ enyo.kind({
     updateView: function() {
         this.$.name.setContent(this.store.get("name"));
         this.$.chusCount.setContent(this.store.get("chu_count") || 0);
-        this.$.followButton.setContent(this.store.get("following") ? "unfollow" : "follow");
+        this.$.followButton.setContent(this.store.get("following") ? $L("unfollow") : $L("follow"));
         this.$.followersCount.setContent(this.store.get("follower_count") || 0);
 
         var coverImage = this.store.get("cover_image") || this.coverPlaceholder;
@@ -182,7 +182,7 @@ enyo.kind({
     components: [
         {kind: "Image", classes: "userview-avatar fadein", name: "avatar"},
         {name: "nameFollow", classes: "userview-name-follow", components: [
-            {kind: "Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
+            {kind: "Button", name: "followButton", content: $L("follow"), ontap: "followButtonTapped", classes: "userview-follow-button follow-button"},
             {classes: "userview-fullname ellipsis", name: "name"}
         ]},
         {kind: "AnimatedPanels", classes: "enyo-fill", name: "panels", components: [
