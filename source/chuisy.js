@@ -63,7 +63,6 @@
                 // We have gone from offline to online and there is an active and authenticated user. Lets do some synching!
                 chuisy.accounts.syncActiveUser();
                 chuisy.closet.syncRecords();
-                chuisy.notifications.fetch({data: {limit: 10}});
             }
         },
         /**

@@ -565,6 +565,7 @@ enyo.kind({
     resume: function() {
         App.startSession();
         this.checkPendingNotifications();
+        chuisy.notifications.fetch({data: {limit: 10}});
     },
     pause: function() {
         App.endSession();
