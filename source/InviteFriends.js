@@ -6,9 +6,6 @@ enyo.kind({
     published: {
         buttonLabel: $L("add")
     },
-    handlers: {
-        onpostresize: "unfreeze"
-    },
     create: function() {
         this.inherited(arguments);
         this.userChanged();
@@ -41,12 +38,10 @@ enyo.kind({
     },
     setupItem: function(sender, event) {
         var friend = this.filteredFriends[event.index];
-        this.$.avatar.setSrc(friend.getAvatar(64, 64));
+        this.$.avatar.setSrc(friend.getAvatar(80, 80));
         this.$.fullName.setContent(friend.get("name"));
 
-        this.$.addButton.setShowing(!this.isSelected(friend));
-        this.$.addButton.setContent(this.buttonLabel);
-        this.$.check.setShowing(this.isSelected(friend));
+        this.$.item.addRemoveClass("selected", this.isSelected(friend));
     },
     toggleFriend: function(sender, event) {
         var friend = this.filteredFriends[event.index];
@@ -82,20 +77,15 @@ enyo.kind({
         this.selectedFriends = {};
         this.refreshList();
     },
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
-    },
     components: [
-        {kind: "SearchInput", classes: "fbfriendspicker-filter-input", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
-        {kind: "CssSpinner", name: "spinner", classes: "fbfriendspicker-spinner", showing: false},
+        {kind: "SearchInput", classes: "discover-searchinput", placeholder: $L("Type to filter..."), onChange: "applyFilter", name: "filterInput", onCancel: "filterCancel"},
+        {kind: "Spinner", name: "spinner", classes: "fbfriendspicker-spinner", showing: false},
         {kind: "List", name: "list", fit: true, onSetupItem: "setupItem", rowsPerPage: 50,
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "fbfriendspicker-friend", components: [
-                {kind: "Image", classes: "fbfriendspicker-friend-avatar", name: "avatar"},
-                {classes: "fbfriendspicker-friend-fullname ellipsis", name: "fullName"},
-                {classes: "fbfriendspicker-friend-check", name: "check", showing: false, ontap: "toggleFriend"},
-                {kind: "onyx.Button", ontap: "toggleFriend", name: "addButton", classes: "fbfriendspicker-friend-add-button"}
+            {classes: "list-item userlistitem peoplepicker-item", name: "item", ontap: "toggleFriend", components: [
+                {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
+                {classes: "userlistitem-fullname ellipsis", name: "fullName"},
+                {classes: "peoplepicker-item-light"}
             ]}
         ]}
     ]
@@ -116,19 +106,26 @@ enyo.kind({
             to: ids
         }, enyo.bind(this, function(response) {
             if (response.request) {
+                chuisy.createInvites(response.request, ids);
                 // User did send the request
                 this.doBack();
-                App.sendCubeEvent("fb_invite", {
+                App.sendCubeEvent("fb_api", {
+                    type: "invite",
+                    result: "success",
                     ids: ids
                 });
             } else {
-                App.sendCubeEvent("fb_invite_cancel", {
+                App.sendCubeEvent("fb_api", {
+                    type: "invite",
+                    result: "cancel",
                     ids: ids
                 });
             }
         }));
     },
     activate: function() {
+        this.$.fbFriendsPicker.show();
+        this.resized();
         this.$.fbFriendsPicker.reset();
         var user = chuisy.accounts.getActiveUser();
         if (user) {
@@ -136,11 +133,12 @@ enyo.kind({
         }
     },
     deactivate: function() {
+        this.$.fbFriendsPicker.hide();
     },
     components: [
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")},
-            {kind: "onyx.Button", ontap: "invite", classes: "done-button", content: $L("invite")}
+            {classes: "header-icon back", ontap: "doBack"},
+            {kind: "Button", ontap: "invite", classes: "header-button right primary", content: $L("invite")}
         ]},
         {kind: "FbFriendsPicker", fit: true}
     ]

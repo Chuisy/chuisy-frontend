@@ -1,110 +1,12 @@
 .profileview {
 }
 
-.profileview-avatar {
-	width: 80px;
-	margin: 10px;
-	vertical-align: top;
+.userview-avatar.profileview-avatar {
+	top: -85px;
 }
 
-.profileview-window {
-	height: 150px;
-	position: relative;
-	-webkit-transition: height 0.1s;
-}
-
-.profileview-info {
-	width: 100%;
-	height: 100%;
-	background: url() no-repeat center center;
-	background-size: cover;
-	box-shadow: inset 0 -1px 20px #333;
-}
-
-.profileview-window.collapsed {
-	height: 0;
-}
-
-.profileview-info.profileview-avatar-placeholder {
-	position: absolute;
-	z-index: -1;
-	left: 0;
-	right: 0;
-	background-image: url(../../assets/images/profile_placeholder.png);
-	background-size: 128px 128px;
-}
-
-
-.profileview-profileinfo {
-	display: inline-block;
-	vertical-align: top;
-	height: 100px;
-}
-
-.profileview-fullname {
-	font-size: 15pt;
-	color: White;
-	text-shadow: 0 0 5px #000;
-	position: absolute;
-	left: 5px;
-	bottom: 5px;
-	max-width: 200px;
-	text-align: left;
-}
-
-.profileview-bio {
-	padding: 5px;
-	font-size: 11pt;
-}
-
-.profileview-menu {
-	width: 100%;
-	box-sizing: border-box;
-	height: 45px;
-	text-align: center;
-}
-
-.profileview-menu-button {
-	width: 25%;
-	height: 100%;
-	box-sizing: border-box;
-	padding: 0;
-	border-radius: 0 !important;
-	background-image: none;
-	background-color: #eee;
-	vertical-align: top;
-}
-
-.profileview-menu-button.active {
-	box-shadow: none;
-	background-color: white;
-	background-image: none;
-	color: black;
-	border-top: 1px solid rgba(15, 15, 15, 0.2);
-}
-
-.profileview-menu-button-caption {
-	display: block;
-	font-size: 10pt;
-	margin: 0 auto;
-}
-
-.profileview-menu-button-count {
-	display: block;
-	margin: 0 auto;
-	font-size: 12pt;
-}
-
-.profileview-follow-button {
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
-	width: 85px;
-}
-
-.profileview.owned .follow-button {
-	display: none;
-	width: 85px;
+.userview-name-follow.profileview-name-follow {
+	top: 102px;
 }
 
 .profileview-settings-button {
@@ -112,18 +14,12 @@
 	height: 36px;
 	background-size: 36px 72px;
 	background-image: url(../../assets/images/settings_button.png);
-	position: absolute;
-	right: 5px;
-	bottom: 5px;
-	display: none;
+    float: right;
+    margin: 5px;
 }
 
 .profileview-settings-button:active:hover:not([disabled]) {
 	background-position: 0 -36px;
-}
-
-.profileview.owned .profileview-settings-button {
-	display: block;
 }
 
 .profileview .placeholder {
@@ -133,37 +29,6 @@
 
 .profileview .placeholder-image {
 	background-image: url(../../assets/images/profile_placeholder.png);
-}
-
-.profileview-list-placeholder {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background: url() no-repeat center center;
-	background-size: 128px 128px;
-}
-
-.profileview-list-placeholder.chus {
-	background-image: url(../../assets/images/closet_placeholder.png);
-}
-
-.profileview-list-placeholder.following {
-	background-image: url(../../assets/images/friends_placeholder.png);
-}
-
-.profileview-list-placeholder.followers {
-	background-image: url(../../assets/images/friends_placeholder.png);
-}
-
-.profileview-list-placeholder.likes {
-	background-image: url(../../assets/images/hearts_placeholder.png);
-}
-
-.profileview-login-spinner {
-	display: block;
-	margin: 10px auto;
 }
 
 .profileview-terms {
@@ -178,6 +43,10 @@
 	text-decoration: none;
 }
 
-.profileview-tab-spinner {
-	margin: 20px auto;
+.profileview-login-text {
+	padding: 30px;
+	text-align: center;
+	font-size: 10pt;
+    color: #888;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.59);
 }

@@ -1,210 +1,230 @@
 enyo.kind({
     name: "ProfileView",
-    // kind: "FittableRows",
-    classes: "profileview",
+    classes: "userview profileview",
+    kind: "FittableRows",
     published: {
         user: null
     },
     events: {
-        onShowChu: "",
-        onShowUser: "",
-        onShowSettings: ""
+        onShowChuList: "",
+        onShowUserList: "",
+        onShowSettings: "",
+        onShowStoreList: "",
+        onShowCloset: ""
     },
     listenTo: Backbone.Events.listenTo,
     stopListening: Backbone.Events.stopListening,
+    create: function() {
+        this.inherited(arguments);
+        this.activeUserChanged();
+        chuisy.accounts.on("change:active_user", this.activeUserChanged, this);
+        var s = this.$.scroller.getStrategy();
+        s.scrollIntervalMS = 17;
+        this.positionParallaxElements();
+    },
+    activeUserChanged: function() {
+        this.setUser(chuisy.accounts.getActiveUser());
+    },
     userChanged: function() {
-        this.$.likedChusMenuButton.setActive(true);
-        this.$.panels.setIndex(0);
+        // Reset avatar to make sure the view doesn't show the avatar of the previous user while the new one is loading
+        this.updateView();
 
-        this.$.info.applyStyle("background-image", "url()");
-
+        // Bind the user model to this view
         this.stopListening();
 
-        this.updateView();
-        this.listenTo(this.user, "change", this.updateView);
-
-        this.$.followersList.setUsers(this.user.followers);
-        this.$.followingList.setUsers(this.user.following);
-
-        this.synced("following");
-        this.listenTo(this.user.followers, "sync", _.bind(this.synced, this, "followers"));
-        this.synced("followers");
-        this.listenTo(this.user.following, "sync", _.bind(this.synced, this, "following"));
-
-        this.$.chuList.setChus(this.user.chus);
-        this.$.likedChuList.setChus(this.user.likedChus);
-    },
-    updateView: function() {
-        this.$.panels1.setIndex(0);
-        this.$.spinner.hide();
-        this.$.chusCount.setContent(this.user.get("chu_count"));
-        this.$.followersCount.setContent(this.user.get("follower_count"));
-        this.$.followingCount.setContent(this.user.get("following_count"));
-        this.$.likedChusCount.setContent(this.user.get("like_count"));
-        var avatar = this.user.get("localAvatar") || this.user.profile.get("avatar");
-        this.$.info.applyStyle("background-image", "url(" + avatar + ")");
-        this.$.fullName.setContent(this.user.get("first_name") ? (this.user.get("first_name") + " " + this.user.get("last_name")) : "");
-
-        this.$.followButton.setContent(this.user.get("following") ? "unfollow" : "follow");
-        var activeUser = chuisy.accounts.getActiveUser();
-        this.addRemoveClass("owned", activeUser && this.user.id == activeUser.id);
-    },
-    menuItemSelected: function(sender, event) {
-        if (event.originator.getActive()) {
-            this.$.panels.setIndex(event.originator.value);
-            // var listMap = {
-            //     0: this.$.chuList,
-            //     1: this.$.followingList,
-            //     2: this.$.followersList
-            // };
-            // var list = listMap[event.originator.value];
-            // this.checkCollapsed(list);
-        }
-    },
-    showChu: function(sender, event) {
-        if (App.checkConnection()) {
-            this.doShowChu(event);
-        }
-        return true;
-    },
-    synced: function(which) {
-        this.$[which + "Spinner"].hide();
-        var coll = this.user && this.user[which];
-        var count = coll && (coll.meta && coll.meta.total_count || coll.length) || 0;
-        // this.$[which + "Count"].setContent(count);
-        this.$[which + "Placeholder"].setShowing(!count);
-    },
-    followButtonTapped: function() {
-        if (App.checkConnection()) {
-            App.requireSignIn(enyo.bind(this, this.toggleFollow), "follow");
-        }
-    },
-    toggleFollow: function(sender, event) {
-        this.user.toggleFollow();
-        App.sendCubeEvent(this.user.get("following") ? "follow" : "unfollow", {
-            target_user: this.user,
-            context: "profile"
-        });
-        return true;
-    },
-    signIn: function() {
-        if (App.checkConnection()) {
-            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-                this.$.spinner.show();
-                chuisy.signIn(accessToken, enyo.bind(this, function() {
-                    this.activate();
-                    enyo.Signals.send("onShowGuide", {view: "profile"});
-                }), enyo.bind(this, function() {
-                    this.$.spinner.hide();
-                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
-                    }, $L("Authentication failed"), $L("OK")));
-                }));
-            }));
-            App.sendCubeEvent("signin_tap", {
-                context: "profile"
-            });
-        }
-    },
-    activate: function(obj) {
-        if (obj) {
-            this.setUser(obj);
-        }
-        this.$.panels1.setIndexDirect(!obj && !App.isSignedIn() ? 1 : 0);
+        this.refreshChus();
 
         if (this.user) {
-            this.$.followersSpinner.setShowing(!this.user.followers.length);
-            this.user.followers.fetch();
-            this.$.followingSpinner.setShowing(!this.user.following.length);
-            this.user.following.fetch();
-            this.$.chusSpinner.setShowing(!this.user.chus.length);
-            this.$.likedChusSpinner.setShowing(!this.user.likedChus.length);
-            this.user.chus.fetch({data: {limit: this.$.chuList.getChusPerPage(), thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
-                this.$.chusSpinner.hide();
-                this.$.chusPlaceholder.setShowing(!this.user || !this.user.chus.length);
-            })});
-            this.user.likedChus.fetch({data: {limit: this.$.likedChuList.getChusPerPage(), thumbnails: ["100x100"]}, success: enyo.bind(this, function() {
-                this.$.likedChusSpinner.hide();
-                this.$.likedChusPlaceholder.setShowing(!this.user || !this.user.likedChus.length);
-                this.$.likedChusCount.setContent(this.user.likedChus.meta.total_count);
-            })});
+            this.listenTo(this.user, "change", this.updateView);
+
+            // Refresh collections associated with this user. Fetch from server if necessary
+            this.refreshHearts();
+            this.refreshGoodies();
+            this.refreshStores();
         }
+
+        this.$.heartsButton.setDisabled(!this.user);
+        this.$.followerButton.setDisabled(!this.user);
+        this.$.followingButton.setDisabled(!this.user);
+        this.$.content.setShowing(this.user);
+        this.$.login.setShowing(!this.user);
+        this.$.settingsButton.setShowing(this.user);
+        this.$.settingsButtonDummy.setShowing(this.user);
+
+        this.$.scroller.scrollToTop();
     },
-    deactivate: function() {},
-    checkCollapsed: function(list) {
-        var scrollTop = list.getScrollTop();
-        var collapsed = collapsed ? (scrolltop > 100) : list.getScrollTop() > 500;
-        if (this.collapsed != collapsed) {
-            this.$.window.addRemoveClass("collapsed", collapsed);
-            setTimeout(enyo.bind(this, function() {
-                this.$.fittableRows.reflow();
-            }), 150);
-            this.collapsed = collapsed;
+    updateView: function() {
+        this.$.fullName.setContent(this.user && this.user.getFullName() || "");
+        this.$.avatar.setSrc(this.user && this.user.get("localAvatar") || this.user && this.user.profile.get("avatar") || "assets/images/avatar_placeholder.png");
+        this.$.heartsCount.setContent(this.user && this.user.get("like_count") || 0);
+        this.$.chusCount.setContent(chuisy.closet.length);
+        this.$.followersCount.setContent(this.user && this.user.get("follower_count") || 0);
+        this.$.followingCount.setContent(this.user && this.user.get("following_count") || 0);
+    },
+    loadHearts: function() {
+        this.$.heartsEmpty.hide();
+        this.$.heartsSpinner.show();
+        this.user.likedChus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshHearts)});
+    },
+    refreshHearts: function() {
+        this.$.heartsSpinner.hide();
+        this.$.heartsRepeater.setCount(Math.min(this.user.likedChus.length, 3));
+        this.$.heartsEmpty.setShowing(!this.user.likedChus.length);
+    },
+    setupHeart: function(sender, event) {
+        var heart = this.user && this.user.likedChus.at(event.index);
+        event.item.$.image.applyStyle("background-image", "url(" + heart.get("thumbnails")["100x100"] + ")");
+    },
+    loadChus: function() {
+        this.$.chusEmpty.hide();
+        this.$.chusSpinner.show();
+        this.user.chus.fetch({data: {limit: 3, thumbnails: ["100x100"]}, success: enyo.bind(this, this.refreshChus)});
+    },
+    refreshChus: function() {
+        this.$.chusSpinner.hide();
+        this.$.chusRepeater.setCount(Math.min(chuisy.closet.length, 3));
+        this.$.chusEmpty.setShowing(!chuisy.closet.length);
+    },
+    setupChu: function(sender, event) {
+        var chu = chuisy.closet.at(event.index);
+        var image = chu.get("localThumbnail") || chu.get("thumbnails") && chu.get("thumbnails")["100x100"] ||
+            chu.get("localImage") || chu.get("image") || "";
+        event.item.$.image.applyStyle("background-image", "url(" + image + ")");
+    },
+    loadGoodies: function() {
+        this.$.goodiesEmtpy.hide();
+        this.$.goodiesSpinner.show();
+        this.user.goodies.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshGoodies)});
+    },
+    refreshGoodies: function() {
+        this.$.goodiesSpinner.hide();
+        this.$.goodiesRepeater.setCount(Math.min(this.user.goodies.length, 3));
+        this.$.goodiesEmtpy.setShowing(!this.user.goodies.length);
+    },
+    setupGoody: function(sender, event) {
+        var goody = this.user && this.user.goodies.at(event.index);
+        event.item.$.image.applyStyle("background-image", "url(" + goody.get("cover_image_thumbnail") + ")");
+    },
+    loadStores: function() {
+        this.$.storesEmpty.hide();
+        this.$.storesSpinner.show();
+        this.user.followedStores.fetch({data: {limit: 3}, success: enyo.bind(this, this.refreshStores)});
+    },
+    refreshStores: function() {
+        this.$.storesSpinner.hide();
+        this.$.storesRepeater.setCount(Math.min(this.user.followedStores.length, 3));
+        this.$.storesEmpty.setShowing(!this.user.followedStores.length);
+    },
+    setupStore: function(sender, event) {
+        var store = this.user && this.user.followedStores.at(event.index);
+        var rand = Math.ceil(Math.random()*2);
+        var coverPlaceholder = "assets/images/store_cover_placeholder_" + rand + ".jpg";
+        event.item.$.image.applyStyle("background-image", "url(" + (store.get("cover_image") || coverPlaceholder) + ")");
+        event.item.$.storeName.setContent(store.get("name"));
+    },
+    heartsTapped: function() {
+        this.doShowChuList({chus: this.user.likedChus, title: $L("{{ name }}'s Hearts").replace("{{ name }}", this.user.get("first_name"))});
+    },
+    chusTapped: function() {
+        this.doShowChuList({chus: this.user.chus, title: $L("{{ name }}'s Chus").replace("{{ name }}", this.user.get("first_name"))});
+    },
+    followersTapped: function() {
+        this.doShowUserList({users: this.user.followers, title: $L("{{ name }}'s Followers").replace("{{ name }}", this.user.get("first_name"))});
+    },
+    followingTapped: function() {
+        this.doShowUserList({users: this.user.following, title: $L("Followed by {{ name }}").replace("{{ name }}", this.user.get("first_name"))});
+    },
+    storesTapped: function() {
+        this.doShowStoreList({stores: this.user.followedStores, title: $L("Followed by {{ name }}").replace("{{ name }}", this.user.get("first_name"))});
+    },
+    positionParallaxElements: function() {
+        this.$.avatar.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/2 + "px, 0)");
+        this.$.nameFollow.applyStyle("-webkit-transform", "translate3d(0, " + -this.$.scroller.getScrollTop()/1.5 + "px, 0)");
+    },
+    activate: function() {
+        this.updateView();
+        this.refreshChus();
+        if (this.user && !this.user.likedChus.meta.total_count) {
+            this.loadHearts();
         }
-        return true;
+        if (this.user && !this.user.goodies.meta.total_count) {
+            this.loadGoodies();
+        }
+        if (this.user && !this.user.followedStores.length.total_count) {
+            this.loadStores();
+        }
     },
     components: [
-        {kind: "Panels", name: "panels1", classes: "enyo-fill", draggable: false, components: [
-            {kind: "FittableRows", components: [
-                {classes: "profileview-window", name: "window", components: [
-                    {classes: "profileview-info profileview-avatar-placeholder"},
-                    {classes: "profileview-info", name: "info", components: [
-                        {classes: "profileview-fullname", name: "fullName"},
-                        {classes: "profileview-settings-button", ontap: "doShowSettings"},
-                        {kind: "onyx.Button", name: "followButton", content: "follow", ontap: "followButtonTapped", classes: "profileview-follow-button follow-button"}
-                    ]}
-                ]},
-                {kind: "onyx.RadioGroup", onActivate: "menuItemSelected", classes: "profileview-menu", components: [
-                    {classes: "profileview-menu-button", value: 0, name: "likedChusMenuButton", components: [
-                        {classes: "profileview-menu-button-caption", content: $L("Hearts")},
-                        {classes: "profileview-menu-button-count", name: "likedChusCount"}
-                    ]},
-                    {classes: "profileview-menu-button", value: 1, name: "chusMenuButton", components: [
-                        {classes: "profileview-menu-button-caption", content: $L("Chus")},
-                        {classes: "profileview-menu-button-count", name: "chusCount"}
-                    ]},
-                    {classes: "profileview-menu-button", value: 2, name: "followingMenuButton", components: [
-                        {classes: "profileview-menu-button-caption", content: $L("Following")},
-                        {classes: "profileview-menu-button-count", name: "followingCount"}
-                    ]},
-                    {classes: "profileview-menu-button", value: 3, name: "followersMenuButton", components: [
-                        {classes: "profileview-menu-button-caption", content: $L("Followers")},
-                        {classes: "profileview-menu-button-count", name: "followersCount"}
-                    ]}
-                ]},
-                {kind: "Panels", name: "panels", fit: true, draggable: false, components: [
-                    {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "likedChusSpinner", showing: false},
-                        {name: "likedChusPlaceholder", classes: "profileview-list-placeholder likes"},
-                        {kind: "ChuList", name: "likedChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
-                    ]},
-                    {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "chusSpinner", showing: false},
-                        {name: "chusPlaceholder", classes: "profileview-list-placeholder chus"},
-                        {kind: "ChuList", classes: "enyo-fill", onShowChu: "showChu", onRefresh: "chuListRefresh"}
-                    ]},
-                    {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "followingSpinner", showing: false},
-                        {name: "followingPlaceholder", classes: "profileview-list-placeholder following"},
-                        {kind: "UserList", name: "followingList", classes: "enyo-fill", rowsPerPage: 20}
-                    ]},
-                    {classes: "enyo-fill", components: [
-                        {kind: "CssSpinner", classes: "profileview-tab-spinner", name: "followersSpinner", showing: false},
-                        {name: "followersPlaceholder", classes: "profileview-list-placeholder followers"},
-                        {kind: "UserList", name: "followersList", classes: "enyo-fill", rowsPerPage: 20}
-                    ]}
-                ]}
+        {kind: "Image", classes: "userview-avatar profileview-avatar fadein", name: "avatar"},
+        {name: "nameFollow", classes: "userview-name-follow profileview-name-follow", components: [
+            {classes: "profileview-settings-button", ontap: "doShowSettings", name: "settingsButtonDummy"},
+            {classes: "userview-fullname ellipsis", name: "fullName"}
+        ]},
+        {kind: "Scroller", classes: "enyo-fill", strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "positionParallaxElements", components: [
+            {classes: "userview-window", components: [
+                {style: "position: absolute; right: 0; bottom: 0; width: 50px; height: 50px;", ontap: "doShowSettings", name: "settingsButton"}
             ]},
-            {components: [
-                {classes: "placeholder", name: "placeholder", components: [
-                    {classes: "placeholder-image"},
-                    {classes: "placeholder-text", content: $L("Here you can see your profile as soon as you log in!")}
+            {style: "background-color: #f1f1f1;", components: [
+                {classes: "userview-tabs", components: [
+                    {kind: "Button", name: "heartsButton", classes: "userview-tab", ontap: "heartsTapped", components: [
+                        {classes: "userview-tab-count", name: "heartsCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Hearts")}
+                    ]},
+                    {kind: "Button", name: "closetButton", classes: "userview-tab", ontap: "doShowCloset", components: [
+                        {classes: "userview-tab-count", name: "chusCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Chus")}
+                    ]},
+                    {kind: "Button", name: "followerButton", classes: "userview-tab", ontap: "followersTapped", components: [
+                        {classes: "userview-tab-count", name: "followersCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Followers")}
+                    ]},
+                    {kind: "Button", name: "followingButton", classes: "userview-tab", ontap: "followingTapped", components: [
+                        {classes: "userview-tab-count", name: "followingCount", content: "0"},
+                        {classes: "userview-tab-caption", content: $L("Following")}
+                    ]}
                 ]},
-                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                    {classes: "facebook-button-icon"},
-                    {content: $L("Sign in with Facebook")}
+                {name: "content", components: [
+                    {classes: "userview-box", ontap: "heartsTapped", components: [
+                        {classes: "userview-box-label hearts"},
+                        {kind: "Repeater", style: "display: inline-block;", name: "heartsRepeater", onSetupItem: "setupHeart", components: [
+                            {name: "image", classes: "userview-box-image"}
+                        ]},
+                        {kind: "Spinner", classes: "userview-box-spinner", name: "heartsSpinner", showing: false},
+                        {name: "heartsEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                    ]},
+                    {classes: "userview-box", ontap: "doShowCloset", components: [
+                        {classes: "userview-box-label chus"},
+                        {kind: "Repeater", style: "display: inline-block;", name: "chusRepeater", onSetupItem: "setupChu", components: [
+                            {name: "image", classes: "userview-box-image"}
+                        ]},
+                        {kind: "Spinner", classes: "userview-box-spinner", name: "chusSpinner", showing: false},
+                        {name: "chusEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                    ]},
+                    {classes: "userview-box", ontap: "goodiesTapped", components: [
+                        {classes: "userview-box-label goodies"},
+                        {kind: "Repeater", style: "display: inline-block;", name: "goodiesRepeater", onSetupItem: "setupGoody", components: [
+                            {name: "image", classes: "userview-box-image"}
+                        ]},
+                        {kind: "Spinner", classes: "userview-box-spinner", name: "goodiesSpinner", showing: false},
+                        {name: "goodiesEmtpy", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                    ]},
+                    {classes: "userview-box", ontap: "storesTapped", components: [
+                        {classes: "userview-box-label stores"},
+                        {kind: "Repeater", style: "display: inline-block;", name: "storesRepeater", onSetupItem: "setupStore", components: [
+                            {name: "image", classes: "userview-box-image", components: [
+                                {classes: "userview-store-name ellipsis", name: "storeName"}
+                            ]}
+                        ]},
+                        {kind: "Spinner", classes: "userview-box-spinner", name: "storesSpinner", showing: false},
+                        {name: "storesEmpty", showing: false, classes: "userview-box-empty", content: $L("Nothing here yet...")}
+                    ]},
+                    {style: "height: 5px;"}
                 ]},
-                {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")},
-                {kind: "CssSpinner", name: "spinner", classes: "profileview-login-spinner", showing: false}
+                {name: "login", components: [
+                    {classes: "profileview-login-text", content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
+                    {kind: "SignInButton", context: "profile", onSignInSuccess: "signInSuccess", style: "display: block; margin: 0 auto;"}
+                    // {classes: "profileview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
+                ]}
             ]}
         ]}
     ]

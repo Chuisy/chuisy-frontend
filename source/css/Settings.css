@@ -1,11 +1,10 @@
 .settings {
-	background-color: #f2f2f2;
-	background-image: url(../../assets/images/greyfloral.png);
-	background-size: 150px 124px;
+	background-color: #f1f1f1;
+    -webkit-perspective: 1000px;
 }
 
 .settings .onyx-groupbox {
-	margin: 5px 0;
+	margin: 10px 0;
 }
 
 .settings .onyx-groupbox .onyx-input,
@@ -14,10 +13,13 @@
 }
 
 .settings-section-header {
-	padding: 10px 10px 5px 10px;
-	font-size: 15pt;
-	font-family: 'Quicksand';
-	/*font-variant: small-caps;*/
+	padding: 10px 10px 0 10px;
+    display: inline-block;
+    font-size: 13pt;
+    font-variant: small-caps;
+    font-weight: bold;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .settings-item {
@@ -37,6 +39,8 @@
 .settings-content {
 	padding: 10px;
 	box-sizing: border-box;
+	background-image: url(../../assets/images/greyfloral.png);
+	background-size: 150px 124px;
 }
 
 .settings-avatar {
@@ -44,12 +48,15 @@
 	background: url() no-repeat center center;
 	background-size: cover;
 	position: relative;
-	box-shadow: inset 0 -1px 20px #333;
+    box-shadow: inset 0 -0 10px rgba(0, 0, 0, 0.2)
 }
 
 .settings-change-avatar {
 	float: right;
 	margin: 5px;
+    background-color: rgba(236, 236, 236, 0.7);
+    border: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .settings-notification-icon {
@@ -71,4 +78,21 @@
 
 .settings-notification-icon.active {
 	background-position: 0 -32px;
+}
+
+.settings-signature {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    bottom: -50px;
+    background-color: gray;
+    -webkit-transform: tranlate3d(0, 0, 0);
+    -webkit-transform-origin: 50% 0;
+    -webkit-backface-visibility: hidden;
+    font-size: 10pt;
+    background-color: #f1f1f1;
+    text-shadow: 0 1px 0 #fff;
+    line-height: 50px;
+    text-align: center;
+    color: #888;
 }

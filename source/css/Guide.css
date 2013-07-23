@@ -1,58 +1,52 @@
-.guide {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	color: #eee;
-	text-align: center;
-	opacity: 0;
-	-webkit-transition: opacity 0.5s;
-	z-index: -1000;
-	/*font-weight: 200;*/
+.card-side.guide-card-side {
+    /*background-image: url(../../assets/images/lightpaperfibers.png);
+    background-size: 500px 300px;*/
+    background-color: white;
+    text-align: center;
+    height: 330px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.guide.open {
-	opacity: 1;
+.guide-card-ghost {
+    width: 100%;
+    text-align: center;
 }
 
-.guide-centered {
-	position: absolute;
-	width: 230px;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
+.guide-card-ghost-bullet {
+    display: inline-block;
+    vertical-align: middle;
+    border: none;
+    margin: 0 8px;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border-radius: 50px;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.guide-header {
-	font-size: 22pt;
-	line-height: 1.3em;
+.guide-card-ghost-bullet.active {
+    background-color: rgba(195, 15, 38, 0.8);
+    border: none;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-.guide-separator {
-	width: 150px;
-	display: inline-block;
-	border-top: solid 1px rgb(100, 100, 100);
-	height: 0;
-	margin: 15px 0 10px 0;
+.guide-card-title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #444;
+    /*text-shadow: 0px 1px 0px rgba(255,255,255,0.59);*/
+    padding: 30px 20px 15px 20px;
+    font-size: 17pt;
+    font-weight: bold;
 }
 
-.guide-dictionary {
-	font-family: Muli;
-	font-size: 10pt;
-	height: 150px;
-}
-
-.guide-text {
-	line-height: 1.5em;
-}
-
-.guide-continue {
-	width: 100%;
-	position: absolute;
-	bottom: 5px;
-	color: #eee;
-	font-size: 9pt;
+.guide-card-text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #444;
+    /*text-shadow: 0px 1px 0px rgba(255,255,255,0.59);*/
+    padding: 0 25px;
+    font-size: 11pt;
+    line-height: 1.3em;
 }

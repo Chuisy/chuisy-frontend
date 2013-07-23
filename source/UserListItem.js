@@ -3,7 +3,7 @@
 */
 enyo.kind({
 	name: "UserListItem",
-	classes: "userlistitem",
+	classes: "list-item userlistitem pressable",
 	published: {
         // The user to display
 		user: null
@@ -12,7 +12,7 @@ enyo.kind({
         // Use was followed / unfollowed
 		onToggleFollow: ""
 	},
-	userChanged: function() {
+	update: function() {
 		this.$.avatar.setSrc(this.user.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
 		this.$.fullName.setContent(this.user.get("first_name") + " " + this.user.get("last_name"));
 		this.$.followButton.setContent(this.user.get("following") ? $L("unfollow") : $L("follow"));
@@ -28,6 +28,6 @@ enyo.kind({
 	components: [
         {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
         {classes: "userlistitem-fullname ellipsis", name: "fullName"},
-        {kind: "onyx.Button", content: $L("follow"), ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
+        {kind: "Button", content: $L("follow"), ontap: "followButtonTapped", name: "followButton", classes: "userlistitem-follow-button"}
     ]
 });

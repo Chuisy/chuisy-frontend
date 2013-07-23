@@ -13,7 +13,9 @@ enyo.kind({
         ondrag: "preventPropagation"
     },
     events: {
-        onMarkerTap: ""
+        onMarkerTap: "",
+        onMapZoomChange: "",
+        onMapTap: ""
     },
     statics: {
         apiLoaded: function() {
@@ -47,10 +49,24 @@ enyo.kind({
             minZoom: this.minZoom,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true
+            disableDefaultUI: true,
+            styles: [{
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{
+                    visibility: "off"
+                }]
+            }]
         };
 
         this.map = new google.maps.Map(this.$.map.hasNode(), options);
+        google.maps.event.addListener(this.map, "zoom_changed", enyo.bind(this, function() {
+            this.doMapZoomChange();
+        }));
+        google.maps.event.addListener(this.map, "click", enyo.bind(this, function() {
+            this.doMapTap({markerControl: this.markerControl});
+            this.markerControl = null;
+        }));
 
         this.markers = [];
     },
@@ -67,12 +83,12 @@ enyo.kind({
             this.panToCenter();
         }
     },
-    addMarker: function(coords, markerControl, popupContent, obj, animate) {
+    addMarker: function(coords, markerControl, popupContent, obj, animate, markerType) {
         var marker;
         var latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
-        var image = "./assets/images/marker-pink96x96.png";
+        var image = null;
         if (markerControl) {
-            markerControl.addRemoveClass("drop", animate);
+            // markerControl.addRemoveClass("drop", animate);
             marker = new RichMarker({
                 position: latlng,
                 map: this.map,
@@ -80,9 +96,11 @@ enyo.kind({
                 flat: true
             });
             google.maps.event.addListener(marker, "click", enyo.bind(this, function() {
-                this.doMarkerTap({obj: obj});
+                this.markerControl = markerControl;
+                this.doMarkerTap({obj: obj, markerControl: markerControl});
             }));
         } else {
+            image = "./assets/images/marker.png";
             marker = new google.maps.Marker({
                 position: latlng,
                 map: this.map,
@@ -111,8 +129,8 @@ enyo.kind({
             style: "position: relative; width: 1000px; height: 0; margin-left: -500px", components: [
                 {style: "width: 100%; overflow: visible; text-align: center; position: absolute; bottom: 0;",
                 components: [
-                    {name: "inner", classes: "tooltip-content-wrapper", style: "display: inline-block", allowHtml: true, content: popupContent},
-                    {classes: "tooltip-tip"}
+                    {name: "inner", classes: "map-popup-content", style: "display: inline-block", allowHtml: true, content: popupContent},
+                    {classes: "map-popup-tip"}
                 ]}
             ]
         });
@@ -128,6 +146,7 @@ enyo.kind({
         };
         var infoBox = new InfoBox(options);
         infoBox.open(this.map, marker);
+        marker.infoBox = infoBox;
         return infoBox;
     },
     placeRichMarker: function(coords, markerControl, animate) {
@@ -145,6 +164,9 @@ enyo.kind({
     },
     clearMarkers: function() {
         for (var i = 0; i < this.markers.length; i++) {
+            if (this.markers[i].infoBox) {
+                this.markers[i].infoBox.close();
+            }
             this.markers[i].setMap(null);
             delete this.markers[i];
         }
@@ -152,6 +174,9 @@ enyo.kind({
     },
     removeMarker: function(marker) {
         marker.setMap(null);
+        if (marker.infoBox) {
+            marker.infoBox.close();
+        }
         this.markers = _.without(this.markers, marker);
     },
     apiLoaded: function() {

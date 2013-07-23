@@ -1,5 +1,8 @@
-.mainview {
-	position: relative;
-	/*background-image: url(../../assets/images/irongrip@2x.png);
-	background-size: 300px 301px;*/
+.mainview-inner {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.mainview-panels {
+    -webkit-box-flex: 1;
 }

@@ -4,140 +4,150 @@
 */
 enyo.kind({
     name: "ComposeChu",
-    kind: "FittableRows",
     events: {
         // The user has tapped the back button
         onBack: "",
         // The user has gone through all stages and tapped the done button
         onDone: ""
     },
-    create: function() {
-        this.inherited(arguments);
-        if (navigator.camera) {
-            // Clean up temporary pictures
-            navigator.camera.cleanup();
-        }
+    published: {
+        image: ""
     },
-    /**
-        Opens the device's camera
-    */
-    getImage: function(callback) {
-        this.getImageTime = new Date();
-        try {
-            navigator.camera.getPicture(enyo.bind(this, this.gotImage), enyo.bind(this, function(message) {
-                this.warn("Getting image failed!");
-                App.sendCubeEvent("get_image_fail", {
-                    message: message,
-                    duration: new Date().getTime() - this.getImageTime.getTime()
-                });
-                this.doBack();
-            }), {targetWidth: 612, targetHeight: 612, allowEdit: true, correctOrientation: true, quality: 49});
-        } catch (e) {
-            this.warn("No camera available!");
-            this.gotImage("");
-        }
+    clear: function() {
+        this.$.panels.selectDirect(this.$.chuForm);
+        this.chu = null;
+        this.postingChu = false;
+        this.$.pickStore.initialize();
+        this.$.chuForm.clear();
+        this.$.postView.clear();
+        this.uuid = util.generateUuid();
+        this.$.postView.setUuid(this.uuid);
     },
-    gotImage: function(uri) {
-        App.sendCubeEvent("get_image_success", {
-            duration: new Date().getTime() - this.getImageTime.getTime()
-        });
-
-        this.image = uri;
+    imageChanged: function() {
         this.$.chuForm.setImage(this.image);
-
-        var user = chuisy.accounts.getActiveUser();
-        // If user has activated sharing posts, make sure that we have publishing permissions.
-        // If not, ask him again (if a certain period of time has passed)
-        if (user && user.profile.get("fb_og_share_posts")) {
-            App.fbRequestPublishPermissions();
-        } else {
-            App.optInSetting("fb_og_share_posts", $L("Share on Facebook"),
-                $L("Do you want to share your Chus on Facebook? Some goodies can only be received if you share your stories! " +
-                    "You can change this later in your settings."), 7 * 24 * 60 * 60 * 1000, function(choice) {
-                    if (choice) {
-                        App.fbRequestPublishPermissions();
-                    }
-                });
-        }
-
-        this.$.pickLocation.initialize();
-        this.pickLocationTime = new Date();
-    },
-    locationPicked: function (sender, event) {
-        App.sendCubeEvent("pick_store", {
-            store: event.location,
-            duration: this.pickLocation ? new Date().getTime() - this.pickLocationTime.getTime() : undefined
-        });
-        this.location = event.location;
-        this.coordinates = event.coordinates;
-        this.$.chuForm.setLocation(this.location);
-        this.postChuTime = new Date();
-        this.$.panels.setIndex(1);
-        enyo.Signals.send("onShowGuide", {view: "compose"});
+        this.$.postView.setImage(this.image);
+        this.adjustPriceStart = new Date();
     },
     chuFormDone: function() {
+        this.$.panels.select(this.$.pickStore);
+        this.pickStoreStart = new Date();
+        return true;
+    },
+    storePicked: function (sender, event) {
+        this.store = event.store;
+        this.coordinates = event.coordinates;
+        enyo.asyncMethod(this, function() {
+            this.$.postView.setStore(this.store);
+            this.$.panels.select(this.$.postView);
+        });
+        this.postStart = new Date();
+    },
+    chuFormBack: function() {
+        App.sendCubeEvent("action", {
+            type: "post_chu",
+            result: "cancel"
+        });
+        this.doBack();
+        if (event) {
+            event.preventDefault();
+        }
+        return true;
+    },
+    pickStoreBack: function() {
+        this.$.panels.select(this.$.chuForm, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+        if (event) {
+            event.preventDefault();
+        }
+        return true;
+    },
+    postViewBack: function() {
+        this.$.panels.select(this.$.pickStore, AnimatedPanels.SLIDE_IN_FROM_LEFT, AnimatedPanels.SLIDE_OUT_TO_RIGHT);
+        return true;
+    },
+    postViewDone: function() {
+        this.postChu();
+        return true;
+    },
+    postChu: function() {
         if (this.postingChu) {
             return true;
         }
         this.postingChu = true;
 
-        var user = chuisy.accounts.getActiveUser();
-        var attrs = {
-            visibility: App.isSignedIn() ? "public" : "private",
-            user: user
-        };
-        // Number formater for providing locale-specific currency formats
-        var locale = this.location.get("location").cc;
+        // Prepare attributes
+        var userMod = chuisy.accounts.getActiveUser();
+        var user = userMod && userMod.toJSON();
+        if (user) {
+            user.profile.avatar_thumbnail = userMod.profile.get("avatar_thumbnail");
+        }
+        var visibility = this.$.postView.getVisibility();
+        var friends = [];
+        var friendsModels = this.$.postView.getFriends();
+        for (var i=0; i<friendsModels.length; i++) {
+            friends.push(friendsModels[i].toJSON());
+        }
+        var price = this.$.chuForm.getPrice();
+        var locale = this.store.get("location") && this.store.get("location").cc; // Number formater for providing locale-specific currency formats
         var currFmt = new enyo.g11n.NumberFmt({style: "currency", currencyStyle: "iso", fractionDigits: 0, locale: locale && locale.toLowerCase()});
-        attrs.price = this.$.chuForm.getPrice();
-        // Specify the local currencies iso code (e.g. EUR)
-        attrs.price_currency = currFmt.sign;
-        attrs.location = this.location.toLocJSON();
-        attrs.latitude = this.coordinates && this.coordinates.latitude;
-        attrs.longitude = this.coordinates && this.coordinates.longitude;
-        var chu = chuisy.closet.create(attrs, {at: 0});
+        var currency = currFmt.sign; // Local currency in iso code (e.g. EUR)
+        var store = this.store.toStoreJSON();
+        var latitude = this.coordinates && this.coordinates.latitude;
+        var longitude = this.coordinates && this.coordinates.longitude;
+        var like = this.$.postView.getLike();
+        var comment = this.$.postView.getComment();
+        var share = this.$.postView.getShareFacebook();
+
+        var chu = chuisy.closet.create({
+            user: user,
+            visibility: visibility,
+            friends: friends,
+            price: price,
+            price_currency: currency,
+            store: store,
+            latitude: latitude,
+            longitude: longitude,
+            liked: like,
+            comment: comment,
+            fb_og_share: share,
+            uuid: this.uuid
+        }, {at: 0});
+        if (comment) {
+            chu.comments.add(new chuisy.models.ChuComment({
+                user: user,
+                text: comment
+            }));
+        }
         chu.changeImage(this.image, enyo.bind(this, function() {
             if (App.isSignedIn()) {
-                chuisy.closet.syncRecords();
+                chuisy.closet.syncAdded();
             }
             this.doDone({chu: chu});
         }));
-
-        App.sendCubeEvent("post_chu", {
+        App.sendCubeEvent("action", {
+            type: "post_chu",
+            result: "submit",
             chu: chu,
-            duration: new Date().getTime() - this.postChuTime.getTime()
+            adjust_price: this.adjustPriceStart.getTime(),
+            pick_store: this.pickStoreStart.getTime(),
+            post: this.postStart.getTime()
         });
         return true;
     },
-    pickLocationBack: function() {
-        App.sendCubeEvent("pick_store_back", {
-            duration: new Date().getTime() - this.pickLocationTime.getTime()
-        });
-        this.doBack();
-    },
-    chuFormBack: function() {
-        App.sendCubeEvent("post_chu_back", {
-            duration: new Date().getTime() - this.postChuTime.getTime()
-        });
-        this.$.panels.setIndex(0);
-        return true;
+    inAnimationStart: function(sender, event) {
+        event.newPanel.resized();
     },
     activate: function() {
-        this.chu = null;
-        this.postingChu = false;
-        this.$.panels.setIndex(0);
-        this.$.pickLocation.initialize();
-        this.$.chuForm.clear();
-        this.getImage();
     },
-    deactivate: function() {},
+    deactivate: function() {
+    },
     components: [
-        {kind: "Panels", fit: true, arrangerKind: "CarouselArranger", classes: "enyo-fill", draggable: false, components: [
-            // STAGE 1: Pick location/place from list
-            {kind: "PickLocation", classes: "enyo-fill", onLocationPicked: "locationPicked", onBack: "pickLocationBack"},
-            // STAGE 2: Pick filter, price, category
-            {kind: "ChuForm", classes: "enyo-fill", onDone: "chuFormDone", onBack: "chuFormBack"}
-            // STAGE 3: Change visibility, share
+        {kind: "AnimatedPanels", async: true, name: "panels", arrangerKind: "CarouselArranger", classes: "enyo-fill", onInAnimationStart: "inAnimationStart", components: [
+            // STEP 1: Pick filter, price, category
+            {kind: "ChuForm", onDone: "chuFormDone", onBack: "chuFormBack"},
+            // STEP 2: Pick location/place from list
+            {kind: "PickStore", onStorePicked: "storePicked", onBack: "pickStoreBack"},
+            // STEP 3: Change visibility, share
+            {kind: "PostView", onBack: "postViewBack", onDone: "postViewDone"}
             // {kind: "ShareView", classes: "enyo-fill", onDone: "shareViewDone", onBack: "shareViewBack"}
         ]}
     ]

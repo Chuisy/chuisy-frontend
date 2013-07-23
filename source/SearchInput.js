@@ -15,7 +15,8 @@ enyo.kind({
         changeDelay: 100,
         // Set to true to disable input
         disabled: false,
-        placeholder: $L("Search...")
+        placeholder: $L("Search..."),
+        searchEnterButton: true
     },
     events: {
         // User has tapped the x button
@@ -30,6 +31,7 @@ enyo.kind({
         this.valueChanged();
         this.disabledChanged();
         this.placeholderChanged();
+        this.searchEnterButtonChanged();
     },
     valueChanged: function() {
         this.$.input.setValue(this.value);
@@ -39,6 +41,9 @@ enyo.kind({
     },
     placeholderChanged: function() {
         this.$.input.setPlaceholder(this.placeholder);
+    },
+    searchEnterButtonChanged: function() {
+        this.$.input.setType(this.searchEnterButton ? "search": "text")
     },
     /**
         Get the input value
@@ -65,7 +70,9 @@ enyo.kind({
         this.doCancel();
         this.blur();
         // Prevent tap event from propagating to elements below this element (bug in mobile safari)
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         return true;
     },
     /**
@@ -82,7 +89,7 @@ enyo.kind({
         }
     },
     components: [
-        {kind: "onyx.Input", onkeyup: "inputKeyup", type: "search", onkeypress: "keypress", style: "-webkit-appearance: textfield"},
+        {kind: "onyx.Input", onkeyup: "inputKeyup", onkeypress: "keypress", style: "-webkit-appearance: textfield"},
         {classes: "searchinput-icon", ontap: "cancel"}
     ]
 });

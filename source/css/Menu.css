@@ -1,46 +1,95 @@
 .menu {
-	text-align: center;
+	text-align: left;
+	display: -webkit-box;
 }
 
 .menu-item {
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	background: url() no-repeat center center;
-	background-size: 40px 80px;
-	background-position: 0 0;
-	margin: 2px 6px;
+	background: url() no-repeat center top;
+	background-size: 44px 88px;
+	-webkit-box-flex: 1;
+	text-align: center;
+	width: 0;
+	border-left: solid 1px transparent;
+	border-right: solid 1px transparent;
 }
 
+.menu-item:not(:last-child) {
+	border-right: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:not(:first-child) {
+	border-left: solid 1px rgba(255, 255, 255, 0.1);
+} 
+
 .menu-item.active {
-	background-position: 0 -40px;
+	background-position-y: -44px;
+	background-color: rgba(0, 0, 0, 0.1);
+	/*box-shadow: inset 0 15px 30px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.1);*/
+	border-left: solid 1px transparent;
+	border-right: solid 1px transparent;
+	/*box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);*/
+}
+
+.menu-item.active:not(:last-child) {
+	border-right: solid 1px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item.feed {
-	background-image: url(../../assets/images/feed.png);
+	-webkit-box-flex: 1.5;
+	background-image: url(../../assets/images/header_logo.png);
+	background-size: 88px 88px;
 }
 
 .menu-item.profile {
-	background-image: url(../../assets/images/profile.png);
-}
-
-.menu-item.closet {
-	background-image: url(../../assets/images/closet.png);
+	background-image: url(../../assets/images/header_profile.png);
 }
 
 .menu-item.goodies {
-	background-image: url(../../assets/images/goodies.png);
-}
-
-.menu-item.discover {
-	background-image: url(../../assets/images/discover.png);
+	background-image: url(../../assets/images/header_goodies.png);
 }
 
 .menu-item.notifications {
-	background-image: url(../../assets/images/notifications.png);
-	background-size: 40px 120px;
+	position: relative;
+	background-image: url(../../assets/images/header_notifications.png);
 }
 
-.menu.new-notifications .menu-item.notifications:not(.active) {
-	background-position: 0 -80px;
+.menu.new-notifications .menu-item.notifications {
+	background-position-y: -1000px;
+}
+
+.menu-notifications-badge {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	margin: 7px 0;
+	box-sizing: border-box;
+	border-radius: 100px;
+	border: solid 3px white;
+	line-height: 22px;
+	color: white;
+	font-size: 12pt;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(0, 0, 0, 0.3);
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	font-weight: bold;
+	background-color: rgba(0, 0, 0, 0.15);
+	-webkit-transition: -webkit-transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	-webkit-transform: scale(0);
+}
+
+.menu.new-notifications .menu-notifications-badge {
+	-webkit-transform: scale(1);
+}
+
+.menu-notifications-badge.two-digits {
+	font-size: 10pt;
+}
+
+.menu-notifications-badge.three-digits {
+	font-size: 8pt;
+}
+
+@-webkit-keyframes nudge {
+	50% {
+		-webkit-transform: scale(1.1);
+	}
 }

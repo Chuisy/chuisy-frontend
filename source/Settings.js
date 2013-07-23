@@ -16,6 +16,8 @@ enyo.kind({
         this.inherited(arguments);
         this.userChanged();
         this.listenTo(chuisy.accounts, "change:active_user", this.userChanged);
+        this.s = this.$.scroller.getStrategy();
+        this.s.scrollIntervalMS = 17;
     },
     userChanged: function(sender, event) {
         var user = chuisy.accounts.getActiveUser();
@@ -24,8 +26,6 @@ enyo.kind({
             this.updateView();
             this.stopListening();
             this.listenTo(user, "change change:avatar", this.updateView);
-        } else {
-            this.doBack();
         }
     },
     updateView: function() {
@@ -55,8 +55,6 @@ enyo.kind({
             first_name: this.$.firstName.getValue(),
             last_name: this.$.lastName.getValue()
         });
-        // chuisy.accounts.mark(user, "changed", true);
-        chuisy.accounts.syncActiveUser();
     },
     facebookSignIn: function() {
         // Get facebook access token
@@ -73,7 +71,7 @@ enyo.kind({
                 if (choice) {
                     chuisy.signOut();
                     this.doBack();
-                    App.sendCubeEvent("logout");
+                    App.sendCubeEvent("action", {type: "logout"});
                 }
             }),
             [$L("Cancel"), $L("Logout")]
@@ -107,20 +105,36 @@ enyo.kind({
             App.fbRequestPublishPermissions();
         }
     },
-    activate: function() {},
-    deactivate: function() {},
+    activate: function() {
+        this.$.scroller.show();
+        this.resized();
+    },
+    deactivate: function() {
+        chuisy.accounts.syncActiveUser();
+        this.$.scroller.hide();
+    },
+    scroll: function() {
+        var offset = -this.s.scrollTop - this.s.bottomBoundary;
+        var rot = Math.max(-90, Math.min(0, -90 - 90/50 * offset));
+        var offset2 =  -this.s.scrollTop - this.s.bottomBoundary + 50;
+        var rot2 = Math.max(-90, Math.min(0, -90 - 90/50 * offset2));
+        this.$.signature.applyStyle("-webkit-transform", "translate3d(0, " + offset + "px, 0) rotateX(" + rot + "deg)");
+        this.$.poweredBy.applyStyle("-webkit-transform", "translate3d(0, " + offset2 + "px, 0) rotateX(" + rot2 + "deg)");
+    },
     components: [
+        {name: "signature", classes: "settings-signature", style: "border-bottom: dotted 1px #888;", allowHtml: true, content: "Developed by <strong>Martin Kleinschrodt</strong>"},
+        {name: "poweredBy", classes: "settings-signature", style: "border-top: dotted 1px #fff; ", allowHtml: true, content: "Powered by <strong>Enyo</strong>"},
         {classes: "header", components: [
-            {kind: "onyx.Button", ontap: "doBack", classes: "back-button", content: $L("back")}
+            {classes: "header-icon back", ontap: "doBack"}
         ]},
-        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", thumb: false, components: [
+        {kind: "Scroller", fit: true, strategyKind: "TransitionScrollStrategy", preventScrollPropagation: false, onScroll: "scroll", sthumb: false, components: [
             {classes: "settings-content", components: [
                 // PROFILE INFORMATION
                 {classes: "settings-section-header", content: $L("Profile")},
                 {kind: "onyx.Groupbox", components: [
                     // AVATAR
                     {name: "avatar", classes: "settings-avatar", components: [
-                        {kind: "onyx.Button", classes: "settings-change-avatar", content: $L("Change"), ontap: "changeAvatar"}
+                        {kind: "Button", classes: "settings-change-avatar", content: $L("Change"), ontap: "changeAvatar"}
                     ]},
                     // FIRST NAME
                     {kind: "onyx.InputDecorator", components: [
@@ -139,7 +153,7 @@ enyo.kind({
                 {classes: "settings-section-header", content: $L("Facebook")},
                 {kind: "onyx.Groupbox", components: [
                     // FACEBOOK
-                    {classes: "settings-item", components: [
+                    {classes: "settings-item", showing: false, components: [
                         {content: $L("Share posts"), classes: "settings-item-text"},
                         {kind: "onyx.ToggleButton", name: "sharePostsButton", ontap: "toggleShare"}
                     ]},
@@ -152,7 +166,7 @@ enyo.kind({
                         {kind: "onyx.ToggleButton", name: "shareRedeemsButton", ontap: "toggleShare"}
                     ]}
                 ]},
-                {kind: "onyx.Button", style: "width: 100%", content: $L("Invite Friends"), ontap: "doInviteFriends"},
+                {kind: "Button", style: "width: 100%; margin-bottom: 10px;", content: $L("Invite Friends"), ontap: "doInviteFriends"},
                 // NOTIFICATION SETTINGS
                 {classes: "settings-section-header", content: $L("Notifications")},
                 {kind: "onyx.Groupbox", components: [
@@ -175,7 +189,7 @@ enyo.kind({
                         {classes: "settings-notification-icon email", name: "emailFollowIcon", prop: "email_follow", ontap: "toggleNotification"}
                     ]}
                 ]},
-                {kind: "onyx.Button", style: "width: 100%; margin-top: 20px;", content: $L("Logout"), ontap: "signOut"}
+                {kind: "Button", style: "width: 100%; margin-top: 20px;", content: $L("Logout"), ontap: "signOut"}
             ]}
         ]}
     ]

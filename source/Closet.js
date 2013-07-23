@@ -8,12 +8,9 @@ enyo.kind({
     events: {
         //* Gets fired when a chu is selected by tapping in it
         onShowChu: "",
-        //* The user has tapped on the menu button
-        onToggleMenu: "",
         //* The user has tapped the create chu button
         onComposeChu: "",
-        //* The user has tapped the notification button
-        onShowNotifications: ""
+        onBack: ""
     },
     handlers: {
         onpostresize: "postResize",
@@ -22,7 +19,7 @@ enyo.kind({
     // Estimated width of a single chu
     chuWidth: 105,
     // Meta object for requests
-    chusPerPage: 60,
+    chusPerPage: 30,
     // Items in the chu box
     items: [],
     create: function() {
@@ -35,7 +32,6 @@ enyo.kind({
     },
     postResize: function() {
         this.setupList();
-        this.$.list.updateMetrics();
         this.refresh();
     },
     setupList: function() {
@@ -82,6 +78,9 @@ enyo.kind({
                 c.applyStyle("visibility", "hidden");
             }
         }
+
+        var isLastRow = chuisy.closet.length && event.index+1 == Math.ceil(chuisy.closet.length / this.cellCount);
+        this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
 
         return true;
     },
@@ -146,10 +145,12 @@ enyo.kind({
         var index = event.index * this.cellCount + sender.cellIndex;
         var chu = chuisy.closet.at(index);
         this.$.list.performOnRow(event.index, function(index, cellIndex) {
+            this.$["chu" + sender.cellIndex].removeClass("wiggle");
             this.$["chu" + sender.cellIndex].addClass("deleted");
         }, this, event.index, sender.cellIndex);
         setTimeout(function() {
             chu.destroy();
+            chuisy.closet.syncDestroyed();
         }, 300);
     },
     hold: function(sender, event) {
@@ -174,24 +175,30 @@ enyo.kind({
     //     this.$.contextMenu.applyStyle("left", x + "px");
     // },
     activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "closet"});
+        this.$.list.show();
+        this.resized();
     },
     deactivate: function() {
-        this.finishEditing();
+        this.$.list.hide();
     },
     components: [
-        {classes: "closet-edit-hint", components: [
+        {showing: false, classes: "closet-edit-hint", components: [
             {name: "editHint", classes: "closet-edit-hint-text", content: $L("(hold to edit)")}
         ]},
-        {kind: "Signals", onClosetUpdated: "refresh"},
         {name: "postButton", classes: "post-chu-button", ontap: "doComposeChu"},
         {name: "contextMenu", classes: "closet-contextmenu", components: [
             {classes: "closet-contextmenu-left"},
             {classes: "closet-contextmenu-right"}
         ]},
+        {classes: "header", components: [
+            {classes: "header-icon back", ontap: "doBack"},
+            {classes: "header-text", content: $L("Your Closet")},
+            {kind: "Button", ontap: "startEditing", classes: "header-button right closet-edit-button", content: $L("edit")},
+            {kind: "Button", ontap: "finishEditing", classes: "header-button right closet-done-button", content: $L("done")}
+        ]},
         {classes: "placeholder", name: "placeholder", components: [
             {classes: "placeholder-image"},
-            {classes: "placeholder-text", content: $L("Your closet is still empty? Fill it while shopping!")}
+            {classes: "placeholder-text", content: $L("There are no items in your closet yet.")}
         ]},
         // LIST
         {kind: "List", fit: true, thumb: false, classes: "closet-list", name: "list", onSetupItem: "setupItem", strategyKind: "TransitionScrollStrategy", components: [

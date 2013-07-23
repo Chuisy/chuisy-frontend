@@ -8,6 +8,9 @@ enyo.kind({
     events: {
         onDone: ""
     },
+    handlers: {
+        tap: ""
+    },
     published: {
         // Callback that gets called when the user has successfully signed in
         successCallback: function() {},
@@ -20,49 +23,36 @@ enyo.kind({
         this.contextChanged();
     },
     contextChanged: function() {
-        this.$.primaryText.setShowing(this.context == "start");
-        this.$.secondaryText.setShowing(this.context != "start");
-        this.$.cancelButton.setContent(this.context == "start" ? $L("Skip") : $L("Cancel"));
+        // this.$.cancelButton.setContent(this.context == "start" ? $L("Browse anonymously") : $L("Cancel"));
+        this.$.signInButton.setContext(this.context);
     },
-    ready: function() {
-        // setTimeout(enyo.bind(this, function() {
-            this.addClass("ready");
-        // }), 500);
+    open: function() {
+        this.show();
+        enyo.asyncMethod(this, function() {
+            this.addClass("show");
+        });
     },
-    /**
-        Gets a facebook access token and exchanges it for Chuisy api authentication credentials
-    */
-    signIn: function() {
-        // Get facebook access token
-        if (App.checkConnection()) {
-            App.loginWithFacebook(enyo.bind(this, function(accessToken) {
-                this.$.spinner.show();
-                // User facebook access token to get authentication credentials from Chuisy API
-                chuisy.signIn(accessToken, enyo.bind(this, function() {
-                    this.$.spinner.hide();
-                    if (this.successCallback) {
-                        this.successCallback();
-                    }
-                    this.successCallback = null;
-                    this.failureCallback = null;
-                    this.doDone();
-                }), enyo.bind(this, function() {
-                    this.$.spinner.hide();
-                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), function() {}, $L("Authentication failed"), $L("OK"));
-                }));
-            }));
-            App.sendCubeEvent("signin_tap", {
-                context: this.context
-            });
-        } else {
-            if (this.failureCallback) {
-                this.failureCallback();
-            }
-            this.doDone();
+    close: function() {
+        this.removeClass("show");
+        setTimeout(enyo.bind(this, function() {
+            this.hide();
+        }), 500);
+    },
+    signInSuccess: function() {
+        if (this.successCallback) {
+            this.successCallback();
         }
-        if (event) {
-            event.preventDefault();
+        this.successCallback = null;
+        this.failureCallback = null;
+        this.doDone({success: true});
+    },
+    signInFail: function() {
+        if (this.failureCallback) {
+            this.failureCallback();
         }
+        this.successCallback = null;
+        this.failureCallback = null;
+        this.doDone({success: false});
     },
     /**
         Calls _failureCallback_ and fires done event
@@ -73,31 +63,28 @@ enyo.kind({
         }
         this.successCallback = null;
         this.failureCallback = null;
-        this.doDone();
+        this.doDone({success: false});
         if (event) {
             event.preventDefault();
         }
-        App.sendCubeEvent("signin_cancel", {
+        App.sendCubeEvent("action", {
+            type: "signin",
+            result: "cancel",
             context: this.context
         });
     },
+    tap: function(sender, event) {
+        if (!event.originator.isDescendantOf(this.$.front)) {
+            this.cancel();
+        }
+    },
     components: [
-        {classes: "signinview-scrim"},
-        {classes: "signinview-content", components: [
-            {classes: "signinview-spacer"},
-            {classes: "signinview-center", components: [
-                {name: "primaryText", classes: "signinview-text", allowHtml: true, content: $L("The perfect shopping experience with friends.")},
-                {name: "secondaryText", classes: "signinview-text", style: "font-size: 13pt;", showing: false,
+        {kind: "Card", classes: "enyo-fill signinview-card", components: [
+            {name: "front", classes: "signinview-card-front", components: [
+                {kind: "Image", src: "assets/images/friends_placeholder.png", classes: "signinview-image"},
+                {classes: "signinview-text",
                     content: $L("Connect with Facebook now if you want to to use all of Chuisy's features! Don't worry, we won't post anything in your name without asking you!")},
-                {kind: "onyx.Button", name: "facebookButton", classes: "facebook-button", ontap: "signIn", components: [
-                    {classes: "facebook-button-icon"},
-                    {content: $L("Sign in with Facebook")}
-                ]},
-                {kind: "onyx.Button", name: "cancelButton", ontap: "cancel", classes: "signinview-cancel-button"},
-                {classes: "signinview-terms", allowHtml: true, content: $L("By signing in you accept our<br><a href='http://www.chuisy.com/terms/' target='_blank' class='link'>terms of use</a> and <a href='http://www.chuisy.com/privacy/' target='_blank' class='link'>privacy policy</a>.")}
-            ]},
-            {classes: "signinview-spacer", components: [
-                {kind: "CssSpinner", name: "spinner", classes: "signinview-spinner", showing: false}
+                {kind: "SignInButton", onSignInSuccess: "signInSuccess", onSignInFail: "signInFail", classes: "signinview-signin-button"}
             ]}
         ]}
     ]

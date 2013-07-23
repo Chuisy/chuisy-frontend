@@ -1,58 +1,61 @@
 .signinview {
-	background: url(../../assets/images/loading_screen.png) no-repeat center bottom;
-	background-size: 320px 568px;
-	z-index: 1000;
+	background-color: transparent;
+	-webkit-transition: background-color 0.5s;
+    -webkit-perspective: 1000px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
 }
 
-.signinview-spacer {
-	-webkit-box-flex: 1;
+.signinview.show {
+	background-color: rgba(0, 0, 0, 0.7);
 }
 
-.signinview-scrim {
-	background-color: white;
+.card-stage.signinview-card {
 	opacity: 0;
-	width: 100%;
-	height: 100%;
+	-webkit-transform: translate3d(0, 0, 700px) rotateY(90deg);
+	-webkit-transition: -webkit-transform 0.5s, opacity 0.4s;
+}
+
+.signinview.show .signinview-card {
+	-webkit-transform: translate3d(0, 0, 0) rotateY(0);
+	opacity: 1;
+}
+
+.card-side.signinview-card-front {
+	height: 300px;
+	background-color: #f1f1f1;
+}
+
+.signin-button.signinview-signin-button {
 	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 0;
-	-webkit-transition: opacity 0.7s;
-}
-
-.signinview.ready .signinview-scrim {
-	opacity: 0.8;
-}
-
-.signinview-content {
-	position: absolute;
+	bottom: 0;
 	width: 100%;
-	height: 100%;
-	-webkit-transform: translate3d(0, 30px, 0);
-	left: 0;
-	z-index: 10;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-box-align: center;
-	opacity: 0;
-	-webkit-transition: opacity 0.5s linear 0.7s, -webkit-transform 0.5s linear 0.7s;
 }
 
-.signinview.ready .signinview-content {
-	-webkit-transform: translate3d(0, 0, 0);
-	opacity: 1
+.signin-button.signinview-signin-button .signin-button-button {
+	border-radius: 0 0 13px 13px;
+	box-shadow: none;
+	border-top: solid 1px #38548D;
 }
 
-.signinview-center {
-	width: 100%;
+.signinview-image {
+	width: 128px;
+	height: 128px;
+	display: block;
+	margin: 0 auto;
 }
 
 .signinview-text {
 	width: 100%;
 	text-align: center;
-	padding: 0 30px 20px 30px;
-	color: #555;
-	font-size: 18pt;
+	padding: 0 35px;
+	color: #888;
+	text-shadow: 0px 1px 0px rgba(255,255,255,1);
+	font-size: 11pt;
+	line-height: 1.3em;
 	box-sizing: border-box;
 }
 
@@ -72,11 +75,4 @@
 	display: block;
 	margin: 5px auto;
 	width: 250px;
-}
-
-.signinview-spinner {
-	display: block;
-	margin: 0 auto;
-	position: relative;
-	top: 40px;
 }

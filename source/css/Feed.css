@@ -12,8 +12,8 @@
 .feed-info-box {
     box-sizing: border-box;
     margin: 8px 8px;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px #888;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     padding: 10px;
     position: relative;
     overflow: hidden;
@@ -35,4 +35,105 @@
 .feed-info-box-button.confirm {
     margin-left: 1%;
     background-color: #ddd;
+}
+
+.feed-tabs {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 50;
+    height: 35px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    display: -webkit-box;
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-transition: -webkit-transform 0.5s;
+}
+
+.feed-tabs.hide, .feed-tabs.disabled {
+    -webkit-transform: translate3d(0, -40px, 0);
+}
+
+.feed-tab {
+    display: block;
+    -webkit-box-flex: 1;
+    padding: 0;
+    width: 0;
+    border: none;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.05)));
+    box-shadow: none;
+}
+
+.feed-tab-icon {
+    width: 24px;
+    height: 16px;
+    background: url() no-repeat center center;
+    background-size: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.feed-tab-icon.nearby {
+    background-image: url(../../assets/images/tab_icon_nearby.png);
+}
+
+.feed-tab-icon.discover {
+    background-image: url(../../assets/images/tab_icon_discover.png);
+}
+
+.feed-tab-icon.stores {
+    background-image: url(../../assets/images/tab_icon_store.png);
+}
+
+.feed-tab-icon.people {
+    background-image: url(../../assets/images/tab_icon_people.png);
+}
+
+.feed-tab-caption {
+    display: block;
+    font-size: 7pt;
+    line-height: 10px;
+}
+
+.feed-tab, .feed-tab:active:hover:not([disabled]) {
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.feed-tab:not(:last-child) {
+    border-right: 1px solid #d8d8d8;
+}
+
+.feed-tab:not(:first-child) {
+    /*border-left: 1px solid rgba(15, 15, 15, 0.2);*/
+}
+
+.feed .placeholder {
+    padding: 80px 0;
+}
+
+.feed .placeholder-image {
+    background-image: url(../../assets/images/empty_placeholder.png);
+}
+
+.feed-placeholder-button {
+    border: dotted 1px #888;
+    color: #888;
+    text-shadow: 0 1px 1px #fff;
+    box-shadow: none;
+    background: transparent;
+    margin-top: 15px;
+    position: relative;
+    padding: 10px 12px;
+}
+
+.feed-placeholder-button:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    border: dotted 1px #fff;
 }

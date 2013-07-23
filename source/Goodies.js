@@ -13,7 +13,8 @@ enyo.kind({
         chuisy.cards.compress();
         this.$.repeater.setCount(chuisy.cards.length);
         this.$.placeholder.setShowing(!chuisy.cards.length);
-        this.$.spinner.removeClass("rise");
+        this.$.spinner.hide();
+        this.$.spinner.setSpinning(false);
     },
     setupItem: function(sender, event) {
         var card = chuisy.cards.at(event.index);
@@ -113,7 +114,9 @@ enyo.kind({
             }), 500);
         });
 
-        App.sendCubeEvent("show_card", {
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "open",
             card: card
         });
     },
@@ -148,7 +151,9 @@ enyo.kind({
             }), 100);
         }), 500);
 
-        App.sendCubeEvent("hide_card", {
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "close",
             card: this.card
         });
     },
@@ -218,7 +223,9 @@ enyo.kind({
             this.isAnimating = false;
         }), 500);
 
-        App.sendCubeEvent("flip_card", {
+        App.sendCubeEvent("action", {
+            type: "card",
+            result: "flip",
             card: this.card
         });
     },
@@ -245,10 +252,6 @@ enyo.kind({
 
         var coupon = new chuisy.models.Coupon(this.card.get("coupon"));
 
-        App.sendCubeEvent("redeem_coupon", {
-            coupon: coupon
-        });
-
         coupon.redeem({complete: enyo.bind(this, function(request, status) {
             if (request.status == 200) {
                 this.$.redeemSpinner.hide();
@@ -256,7 +259,9 @@ enyo.kind({
                 this.card.get("coupon").redeemed = true;
                 this.$.card.addClass("redeemed");
                 this.item.addClass("redeemed");
-                App.sendCubeEvent("redeem_coupon_success", {
+                App.sendCubeEvent("action", {
+                    type: "redeem_coupon",
+                    result: "success",
                     coupon: coupon
                 });
             } else {
@@ -268,7 +273,9 @@ enyo.kind({
                 }
                 this.$.redeemSpinner.hide();
                 this.$.redeemButton.setDisabled(false);
-                App.sendCubeEvent("redeem_coupon_fail", {
+                App.sendCubeEvent("action", {
+                    type: "redeem_coupon",
+                    result: "fail",
                     coupon: coupon,
                     status_code: request.status,
                     response_text: request.responseText
@@ -280,7 +287,7 @@ enyo.kind({
         var redeem = enyo.bind(this, function() {
             App.confirm(
                 $L("Redeem Coupon"),
-                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone you can claim it! A coupon can only be redeemed once!"),
+                $L("Are you sure you want to redeem this coupon now? Note that you should not void coupons yourself but let it be done by someone who can claim it! A coupon can only be redeemed once!"),
                 enyo.bind(this, function(choice) {
                     if (choice) {
                         this.redeemCoupon();
@@ -312,23 +319,24 @@ enyo.kind({
         return true;
     },
     activate: function(card) {
+        this.$.stagePopup.hide();
+        this.hideCard();
         if (card) {
             chuisy.cards.unshift(card);
             this.refresh();
         }
         if (App.isSignedIn()) {
+            this.$.spinner.setSpinning(true);
             this.$.spinner.addClass("rise");
             chuisy.cards.fetch({update: true, remove: false});
         }
-        enyo.Signals.send("onShowGuide", {view: "goodies"});
-    },
-    deactivate: function() {
-        this.$.stagePopup.hide();
-        this.hideCard();
     },
     components: [
-        {kind: "CssSpinner", name: "spinner", classes: "next-page-spinner rise"},
-        {name: "placeholder", classes: "placeholder-image"},
+        {kind: "Spinner", name: "spinner", style: "position: absolute; top: 20px; right: 0; left: 0; margin: 0 auto;", showing: true},
+        {classes: "placeholder", name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("You don't have any goodies yet.")}
+        ]},
         {kind: "Scroller", strategyKind: "TransitionScrollStrategy", classes: "enyo-fill", components: [
             {kind: "Repeater", onSetupItem: "setupItem", style: "padding: 6px 4px;", components: [
                 {name: "cardItem", classes: "goodies-item", ontap: "showCard", components: [
@@ -339,7 +347,7 @@ enyo.kind({
             ]}
         ]},
         {kind: "Popup", style: "width: 100%; height: 100%; top: 0; left: 0;", name: "stagePopup", floating: true, components: [
-            {kind: "Menu", name: "fakeMenu", style: "position: absolute; top: 0; width: 100%;"},
+            {kind: "Menu", name: "fakeMenu", style: "position: absolute; top: 0; width: 100%; box-shadow: none;"},
             {name: "stage", classes: "goodies-card-stage", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", ontap: "stageTapped", components: [
                 {name: "card", classes: "goodies-card notransition", ontap: "cardTapped", components: [
                     {classes: "goodies-card-side front", name: "front", components: [
@@ -351,10 +359,10 @@ enyo.kind({
                             {kind: "FittingTextContainer", classes: "enyo-fill", name: "cardText"}
                         ]},
                         {classes: "goodies-card-redeem", components: [
-                            {kind: "onyx.Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
+                            {kind: "Button", name: "redeemButton", classes: "goodies-card-redeem-button", ontap: "redeemButtonTapped", components: [
                                 {content: $L("Redeem")}
                             ]},
-                            {kind: "CssSpinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
+                            {kind: "Spinner", name: "redeemSpinner", classes: "absolute-center", showing: false},
                             {classes: "goodies-card-redeemed-text", name: "redeemedText", content: $L("Redeemed")}
                         ]},
                         {name: "disclaimer", classes: "goodies-card-disclaimer", allowHtml: true},

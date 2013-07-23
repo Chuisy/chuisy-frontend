@@ -11,7 +11,9 @@ enyo.kind({
     },
     events: {
         // Is sent whenever a person is selected or unselected
-        onChange: ""
+        onChange: "",
+        onDone: "",
+        onInviteFriends: ""
     },
     create: function() {
         this.inherited(arguments);
@@ -22,6 +24,7 @@ enyo.kind({
     itemsChanged: function() {
         this.filteredItems = this.items;
         this.refreshList();
+        this.$.panels.setIndex(this.items.length ? 0 : 1);
     },
     /**
         Marks all _items_ as selected
@@ -104,16 +107,34 @@ enyo.kind({
     setupItem: function(sender, event) {
         var item = this.filteredItems[event.index];
         event.item.$.avatar.setSrc(item.profile.get("avatar_thumbnail") || "assets/images/avatar_thumbnail_placeholder.png");
-        event.item.$.avatar.addRemoveClass("selected", this.isSelected(item));
+        event.item.$.fullName.setContent(item.get("first_name") + " " + item.get("last_name"));
+        event.item.$.item.addRemoveClass("selected", this.isSelected(item));
         return true;
     },
     components: [
-        {kind: "onyx.InputDecorator", classes: "peoplepicker-filter-input", components: [
-            {kind: "onyx.Input", name: "searchInput", style: "width: 100%;", onkeyup: "keyupHandler", placeholder: $L("Type to filter...")}
+        {classes: "header", components: [
+            {kind: "Button", ontap: "doDone", classes: "header-button right", content: $L("done")}
         ]},
-        {kind: "Scroller", strategyKind: "TransitionScrollStrategy", thumb: false, fit: true, components: [
-            {kind: "Repeater", name: "list", onSetupItem: "setupItem", style: "text-align: center", components: [
-                {kind: "Image", name: "avatar", classes: "peoplepicker-avatar", ontap: "itemTap"}
+        {kind: "Panels", fit: true, animate: false, draggable: false, components: [
+            {kind: "FittableRows", components: [
+                // SEARCH INPUT
+                {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", onCancel: "searchInputCancel", onkeyup: "keyupHandler"},
+                {kind: "Scroller", strategyKind: "TransitionScrollStrategy", thumb: false, fit: true, components: [
+                    {kind: "Repeater", name: "list", onSetupItem: "setupItem", ontap: "itemTap", components: [
+                        {classes: "list-item userlistitem peoplepicker-item", name: "item", components: [
+                            {kind: "Image", classes: "userlistitem-avatar", name: "avatar"},
+                            {classes: "userlistitem-fullname ellipsis", name: "fullName"},
+                            {classes: "peoplepicker-item-light"}
+                        ]}
+                    ]}
+                ]}
+            ]},
+            {classes: "peoplepicker-placeholder", components: [
+                {classes: "placeholder-card absolute-center", components: [
+                    {kind: "Image", src: "assets/images/friends_placeholder.png", classes: "placeholder-card-image peoplepicker-placeholder-card-image"},
+                    {classes: "placeholder-card-text peoplepicker-placeholder-card-text", content: $L("It seems you don't have any friends on Chuisy yet. Friends are people you follow that follow you back.")},
+                    {kind: "Button", classes: "placeholder-card-button", ontap: "doInviteFriends", content: $L("Invite Friends")}
+                ]}
             ]}
         ]}
     ]

@@ -1,206 +1,49 @@
 .storeview {
 }
 
-.storeview-window {
-	height: 150px;
-	position: relative;
-	-webkit-transition: height 0.1s;
+.storeview .userview-box-label.chus {
+	background-image: url(../../assets/images/profile_photos.png);
 }
 
-.storeview-info {
-	width: 100%;
-	height: 100%;
-	background: url() no-repeat center center;
-	background-size: cover;
-	box-shadow: inset 0 -1px 20px #333;
+.userview-box-image.storeview-location-tile {
+    width: 210px;
 }
 
-.storeview-window.collapsed {
-	height: 0;
+.storeview-info-section {
+    padding: 10px 20px;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-top: solid 1px #d8d8d8;
 }
 
-.storeview-info.storeview-cover-placeholder {
-	position: absolute;
-	z-index: -1;
-	left: 0;
-	right: 0;
-	/*background-image: url(../../assets/images/store_cover_placeholder.jpg);*/
-	/*background-size: cover;*/
+.storeview-info-label {
+    font-size: 13pt;
+    font-variant: small-caps;
+    font-weight: bold;
+    float: left;
+    margin: 0 10px 10px 0;
 }
 
-.storeview-profileinfo {
-	display: inline-block;
-	vertical-align: top;
-	height: 100px;
-}
-
-.storeview-fullname {
-	font-size: 15pt;
-	color: White;
-	text-shadow: 0 0 5px #000;
-	position: absolute;
-	left: 5px;
-	bottom: 5px;
-	max-width: 200px;
-	text-align: left;
-}
-
-.storeview-menu {
-	width: 100%;
-	box-sizing: border-box;
-	height: 45px;
-	text-align: center;
-}
-
-.storeview-menu-button {
-	width: 33.33333%;
-	height: 100%;
-	box-sizing: border-box;
-	padding: 0;
-	border-radius: 0 !important;
-	background-image: none;
-	background-color: #eee;
-	vertical-align: top;
-}
-
-.storeview-menu-button.active {
-	box-shadow: none;
-	background-color: white;
-	background-image: none;
-	color: black;
-	border-top: 1px solid rgba(15, 15, 15, 0.2);
-}
-
-.storeview-menu-button-caption {
-	display: block;
-	font-size: 10pt;
-	margin: 0 auto;
-}
-
-.storeview-menu-button-count {
-	display: block;
-	margin: 0 auto;
-	font-size: 12pt;
-}
-
-.storeview-follow-button {
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
-	width: 85px;
-}
-
-.storeview-settings-button {
-	width: 36px;
-	height: 36px;
-	background-size: 36px 72px;
-	background-image: url(../../assets/images/settings_button.png);
-	position: absolute;
-	right: 5px;
-	bottom: 5px;
-	display: none;
-}
-
-.storeview-list-placeholder {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background: url() no-repeat center center;
-	background-size: 128px 128px;
-}
-
-.storeview-list-placeholder.chus {
-	background-image: url(../../assets/images/closet_placeholder.png);
-}
-
-.storeview-list-placeholder.followers {
-	background-image: url(../../assets/images/friends_placeholder.png);
-}
-
-.storeview-tab-spinner {
-	margin: 20px auto;
-}
-
-.storeview-loading-panel {
-	position: absolute;
-	background-color: rgba(0, 0, 0, 0.7);
-	width: 100%;
-	height: 100%;
-	z-index: 1000;
-	opacity: 1;
-	-webkit-transition: opacity 0.5s;
-}
-
-.storeview-loading-content {
-	color: #eee;
-	position: absolute;
-	text-align: center;
-	height: 20px;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
-	font-family: Muli;
-}
-
-.storeview-loading-spinner {
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 5px;
-}
-
-.storeview-loading-text {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.storeview-loading-dismiss {
-	width: 100%;
-	position: absolute;
-	bottom: 5px;
-	color: #eee;
-	font-size: 9pt;
-	text-align: center;
-}
-
-.storeview-map {
-	box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-	position: absolute;
-	z-index: 20;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	-webkit-transform: translate3d(110%, 0, 0);
-	-webkit-transition: -webkit-transform 0.5s;
-}
-
-.storeview-map.showing {
-	-webkit-transform: translate3d(0, 0, 0);
-}
-
-.storeview-info-block {
-	padding: 15px 15px 0 15px;
-	line-height: 1.3em;
+.storeview-info-text {
 	font-size: 11pt;
+	line-height: 1.5em;
+	text-align: right;
 }
 
-.storeview-info-block:last-child {
-	padding-bottom: 15px;
+.storeview-tab-icon {
+    width: 16px;
+    height: 15px;
+    overflow: visible;
+    background: url() no-repeat center center;
+    background-size: 16px 16px;
+    margin-top: -2px;
+    margin-bottom: -1px;
 }
 
-.storeview-info-header {
-	margin-bottom: 5px;
-	font-weight: bold;
+.storeview-tab-icon.info {
+	background-image: url(../../assets/images/tab_icon_info.png);
 }
 
-.storeview-location-button {
-	float: right;
-	margin: 15px;
-	width: 50px; height: 50px;
-	background: url() no-repeat center center;
-	background-size: 50px 50px;
+.storeview-tab-icon.map {
+	background-image: url(../../assets/images/tab_icon_map.png);
 }

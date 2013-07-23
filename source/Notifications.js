@@ -8,9 +8,6 @@ enyo.kind({
         // User has tapped a notification
         onNotificationSelected: ""
     },
-    handlers: {
-        onpostresize: "unfreeze"
-    },
     create: function() {
         this.inherited(arguments);
         chuisy.notifications.on("reset", this.refresh, this);
@@ -27,15 +24,7 @@ enyo.kind({
             this.$.list.reset();
         }
         this.$.placeholder.setShowing(!chuisy.notifications.length);
-        this.hideSpinner();
-    },
-    showSpinner: function() {
-        setTimeout(enyo.bind(this, function() {
-            this.$.nextPageSpinner.addClass("rise");
-        }), 500);
-    },
-    hideSpinner: function() {
-        this.$.nextPageSpinner.removeClass("rise");
+        this.$.spinner.hide();
     },
     setupItem: function(sender, event) {
         var item = chuisy.notifications.at(event.index);
@@ -47,7 +36,22 @@ enyo.kind({
         } else {
             var connection = $L(" that you are interested in");
             var targetObj = item.get("target_obj");
-            if (targetObj) {
+            if (item.get("connection")) {
+                switch (item.get("connection")) {
+                    case "owned":
+                        connection = $L(" of yours");
+                        break;
+                    case "shared":
+                        connection = $L(" that was shared with you");
+                        break;
+                    case "commented":
+                        connection = $L(" that you commented on");
+                        break;
+                    case "liked":
+                        connection = $L(" that you liked");
+                        break;
+                }
+            } else if (targetObj) {
                 if (targetObj.owned) {
                     connection = $L(" of yours");
                 } else if (targetObj.shared) {
@@ -58,7 +62,6 @@ enyo.kind({
                     connection = $L(" that you liked");
                 }
             }
-            var time = item.getTimeText();
             switch (item.get("action")) {
                 case "like":
                     this.$.text.setContent($L("<strong>{{ name }}</strong> has <strong>liked</strong> a <strong>Chu</strong>{{ connection }}.")
@@ -83,12 +86,12 @@ enyo.kind({
                         .replace("{{ name }}", item.get("actor").first_name));
                     break;
                 case "goody":
-                    this.$.text.setContent($L("You have received a new goody!"));
-                    image = chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
+                    this.$.text.setContent($L("You have <strong>received</strong> a new <strong>Goody</strong>!"));
+                    image = chuisy.accounts.getActiveUser() && chuisy.accounts.getActiveUser().profile.get("avatar_thumbnail");
                     break;
             }
-            this.$.time.setContent(time);
         }
+        this.$.time.setContent(item.getTimeText());
 
         this.$.image.applyStyle("background-image", "url(" + (image || item.get("thumbnail") || "") + ")");
 
@@ -96,14 +99,13 @@ enyo.kind({
         this.$.subject.setShowing(item.get("subject_image"));
 
         this.$.notification.addRemoveClass("read", item.get("read"));
+        this.$.notification.addRemoveClass("unseen", !item.get("seen"));
 
         var isLastItem = event.index == chuisy.notifications.length-1;
-        if (isLastItem && chuisy.notifications.hasNextPage()) {
-            // Last item in the list and there is more! Load next page
-            this.$.nextPageSpacer.show();
+        var hasNextPage = chuisy.notifications.hasNextPage();
+        this.$.listItem.addRemoveClass("next-page", isLastItem && hasNextPage);
+        if (isLastItem && hasNextPage) {
             this.nextPage();
-        } else {
-            this.$.nextPageSpacer.hide();
         }
 
         return true;
@@ -111,7 +113,7 @@ enyo.kind({
     nextPage: function() {
         chuisy.notifications.fetchNext({success: enyo.bind(this, function() {
             this.refresh();
-        })});
+        }), data: {limit: 20}});
     },
     notificationTapped: function(sender, event) {
         var not = chuisy.notifications.at(event.index);
@@ -120,7 +122,6 @@ enyo.kind({
             if (!not.get("read")) {
                 // Mark notification as read
                 not.save({read: true});
-                this.refresh();
             }
         }
     },
@@ -130,32 +131,24 @@ enyo.kind({
     seen: function() {
         chuisy.notifications.seen();
     },
-    activate: function() {
-        enyo.Signals.send("onShowGuide", {view: "notifications"});
-        this.seen();
-    },
-    deactivate: function() {},
-    unfreeze: function() {
-        this.$.list.updateMetrics();
-        this.$.list.refresh();
-    },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner rise"},
-        // {classes: "placeholder", name: "placeholder", components: [
-            {name: "placeholder", classes: "placeholder-image absolute-center"},
-            // {classes: "placeholder-text", content: $L("Nothing new in here. Make something happen!")}
-        // ]},
-        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 40, classes: "enyo-fill",
+        {kind: "Spinner", name: "spinner", showing: true, style: "position: absolute; top: 20px; left: 0; right: 0; margin: 0 auto;"},
+        {classes: "placeholder", name: "placeholder", components: [
+            {classes: "placeholder-image"},
+            {classes: "placeholder-text", content: $L("You don't have any notifications yet.")}
+        ]},
+        {kind: "List", name: "list", onSetupItem: "setupItem", rowsPerPage: 20, classes: "enyo-fill",
             strategyKind: "TransitionScrollStrategy", thumb: false, components: [
-            {classes: "notifications-notification", name: "notification", ontap: "notificationTapped", components: [
-                {classes: "notifications-notification-image", name: "image"},
-                {classes: "notifications-notification-content", components: [
-                    {classes: "notifications-notification-text", name: "text", allowHtml: true},
-                    {classes: "notifications-notification-time", name: "time"}
-                ]},
-                {classes: "notifications-notification-subject", name: "subject"}
-            ]},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            {name: "listItem", classes: "list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}, components: [
+                {classes: "list-item notifications-notification pressable", name: "notification", ontap: "notificationTapped", components: [
+                    {classes: "notifications-notification-image", name: "image"},
+                    {classes: "notifications-notification-content", components: [
+                        {classes: "notifications-notification-text", name: "text", allowHtml: true},
+                        {classes: "notifications-notification-time", name: "time"}
+                    ]},
+                    {classes: "notifications-notification-subject", name: "subject"}
+                ]}
+            ]}
         ]}
     ]
 });

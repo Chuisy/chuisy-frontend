@@ -1,0 +1,35 @@
+.storemap {
+    position: relative;
+}
+
+.storemap.marker-open .storemarker:not(.expand) {
+    display: none;
+}
+
+.searchinput.storemap-searchinput {
+    position: absolute;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.storemap-searchinput-wrapper > .searchinput {
+    width: 100%;
+}
+
+.storemap .placeholder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 200px;
+}
+
+.storemap .placeholder-text {
+    padding: 10px;
+}
+
+.storemap .placeholder-image {
+    background-image: url(../../assets/images/map_placeholder.png);
+}

@@ -9,7 +9,8 @@ enyo.kind({
     published: {
         // A _chuisy.models.ChuCollection_ object
         chus: null,
-        chusPerPage: 30
+        chusPerPage: 30,
+        scrollerOffset: 0
     },
     events: {
         //* A chu has been selected
@@ -32,6 +33,9 @@ enyo.kind({
         if (this.chus) {
             this.listenTo(this.chus, "sync", this.refresh);
         }
+    },
+    scrollerOffsetChanged: function() {
+        this.$.list.getStrategy().topBoundary = -this.scrollerOffset;
     },
     rendered: function() {
         this.inherited(arguments);
@@ -71,33 +75,29 @@ enyo.kind({
                 var image = chu.get("thumbnails") && chu.get("thumbnails")["100x100"] || chu.get("image") || "assets/images/chu_placeholder.png";
                 this.$["chuImage" + i].applyStyle("background-image", "url(" + image + ")");
                 this.$["chu" + i].applyStyle("visibility", "visible");
-                App.sendCubeEvent("impression", {
-                    chu: chu,
-                    context: "other"
-                });
+                // App.sendCubeEvent("impression", {
+                //     chu: chu,
+                //     context: "other"
+                // });
             } else {
                 this.$["chu" + i].applyStyle("visibility", "hidden");
             }
+        }
 
-            var isLastItem = index == this.chus.length-1;
-            if (isLastItem && this.chus.hasNextPage()) {
-                // We are at the end of the list and there seems to be more.
-                // Load next bunch of chus
-                this.$.nextPageSpacer.show();
-                this.nextPage();
-            } else {
-                this.$.nextPageSpacer.hide();
-            }
+        var isLastRow = this.chus.length && event.index+1 == Math.ceil(this.chus.length / this.cellCount);
+        var hasNextPage = this.chus.hasNextPage();
+        this.$.listClient.addRemoveClass("next-page", isLastRow && hasNextPage);
+        this.$.listClient.applyStyle("margin-bottom", isLastRow ? "8px" : "0");
+        if (isLastRow && hasNextPage) {
+            this.nextPage();
         }
 
         return true;
     },
     nextPage: function() {
-        this.$.nextPageSpinner.addClass("rise");
         this.chus.fetchNext({
-            success: enyo.bind(this, function() {
-                this.$.nextPageSpinner.removeClass("rise");
-            }), data: {
+            data: {
+                limit: 21,
                 thumbnails: ["100x100"]
             }
         });
@@ -112,6 +112,7 @@ enyo.kind({
             this.$.list.refresh();
         } else {
             this.$.list.reset();
+            this.$.list.setScrollTop(-this.scrollerOffset);
         }
         this.doRefresh();
     },
@@ -124,11 +125,9 @@ enyo.kind({
         return this.$.list.getScrollTop();
     },
     components: [
-        {kind: "CssSpinner", name: "nextPageSpinner", classes: "next-page-spinner"},
         {kind: "List", classes: "enyo-fill chulist-list", name: "list", thumb: false, onSetupItem: "setupItem",
-            strategyKind: "TransitionScrollStrategy", components: [
-            {name: "listClient", classes: "chulist-row"},
-            {name: "nextPageSpacer", classes: "next-page-spacer"}
+            strategyKind: "TransitionScrollStrategy", preventDragPropagation: false, components: [
+            {name: "listClient", classes: "chulist-row list-item-wrapper", attributes: {"data-next-page": $L("Wait, there's more!")}}
         ]}
     ]
 });

@@ -21,7 +21,7 @@ window.util = {
         } else if (days < 30) {
             return $L("{{ days }} d").replace("{{ days }}", f(days));
         } else {
-            return $L("a while back...");
+            return $L("a while back");
         }
     },
     createThumbnail: function(imgSrc, width, height, callback) {
@@ -45,6 +45,24 @@ window.util = {
             }
 
             context.drawImage(img, targetX, targetY, targetWidth, targetHeight);
+            callback(canvas.toDataURL());
+        };
+        img.src = imgSrc;
+    },
+    watermark: function(imgSrc, callback) {
+        var canvas = document.createElement("canvas");
+        canvas.width = 612;
+        canvas.height = 612;
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        var watermark = new Image();
+
+        img.onload = function() {
+            watermark.src = "assets/images/watermark.png";
+        };
+        watermark.onload = function() {
+            context.drawImage(img, 0, 0, 612, 612);
+            context.drawImage(watermark, 0, 0, 612, 612);
             callback(canvas.toDataURL());
         };
         img.src = imgSrc;

@@ -1,9 +1,26 @@
-.discover {
-}
-
 .searchinput.discover-searchinput {
 	border-radius: 0;
 	box-sizing: border-box;
+	width: 100%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	position: relative;
+	z-index: 10;
+	border: none;
+}
+
+.searchinput.discover-searchinput.scrollaway {
+	position: absolute;
+	top: 44px;
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-transition: -webkit-transform 0.5s;
+}
+
+.searchinput.discover-searchinput.scrollaway.hide, .searchinput.discover-searchinput.scrollaway.disabled {
+    -webkit-transform: translate3d(0, -40px, 0);
+}
+
+.discover-alert {
+	top: 4px;
 }
 
 .discover-resultchu {
@@ -30,57 +47,44 @@
 	border: solid 2px White;
 }
 
-.discover-resultchu-category {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-}
-
-.discover-result-panel {
-	position: relative;
-}
-
 .discover-no-results {
 	height: 50px;
-	font-size: 15pt;
+    font-size: 13pt;
+    /*font-variant: small-caps;*/
+    font-weight: bold;
+    color: #555;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 	text-align: center;
 }
 
 .discover-tabs {
+	position: relative;
+	z-index: 10;
 	height: 45px;
 	text-align: center;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+	display: -webkit-box;
 }
 
-.discover-tabs > * {
-	width: 33.3%;
-	height: 100%;
+.discover-tab {
+	-webkit-box-flex: 1;
 	box-sizing: border-box;
-	padding: 0;
-	border-radius: 0 !important;
-	background-image: none;
 	background-color: #eee;
-	/*border-top: none !important;*/
-	vertical-align: top;
-}
-
-.discover-tabs > *.active {
-	box-shadow: none;
-	background-color: white;
-	background-image: none;
-	color: black;
-	border-top: 1px solid rgba(15, 15, 15, 0.2);
-}
-
-.discover-tab-caption {
-	display: block;
+	line-height: 45px;
 	font-size: 10pt;
-	margin: 0 auto;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-.discover-tab-count {
-	display: block;
-	margin: 0 auto;
-	font-size: 12pt;
+.discover-tab:not(:last-child) {
+	border-right: 1px solid rgba(0, 0, 0, 0);
+}
+
+.discover-tab:not(:first-child) {
+	border-left: 1px solid rgba(15, 15, 15, 0.2);
+}
+
+.discover-tabs > *:active:hover:not([disabled]) {
+	background-color: white;
 }
 
 .discover-placeholder {
@@ -90,21 +94,14 @@
 	background-size: cover;
 }
 
-.discover-map-button {
+.discover.marker-open .storemarker:not(.expand) {
+	display: none;
+}
+
+.discover-spinner {
 	position: absolute;
-	right: 8px;
-	top: 8px;
-	z-index: 1;
-	background-color: rgba(255, 255, 255, 0.6);
-}
-
-.discover-store {
-	padding: 8px;
-	border-top: solid 1px #ddd;
-}
-
-.discover-store-address {
-	color: #555;
-	font-size: 10pt;
-	padding-top: 2px;
+	top: 95px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
 }
