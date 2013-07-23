@@ -128,6 +128,7 @@ enyo.kind({
         // HEADER
         {classes: "header", components: [
             {classes: "header-icon back", ontap: "doBack"},
+            {classes: "header-text", content: $L("Adjust Price")},
             {kind: "Button", ontap: "doDone", classes: "header-button right primary", content: $L("next"), name: "doneButton"}
         ]},
         {classes: "chuform-image-wrapper", onflick: "flick", onhold: "hold", ondragstart: "dragstart", ondrag: "drag", ondragfinish: "dragfinish", components: [

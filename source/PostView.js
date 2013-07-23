@@ -128,6 +128,7 @@ enyo.kind({
             {name: "formView", components: [
                 {classes: "header", components: [
                     {classes: "header-icon back", ontap: "doBack"},
+                    {classes: "header-text", content: $L("Post Chu")},
                     {kind: "Button", ontap: "doDone", classes: "header-button right primary", content: $L("post")}
                 ]},
                 {classes: "postview-scroller-inner", components: [
