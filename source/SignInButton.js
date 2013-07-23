@@ -25,7 +25,7 @@ enyo.kind({
                 }), enyo.bind(this, function() {
                     this.$.button.setDisabled(false);
                     this.$.spinner.setShowing(false);
-                    navigator.notification.alert($L("Hm, that didn't work. Please try again later!"), enyo.bind(this, function() {
+                    navigator.notification.alert($L("Hmm, that didn't work. Please try again later."), enyo.bind(this, function() {
                         this.doSignInFail();
                     }, $L("Authentication failed"), $L("OK")));
                     App.sendCubeEvent("action", {

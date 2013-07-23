@@ -132,7 +132,7 @@ enyo.kind({
             {classes: "peoplepicker-placeholder", components: [
                 {classes: "placeholder-card absolute-center", components: [
                     {kind: "Image", src: "assets/images/friends_placeholder.png", classes: "placeholder-card-image peoplepicker-placeholder-card-image"},
-                    {classes: "placeholder-card-text peoplepicker-placeholder-card-text", content: $L("It seems you don't have any friends on Chuisy yet. Friends are people you follow that follow you back.")},
+                    {classes: "placeholder-card-text peoplepicker-placeholder-card-text", content: $L("It looks like you don't have any friends on Chuisy yet. Friends are people you follow who follow you back.")},
                     {kind: "Button", classes: "placeholder-card-button", ontap: "doInviteFriends", content: $L("Invite Friends")}
                 ]}
             ]}

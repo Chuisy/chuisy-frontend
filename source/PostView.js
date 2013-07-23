@@ -108,7 +108,7 @@ enyo.kind({
         if (this.store && this.store.get("name")) {
             return $L("Look what I found at {{ place }}! What do you think?").replace("{{ place }}", this.store.get("name"));
         } else {
-            return $L("Check out this cool fashion item!");
+            return $L("Check out this great fashion item!");
         }
     },
     getShareUrl: function() {
@@ -186,7 +186,7 @@ enyo.kind({
                         ]}
                     ]},
                     {name: "login", classes: "postview-login-container", components: [
-                        {classes: "postview-login-text", content: $L("If you want to share this Chu with others you have to login first. Don't worry, your data is safe and we won't post anything without asking you!")},
+                        {classes: "postview-login-text", content: $L("If you want to share this Chu with others you need to login first. Don't worry, your data is safe and we won't post anything without asking you!")},
                         {kind: "SignInButton"}
                     ]}
                 ]}

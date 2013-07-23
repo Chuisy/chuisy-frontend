@@ -102,7 +102,7 @@ enyo.kind({
         var ids = this.$.fbFriendsPicker.getIds();
         FB.ui({
             method: 'apprequests',
-            message: $L("Come join me on Chuisy, help me decide on what to buy and share beautiful fashion you like!"),
+            message: $L("Come join me on Chuisy - help me decide what to buy and share your favorite fashion items!"),
             to: ids
         }, enyo.bind(this, function(response) {
             if (response.request) {

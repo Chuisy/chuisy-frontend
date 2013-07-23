@@ -151,7 +151,7 @@ enyo.kind({
             {name: "noLocationMessage", showing: false, classes: "pickstore-location-message", components: [
                 {classes: "placeholder-card absolute-center", components: [
                     {kind: "Image", src: "assets/images/map_placeholder.png", classes: "placeholder-card-image"},
-                    {classes: "placeholder-card-text", content: $L("Unfortunately we weren't able to access your location. Please go to your settings under 'Privacy > Location Services' and make sure Chuisy is enabled!"), allowHtml: true}
+                    {classes: "placeholder-card-text", content: $L("Unfortunately we weren't able to access your location. Please go to your settings under 'Privacy > Location Services' and make sure Chuisy is enabled."), allowHtml: true}
                 ]}
             ]},
             {kind: "SearchInput", name: "searchInput", classes: "discover-searchinput", placeholder: $L("Search or create store..."), onEnter: "searchInputEnter", onChange: "searchInputChange", onCancel: "searchInputCancel", searchEnterButton: false},

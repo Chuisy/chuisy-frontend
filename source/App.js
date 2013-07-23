@@ -30,7 +30,7 @@ enyo.kind({
             if (App.isOnline()) {
                 return true;
             } else {
-                navigator.notification.alert($L("Can't do this right now because there is no internet connection. Try again later!"), function() {}, $L("No internet connection"), $L("OK"));
+                navigator.notification.alert($L("Chuisy requires an internet connection to carry out this action. Please try again later."), function() {}, $L("No internet connection"), $L("OK"));
                 return false;
             }
         },
@@ -59,8 +59,8 @@ enyo.kind({
                         scope: scope,
                         result: "fail"
                     });
-                    navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                        fail, $L("Facebook signin failed!"), $L("OK"));
+                    navigator.notification.alert($L("Chuisy could not connect to your Facebook account. Please check your Facebook settings and try again."),
+                        fail, $L("Facebook Sign-in Failed"), $L("OK"));
                 }
             }, function(error) {
                 App.sendCubeEvent("fb_api", {
@@ -69,8 +69,8 @@ enyo.kind({
                     result: error == "The user has cancelled the login" ? "cancel" : "fail"
                 });
                 // console.log("***** login fail ***** " + JSON.stringify(error));
-                navigator.notification.alert($L("Chuisy could not connect with your facebook account. Please check your Facebook settings and try again!"),
-                    fail, $L("Facebook signin failed!"), $L("OK"));
+                navigator.notification.alert($L("Chuisy could not connect to your Facebook account. Please check your Facebook settings and try again."),
+                    fail, $L("Facebook Sign-in Failed"), $L("OK"));
             });
         },
         fbHasPublishPermissions: function(callback) {

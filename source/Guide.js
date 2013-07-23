@@ -38,27 +38,27 @@ enyo.kind({
     deactivate: function() {},
     components: [
         {classes: "header", components: [
-            {classes: "header-text", content: $L("How it works")}
+            {classes: "header-text", content: $L("How It Works")}
         ]},
         {kind: "Carousel", name: "panels", onTransitionStart: "panelsTransitionStart", fit: true, components: [
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", style: "background: url(assets/images/guide_front_1.jpg) no-repeat center bottom #fff; background-size: 300px 153px;", components: [
-                    {classes: "guide-card-title", content: $L("Discover fashion")},
-                    {classes: "guide-card-text", content: $L("Discover the prettiest fashion items in your city. See where others go shopping and find inspiration for your own shopping trips!")}
+                    {classes: "guide-card-title", content: $L("Discover Fashion")},
+                    {classes: "guide-card-text", content: $L("Discover the hottest fashion items in your city. See where others go shopping and find inspiration for your own shopping trips!")}
                 ]},
                 {classes: "guide-card-side"}
             ]},
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: $L("Snap fashion items")},
-                    {classes: "guide-card-text", content: $L("Take pictures of your favourite fashion items while shopping and collect gifts. You decide if you want to share your discoveries with your friends or keep them to yourself."), style: "padding: 10px 25px 25px 25px;"},
+                    {classes: "guide-card-title", content: $L("Snap Fashion Items")},
+                    {classes: "guide-card-text", content: $L("Take photos of your favorite fashion items while shopping to earn rewards. You decide if you want to share your discoveries with your friends or keep them to yourself."), style: "padding: 10px 25px 25px 25px;"},
                     {kind: "Image", src: "assets/images/guide_front_2.png", style: "width: 200px; height: 100px"}
                 ]},
                 {classes: "guide-card-side"}
             ]},
             {kind: "Card", classes: "enyo-fill", components: [
                 {classes: "guide-card-side", components: [
-                    {classes: "guide-card-title", content: $L("Join now")},
+                    {classes: "guide-card-title", content: $L("Join Now")},
                     {classes: "guide-card-text", content: $L("Sign in to connect with your friends and use all of Chuisy's features. Your data is safe with us and we won't post anything without asking you!"), style: "padding: 10px 25px 30px 25px;"},
                     {kind: "SignInButton", onSignInSuccess: "doDone", onSignInFail: "doDone"},
                     {kind: "Button", content: $L("Browse anonymously"), classes: "signin-cancel-button", ontap: "doDone"}

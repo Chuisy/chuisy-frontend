@@ -125,7 +125,7 @@ enyo.kind({
     removeButtonTapped: function(sender, event) {
         App.confirm(
             $L("Remove Chu"),
-            $L("Are you sure you want to remove this Chu? This action can not be undone."),
+            $L("Are you sure you want to remove this Chu? This action can't be undone."),
             enyo.bind(this, function(choice) {
                 if (choice) {
                     this.removeChu(sender, event);
